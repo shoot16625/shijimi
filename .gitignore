@@ -1,0 +1,7 @@
+# shijimi
+/Go/swagger/
+/Go/app
+/Go/sftp-config.json
+/Go/.vscode/
+/Go/.travis.yml
+/MySQL/mysql_data/

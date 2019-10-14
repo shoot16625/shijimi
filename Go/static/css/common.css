@@ -1,0 +1,90 @@
+@charset "UTF-8";
+
+.thumbnail {
+    position: relative;
+    z-index: 1; /* 必要であればリンク要素の重なりのベース順序指定 */
+}
+.thumbnail a {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-indent:-999px;
+    z-index: 2; /* 必要であればリンク要素の重なりのベース順序指定 */
+}
+.thumbnail:hover {
+    filter:alpha(opacity=70);/* IE 6,7*/
+    -ms-filter: "alpha(opacity=70)";/* IE 8,9 */
+    -moz-opacity:0.7;/* FF , Netscape */
+    -khtml-opacity: 0.7;/* Safari 1.x */
+    opacity:0.7;
+    zoom:1;/*IE*/
+}
+img {
+    max-width: 300px;
+}
+
+.dialog{
+  width: 100%;
+  height: 100%;
+  max-width: 800px;
+  max-height: 800px;
+}
+
+.textarea {
+  width: 80%;
+  background-color: white;
+}
+
+ons-input {
+  width: 80%;
+}
+
+label {
+  color: lightslategrey;
+}
+
+.scroller {
+  display: block;
+  height: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;
+  -ms-scroll-snap-type: mandatory;
+}
+
+#cancel_button {
+    background: left;
+    color: grey;
+}
+
+a {
+    text-decoration: none;
+}
+
+  .list-item__subtitle{
+    word-break: break-all;
+  }
+
+.input-range {
+  display: none;
+}
+.range-group {
+  position: relative;
+}
+.range-group > a {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+}
+.range-group > a:before {
+  content: "\f3ae";
+  font-family: "Ionicons";
+  font-size: 20px;
+  color: #aaa;
+}
+.range-group > a.on:before {
+  content: "\f2fc";
+  color: #fc3;
+}

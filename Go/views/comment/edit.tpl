@@ -1,0 +1,1 @@
+/go/src/app/views/comment/edit.tpl

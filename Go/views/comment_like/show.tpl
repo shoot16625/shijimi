@@ -1,0 +1,1 @@
+/go/src/app/views/CommentLike/show.tpl

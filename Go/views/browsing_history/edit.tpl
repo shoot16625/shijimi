@@ -1,0 +1,1 @@
+/go/src/app/views/BrowsingHistory/edit.tpl

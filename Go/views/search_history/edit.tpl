@@ -1,0 +1,1 @@
+/go/src/app/views/SearchHistory/edit.tpl
