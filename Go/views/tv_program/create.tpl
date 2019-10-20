@@ -210,16 +210,14 @@ p {
   <script type="text/javascript" src="/static/js/common.js"></script>
 
   <script>
-    var target = document.getElementById('hour');
-    var text = "<option>指定なし</option>";
+    let target = document.getElementById('hour');
+    let text = "<option>指定なし</option>";
     let t;
     for (let i = 0; i < 48; i++) {
       if (i % 2 == 0){
-        // console.log(String(i/2)+":00");
         t = String(i/2)+":00";
         text += "<option>"+t+"</option>"
       } else {
-        // console.log(String((i-1)/2)+":30");
         t = String((i-1)/2)+":30";
         text += "<option>"+t+"</option>"
       }
@@ -229,9 +227,9 @@ p {
 
 
   <script type="text/javascript">
-    var PreviewTvProgram = function(elem_id){
+    var PreviewTvProgram = function(elemID){
       ons.ready(function() {
-        var dialog = document.getElementById(elem_id);
+        var dialog = document.getElementById(elemID);
         if (dialog) {
           document.getElementById('preview_on_air_info').innerHTML = document.getElementsByName('year')[0].value+"年 "+document.getElementsByName('season')[0].value.replace(/\(.+\)/, '')+"（"+document.getElementsByName('week')[0].value+document.getElementsByName('hour')[0].value+"）";
           document.getElementById('preview_title').innerHTML = document.getElementsByName('title')[0].value;
@@ -251,12 +249,13 @@ p {
           document.querySelector('#expandable-list-item').showExpansion();
           dialog.show();
         } else {
-          ons.createElement(elem_id+'.html', { append: true })
+          ons.createElement(elemID+'.html', { append: true })
           .then(function(dialog) {
+            let hour;
             if (document.getElementsByName('hour')[0].value == "指定なし"){
-              var hour = "";
+              hour = "";
             } else {
-              var hour = document.getElementsByName('hour')[0].value;
+              hour = document.getElementsByName('hour')[0].value;
             }
             document.getElementById('preview_on_air_info').innerHTML = document.getElementsByName('year')[0].value+"年 "+document.getElementsByName('season')[0].value.replace(/\(.+\)/, '')+"（"+document.getElementsByName('week')[0].value+hour+"）";
             document.getElementById('preview_title').innerHTML = document.getElementsByName('title')[0].value;
@@ -283,8 +282,7 @@ p {
 
   <script type="text/javascript">
     const name = {{.TvProgram.Title}};
-    if (name != "null") {
-      console.log({{.TvProgram.Category}});
+    if (name != null) {
       if ({{.TvProgram.Season.Name}} == "春"){
         document.getElementById('season').value = {{.TvProgram.Season.Name}}+"(4~6)";
       }
@@ -317,7 +315,5 @@ p {
       DialogBoxEveryone("alert_tv_title");
     };
   </script>
-
-
 </body>
 </html>

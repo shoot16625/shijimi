@@ -39,6 +39,5 @@
     </form>
   </ons-page>
   <script type="text/javascript" src="/static/js/common.js"></script>
-
 </body>
 </html>

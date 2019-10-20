@@ -1,15 +1,16 @@
 package controllers
 
 import (
-"app/models"
-"encoding/json"
-"errors"
-"strconv"
-"strings"
-"fmt"
+	"app/models"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"strconv"
+	"strings"
+
 	// "time"
 
-"github.com/astaxie/beego"
+	"github.com/astaxie/beego"
 )
 
 //  CommentController operations for Comment
@@ -37,7 +38,7 @@ func (c *CommentController) URLMapping() {
 // @router / [post]
 func (c *CommentController) Post() {
 	session := c.StartSession()
-	if session.Get("UserId")==nil{
+	if session.Get("UserId") == nil {
 		fmt.Println("you are not user, so permission denyed.")
 		c.Redirect("/tv/tv_program/comment/"+c.GetString("TvProgramId"), 302)
 	} else {
@@ -47,15 +48,15 @@ func (c *CommentController) Post() {
 		// if true {
 		json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 
-// } else {
-// 		idStr := c.GetString("TvProgramId")
-// 		id, _ := strconv.ParseInt(idStr, 0, 64)
-// 		v = models.Comment{
-// 			// Content: models.ReplacNewLine(c.GetString("content"), "<br>"),
-// 			Content: c.GetString("content"),
-// 			TvProgramId: id,
-// 			UserId: session.Get("UserId").(int64),
-// 		}}
+		// } else {
+		// 		idStr := c.GetString("TvProgramId")
+		// 		id, _ := strconv.ParseInt(idStr, 0, 64)
+		// 		v = models.Comment{
+		// 			// Content: models.ReplacNewLine(c.GetString("content"), "<br>"),
+		// 			Content: c.GetString("content"),
+		// 			TvProgramId: id,
+		// 			UserId: session.Get("UserId").(int64),
+		// 		}}
 		// fmt.Println(v)
 		if _, err := models.AddComment(&v); err == nil {
 			c.Ctx.Output.SetStatus(201)
@@ -185,9 +186,9 @@ func (c *CommentController) Delete() {
 	if err := models.DeleteComment(id); err == nil {
 		c.Data["json"] = "OK"
 		u, err := models.GetCommentLikeByComment(id)
-		if err == nil{
-			for _, value := range u{
-					_ = models.DeleteCommentLike(value.Id)
+		if err == nil {
+			for _, value := range u {
+				_ = models.DeleteCommentLike(value.Id)
 			}
 		}
 	} else {
@@ -200,21 +201,21 @@ func (c *CommentController) Delete() {
 func (c *CommentController) Show() {
 
 	idStr := c.Ctx.Input.Param(":id")
-	tv_program_id, _ := strconv.ParseInt(idStr, 0, 64)
-	v, err := models.GetTvProgramById(tv_program_id)
+	tvProgramID, _ := strconv.ParseInt(idStr, 0, 64)
+	v, err := models.GetTvProgramById(tvProgramID)
 	if err != nil {
 		c.Data["TvProgram"] = err.Error()
 	} else {
 		c.Data["TvProgram"] = v
 	}
 
-	l, err := models.GetCommentByTvprogramId(tv_program_id)
+	l, err := models.GetCommentByTvprogramId(tvProgramID)
 	if err != nil {
 		c.Data["Comment"] = nil
 	} else {
 		c.Data["Comment"] = l
 	}
-	
+
 	var users []models.User
 	for _, comment := range l {
 		u, _ := models.GetUserById(comment.UserId)
@@ -222,49 +223,49 @@ func (c *CommentController) Show() {
 	}
 	c.Data["Users"] = users
 	session := c.StartSession()
-// 閲覧数カウント
-	if session.Get(tv_program_id)==nil{
+	// 閲覧数カウント
+	if session.Get(tvProgramID) == nil {
 		fmt.Println("first tv click")
-		if session.Get("UserId")!=nil{
-			user_id := session.Get("UserId").(int64)
-		var b models.BrowsingHistory
-		b = models.BrowsingHistory{
-			UserId: user_id,
-			TvProgramId: tv_program_id,
+		if session.Get("UserId") != nil {
+			userID := session.Get("UserId").(int64)
+			var b models.BrowsingHistory
+			b = models.BrowsingHistory{
+				UserId:      userID,
+				TvProgramId: tvProgramID,
+			}
+			_, err = models.AddBrowsingHistory(&b)
+			if err == nil {
+				fmt.Println("browsing_history", b)
+			}
 		}
-		_, err = models.AddBrowsingHistory(&b)
-		if err==nil{
-			fmt.Println("browsing_history", b)
-		}
-	}
 		v.CountClicked++
 		_ = models.UpdateTvProgramById(v)
-		session.Set(tv_program_id, true)
+		session.Set(tvProgramID, true)
 	}
 
-	if session.Get("UserId")==nil{
+	if session.Get("UserId") == nil {
 		fmt.Println("you are not user, so your tv_Like break.")
-	}	else {
-		user_id := session.Get("UserId").(int64)
-		w, err := models.GetWatchingStatusByUserAndTvProgram(user_id, tv_program_id)
+	} else {
+		userID := session.Get("UserId").(int64)
+		w, err := models.GetWatchingStatusByUserAndTvProgram(userID, tvProgramID)
 		if err != nil {
 			c.Data["WatchStatus"] = new(models.WatchingStatus)
 		} else {
 			c.Data["WatchStatus"] = w
 		}
 
-		x,_ := models.GetUserById(user_id)
+		x, _ := models.GetUserById(userID)
 		c.Data["User"] = x
 
-		var comment_likes []models.CommentLike
+		var commentLikes []models.CommentLike
 		for _, comment := range l {
-			u, err := models.GetCommentLikeByCommentAndUser(comment.Id, user_id)
-			if err != nil{
+			u, err := models.GetCommentLikeByCommentAndUser(comment.Id, userID)
+			if err != nil {
 				u = new(models.CommentLike)
 			}
-			comment_likes = append(comment_likes, *u)
+			commentLikes = append(commentLikes, *u)
 		}
-		c.Data["CommentLike"] = comment_likes
+		c.Data["CommentLike"] = commentLikes
 
 	}
 	c.TplName = "comment/show.tpl"
@@ -273,8 +274,8 @@ func (c *CommentController) Show() {
 func (c *CommentController) SearchComment() {
 
 	idStr := c.Ctx.Input.Param(":id")
-	tv_program_id, _ := strconv.ParseInt(idStr, 0, 64)
-	v, err := models.GetTvProgramById(tv_program_id)
+	tvProgramID, _ := strconv.ParseInt(idStr, 0, 64)
+	v, err := models.GetTvProgramById(tvProgramID)
 	if err != nil {
 		c.Data["TvProgram"] = err.Error()
 	} else {
@@ -289,54 +290,54 @@ func (c *CommentController) SearchComment() {
 	var offset int64
 	var word string
 	type SearchWords struct {
-			Word string
-			Limit int64
-			Sortby string
+		Word   string
+		Limit  int64
+		Sortby string
 	}
 
 	if v, err := c.GetInt64("limit"); err == nil {
 		limit = v
 	}
-	
+
 	if v := c.GetString("word"); v != "" {
 		query["Content__icontains"] = v
 		word = strings.Replace(v, "　", " ", -1)
 		word = strings.Replace(word, " ", "、", -1)
 	}
 
-	query["TvProgramId"] = strconv.FormatInt(tv_program_id, 10)
+	query["TvProgramId"] = strconv.FormatInt(tvProgramID, 10)
 
 	if v := c.GetString("sortby"); v != "" {
-		sort_elem := v
-		if sort_elem == "新しい順" {
+		sortElem := v
+		if sortElem == "新しい順" {
 			sortby = append(sortby, "Created")
 			order = append(order, "desc")
-		} else if sort_elem == "古い順" {
+		} else if sortElem == "古い順" {
 			sortby = append(sortby, "Created")
 			order = append(order, "asc")
-		} else if sort_elem == "いいねが多い順" {
+		} else if sortElem == "いいねが多い順" {
 			sortby = append(sortby, "CountLike")
 			order = append(order, "desc")
 		}
 	}
-	
+
 	var s SearchWords
-	s = SearchWords {
-		Word: c.GetString("word"),
-		Limit: limit,
+	s = SearchWords{
+		Word:   c.GetString("word"),
+		Limit:  limit,
 		Sortby: c.GetString("sortby"),
 	}
 	c.Data["SearchWords"] = s
 	session := c.StartSession()
-	if session.Get("UserId")!=nil{
+	if session.Get("UserId") != nil {
 		var u models.SearchHistory
-		u = models.SearchHistory {
+		u = models.SearchHistory{
 			UserId: session.Get("UserId").(int64),
-			Word: word,
-			Limit: s.Limit,
-			Sortby:s.Sortby,
+			Word:   word,
+			Limit:  s.Limit,
+			Sortby: s.Sortby,
 		}
-		_,_ = models.AddSearchHistory(&u)
+		_, _ = models.AddSearchHistory(&u)
 	}
 
 	l, err := models.GetAllComment(query, fields, sortby, order, offset, limit)
@@ -353,49 +354,49 @@ func (c *CommentController) SearchComment() {
 	}
 	c.Data["Users"] = users
 	// session := c.StartSession()
-// 閲覧数カウント
-	if session.Get(tv_program_id)==nil{
+	// 閲覧数カウント
+	if session.Get(tvProgramID) == nil {
 		fmt.Println("first tv click")
-		if session.Get("UserId")!=nil{
-			user_id := session.Get("UserId").(int64)
-		var b models.BrowsingHistory
-		b = models.BrowsingHistory{
-			UserId: user_id,
-			TvProgramId: tv_program_id,
+		if session.Get("UserId") != nil {
+			userID := session.Get("UserId").(int64)
+			var b models.BrowsingHistory
+			b = models.BrowsingHistory{
+				UserId:      userID,
+				TvProgramId: tvProgramID,
+			}
+			_, err = models.AddBrowsingHistory(&b)
+			if err == nil {
+				fmt.Println("browsing_history", b)
+			}
 		}
-		_, err = models.AddBrowsingHistory(&b)
-		if err==nil{
-			fmt.Println("browsing_history", b)
-		}
-	}
 		v.CountClicked++
 		_ = models.UpdateTvProgramById(v)
-		session.Set(tv_program_id, true)
+		session.Set(tvProgramID, true)
 	}
 
-	if session.Get("UserId")==nil{
+	if session.Get("UserId") == nil {
 		fmt.Println("you are not user, so your tv_Like break.")
-	}	else {
-		user_id := session.Get("UserId").(int64)
-		w, err := models.GetWatchingStatusByUserAndTvProgram(user_id, tv_program_id)
+	} else {
+		userID := session.Get("UserId").(int64)
+		w, err := models.GetWatchingStatusByUserAndTvProgram(userID, tvProgramID)
 		if err != nil {
 			c.Data["WatchStatus"] = new(models.WatchingStatus)
 		} else {
 			c.Data["WatchStatus"] = w
 		}
 
-		x,_ := models.GetUserById(user_id)
+		x, _ := models.GetUserById(userID)
 		c.Data["User"] = x
 
-		var comment_likes []models.CommentLike
+		var commentLikes []models.CommentLike
 		for _, comment := range l {
-			u, err := models.GetCommentLikeByCommentAndUser(comment.(models.Comment).Id, user_id)
-			if err != nil{
+			u, err := models.GetCommentLikeByCommentAndUser(comment.(models.Comment).Id, userID)
+			if err != nil {
 				u = new(models.CommentLike)
 			}
-			comment_likes = append(comment_likes, *u)
+			commentLikes = append(commentLikes, *u)
 		}
-		c.Data["CommentLike"] = comment_likes
+		c.Data["CommentLike"] = commentLikes
 
 	}
 	c.TplName = "comment/show.tpl"

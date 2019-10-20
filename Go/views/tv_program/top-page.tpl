@@ -9,17 +9,16 @@
       }
     </style>
   </head>
-
   <body>
-    <ons-page>
+    <ons-page id="top-page">
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
-      <div class="body" style="margin-left: 5px; margin-right: 5px;">
+      <div style="margin-left: 5px; margin-right: 5px;">
         <ons-card
           style="text-align: center;background-color:linen;margin:10px;"
         >
           「ShiJimi」<br />
-          あなたの大好きを未来へ伝えるSNS
+          SNSとレビューサイトを足して2で割ったような．
         </ons-card>
         <form id="search_form" action="/tv/tv_program/search" method="post">
           <p style="margin-top: 20px;">
@@ -82,7 +81,7 @@
             <i class="far fa-moon" style="color:gold;"></i> 月
           </p>
           <ons-carousel
-            var="carousel01"
+            id="carousel01"
             auto-refresh
             auto-scroll
             auto-scroll-ratio="0.15"
@@ -115,10 +114,10 @@
           <p
             style="margin-top: 25px;border-bottom: solid thin lightgray;text-align: left;"
           >
-            <i class="far fa-moon" style="color:gold;"></i> 火
+            <i class="fas fa-fire" style="color:red;"></i> 火
           </p>
           <ons-carousel
-            var="carousel02"
+            id="carousel02"
             auto-refresh
             auto-scroll
             auto-scroll-ratio="0.15"
@@ -151,10 +150,10 @@
           <p
             style="margin-top: 25px;border-bottom: solid thin lightgray;text-align: left;"
           >
-            <i class="far fa-moon" style="color:gold;"></i> 水
+            <i class="fas fa-tint" style="color:blue;"></i> 水
           </p>
           <ons-carousel
-            var="carousel03"
+            id="carousel03"
             auto-refresh
             auto-scroll
             auto-scroll-ratio="0.15"
@@ -187,10 +186,10 @@
           <p
             style="margin-top: 25px;border-bottom: solid thin lightgray;text-align: left;"
           >
-            <i class="far fa-moon" style="color:gold;"></i> 木
+            <i class="fas fa-tree" style="color:green;"></i> 木
           </p>
           <ons-carousel
-            var="carousel04"
+            id="carousel04"
             auto-refresh
             auto-scroll
             auto-scroll-ratio="0.15"
@@ -223,10 +222,10 @@
           <p
             style="margin-top: 25px;border-bottom: solid thin lightgray;text-align: left;"
           >
-            <i class="far fa-moon" style="color:gold;"></i> 金
+            <i class="fas fa-coins" style="color:gold;"></i> 金
           </p>
           <ons-carousel
-            var="carousel05"
+            id="carousel05"
             auto-refresh
             auto-scroll
             auto-scroll-ratio="0.15"
@@ -259,10 +258,10 @@
           <p
             style="margin-top: 25px;border-bottom: solid thin lightgray;text-align: left;"
           >
-            <i class="far fa-moon" style="color:gold;"></i> 土
+            <i class="fas fa-globe" style="color:rgb(116, 168, 192);"></i> 土
           </p>
           <ons-carousel
-            var="carousel06"
+            id="carousel06"
             auto-refresh
             auto-scroll
             auto-scroll-ratio="0.15"
@@ -295,10 +294,10 @@
           <p
             style="margin-top: 25px;border-bottom: solid thin lightgray;text-align: left;"
           >
-            <i class="far fa-moon" style="color:gold;"></i> 日
+            <i class="fas fa-sun" style="color:gold;"></i> 日
           </p>
           <ons-carousel
-            var="carousel07"
+            id="carousel07"
             auto-refresh
             auto-scroll
             auto-scroll-ratio="0.15"
@@ -394,11 +393,11 @@
         </ons-page>
         <script type="text/javascript">
           $(function() {
-            $("#password-check").change(function() {
-              if ($(this).prop("checked")) {
-                $("#password").attr("type", "text");
+            $('#password-check').change(function() {
+              if ($(this).prop('checked')) {
+                $('#password').attr('type', 'text');
               } else {
-                $("#password").attr("type", "password");
+                $('#password').attr('type', 'password');
               }
             });
           });
@@ -408,9 +407,7 @@
 
     <script type="text/javascript" src="/static/js/common.js"></script>
     <script type="text/javascript">
-
-      ons.ready(function() {
-        if({{.TvProgram_mon}}){
+      if({{.TvProgram_mon}}){
         AutoScroll(carousel01, {{.TvProgram_mon}}.length);
       }
       if ({{.TvProgram_tue}}) {
@@ -419,16 +416,18 @@
       if ({{.TvProgram_wed}}) {
         AutoScroll(carousel03, {{.TvProgram_wed}}.length);
       }
-      });
+      if({{.TvProgram_thu}}){
+        AutoScroll(carousel04, {{.TvProgram_thu}}.length);
+      }
+      if ({{.TvProgram_fri}}) {
+        AutoScroll(carousel05, {{.TvProgram_fri}}.length);
+      }
+      if ({{.TvProgram_sat}}) {
+        AutoScroll(carousel06, {{.TvProgram_sat}}.length);
+      }
+      if ({{.TvProgram_sun}}) {
+        AutoScroll(carousel07, {{.TvProgram_sun}}.length);
+      }
     </script>
-    <!-- <script>
-  var GoOtherPage = function(path){
-    if ({{.UserId}} == null){
-      return DialogBoxEveryone('alert_onlyuser_dialog');
-    } else {
-    window.location.href = path;
-    }
-  };
-</script> -->
   </body>
 </html>

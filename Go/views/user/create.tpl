@@ -52,19 +52,6 @@
             </label>
           </p>
           <p>
-            <ons-input
-              type="number"
-              name="age"
-              value="{{.User.Age}}"
-              modifier="underbar"
-              placeholder="年齢"
-              min="0"
-              max="120"
-              float
-              required
-            ></ons-input>
-          </p>
-          <p>
             <ons-select
               class="select"
               name="gender"
@@ -76,6 +63,7 @@
               <select class="select-input">
                 <option>男性</option>
                 <option>女性</option>
+                <option>LGBT</option>
               </select>
             </ons-select>
           </p>
@@ -153,6 +141,7 @@
                 <option value="宮崎県">宮崎県</option>
                 <option value="鹿児島県">鹿児島県</option>
                 <option value="沖縄県">沖縄県</option>
+                <option value="海外">海外</option>
               </select>
             </ons-select>
           </p>
@@ -167,17 +156,32 @@
             >
               <label for="jobs">＜職業＞</label>
               <select class="select-input" id="jobs">
+                <option>学生</option>
                 <option>エンジニア</option>
                 <option>会社員</option>
                 <option>公務員</option>
                 <option>自営業</option>
                 <option>会社役員</option>
+                <option>御隠居</option>
                 <option>専業主婦（夫）</option>
-                <option>学生</option>
                 <option>パート・アルバイト</option>
                 <option>フリーター</option>
+                <option>その他</option>
               </select>
             </ons-select>
+          </p>
+          <p>
+            <ons-input
+              type="number"
+              name="age"
+              value="{{.User.Age}}"
+              modifier="underbar"
+              placeholder="年齢"
+              min="0"
+              max="120"
+              float
+              required
+            ></ons-input>
           </p>
           <p>
             <label for="IconUrl">＜プロフィール画像のURL＞</label>

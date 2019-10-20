@@ -1,16 +1,17 @@
 package controllers
 
 import (
-"app/models"
+	"app/models"
 	// "app/sessions"
 	// "encoding/json"
-"errors"
-"strconv"
-"strings"
-"fmt"
+	"errors"
+	"fmt"
+	"strconv"
+	"strings"
+
 	// "net/http"
 
-"github.com/astaxie/beego"
+	"github.com/astaxie/beego"
 	// "github.com/astaxie/beego/session"
 )
 
@@ -30,6 +31,8 @@ func (c *UserController) URLMapping() {
 	c.Mapping("Index", c.Index)
 	c.Mapping("Show", c.Show)
 	c.Mapping("ShowReview", c.ShowReview)
+	c.Mapping("ShowWatchedTv", c.ShowWatchedTv)
+	c.Mapping("ShowWtwTv", c.ShowWtwTv)
 	c.Mapping("Edit", c.Edit)
 	c.Mapping("Login", c.Login)
 	c.Mapping("Logout", c.Logout)
@@ -49,33 +52,33 @@ func (c *UserController) URLMapping() {
 func (c *UserController) Post() {
 	var v models.User
 	age, _ := c.GetInt("age")
-	hash_pass, _ := models.PasswordHash(c.GetString("password"))
-	hash_secondpass, _ := models.PasswordHash(c.GetString("SecondPassword"))
-	icon_url := c.GetString("IconUrl")
-	if icon_url == "" {
-		icon_url = "http://flat-icon-design.com/f/f_object_174/s512_f_object_174_0bg.png"
+	hashPass, _ := models.PasswordHash(c.GetString("password"))
+	hashSecondpass, _ := models.PasswordHash(c.GetString("SecondPassword"))
+	iconURL := c.GetString("IconUrl")
+	if iconURL == "" {
+		iconURL = "http://flat-icon-design.com/f/f_object_174/s512_f_object_174_0bg.png"
 	}
 	// json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 	v = models.User{
-		Username: c.GetString("username"),
-		Password: hash_pass,
-		SecondPassword: hash_secondpass,
-		Age: age,
-		Address: c.GetString("address"),
-		Gender: c.GetString("gender"),
-		Job: c.GetString("job"),
-		IconUrl: icon_url,
-		Marital: c.GetString("marital"),
+		Username:       c.GetString("username"),
+		Password:       hashPass,
+		SecondPassword: hashSecondpass,
+		Age:            age,
+		Address:        c.GetString("address"),
+		Gender:         c.GetString("gender"),
+		Job:            c.GetString("job"),
+		IconUrl:        iconURL,
+		Marital:        c.GetString("marital"),
 	}
-	
+
 	// fmt.Println(v)
 	if _, err := models.AddUser(&v); err == nil {
 		fmt.Println("user create and login!!")
-			session := c.StartSession()
-			session.Set("username", c.GetString("username"))
-			session.Set("UserId", v.Id)
-			// c.Redirect("/tv/tv_program/index", 302)
-			c.Redirect("/tv/user/show", 302)
+		session := c.StartSession()
+		session.Set("username", c.GetString("username"))
+		session.Set("UserId", v.Id)
+		// c.Redirect("/tv/tv_program/index", 302)
+		c.Redirect("/tv/user/show", 302)
 	} else {
 		// c.Data["json"] = err.Error()
 		v.Password = c.GetString("password")
@@ -86,7 +89,6 @@ func (c *UserController) Post() {
 	}
 	// c.ServeJSON()
 }
-
 
 // GetOne ...
 // @Title Get One
@@ -183,25 +185,25 @@ func (c *UserController) Put() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	age, _ := c.GetInt("age")
-	hash_pass, _ := models.PasswordHash(c.GetString("password"))
-	hash_secondpass, _ := models.PasswordHash(c.GetString("SecondPassword"))
+	hashPass, _ := models.PasswordHash(c.GetString("password"))
+	hashSecondpass, _ := models.PasswordHash(c.GetString("SecondPassword"))
 	if c.GetString("password") == "" {
 		u, _ := models.GetUserById(id)
-		hash_pass = u.Password
-		hash_secondpass = u.SecondPassword
+		hashPass = u.Password
+		hashSecondpass = u.SecondPassword
 	}
 	var v models.User
 	v = models.User{
-		Id: id,
-		Username: c.GetString("username"),
-		Password: hash_pass,
-		SecondPassword: hash_secondpass,
-		Age: age,
-		Address: c.GetString("address"),
-		Gender: c.GetString("gender"),
-		Job: c.GetString("job"),
-		IconUrl: c.GetString("IconUrl"),
-		Marital: c.GetString("marital"),
+		Id:             id,
+		Username:       c.GetString("username"),
+		Password:       hashPass,
+		SecondPassword: hashSecondpass,
+		Age:            age,
+		Address:        c.GetString("address"),
+		Gender:         c.GetString("gender"),
+		Job:            c.GetString("job"),
+		IconUrl:        c.GetString("IconUrl"),
+		Marital:        c.GetString("marital"),
 	}
 	fmt.Println(v)
 	if err := models.UpdateUserById(&v); err == nil {
@@ -226,10 +228,14 @@ func (c *UserController) Delete() {
 	id := session.Get("UserId").(int64)
 	if err := models.DeleteUser(id); err == nil {
 		c.Data["json"] = "OK"
+		c.Data["Status"] = "ユーザを削除"
 	} else {
 		c.Data["json"] = err.Error()
 	}
 	c.ServeJSON()
+	session.Delete("UserId")
+	session.Delete("Username")
+	c.TplName = "user/logout.tpl"
 }
 
 func (c *UserController) Create() {
@@ -246,50 +252,57 @@ func (c *UserController) Show() {
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	// fmt.Println(id)
 	if id != 0 {
-		v,_ := models.GetUserById(id)
+		v, _ := models.GetUserById(id)
 		c.Data["User"] = v
-		w,_ := models.GetCommentByUserId(id)
+		w, _ := models.GetCommentByUserId(id)
 		c.Data["Comment"] = w
 
-		var comment_likes []models.CommentLike
+		var commentLikes []models.CommentLike
 		var MyUserId int64 = 0
 		if session.Get("UserId") == nil {
 			c.Data["MyUserId"] = nil
 		} else {
-		MyUserId = session.Get("UserId").(int64)
-		c.Data["MyUserId"] = MyUserId
+			MyUserId = session.Get("UserId").(int64)
+			c.Data["MyUserId"] = MyUserId
 			for _, comment := range w {
-			u, err := models.GetCommentLikeByCommentAndUser(comment.Id, MyUserId)
-			if err != nil{
-				u = new(models.CommentLike)
+				u, err := models.GetCommentLikeByCommentAndUser(comment.Id, MyUserId)
+				if err != nil {
+					u = new(models.CommentLike)
+				}
+				commentLikes = append(commentLikes, *u)
 			}
-			comment_likes = append(comment_likes, *u)
+			c.Data["CommentLike"] = commentLikes
 		}
-		c.Data["CommentLike"] = comment_likes
-	}
-		// fmt.Println(comment_likes)
+		// fmt.Println(commentLikes)
 
 		c.TplName = "user/user_page.tpl"
 	} else {
-	if session.Get("UserId") == nil{
-		c.Redirect("/", 302)
-	} else {
-		UserId := session.Get("UserId").(int64)
-		v,_ := models.GetUserById(UserId)
-		c.Data["User"] = v
-		w,_ := models.GetCommentByUserId(UserId)
-		c.Data["Comment"] = w
+		if session.Get("UserId") == nil {
+			c.Redirect("/", 302)
+		} else {
+			UserId := session.Get("UserId").(int64)
+			v, _ := models.GetUserById(UserId)
+			c.Data["User"] = v
+			w, _ := models.GetCommentByUserId(UserId)
+			c.Data["Comment"] = w
 
-		var comment_likes []models.CommentLike
-		for _, comment := range w {
-			u, err := models.GetCommentLikeByCommentAndUser(comment.Id, UserId)
-			if err != nil{
-				u = new(models.CommentLike)
+			var commentLikes []models.CommentLike
+			var tvPrograms []models.TvProgram
+			for _, comment := range w {
+				u, err := models.GetCommentLikeByCommentAndUser(comment.Id, UserId)
+				if err != nil {
+					u = new(models.CommentLike)
+				}
+				commentLikes = append(commentLikes, *u)
+				v, err := models.GetTvProgramById(comment.TvProgramId)
+				if err != nil {
+					v = new(models.TvProgram)
+				}
+				tvPrograms = append(tvPrograms, *v)
 			}
-			comment_likes = append(comment_likes, *u)
+			c.Data["CommentLike"] = commentLikes
+			c.Data["TvProgram"] = tvPrograms
 		}
-		c.Data["CommentLike"] = comment_likes
-	}
 		c.TplName = "user/show.tpl"
 	}
 }
@@ -300,77 +313,143 @@ func (c *UserController) ShowReview() {
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	// fmt.Println(id)
 	if id != 0 {
-		v,_ := models.GetUserById(id)
+		v, _ := models.GetUserById(id)
 		c.Data["User"] = v
-		w,_ := models.GetReviewCommentByUserId(id)
+		w, _ := models.GetReviewCommentByUserId(id)
 		c.Data["Comment"] = w
 		if session.Get("UserId") == nil {
 			c.Data["MyUserId"] = nil
 		} else {
-		c.Data["MyUserId"] = session.Get("UserId").(int64)
+			c.Data["MyUserId"] = session.Get("UserId").(int64)
 
-		var comment_likes []models.ReviewCommentLike
-		for _, comment := range w {
-			u, err := models.GetReviewCommentLikeByCommentAndUser(comment.Id, id)
-			if err != nil{
-				u = new(models.ReviewCommentLike)
+			var commentLikes []models.ReviewCommentLike
+			for _, comment := range w {
+				u, err := models.GetReviewCommentLikeByCommentAndUser(comment.Id, id)
+				if err != nil {
+					u = new(models.ReviewCommentLike)
+				}
+				commentLikes = append(commentLikes, *u)
 			}
-			comment_likes = append(comment_likes, *u)
+			c.Data["CommentLike"] = commentLikes
 		}
-		c.Data["CommentLike"] = comment_likes
-	}
 		c.TplName = "user/user_review.tpl"
 	} else {
-	if session.Get("UserId") == nil{
-		c.Redirect("/", 302)
-	} else {
-		UserId := session.Get("UserId").(int64)
-		v,_ := models.GetUserById(UserId)
-		c.Data["User"] = v
-		w,_ := models.GetReviewCommentByUserId(UserId)
-		c.Data["Comment"] = w
+		if session.Get("UserId") == nil {
+			c.Redirect("/", 302)
+		} else {
+			UserId := session.Get("UserId").(int64)
+			v, _ := models.GetUserById(UserId)
+			c.Data["User"] = v
+			w, _ := models.GetReviewCommentByUserId(UserId)
+			c.Data["Comment"] = w
 
-		var comment_likes []models.ReviewCommentLike
-		for _, comment := range w {
-			u, err := models.GetReviewCommentLikeByCommentAndUser(comment.Id, UserId)
-			if err != nil{
-				u = new(models.ReviewCommentLike)
+			var commentLikes []models.ReviewCommentLike
+			for _, comment := range w {
+				u, err := models.GetReviewCommentLikeByCommentAndUser(comment.Id, UserId)
+				if err != nil {
+					u = new(models.ReviewCommentLike)
+				}
+				commentLikes = append(commentLikes, *u)
 			}
-			comment_likes = append(comment_likes, *u)
+			c.Data["CommentLike"] = commentLikes
 		}
-		c.Data["CommentLike"] = comment_likes
-	}
 		c.TplName = "user/show_review.tpl"
 	}
+}
+
+func (c *UserController) ShowWatchedTv() {
+	var fields []string
+	var sortby []string
+	var order []string
+	var query = make(map[string]string)
+	var limit int64 = 10000
+	var offset int64
+
+	session := c.StartSession()
+	userID := session.Get("UserId").(int64)
+
+	sortby = append(sortby, "Updated")
+	order = append(order, "desc")
+	query["Watched"] = "1"
+	v, _ := models.GetAllWatchingStatus(query, fields, sortby, order, offset, limit)
+	c.Data["WatchStatus"] = v
+
+	var tvPrograms []models.TvProgram
+	for _, watched := range v {
+		r, err := models.GetTvProgramById(watched.(models.WatchingStatus).TvProgramId)
+		if err != nil {
+			tvPrograms = append(tvPrograms, *new(models.TvProgram))
+		} else {
+			tvPrograms = append(tvPrograms, *r)
+		}
+	}
+	c.Data["TvProgram"] = tvPrograms
+	u, _ := models.GetUserById(userID)
+	c.Data["User"] = u
+	c.TplName = "user/show_watched.tpl"
+}
+
+func (c *UserController) ShowWtwTv() {
+	fmt.Println("ShowWtwTvShowWtwTvShowWtwTvShowWtwTvShowWtwTvShowWtwTv")
+	var fields []string
+	var sortby []string
+	var order []string
+	var query = make(map[string]string)
+	var limit int64 = 10000
+	var offset int64
+
+	session := c.StartSession()
+	userID := session.Get("UserId").(int64)
+
+	sortby = append(sortby, "Updated")
+	order = append(order, "desc")
+	query["WantToWatch"] = "1"
+	v, _ := models.GetAllWatchingStatus(query, fields, sortby, order, offset, limit)
+	c.Data["WatchStatus"] = v
+
+	var tvPrograms []models.TvProgram
+	for _, watched := range v {
+		r, err := models.GetTvProgramById(watched.(models.WatchingStatus).TvProgramId)
+		if err != nil {
+			tvPrograms = append(tvPrograms, *new(models.TvProgram))
+		} else {
+			tvPrograms = append(tvPrograms, *r)
+		}
+	}
+	c.Data["TvProgram"] = tvPrograms
+	u, _ := models.GetUserById(userID)
+	c.Data["User"] = u
+	c.TplName = "user/show_wtw_tv.tpl"
 }
 
 func (c *UserController) Edit() {
 	session := c.StartSession()
 	UserId := session.Get("UserId").(int64)
-	v,_ := models.GetUserById(UserId)
+	v, _ := models.GetUserById(UserId)
 	c.Data["User"] = v
 	c.TplName = "user/edit.tpl"
 }
 
 func (c *UserController) Login() {
 	session := c.StartSession()
-	v,_ := models.GetUserByUsername(c.GetString("username"))
-	if  v == nil {
+	v, _ := models.GetUserByUsername(c.GetString("username"))
+	if v == nil {
 		fmt.Println("not user")
-		c.TplName = "user/login_error.tpl"
-	}	else {
+		c.Data["Status"] = "ログインに失敗"
+		c.TplName = "user/logout.tpl"
+	} else {
 		if models.UserPassMach(v.Password, c.GetString("password")) {
 			fmt.Println("good password")
 			session.Set("username", c.GetString("username"))
 			session.Set("UserId", v.Id)
-			v := models.LoginHistory {
+			v := models.LoginHistory{
 				UserId: v.Id,
 			}
 			if _, err := models.AddLoginHistory(&v); err == nil {
 				fmt.Println(v)
 			}
 			c.Redirect("/tv/user/show", 302)
-		}		else {
+		} else {
 			fmt.Println("bad password")
 			c.TplName = "user/login_error.tpl"
 		}
@@ -379,12 +458,13 @@ func (c *UserController) Login() {
 
 func (c *UserController) Logout() {
 	session := c.StartSession()
-	user_id := session.Get("UserId")
-	if user_id != nil {
+	userID := session.Get("UserId")
+	if userID != nil {
 		session.Delete("UserId")
 		session.Delete("Username")
-		fmt.Println(user_id,":logout")
+		fmt.Println(userID, ":logout")
 	}
+	c.Data["Status"] = "ログアウト"
 	c.TplName = "user/logout.tpl"
 }
 
@@ -396,10 +476,9 @@ func (c *UserController) ForgetPasswordPage() {
 	c.TplName = "user/forget_password.tpl"
 }
 
-
 func (c *UserController) ForgetUsername() {
-	v,_ := models.GetUserByPasswords(c.GetString("password"),c.GetString("SecondPassword"))
-	if  v == nil {
+	v, _ := models.GetUserByPasswords(c.GetString("password"), c.GetString("SecondPassword"))
+	if v == nil {
 		fmt.Println("can`t find user")
 		c.Data["User"] = new(models.User)
 	} else {
@@ -409,9 +488,9 @@ func (c *UserController) ForgetUsername() {
 }
 
 func (c *UserController) ForgetPassword() {
-	fmt.Println(c.GetString("username"),c.GetString("SecondPassword"))
-	v,_ := models.GetUserByUsernameAndPassword(c.GetString("username"),c.GetString("SecondPassword"))
-	if  v == nil {
+	fmt.Println(c.GetString("username"), c.GetString("SecondPassword"))
+	v, _ := models.GetUserByUsernameAndPassword(c.GetString("username"), c.GetString("SecondPassword"))
+	if v == nil {
 		fmt.Println("can`t find password")
 		c.Data["User"] = new(models.User)
 		c.TplName = "user/forget_password.tpl"

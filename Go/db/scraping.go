@@ -9,7 +9,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	// "time"
-	// "github.com/microcosm-cc/bluemonday"
+	"github.com/microcosm-cc/bluemonday"
 	// "github.com/astaxie/beego"
 	// "github.com/astaxie/beego/orm"
 	// _ "github.com/go-sql-driver/mysql"
@@ -97,19 +97,109 @@ func Scraping() {
 	})
 }
 
-// func init(){
-//     loc, e := time.LoadLocation(location)
-//     if e != nil {
-//         loc = time.FixedZone(location, 9*60*60)
-//     }
-//     time.Local = loc
+func GetTvProgramInformation(title string) (tvProgram models.TvProgram) {
+	doc, err := goquery.NewDocument("https://ja.wikipedia.org/wiki/" + title)
+	if err != nil {
+		fmt.Print("url scarapping failed")
+	}
+	s := doc.Find("table.infobox")
+	tvProgram.Title = title
+	p := bluemonday.NewPolicy()
+	p.AllowElements("br").AllowElements("td")
+	s.Each(func(_ int, u *goquery.Selection) {
+		doramaFlag := false
+		u.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
+			c, _ := t.Find("td").Attr("class")
+			if c == "category" {
+				if strings.Contains(t.Find("td").Text(), "ドラマ") {
+					doramaFlag = true
+				}
+			}
+			if doramaFlag {
+				th := t.Find("th").Text()
+				switch th {
+				case "脚本":
+					html, _ := t.Find("td").Html()
+					tvProgram.Dramatist = strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
+				case "演出":
+					html, _ := t.Find("td").Html()
+					tvProgram.Director = strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
+				case "監督":
+					html, _ := t.Find("td").Html()
+					tvProgram.Supervisor = strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
+				case "出演者":
+					html, _ := t.Find("td").Html()
+					tvProgram.Cast = strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
+				// case "制作":
+				// tvProgram.Production = t.Find("td").Text()
+				case "オープニング":
+					html, _ := t.Find("td").Html()
+					tvProgram.Themesong = strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
+				case "エンディング":
+					html, _ := t.Find("td").Html()
+					if t.Find("td").Text() != "同上" {
+						if tvProgram.Themesong == "" {
+							tvProgram.Themesong = strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
+						} else {
+							tvProgram.Themesong += "、" + strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
+						}
+					}
+				}
+				// if t.Find("th").Text() == "脚本" {
+				// 	tvProgram.Dramatist = t.Find("td").Text()
+				// }
 
-//     orm.RegisterDriver(beego.AppConfig.String("driver"), orm.DRMySQL)
-//     orm.RegisterDataBase("default", beego.AppConfig.String("driver"), beego.AppConfig.String("sqlconn")+"?charset=utf8&loc=Asia%2FTokyo")
-//     err := orm.RunSyncdb("default", false, false)
-//     // err := orm.RunSyncdb("default", false, false)
-//     if err != nil {
-//         fmt.Println(err)
-//     }
+			}
+		})
+		// fmt.Println(tvProgram)
+	})
+	return tvProgram
+}
 
-// }
+func UpdateTvProgramsInformation() {
+	var fields []string
+	var sortby []string
+	var order []string
+	var query = make(map[string]string)
+	var limit int64 = 1000000
+	var offset int64
+
+	var newTvProgram models.TvProgram
+	l, _ := models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
+	for _, tvProgram := range l {
+		// newTvProgram = tvProgram
+		tvInfo := GetTvProgramInformation(tvProgram.(models.TvProgram).Title)
+		newTvProgram = models.TvProgram{
+			Id:                 tvProgram.(models.TvProgram).Id,
+			Title:              tvProgram.(models.TvProgram).Title,
+			Content:            tvProgram.(models.TvProgram).Content,
+			ImageUrl:           tvProgram.(models.TvProgram).ImageUrl,
+			ImageUrlReference:  tvProgram.(models.TvProgram).ImageUrlReference,
+			MovieUrl:           tvProgram.(models.TvProgram).MovieUrl,
+			MovieUrlReference:  tvProgram.(models.TvProgram).MovieUrlReference,
+			Cast:               tvInfo.Cast,
+			Category:           tvInfo.Category,
+			Dramatist:          tvInfo.Dramatist,
+			Supervisor:         tvInfo.Supervisor,
+			Director:           tvInfo.Director,
+			Production:         tvInfo.Production,
+			Year:               tvProgram.(models.TvProgram).Year,
+			Season:             tvProgram.(models.TvProgram).Season,
+			Week:               tvProgram.(models.TvProgram).Week,
+			Hour:               tvProgram.(models.TvProgram).Hour,
+			Themesong:          tvInfo.Themesong,
+			CreateUserId:       tvProgram.(models.TvProgram).CreateUserId,
+			Star:               tvProgram.(models.TvProgram).Star,
+			CountStar:          tvProgram.(models.TvProgram).CountStar,
+			CountWatched:       tvProgram.(models.TvProgram).CountWatched,
+			CountWantToWatch:   tvProgram.(models.TvProgram).CountWantToWatch,
+			CountClicked:       tvProgram.(models.TvProgram).CountClicked,
+			CountAuthorization: tvProgram.(models.TvProgram).CountAuthorization,
+		}
+		if err := models.UpdateTvProgramById(&newTvProgram); err != nil {
+			fmt.Println("Miss")
+		} else {
+			fmt.Println(newTvProgram)
+		}
+	}
+}

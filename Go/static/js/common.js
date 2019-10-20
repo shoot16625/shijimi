@@ -1,26 +1,24 @@
 // 定数
-// const URL = "http://192.168.2.174:8080";
-// URL = "http://192.168.2.174:8081";
-// URL = "http://www.cmplx.cse.nagoya-u.ac.jp";
-const URL = "localhost:8080";
+const URL = 'http://192.168.2.174:8080';
+//const URL = "http://192.168.2.174:8081";
+// const URL = "http://www.cmplx.cse.nagoya-u.ac.jp";
+//const URL = "localhost:8080";
 
 // 一度のみでいい
-ons.bootstrap();
+// ons.bootstrap();
 
 // 自動スクロール
-function AutoScroll(var_name, len) {
-  let index_state = -1;
+function AutoScroll(varName, len) {
+  let indexState = -1;
   setInterval(function() {
-    let index = var_name.getActiveIndex();
-    if (index >= len - 2) {
-      var_name.first();
+    let activeIndex = varName.getActiveIndex();
+    if (indexState == activeIndex) {
+      varName.first();
+      indexState = -1;
     } else {
-      var_name.next();
+      varName.next();
+      indexState = activeIndex;
     }
-    if (index == index_state) {
-      var_name.first();
-    }
-    index_state = index;
   }, 2000);
 }
 
@@ -40,11 +38,11 @@ function AutoScroll(var_name, len) {
 
 // パスワードを表示するチェックボックス
 $(function() {
-  $("#password-check").change(function() {
-    if ($(this).prop("checked")) {
-      $("#password").attr("type", "text");
+  $('#password-check').change(function() {
+    if ($(this).prop('checked')) {
+      $('#password').attr('type', 'text');
     } else {
-      $("#password").attr("type", "password");
+      $('#password').attr('type', 'password');
     }
   });
 });
@@ -55,17 +53,17 @@ var hideAlertDialog = function(elem) {
 };
 
 // ツイートボックス
-var DialogBox = function(elem_id, user_id) {
+var DialogBox = function(elemID, userID) {
   ons.ready(function() {
-    var dialog = document.getElementById(elem_id);
-    if (user_id === null) {
-      return DialogBoxEveryone("alert_onlyuser_dialog");
+    var dialog = document.getElementById(elemID);
+    if (userID === null) {
+      return DialogBoxEveryone('alert_onlyuser_dialog');
     }
     if (dialog) {
       dialog.show();
     } else {
       ons
-        .createElement(elem_id + ".html", { append: true })
+        .createElement(elemID + '.html', { append: true })
         .then(function(dialog) {
           dialog.show();
         });
@@ -74,14 +72,14 @@ var DialogBox = function(elem_id, user_id) {
 };
 
 // not-userも許可するダイアログボックス
-var DialogBoxEveryone = function(elem_id) {
+var DialogBoxEveryone = function(elemID) {
   ons.ready(function() {
-    var dialog = document.getElementById(elem_id);
+    var dialog = document.getElementById(elemID);
     if (dialog) {
       dialog.show();
     } else {
       ons
-        .createElement(elem_id + ".html", { append: true })
+        .createElement(elemID + '.html', { append: true })
         .then(function(dialog) {
           dialog.show();
         });
@@ -91,19 +89,19 @@ var DialogBoxEveryone = function(elem_id) {
 
 // プルフック
 var PullHook = function() {
-  var pullHook = document.getElementById("pull-hook");
+  var pullHook = document.getElementById('pull-hook');
   if (pullHook != null) {
-    pullHook.addEventListener("changestate", function(event) {
-      let message = "";
+    pullHook.addEventListener('changestate', function(event) {
+      let message = '';
       switch (event.state) {
-        case "initial":
-          message = "Pull to refresh";
+        case 'initial':
+          message = 'Pull to refresh';
           break;
-        case "preaction":
-          message = "Release";
+        case 'preaction':
+          message = 'Release';
           break;
-        case "action":
-          message = "Loading...";
+        case 'action':
+          message = 'Loading...';
           break;
       }
       pullHook.innerHTML = message;
@@ -115,116 +113,116 @@ var PullHook = function() {
 };
 
 // いいねボタンの色切り替え
-function SetLikeStatus(like_status, new_color) {
-  if (like_status) {
-    return new_color;
+function SetLikeStatus(likeStatus, newColor) {
+  if (likeStatus) {
+    return newColor;
   } else {
-    return "black";
+    return 'black';
   }
 }
 
 // いいねボタンの色切り替え
-function SetLikeBold(like_status) {
-  if (like_status) {
-    return "fas";
+function SetLikeBold(likeStatus) {
+  if (likeStatus) {
+    return 'fas';
   } else {
-    return "far";
+    return 'far';
   }
 }
 
 // 見たボタンの色の切り替え
-function SetWatchStatus(elem_id, new_color, status) {
-  var target = document.getElementById(elem_id);
+function SetWatchStatus(elemID, newColor, status) {
+  var target = document.getElementById(elemID);
   if (status) {
-    target.style.color = new_color;
+    target.style.color = newColor;
   } else {
-    target.style.color = "black";
+    target.style.color = 'black';
   }
 }
 
 // 見たボタンの色の切り替え
-function SetWatchBold(elem_id, status) {
-  var target = document.getElementById(elem_id);
+function SetWatchBold(elemID, status) {
+  var target = document.getElementById(elemID);
   if (status) {
-    target.classList.add("fas");
+    target.classList.add('fas');
   } else {
-    target.classList.add("far");
+    target.classList.add('far');
   }
 }
 
 // いいねボタンがクリックされたら色を変える
 function ClickLike(elem) {
-  const new_color = "orchid";
+  const newColor = 'orchid';
   if (global_comment_like_status === null) {
-    return DialogBoxEveryone("alert_onlyuser_dialog");
+    return DialogBoxEveryone('alert_onlyuser_dialog');
   }
-  var count = document.getElementById("count_like_" + elem.id);
-  let check_flag;
-  let new_count;
-  if (elem.style["color"] != new_color) {
-    elem.classList.remove("far");
-    elem.classList.add("fas");
-    $("#" + elem.id).css({ color: new_color });
-    check_flag = true;
-    new_count = parseInt(count.textContent.slice(1), 10) + 1;
+  var count = document.getElementById('count_like_' + elem.id);
+  let checkFlag;
+  let newCount;
+  if (elem.style['color'] != newColor) {
+    elem.classList.remove('far');
+    elem.classList.add('fas');
+    $('#' + elem.id).css({ color: newColor });
+    checkFlag = true;
+    newCount = parseInt(count.textContent.slice(1), 10) + 1;
   } else {
-    elem.classList.remove("fas");
-    elem.classList.add("far");
-    $("#" + elem.id).css({ color: "black" });
-    check_flag = false;
-    new_count = parseInt(count.textContent.slice(1), 10) - 1;
+    elem.classList.remove('fas');
+    elem.classList.add('far');
+    $('#' + elem.id).css({ color: 'black' });
+    checkFlag = false;
+    newCount = parseInt(count.textContent.slice(1), 10) - 1;
   }
-  count.textContent = "：" + new_count;
-  CommentLikeStatus(elem, check_flag);
+  count.textContent = '：' + newCount;
+  CommentLikeStatus(elem, checkFlag);
 }
 
 // 見たボタンのクリック処理
 function ClickWatchStatus(elem) {
   if (global_watch_status === null) {
-    return DialogBoxEveryone("alert_onlyuser_dialog");
+    return DialogBoxEveryone('alert_onlyuser_dialog');
   }
-  var count = document.getElementById(elem.id + "_text");
-  const str = "check_watched";
-  let new_color;
+  var count = document.getElementById(elem.id + '_text');
+  const str = 'check_watched';
+  let newColor;
   if (elem.id.indexOf(str) === 0) {
-    new_color = "lightcoral";
+    newColor = 'lightcoral';
   } else {
-    new_color = "lightseagreen";
+    newColor = 'lightseagreen';
   }
-  let check_flag;
-  let new_count;
-  if (elem.style["color"] != new_color) {
-    $("#" + elem.id).css({ color: new_color });
-    elem.classList.remove("far");
-    elem.classList.add("fas");
-    check_flag = true;
+  let checkFlag;
+  let newCount;
+  if (elem.style['color'] != newColor) {
+    $('#' + elem.id).css({ color: newColor });
+    elem.classList.remove('far');
+    elem.classList.add('fas');
+    checkFlag = true;
     if (elem.id.indexOf(str) === 0) {
-      new_count = parseInt(count.textContent.slice(3), 10) + 1;
+      newCount = parseInt(count.textContent.slice(3), 10) + 1;
     } else {
-      new_count = parseInt(count.textContent.slice(5), 10) + 1;
+      newCount = parseInt(count.textContent.slice(5), 10) + 1;
     }
   } else {
-    $("#" + elem.id).css({ color: "black" });
-    elem.classList.remove("fas");
-    elem.classList.add("far");
-    check_flag = false;
+    $('#' + elem.id).css({ color: 'black' });
+    elem.classList.remove('fas');
+    elem.classList.add('far');
+    checkFlag = false;
     if (elem.id.indexOf(str) === 0) {
-      new_count = parseInt(count.textContent.slice(3), 10) - 1;
+      newCount = parseInt(count.textContent.slice(3), 10) - 1;
     } else {
-      new_count = parseInt(count.textContent.slice(5), 10) - 1;
+      newCount = parseInt(count.textContent.slice(5), 10) - 1;
     }
   }
   if (elem.id.indexOf(str) === 0) {
-    count.textContent = "見た：" + new_count;
+    count.textContent = '見た：' + newCount;
   } else {
-    count.textContent = "また今度：" + new_count;
+    count.textContent = 'また今度：' + newCount;
   }
-  WatchStatus(elem, check_flag);
+  WatchStatus(elem, checkFlag);
 }
 
 // セレクタが複数設定されていた時の再描画処理
 function SetMultipleSelection(elem, data) {
-  const d = data.split("、");
+  const d = data.split('、');
   for (var i = d.length - 1; i >= 0; i--) {
     var target = document.getElementById(elem);
     for (var j = target.length - 1; j >= 0; j--) {
@@ -237,7 +235,7 @@ function SetMultipleSelection(elem, data) {
 
 // ページの上部へ移動
 function GoTop() {
-  $(".page__content").animate({ scrollTop: 0 }, 500, "swing");
+  $('.page__content').animate({ scrollTop: 0 }, 500, 'swing');
 }
 
 // カルーセルを移動してページのトップへ移動
@@ -249,9 +247,9 @@ function GoAnotherCarousel(index) {
 }
 
 // pathのページへ移動
-function GoOtherPage(user_id, path) {
-  if (user_id == null) {
-    return DialogBoxEveryone("alert_onlyuser_dialog");
+function GoOtherPage(userID, path) {
+  if (userID == null) {
+    return DialogBoxEveryone('alert_onlyuser_dialog');
   } else {
     window.location.href = path;
   }

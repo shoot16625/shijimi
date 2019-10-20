@@ -27,24 +27,30 @@ select {
     </ons-pull-hook>
 
     <ons-speed-dial position="bottom right" direction="up" ripple>
-      <ons-fab>
-        <ons-icon icon="md-share"></ons-icon>
-      </ons-fab>
-      <ons-speed-dial-item>
-        <ons-icon icon="md-comment-dots" onclick="DialogBox('tweet_dialog', {{.User.Id}})"></ons-icon>
-      </ons-speed-dial-item>
-      <ons-speed-dial-item>
-        <ons-icon icon="fa-search" onclick="DialogBoxEveryone('search_dialog')"></ons-icon>
-      </ons-speed-dial-item>
-      <ons-speed-dial-item>
-        <ons-icon icon="fa-chart-bar" onclick="GoAnotherCarousel(1)"></ons-icon>
-      </ons-speed-dial-item>
-      <ons-speed-dial-item>
-        <ons-icon icon="ion-arrow-up-a" onclick="GoTop()" style="vertical-align: 0px;"></ons-icon>
-      </ons-speed-dial-item>
-    </ons-speed-dial>
+        <ons-fab>
+          <ons-icon icon="md-share"></ons-icon>
+        </ons-fab>
+        <ons-speed-dial-item>
+          <ons-icon
+            icon="md-comment-dots"
+            onclick="DialogBox('tweet_dialog', {{.User.Id}})"
+          ></ons-icon>
+        </ons-speed-dial-item>
+        <ons-speed-dial-item>
+          <ons-icon
+            icon="md-search"
+            onclick="DialogBoxEveryone('search_dialog')"
+          ></ons-icon>
+        </ons-speed-dial-item>
+        <ons-speed-dial-item>
+          <ons-icon icon="md-chart" onclick="GoAnotherCarousel(1)"></ons-icon>
+        </ons-speed-dial-item>
+        <ons-speed-dial-item>
+          <ons-icon icon="md-home" onclick="GoTop()"></ons-icon>
+        </ons-speed-dial-item>
+      </ons-speed-dial>
 
-    <ons-carousel swipeable overscrollable auto-scroll auto-refresh var="carousel">
+    <ons-carousel swipeable overscrollable auto-scroll auto-refresh id="carousel">
       <ons-carousel-item>
        {{ template "/common/comment_review_change.tpl" . }}
        {{ template "/common/tv_program_show.tpl" . }}
@@ -54,7 +60,10 @@ select {
       </ons-list>
     </ons-carousel-item>
     <ons-carousel-item>
-      <p style="text-align:center;">詳細や分析結果を表示</p>
+        <p style="text-align:center;">詳細情報や分析結果を表示</p>
+        <p style="text-align:center;">
+          工事中<i class="fas fa-truck-pickup"></i>
+        </p>
     </ons-carousel-item>
   </ons-carousel>
 </ons-page>
@@ -156,7 +165,7 @@ select {
           <i class="fas fa-search" style="color: brown;"></i> 詳細検索
         </div>
         <div class="right">
-          <ons-button id="reset_button" onclick="ResetSelect()" style="color:chocolate;background:left;"><i class="far fa-trash-alt"></i></ons-button>
+          <ons-button id="reset_button" onclick="resetSelect()" style="color:chocolate;background:left;"><i class="far fa-trash-alt"></i></ons-button>
         </div>
       </ons-toolbar>
       <div class="scroller">
@@ -231,13 +240,7 @@ select {
       document.getElementById('sortby').value = {{.SearchWords.Sortby}};
     }
   </script>
-  <script type="text/javascript">
-    function ResetSelect() {
-      document.search_comment.reset();
-      document.getElementById("word").value = "";
-      document.getElementById("limit").value = "";
-    };
-  </script>
+
 </ons-dialog>
 </template>
 
@@ -282,7 +285,9 @@ select {
         for (let j = fps.length - 1; j >= 0; j--) {
           fp_text += "<span style='padding:3px;color:blue;'>#"+fps[j]+"</span>";
         }
-        // commentビューと同一
+        if(comments[i].Spoiler){
+          fp_text += "<i class='fas fa-hand-paper' style='color:palevioletred;'></i>";
+        }
         return ons.createElement('<div class="comment"><ons-list-header style="background-color:antiquewhite;text-transform:none;"><div style="text-align:left; float:left;font-size:16px;">@' + users[i].Username + '</div><div style="text-align: right;margin-right:5px;">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm:ss") + '</div></ons-list-header><ons-list-item><ons-row><ons-col width="15%"><i class="fas fa-star" style="color:gold;"></i>：' + comments[i].Star +'</ons-col><ons-col style="font-size:12px;">'+ fp_text + '</ons-col></ons-row></ons-list-item><ons-list-item><div class="left"><a href="/tv/user/show/' + users[i].Id + '" title="user_page"><img class="list-item__thumbnail" src="' + users[i].IconUrl + '" alt="@' + users[i].Username + '"></a></div><div class="center"><span class="list-item__subtitle"id="comment_content_' + String(i) + '" style="font-size:14px;">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle" style="text-align: right;"><div style="float:right;" id="count_like_' + i + '">：' + comments[i].CountLike + '</div><div style="float:right;"><i class="' + SetLikeBold(comment_likes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="ClickLike(this)" style="color:' + SetLikeStatus(comment_likes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
       },
       countItems: function() {
@@ -444,39 +449,6 @@ select {
     };
   </script>
 
- <!--  <script type="text/javascript">
-    function PostRatingTvProgram() {
-      var url = URL+"/tv/rating_tv_program/";
-      var data = {};
-      var fp = document.getElementById("FavoritePoint");
-      var fps = [];
-      for (var i = fp.length - 1; i >= 0; i--) {
-        if (fp[i].selected){
-          fps.push(fp[i].value);
-        }
-      }
-      data.Id  = 0;
-      data.UserId = {{.User.Id}};
-      data.TvProgramId  = {{.TvProgram.Id}};
-      data.Star = Number(document.getElementById("star").value);
-      data.FavoritePoint = fps.join("、");
-      var json = JSON.stringify(data);
-      var request = new XMLHttpRequest();
-      request.open('POST', url, true);
-      request.setRequestHeader('Content-type','application/json; charset=utf-8');
-      request.onload = function () {
-        var x = JSON.parse(request.responseText);
-        if (request.readyState == 4 && request.status == "200") {
-          console.table(x);
-        } else {
-          console.error(x);
-        }
-      }
-      request.send(json);
-      // hideAlertDialog('rating_dialog')
-      // setTimeout(window.location.reload(false), 500);
-    };
-  </script> -->
   <script>
     let time = String({{.TvProgram.Hour}});
     str = ".5";
@@ -499,7 +471,7 @@ select {
     });
   </script>
   <script type="text/javascript">
-    function ResetSelect() {
+    function resetSelect() {
       document.search_comment.reset();
       document.getElementById("word").value = "";
       document.getElementById("limit").value = "";

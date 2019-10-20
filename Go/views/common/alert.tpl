@@ -2,10 +2,13 @@
   <ons-alert-dialog id="alert_onlyuser_dialog" modifier="rowfooter">
     <div class="alert-dialog-title">Alert</div>
     <div class="alert-dialog-content">
-      この機能はログインユーザーのみ<br>利用できます。
+      この機能はログインユーザーのみ<br />利用できます。
     </div>
     <div class="alert-dialog-footer">
-      <ons-alert-dialog-button onclick="hideAlertDialog('alert_onlyuser_dialog')">OK</ons-alert-dialog-button>
+      <ons-alert-dialog-button
+        onclick="hideAlertDialog('alert_onlyuser_dialog')"
+        >OK</ons-alert-dialog-button
+      >
     </div>
   </ons-alert-dialog>
 </template>
@@ -17,7 +20,10 @@
       ユーザー名、または、パスワードが誤っています。
     </div>
     <div class="alert-dialog-footer">
-      <ons-alert-dialog-button onclick="hideAlertDialog('alert_username_dialog')">OK</ons-alert-dialog-button>
+      <ons-alert-dialog-button
+        onclick="hideAlertDialog('alert_username_dialog')"
+        >OK</ons-alert-dialog-button
+      >
     </div>
   </ons-alert-dialog>
 </template>
@@ -29,7 +35,10 @@
       {{.User.Username}} はすでに存在しています。
     </div>
     <div class="alert-dialog-footer">
-      <ons-alert-dialog-button onclick="hideAlertDialog('alert_username_duplicate')">OK</ons-alert-dialog-button>
+      <ons-alert-dialog-button
+        onclick="hideAlertDialog('alert_username_duplicate')"
+        >OK</ons-alert-dialog-button
+      >
     </div>
   </ons-alert-dialog>
 </template>
@@ -41,7 +50,9 @@
       5文字以上入力してください。
     </div>
     <div class="alert-dialog-footer">
-      <ons-alert-dialog-button onclick="hideAlertDialog('alert_minlength')">OK</ons-alert-dialog-button>
+      <ons-alert-dialog-button onclick="hideAlertDialog('alert_minlength')"
+        >OK</ons-alert-dialog-button
+      >
     </div>
   </ons-alert-dialog>
 </template>

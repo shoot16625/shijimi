@@ -22,22 +22,15 @@
         </ons-fab>
         <ons-speed-dial-item>
           <ons-icon
-            icon="fa-search"
+            icon="md-search"
             onclick="DialogBoxEveryone('search_dialog')"
           ></ons-icon>
         </ons-speed-dial-item>
         <ons-speed-dial-item>
-          <ons-icon
-            icon="fa-chart-bar"
-            onclick="GoAnotherCarousel(1)"
-          ></ons-icon>
+          <ons-icon icon="md-chart" onclick="GoAnotherCarousel(1)"></ons-icon>
         </ons-speed-dial-item>
         <ons-speed-dial-item>
-          <ons-icon
-            icon="ion-arrow-up-a"
-            onclick="GoTop()"
-            style="vertical-align: 0px;"
-          ></ons-icon>
+          <ons-icon icon="md-home" onclick="GoTop()"></ons-icon>
         </ons-speed-dial-item>
       </ons-speed-dial>
       <ons-carousel
@@ -45,7 +38,7 @@
         overscrollable
         auto-scroll
         auto-refresh
-        var="carousel"
+        id="carousel"
       >
         <ons-carousel-item>
           <ons-list>
@@ -78,7 +71,7 @@
             <div class="right">
               <ons-button
                 id="reset_button"
-                onclick="ResetSelect()"
+                onclick="resetSelect()"
                 style="color:chocolate;background:left;"
                 ><i class="far fa-trash-alt"></i
               ></ons-button>
@@ -247,16 +240,16 @@
           </div>
         </ons-page>
         <script>
-          var target = document.getElementById("hour");
-          let text = "";
+          var target = document.getElementById('hour');
+          let text = '';
           let t;
           for (let i = 0; i < 48; i++) {
             if (i % 2 == 0) {
-              t = String(i / 2) + ":00";
-              text += "<option>" + t + "</option>";
+              t = String(i / 2) + ':00';
+              text += '<option>' + t + '</option>';
             } else {
-              t = String((i - 1) / 2) + ":30";
-              text += "<option>" + t + "</option>";
+              t = String((i - 1) / 2) + ':30';
+              text += '<option>' + t + '</option>';
             }
           }
           target.innerHTML = text;
@@ -264,10 +257,10 @@
         <script>
           const today = new Date();
           const year = today.getFullYear() + 2;
-          var target = document.getElementById("year");
-          let text = "";
+          var target = document.getElementById('year');
+          text = '';
           for (let i = year; i >= 1970; i--) {
-            text += "<option>" + i + "</option>";
+            text += '<option>' + i + '</option>';
           }
           target.innerHTML = text;
         </script>
@@ -285,12 +278,12 @@
           }
         </script>
         <script type="text/javascript">
-          function ResetSelect() {
+          function resetSelect() {
             document.search_tv_program.reset();
-            document.getElementById("title").value = "";
-            document.getElementById("staff").value = "";
-            document.getElementById("themesong").value = "";
-            document.getElementById("limit").value = "";
+            document.getElementById('title').value = '';
+            document.getElementById('staff').value = '';
+            document.getElementById('themesong').value = '';
+            document.getElementById('limit').value = '';
           }
         </script>
       </ons-dialog>
@@ -364,7 +357,7 @@
     </script>
 
     <script type="text/javascript">
-      function WatchStatus(elem, check_flag) {
+      function WatchStatus(elem, checkFlag) {
         let url = URL+"/tv/watching_status/";
         const index = elem.id.slice(14);
         let data = global_watch_status[index];
@@ -381,10 +374,10 @@
         }
         const str ="check_watched"
         if (elem.id.indexOf(str)===0) {
-          data.Watched = check_flag;
+          data.Watched = checkFlag;
           global_watch_status[index].Watched = data.Watched;
         } else {
-          data.WantToWatch = check_flag;
+          data.WantToWatch = checkFlag;
           global_watch_status[index].WantToWatch = data.WantToWatch;
 
         }
@@ -406,8 +399,8 @@
 
     <script type="text/javascript">
       document
-        .querySelector("ons-carousel")
-        .addEventListener("postchange", function() {
+        .querySelector('ons-carousel')
+        .addEventListener('postchange', function() {
           if (carousel.getActiveIndex() == 1) {
             GoTop();
           }

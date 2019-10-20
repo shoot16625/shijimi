@@ -39,9 +39,9 @@ func init() {
 	orm.RegisterDriver(beego.AppConfig.String("driver"), orm.DRMySQL)
 	orm.RegisterDataBase("default", beego.AppConfig.String("driver"), beego.AppConfig.String("sqlconn")+"?charset=utf8&loc=Asia%2FTokyo")
 	// データを初期化して起動
-	err := orm.RunSyncdb("default", true, false)
+	// err := orm.RunSyncdb("default", true, false)
 	// データの変更点を追加して起動
-	// err := orm.RunSyncdb("default", false, false)
+	err := orm.RunSyncdb("default", false, false)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -68,10 +68,12 @@ func init() {
 	go beego.GlobalSessions.GC()
 
 	// 初期データの投入
-	execInitSQL()
-	execSQL()
+	// execInitSQL()
+	// execSQL()
 	// db.Scraping()
-
+	// db.UpdateTvProgramsInformation()
+	// tvProgram = db.GetTvProgramInformation("偽装不倫")
+	// fmt.Println(tvProgram)
 }
 
 func execInitSQL() {
@@ -93,7 +95,7 @@ func execInitSQL() {
 
 func execSQL() {
 	for i := 1; i < 5; i++ {
-		TvProgramSQL("偽装不倫_"+strconv.Itoa(i), "濱鐘子は32歳で独身。周りからは「パラサイトシングル」や「婚活疲れした派遣社員」など不名誉なレッテルが貼られる始末。2年間の婚活も成就せず、自分はモテない女だと自覚するようになってしまう。「おひとり様」生活がしっくりくるようになり、1年間の派遣社員生活を終え、婚活に別れを告げるために1人旅をしようと計画する。 そんな中、1人旅をするために乗り込んだ飛行機の中で1人の若者に出会い、自分は「既婚者」だと言い様のない嘘を吐いてしまう。それでも若者は「この旅行の間だけでも不倫をしましょう」と迫ってきて、鐘子は恋の楽しさを覚える深みにはまっていく。", "https://www.ntv.co.jp/gisouhurin/images/ogp.jpg", "ntv", "https://www.youtube.com/embed/6Wxy-Gr3VgM", "7月期新水曜ドラマ『偽装不倫』7月10日（水）よる10時スタート／プロローグ［日本テレビ］", "杏、宮沢氷魚、谷原章介、仲間由紀恵", "恋愛、アラサー、OL", "衛藤凛", "", "鈴木勇馬、南雲聖一", "日テレ", 2019, "秋", "milet 「us」", "水", float32(i), 3, 0, 0, 0)
+		TvProgramSQL("偽装不倫_"+strconv.Itoa(i), "濱鐘子は32歳で独身。周りからは「パラサイトシングル」や「婚活疲れした派遣社員」など不名誉なレッテルが貼られる始末。2年間の婚活も成就せず、自分はモテない女だと自覚するようになってしまう。「おひとり様」生活がしっくりくるようになり、1年間の派遣社員生活を終え、婚活に別れを告げるために1人旅をしようと計画する。 そんな中、1人旅をするために乗り込んだ飛行機の中で1人の若者に出会い、自分は「既婚者」だと言い様のない嘘を吐いてしまう。それでも若者は「この旅行の間だけでも不倫をしましょう」と迫ってきて、鐘子は恋の楽しさを覚える深みにはまっていく。", "https://www.ntv.co.jp/gisouhurin/images/ogp.jpg", "ntv", "https://www.youtube.com/embed/ARjBD23zFaQ", "7月期新水曜ドラマ『偽装不倫』7月10日（水）よる10時スタート／プロローグ［日本テレビ］", "杏、宮沢氷魚、谷原章介、仲間由紀恵", "恋愛、アラサー、OL", "衛藤凛", "", "鈴木勇馬、南雲聖一", "日テレ", 2019, "秋", "milet 「us」", "水", float32(i), 3, 0, 0, 0)
 
 		for j := 1; j < 11; j++ {
 			CommentSQL("面白いドラマ\r\n今後も楽しみ＿"+strconv.Itoa(i), 1, int64(j), 0)

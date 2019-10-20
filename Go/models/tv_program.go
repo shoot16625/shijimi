@@ -4,55 +4,52 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"strconv"
 	"strings"
 	"time"
-	"strconv"
 
 	"github.com/astaxie/beego/orm"
 )
 
-
 type TvProgram struct {
-	Id       int64  `orm:"auto"`
-	Title    string `orm:"size(128);unique"`
-	Content  string `orm:"size(500);null"`
-	ImageUrl string `orm:"size(500);null"`
-	ImageUrlReference string `orm:"size(128);null"`
-	MovieUrl string `orm:"size(500);null"`
-	MovieUrlReference string `orm:"size(128);null"`
-	Cast    string `orm:"size(128);null"`
-	Category string `orm:"size(128);null"`
-	Dramatist string `orm:"size(128);null"`
-	Supervisor string `orm:"size(128);null"`
-	Director string `orm:"size(128);null"`
-	Production string `orm:"size(128);null"`
-	Year int `orm:"null"`
-	Season *Season `orm:"rel(fk);null"`
-	Week *Week `orm:"rel(fk);null"`
-	Hour float32 `orm:"null`
-	Themesong string `orm:"size(128);null"`
-	CreateUserId int64 `orm:"default(0)"`
-	Star float32 `orm:"default(2.5)"`
-	CountStar   int32 `orm:"default(0)"`
-	CountWatched   int32 `orm:"default(0)"`
-	CountWantToWatch   int32 `orm:"default(0)"`
-	CountClicked   int32 `orm:"default(0)"`
-	CountAuthorization int32 `orm:"default(0)"`
-	Created time.Time `orm:"auto_now_add;type(datetime)"`
-	Updated time.Time `orm:"auto_now;type(datetime)"`
+	Id                 int64     `orm:"auto"`
+	Title              string    `orm:"size(128);unique"`
+	Content            string    `orm:"size(500);null"`
+	ImageUrl           string    `orm:"size(500);null"`
+	ImageUrlReference  string    `orm:"size(128);null"`
+	MovieUrl           string    `orm:"size(500);null"`
+	MovieUrlReference  string    `orm:"size(128);null"`
+	Cast               string    `orm:"size(256);null"`
+	Category           string    `orm:"size(32);null"`
+	Dramatist          string    `orm:"size(128);null"`
+	Supervisor         string    `orm:"size(128);null"`
+	Director           string    `orm:"size(128);null"`
+	Production         string    `orm:"size(32);null"`
+	Year               int       `orm:"null"`
+	Season             *Season   `orm:"rel(fk);null"`
+	Week               *Week     `orm:"rel(fk);null"`
+	Hour               float32   `orm:"null`
+	Themesong          string    `orm:"size(128);null"`
+	CreateUserId       int64     `orm:"default(0)"`
+	Star               float32   `orm:"default(2.5)"`
+	CountStar          int32     `orm:"default(0)"`
+	CountWatched       int32     `orm:"default(0)"`
+	CountWantToWatch   int32     `orm:"default(0)"`
+	CountClicked       int32     `orm:"default(0)"`
+	CountAuthorization int32     `orm:"default(0)"`
+	Created            time.Time `orm:"auto_now_add;type(datetime)"`
+	Updated            time.Time `orm:"auto_now;type(datetime)"`
 }
 
-
-type Season struct	{
+type Season struct {
 	Name string `orm:"pk"`
-	Id	int
+	Id   int
 }
 
-type Week struct	{
+type Week struct {
 	Name string `orm:"pk"`
-	Id	int
+	Id   int
 }
-
 
 func init() {
 	orm.RegisterModel(new(TvProgram))
@@ -111,7 +108,7 @@ func GetAllTvProgram(query map[string]string, fields []string, sortby []string, 
 		// qs = qs.Filter(k, v)
 		k = strings.Replace(k, ".", "__", -1)
 		v = strings.Replace(v, "　", " ", -1)
-		for _, value := range strings.Split(v, " "){
+		for _, value := range strings.Split(v, " ") {
 			qs = qs.Filter(k, value)
 		}
 	}
@@ -211,8 +208,8 @@ func SearchTvProgramAll(str string) (v []TvProgram, err error) {
 	o := orm.NewOrm()
 	cond_all := orm.NewCondition()
 	str = strings.Replace(str, "　", " ", -1)
-  for _, v := range strings.Split(str, " ") {
-  	cond := orm.NewCondition()
+	for _, v := range strings.Split(str, " ") {
+		cond := orm.NewCondition()
 		v_float, _ := strconv.ParseFloat(v, 32)
 		if v_float == 0 {
 			// Hourに条件「文字式」を入れると自動的に0になっちゃうので，回避
@@ -232,7 +229,7 @@ func SearchTvProgramAll(str string) (v []TvProgram, err error) {
 		cond = cond.Or("Hour", v_float)
 
 		cond_all = cond_all.AndCond(cond)
-  }
+	}
 
 	if _, err = o.QueryTable(new(TvProgram)).SetCond(cond_all).OrderBy("-Year", "-Season__Id", "Week__Id", "Hour").All(&v); err == nil {
 		return v, nil
@@ -252,25 +249,25 @@ func SearchTvProgram(query map[string][]string, fields []string, sortby []string
 		cond_only := orm.NewCondition()
 		for _, value := range v {
 			if k == "Title" {
-					cond_only = cond_only.And("Title__icontains", value)
-			} else if k == "Staff" { 
-					cond_only = cond_only.Or("Cast__icontains", value)
-					cond_only = cond_only.Or("Dramatist__icontains", value)
-					cond_only = cond_only.Or("Supervisor__icontains", value)
-					cond_only = cond_only.Or("Director__icontains", value)
-					cond_only = cond_only.Or("Production__icontains", value)
-			} else if k == "Themesong" { 
-					cond_only = cond_only.Or("Themesong__icontains", value)
-			} else if k == "Year" { 
-					cond_only = cond_only.Or("Year", value)
-			} else if k == "Week" { 
-					cond_only = cond_only.Or("Week__Name", value)
+				cond_only = cond_only.And("Title__icontains", value)
+			} else if k == "Staff" {
+				cond_only = cond_only.Or("Cast__icontains", value)
+				cond_only = cond_only.Or("Dramatist__icontains", value)
+				cond_only = cond_only.Or("Supervisor__icontains", value)
+				cond_only = cond_only.Or("Director__icontains", value)
+				cond_only = cond_only.Or("Production__icontains", value)
+			} else if k == "Themesong" {
+				cond_only = cond_only.Or("Themesong__icontains", value)
+			} else if k == "Year" {
+				cond_only = cond_only.Or("Year", value)
+			} else if k == "Week" {
+				cond_only = cond_only.Or("Week__Name", value)
 			} else if k == "Hour" {
-					cond_only = cond_only.Or("Hour", value)
+				cond_only = cond_only.Or("Hour", value)
 			} else if k == "Season" {
-					cond_only = cond_only.Or("Season", value)
+				cond_only = cond_only.Or("Season", value)
 			} else if k == "Category" {
-					cond_only = cond_only.Or("Category__icontains", value)
+				cond_only = cond_only.Or("Category__icontains", value)
 			}
 		}
 		// fmt.Println(k,v)
@@ -340,7 +337,7 @@ func SearchTvProgram(query map[string][]string, fields []string, sortby []string
 }
 
 func GetOnairSeason() (season string) {
-	season_name := [4]string{"春","夏","秋","冬"}
+	season_name := [4]string{"春", "夏", "秋", "冬"}
 	var tmp int = 365
 	t := time.Now()
 	var seasons []time.Time
@@ -349,12 +346,12 @@ func GetOnairSeason() (season string) {
 	seasons = append(seasons, time.Date(t.Year()+1, 1, 1, 0, 0, 0, 0, time.Local))
 	seasons = append(seasons, time.Date(t.Year(), 4, 1, 0, 0, 0, 0, time.Local))
 	for i := range seasons {
-			duration := seasons[i].Sub(t)
-			days := int(duration.Hours()) / 24
-			if tmp > days && days > 2 {
-				tmp = days
-				season = season_name[i]
-			}
+		duration := seasons[i].Sub(t)
+		days := int(duration.Hours()) / 24
+		if tmp > days && days > 2 {
+			tmp = days
+			season = season_name[i]
+		}
 	}
 	return season
 }
