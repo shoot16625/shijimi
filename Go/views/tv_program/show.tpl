@@ -1,1 +1,0 @@
-/go/src/app/views/TvProgram/show.tpl
