@@ -253,7 +253,7 @@ func (c *UserController) Show() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	// fmt.Println(id)
-	// コメント欄からプロフィールを追ってきた場合
+	// コメント欄からプロフィール遷移してきた場合
 	if id != 0 {
 		v, _ := models.GetUserById(id)
 		c.Data["User"] = v
@@ -261,9 +261,19 @@ func (c *UserController) Show() {
 		c.Data["Comment"] = w
 
 		var commentLikes []models.CommentLike
+		var tvPrograms []models.TvProgram
 		var myUserID int64 = 0
 		if session.Get("UserId") == nil {
 			c.Data["MyUserId"] = nil
+			var tvPrograms []models.TvProgram
+			for _, comment := range w {
+				v, err := models.GetTvProgramById(comment.TvProgramId)
+				if err != nil {
+					v = new(models.TvProgram)
+				}
+				tvPrograms = append(tvPrograms, *v)
+			}
+			c.Data["TvProgram"] = tvPrograms
 		} else {
 			myUserID = session.Get("UserId").(int64)
 			c.Data["MyUserId"] = myUserID
@@ -273,8 +283,14 @@ func (c *UserController) Show() {
 					u = new(models.CommentLike)
 				}
 				commentLikes = append(commentLikes, *u)
+				v, err := models.GetTvProgramById(comment.TvProgramId)
+				if err != nil {
+					v = new(models.TvProgram)
+				}
+				tvPrograms = append(tvPrograms, *v)
 			}
 			c.Data["CommentLike"] = commentLikes
+			c.Data["TvProgram"] = tvPrograms
 			z := models.FootPrintToUser{
 				UserId:   myUserID,
 				ToUserId: id,
@@ -326,18 +342,34 @@ func (c *UserController) ShowReview() {
 		c.Data["Comment"] = w
 		if session.Get("UserId") == nil {
 			c.Data["MyUserId"] = nil
+			var tvPrograms []models.TvProgram
+			for _, comment := range w {
+				v, err := models.GetTvProgramById(comment.TvProgramId)
+				if err != nil {
+					v = new(models.TvProgram)
+				}
+				tvPrograms = append(tvPrograms, *v)
+			}
+			c.Data["TvProgram"] = tvPrograms
 		} else {
 			c.Data["MyUserId"] = session.Get("UserId").(int64)
 
 			var commentLikes []models.ReviewCommentLike
+			var tvPrograms []models.TvProgram
 			for _, comment := range w {
 				u, err := models.GetReviewCommentLikeByCommentAndUser(comment.Id, id)
 				if err != nil {
 					u = new(models.ReviewCommentLike)
 				}
 				commentLikes = append(commentLikes, *u)
+				v, err := models.GetTvProgramById(comment.TvProgramId)
+				if err != nil {
+					v = new(models.TvProgram)
+				}
+				tvPrograms = append(tvPrograms, *v)
 			}
 			c.Data["CommentLike"] = commentLikes
+			c.Data["TvProgram"] = tvPrograms
 		}
 		c.TplName = "user/user_review.tpl"
 	} else {
@@ -351,14 +383,21 @@ func (c *UserController) ShowReview() {
 			c.Data["Comment"] = w
 
 			var commentLikes []models.ReviewCommentLike
+			var tvPrograms []models.TvProgram
 			for _, comment := range w {
 				u, err := models.GetReviewCommentLikeByCommentAndUser(comment.Id, userID)
 				if err != nil {
 					u = new(models.ReviewCommentLike)
 				}
 				commentLikes = append(commentLikes, *u)
+				v, err := models.GetTvProgramById(comment.TvProgramId)
+				if err != nil {
+					v = new(models.TvProgram)
+				}
+				tvPrograms = append(tvPrograms, *v)
 			}
 			c.Data["CommentLike"] = commentLikes
+			c.Data["TvProgram"] = tvPrograms
 		}
 		c.TplName = "user/show_review.tpl"
 	}

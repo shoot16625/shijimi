@@ -9,7 +9,6 @@
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
       {{ template "/user/profile_onlyuser.tpl" . }}
-
       <ons-list style="margin-left: 3px;margin-right: 5px;">
         <ons-lazy-repeat id="comments"></ons-lazy-repeat>
       </ons-list>

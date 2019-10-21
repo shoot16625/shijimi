@@ -88,3 +88,8 @@ a {
   content: "\f2fc";
   color: #fc3;
 }
+
+.input-table {
+  text-align: center;
+  margin-top: 30px;
+}

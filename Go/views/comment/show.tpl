@@ -17,7 +17,7 @@
   </style>
 
   <body>
-    <ons-page>
+    <ons-page id="tv-comments">
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
 

@@ -4,19 +4,13 @@
     {{ template "/common/header.tpl" . }}
   </head>
 
-  <style type="text/css">
-    /*  label {
-    color: lightslategrey;
-  }*/
-  </style>
-
   <body>
     <ons-page>
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
 
-      <form id="create_user" action="/tv/user/" method="post">
-        <div style="text-align: center; margin-top: 30px;">
+      <form id="create-user" action="/tv/user/" method="post">
+        <div class="input-table">
           <p>
             <ons-input
               name="username"
@@ -83,7 +77,14 @@
             </ons-select>
           </p>
           <p>
-            <ons-select class="select" name="bloodType" id="bloodType" modifier="underbar" float required>
+            <ons-select
+              class="select"
+              name="bloodType"
+              id="bloodType"
+              modifier="underbar"
+              float
+              required
+            >
               <select class="select-input">
                 <option>A型</option>
                 <option>B型</option>

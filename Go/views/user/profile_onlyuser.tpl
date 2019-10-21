@@ -1,61 +1,3 @@
-<!--     <div style="text-align: center;">
-      <ons-row>
-        <ons-col>
-          <i class="fas fa-comments"></i>
-          <button class="button--cta" style="line-height: 20px; background-color: cornflowerblue;" onclick="location.href='/tv/user/show'">リアルタイム</button>
-        </ons-col>
-        <ons-col>
-          <i class="fas fa-user"></i>
-          <button class="button--cta" style="line-height: 20px; background-color: cornflowerblue;" onclick="location.href='/tv/user/show_review'">レビュー</button>
-        </ons-col>
-      </ons-row>
-    </div> -->
-<div style="text-align: center;">
-  <ons-row>
-    <ons-col style="text-align: right;">
-      <button
-        class="button--cta"
-        style="line-height: 15px; background-color: cornflowerblue;"
-        onclick="location.href='/tv/user/show'"
-      >
-        <i class="fas fa-comments"></i>Timeline
-      </button>
-    </ons-col>
-    <ons-col style="text-align: left;">
-      <button
-        class="button--cta"
-        style="line-height: 15px; background-color: darkorange;"
-        onclick="location.href='/tv/user/show_review'"
-      >
-        <i class="fas fa-user"></i>Review
-      </button>
-    </ons-col>
-  </ons-row>
-</div>
-
-<div style="text-align: center;">
-  <ons-row>
-    <ons-col style="text-align: right;">
-      <button
-        class="button--cta"
-        style="line-height: 15px; background-color: darkorange;"
-        onclick="location.href='/tv/user/show_watched_tv'"
-      >
-        <i class="fas fa-comments"></i>見た
-      </button>
-    </ons-col>
-    <ons-col style="text-align: left;">
-      <button
-        class="button--cta"
-        style="line-height: 15px; background-color: cornflowerblue;"
-        onclick="location.href='/tv/user/show_wtw_tv'"
-      >
-        <i class="fas fa-user"></i>また今度
-      </button>
-    </ons-col>
-  </ons-row>
-</div>
-
 <ons-list>
   <ons-list-header>
     <div style="text-align: left; float:left;">
@@ -85,6 +27,43 @@
       <input type="hidden" name="_method" value="DELETE" />
       <button type="submit">ユーザーを削除</button>
     </form>
-    <!-- <a href="/tv/user/edit">edit</a> -->
   </ons-list-item>
 </ons-list>
+<ons-row>
+  <ons-col style="text-align: right;">
+    <button
+      class="button--cta"
+      style="line-height: 15px; background-color: cornflowerblue; width: 100%"
+      onclick="location.href='/tv/user/show'"
+    >
+      <i class="fas fa-comments"></i>Timeline
+    </button>
+  </ons-col>
+  <ons-col style="text-align: left;">
+    <button
+      class="button--cta"
+      style="line-height: 15px; background-color: rgb(240, 141, 20); width: 100%"
+      onclick="location.href='/tv/user/show_review'"
+    >
+      <i class="fas fa-user"></i>Review
+    </button>
+  </ons-col>
+  <ons-col style="text-align: left;">
+    <button
+      class="button--cta"
+      style="line-height: 15px; background-color: cornflowerblue; width: 100%;"
+      onclick="location.href='/tv/user/show_watched_tv'"
+    >
+      <i class="fas fa-laugh-beam"></i>見た
+    </button>
+  </ons-col>
+  <ons-col style="text-align: left;">
+    <button
+      class="button--cta"
+      style="line-height: 15px; background-color: rgb(240, 141, 20); width: 100%"
+      onclick="location.href='/tv/user/show_wtw_tv'"
+    >
+      <i class="fas fa-bookmark"></i>見たい
+    </button>
+  </ons-col>
+</ons-row>
