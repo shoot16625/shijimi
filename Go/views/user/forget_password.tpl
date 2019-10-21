@@ -9,8 +9,8 @@
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
 
-      <form id="login_user" action="/tv/user/forget_password" method="post">
-        <div style="text-align: center; margin-top: 30px;">
+      <form id="login-user" action="/tv/user/forget_password" method="post">
+        <div class="input-table">
           <p>
             <ons-input
               name="username"
@@ -37,15 +37,15 @@
           </p>
         </div>
       </form>
-      <template id="alert_username_notfound.html">
-        <ons-alert-dialog id="alert_username_notfound" modifier="rowfooter">
+      <template id="alert-username-not-found.html">
+        <ons-alert-dialog id="alert-username-not-found" modifier="rowfooter">
           <div class="alert-dialog-title">Alert</div>
           <div class="alert-dialog-content">
             ユーザー情報が誤っています。
           </div>
           <div class="alert-dialog-footer">
             <ons-alert-dialog-button
-              onclick="hideAlertDialog('alert_username_notfound')"
+              onclick="hideAlertDialog('alert-username-not-found')"
               >OK</ons-alert-dialog-button
             >
           </div>
@@ -55,9 +55,9 @@
     <script type="text/javascript" src="/static/js/common.js"></script>
     <script type="text/javascript">
       const name = {{.User}};
-      console.log(name);
+      // console.log(name);
       if (name != null){
-        DialogBoxEveryone('alert_username_notfound');
+        dialogBoxEveryone('alert-username-not-found');
       }
     </script>
   </body>

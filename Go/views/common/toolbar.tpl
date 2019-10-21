@@ -19,7 +19,7 @@
   <div class="right">
     <ons-toolbar-button
       icon="fa-search"
-      onclick="DialogBoxEveryone('search_toolbar')"
+      onclick="dialogBoxEveryone('search_toolbar')"
     ></ons-toolbar-button>
   </div>
 </ons-toolbar>
@@ -30,7 +30,7 @@
       <ons-toolbar>
         <div class="left">
           <ons-button
-            id="cancel_button"
+            id="cancel-button"
             onclick="hideAlertDialog('search_toolbar')"
             style="background:left;color: grey;"
             ><i class="fas fa-window-close"></i

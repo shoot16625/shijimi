@@ -4,14 +4,6 @@
     {{ template "/common/header.tpl" . }}
   </head>
 
-  <style type="text/css">
-    select {
-      width: 80%;
-      max-width: 500px;
-      height: 100px;
-    }
-  </style>
-
   <body>
     <ons-page>
       {{ template "/common/toolbar.tpl" . }}
@@ -23,14 +15,14 @@
         <ons-speed-dial-item>
           <ons-icon
             icon="md-search"
-            onclick="DialogBoxEveryone('search_dialog')"
+            onclick="dialogBoxEveryone('search-dialog')"
           ></ons-icon>
         </ons-speed-dial-item>
         <ons-speed-dial-item>
-          <ons-icon icon="md-chart" onclick="GoAnotherCarousel(1)"></ons-icon>
+          <ons-icon icon="md-chart" onclick="goAnotherCarousel(1)"></ons-icon>
         </ons-speed-dial-item>
         <ons-speed-dial-item>
-          <ons-icon icon="md-home" onclick="GoTop()"></ons-icon>
+          <ons-icon icon="md-home" onclick="goTop()"></ons-icon>
         </ons-speed-dial-item>
       </ons-speed-dial>
       <ons-carousel
@@ -42,25 +34,25 @@
       >
         <ons-carousel-item>
           <ons-list>
-            <ons-lazy-repeat id="tv_programs"></ons-lazy-repeat>
+            <ons-lazy-repeat id="tv-programs"></ons-lazy-repeat>
           </ons-list>
         </ons-carousel-item>
         <ons-carousel-item>
-          <p style="text-align:center;">詳細情報や分析結果を表示</p>
-          <p style="text-align:center;">
-            工事中<i class="fas fa-truck-pickup"></i>
-          </p>
+          <div class="area-center">
+            <p>詳細情報や分析結果を表示</p>
+            <p>工事中<i class="fas fa-truck-pickup"></i></p>
+          </div>
         </ons-carousel-item>
       </ons-carousel>
     </ons-page>
-    <template id="search_dialog.html">
-      <ons-dialog id="search_dialog" modifier="large" cancelable fullscreen>
+    <template id="search-dialog.html">
+      <ons-dialog id="search-dialog" modifier="large" cancelable fullscreen>
         <ons-page>
           <ons-toolbar>
             <div class="left">
               <ons-button
-                id="cancel_button"
-                onclick="hideAlertDialog('search_dialog')"
+                id="cancel-button"
+                onclick="hideAlertDialog('search-dialog')"
                 style="background:left;color: grey;"
                 ><i class="fas fa-window-close"></i
               ></ons-button>
@@ -70,7 +62,7 @@
             </div>
             <div class="right">
               <ons-button
-                id="reset_button"
+                id="reset-button"
                 onclick="resetSelect()"
                 style="color:chocolate;background:left;"
                 ><i class="far fa-trash-alt"></i
@@ -84,7 +76,7 @@
               action="/tv/tv_program/search_tv_program"
               method="post"
             >
-              <div style="text-align: center; margin-top: 30px;">
+              <div class="area-center" style="margin-top: 30px;">
                 <p>
                   <ons-input
                     type="text"
@@ -266,12 +258,12 @@
         </script>
         <script type="text/javascript">
           if ({{.SearchWords}} != null){
-            console.log({{.SearchWords}});
-            SetMultipleSelection("year", {{.SearchWords.Year}});
-            SetMultipleSelection("week", {{.SearchWords.Week}});
-            SetMultipleSelection("hour", {{.SearchWords.Hour}});
-            SetMultipleSelection("season", {{.SearchWords.Season}});
-            SetMultipleSelection("category", {{.SearchWords.Category}});
+            // console.log({{.SearchWords}});
+            setMultipleSelection("year", {{.SearchWords.Year}});
+            setMultipleSelection("week", {{.SearchWords.Week}});
+            setMultipleSelection("hour", {{.SearchWords.Hour}});
+            setMultipleSelection("season", {{.SearchWords.Season}});
+            setMultipleSelection("category", {{.SearchWords.Category}});
           }
           if ({{.SearchWords.Sortby}} != null){
             document.getElementById('sortby').value = {{.SearchWords.Sortby}};
@@ -291,32 +283,32 @@
     <script type="text/javascript" src="/static/js/common.js"></script>
 
     <script>
-      let tv_programs = {{.TvProgram}};
-      if (tv_programs == "") {
-        tv_programs = null;
+      let tvPrograms = {{.TvProgram}};
+      if (tvPrograms === "") {
+        tvPrograms = null;
       }
-      let watch_status;
-      if ({{.WatchStatus}} == null && tv_programs != null){
-        watch_status = [tv_programs.length];
-        for (let i = tv_programs.length - 1; i >= 0; i--) {
-          watch_status[i] = {Watched:false, WantToWatch:false};
+      let watchStatus;
+      if ({{.WatchStatus}} === null && tvPrograms != null){
+        watchStatus = [tvPrograms.length];
+        for (let i = tvPrograms.length - 1; i >= 0; i--) {
+          watchStatus[i] = {Watched:false, WantToWatch:false};
         }
       } else {
-        watch_status = {{.WatchStatus}};
+        watchStatus = {{.WatchStatus}};
       }
 
       ons.ready(function() {
-        var infiniteList = document.getElementById('tv_programs');
-        if (tv_programs != null) {
+        var infiniteList = document.getElementById('tv-programs');
+        if (tvPrograms != null) {
           infiniteList.delegate = {
             createItemContent: function(i) {
-              let movie_position;
-              if (tv_programs[i].MovieUrl==""){
-                movie_position = '<img id="image_' + i + '" src="'+tv_programs[i].ImageUrl+'" alt="' + tv_programs[i].Title + '" width="80%">';
+              let moviePosition;
+              if (tvPrograms[i].MovieUrl===""){
+                moviePosition = '<img id="image_' + i + '" src="'+tvPrograms[i].ImageUrl+'" alt="' + tvPrograms[i].Title + '" width="80%">';
               } else {
-                movie_position = '<iframe id="movie_' + i + '" src="'+tv_programs[i].MovieUrl+'?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="' + tv_programs[i].Title + '" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+                moviePosition = '<iframe id="movie_' + i + '" src="'+tvPrograms[i].MovieUrl+'?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="' + tvPrograms[i].Title + '" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
               }
-              let time = String(tv_programs[i].Hour);
+              let time = String(tvPrograms[i].Hour);
               str = ".5";
               if (time == "100"){
                 time = "";
@@ -327,22 +319,22 @@
                   time += ":00";
                 }
               }
-              let header_color;
-              if (tv_programs[i].Season.Name == "春") {
-                header_color = "lavenderblush";
-              } else if (tv_programs[i].Season.Name == "夏") {
-                header_color = "aliceblue";
-              } else if (tv_programs[i].Season.Name == "秋") {
-                header_color = "khaki";
-              } else if (tv_programs[i].Season.Name == "冬") {
-                header_color = "thistle";
+              let headerColor;
+              if (tvPrograms[i].Season.Name === "春") {
+                headerColor = "lavenderblush";
+              } else if (tvPrograms[i].Season.Name === "夏") {
+                headerColor = "aliceblue";
+              } else if (tvPrograms[i].Season.Name === "秋") {
+                headerColor = "khaki";
+              } else if (tvPrograms[i].Season.Name === "冬") {
+                headerColor = "thistle";
               } else {
-                header_color = "ghostwhite";
+                headerColor = "ghostwhite";
               }
-              return ons.createElement('<div class="tv_program"><ons-list-header style="background-color:'+ header_color +';"><div style="text-align: left; float:left;">' + tv_programs[i].Year + '年' + tv_programs[i].Season.Name + '（' + tv_programs[i].Week.Name + time + '）</div><div style="text-align: right; margin-right:5px;">閲覧数：' + tv_programs[i].CountClicked + '</div></ons-list-header><ons-list-item><div class="title" style="font-size: 20px;">' + tv_programs[i].Title + '</div></ons-list-item><ons-list-item><ons-row><ons-col><div class="content"><ons-row style="margin-bottom:5px;"><ons-col width="20%">出演：</ons-col><ons-col>' + tv_programs[i].Cast+ '</ons-col></ons-row><ons-row style="margin-bottom:5px;"><ons-col width="20%">歌：</ons-col><ons-col>' + tv_programs[i].Themesong+ '</ons-col></ons-row><ons-row style="margin-bottom:5px;"><ons-col width="20%">監督：</ons-col><ons-col>' + tv_programs[i].Supervisor+ '</ons-col></ons-row><ons-row style="margin-bottom:5px;"><ons-col width="20%">脚本：</ons-col><ons-col>' + tv_programs[i].Dramatist+ '</ons-col></ons-row><ons-row style="margin-bottom:5px;"><ons-col width="20%">演出：</ons-col><ons-col>' + tv_programs[i].Director+ '</ons-col></ons-row></div></ons-col><ons-row></ons-list-item><div style="text-align:center; margin:5px;">' + movie_position + '</div><ons-list-item expandable>あらすじ・見どころ<div class="expandable-content">' + tv_programs[i].Content + '</div></ons-list-item><ons-list-item modifier="nodivider"><i class="'+ SetLikeBold(watch_status[i].Watched) +' fa-laugh-beam" id="check_watched_' + i + '" onclick="ClickWatchStatus(this)" style="color:' + SetLikeStatus(watch_status[i].Watched, 'lightcoral') + ';"></i><div id="check_watched_' + i + '_text" style="float:right; margin-left: 5px;margin-right: 8px;">見た：' + tv_programs[i].CountWatched + '</div><i class="'+ SetLikeBold(watch_status[i].WantToWatch) +' fa-bookmark" id="check_wan2wat_' + i + '" onclick="ClickWatchStatus(this)" style="color:' + SetLikeStatus(watch_status[i].WantToWatch, 'lightseagreen') + ';"></i><div id="check_wan2wat_' + i + '_text" style="float:right; margin-left: 5px;">また今度：' + tv_programs[i].CountWantToWatch + '</div></ons-list-item><ons-list-item><div class="right list-item__right"><a href="/tv/tv_program/comment/' + tv_programs[i].Id + '" style="text-decoration: none;">コメントを見る</a></div></ons-list-item></div>');
+              return ons.createElement('<div id="' + tvPrograms[i].Id + '"><ons-list-header style="background-color:'+ headerColor +';"><div class="area-left">' + tvPrograms[i].Year + '年' + tvPrograms[i].Season.Name + '（' + tvPrograms[i].Week.Name + time + '）</div><div class="area-right list-margin">閲覧数：' + tvPrograms[i].CountClicked + '</div></ons-list-header><ons-list-item><div class="tv-program-list-title-font">' + tvPrograms[i].Title + '</div></ons-list-item><ons-list-item><ons-row><ons-col><ons-row class="list-margin-bottom"><ons-col width="20%">出演：</ons-col><ons-col>' + tvPrograms[i].Cast+ '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">歌：</ons-col><ons-col>' + tvPrograms[i].Themesong+ '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">監督：</ons-col><ons-col>' + tvPrograms[i].Supervisor+ '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">脚本：</ons-col><ons-col>' + tvPrograms[i].Dramatist+ '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">演出：</ons-col><ons-col>' + tvPrograms[i].Director+ '</ons-col></ons-row></ons-col><ons-row></ons-list-item><div class="area-center" style="margin:5px;">' + moviePosition + '</div><ons-list-item expandable>あらすじ・見どころ<div class="expandable-content">' + tvPrograms[i].Content + '</div></ons-list-item><ons-list-item modifier="nodivider"><i class="'+ setLikeBold(watchStatus[i].Watched) +' fa-laugh-beam" id="check-watched-' + i + '" onclick="clickWatchStatus(this)" style="color:' + setLikeStatus(watchStatus[i].Watched, 'lightcoral') + ';"></i><div id="check-watched-' + i + '-text" class="tv-program-watch" style="margin-right: 8px;">見た：' + tvPrograms[i].CountWatched + '</div><i class="'+ setLikeBold(watchStatus[i].WantToWatch) +' fa-bookmark" id="check-wan2wat-' + i + '" onclick="clickWatchStatus(this)" style="color:' + setLikeStatus(watchStatus[i].WantToWatch, 'lightseagreen') + ';"></i><div id="check-wan2wat-' + i + '-text" class="tv-program-watch">また今度：' + tvPrograms[i].CountWantToWatch + '</div></ons-list-item><ons-list-item><div class="right list-item__right"><a href="/tv/tv_program/comment/' + tvPrograms[i].Id + '" style="text-decoration: none;">コメントを見る</a></div></ons-list-item></div>');
             },
             countItems: function() {
-              return tv_programs.length;
+              return tvPrograms.length;
             }
           };
           infiniteList.refresh();
@@ -353,32 +345,32 @@
     </script>
 
     <script type="text/javascript">
-      global_watch_status = {{.WatchStatus}};
+      globalWatchStatus = {{.WatchStatus}};
     </script>
 
     <script type="text/javascript">
       function WatchStatus(elem, checkFlag) {
         let url = URL+"/tv/watching_status/";
         const index = elem.id.slice(14);
-        let data = global_watch_status[index];
+        let data = globalWatchStatus[index];
         let method;
         if (data.Id === 0){
           method = 'POST';
           data.UserId = {{.User.Id}};
-          global_watch_status[index].UserId = data.UserId;
+          globalWatchStatus[index].UserId = data.UserId;
           data.TvProgramId = {{.TvProgram}}[index].Id;
-          global_watch_status[index].TvProgramId = data.TvProgramId;
+          globalWatchStatus[index].TvProgramId = data.TvProgramId;
         } else {
           method = 'PUT';
           url = url+data.Id;
         }
-        const str ="check_watched"
+        const str ="check-watched"
         if (elem.id.indexOf(str)===0) {
           data.Watched = checkFlag;
-          global_watch_status[index].Watched = data.Watched;
+          globalWatchStatus[index].Watched = data.Watched;
         } else {
           data.WantToWatch = checkFlag;
-          global_watch_status[index].WantToWatch = data.WantToWatch;
+          globalWatchStatus[index].WantToWatch = data.WantToWatch;
 
         }
         var json = JSON.stringify(data);
@@ -388,9 +380,9 @@
         request.onload = function () {
           var x = JSON.parse(request.responseText);
           if (request.readyState == 4 && request.status == "200") {
-            console.table(x);
+            // console.table(x);
           } else {
-            global_watch_status[index].Id = x.Id;
+            globalWatchStatus[index].Id = x.Id;
           }
         }
         request.send(json);
@@ -402,7 +394,7 @@
         .querySelector('ons-carousel')
         .addEventListener('postchange', function() {
           if (carousel.getActiveIndex() == 1) {
-            GoTop();
+            goTop();
           }
         });
     </script>

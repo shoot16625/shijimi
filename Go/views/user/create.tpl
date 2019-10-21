@@ -194,11 +194,11 @@
             ></ons-input>
           </p>
           <p>
-            <label for="IconUrl">＜プロフィール画像のURL＞</label>
+            <label for="IconURL">＜プロフィール画像のURL＞</label>
             <ons-input
-              name="IconUrl"
-              id="IconUrl"
-              value="{{.User.IconUrl}}"
+              name="IconURL"
+              id="IconURL"
+              value="{{.User.IconURL}}"
               modifier="underbar"
               placeholder="必須ではない"
               maxlength="200"
@@ -229,7 +229,7 @@
     <script type="text/javascript">
       const name = {{.User.Username}};
       if (name != null) {
-        DialogBoxEveryone("alert_username_duplicate");
+        dialogBoxEveryone("alert_username_duplicate");
       };
     </script>
     <script>

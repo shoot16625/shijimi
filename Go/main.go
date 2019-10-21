@@ -39,9 +39,9 @@ func init() {
 	orm.RegisterDriver(beego.AppConfig.String("driver"), orm.DRMySQL)
 	orm.RegisterDataBase("default", beego.AppConfig.String("driver"), beego.AppConfig.String("sqlconn")+"?charset=utf8&loc=Asia%2FTokyo")
 	// データを初期化して起動
-	// err := orm.RunSyncdb("default", true, false)
+	err := orm.RunSyncdb("default", true, false)
 	// データの変更点を追加して起動
-	err := orm.RunSyncdb("default", false, false)
+	// err := orm.RunSyncdb("default", false, false)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -68,8 +68,8 @@ func init() {
 	go beego.GlobalSessions.GC()
 
 	// 初期データの投入
-	// execInitSQL()
-	// execSQL()
+	execInitSQL()
+	execSQL()
 	// db.Scraping()
 	// db.UpdateTvProgramsInformation()
 	// tvProgram = db.GetTvProgramInformation("偽装不倫")
@@ -210,7 +210,7 @@ func ReviewCommentLikeSQL(userID int64, reviewcommentID int64, like bool) {
 	o.Insert(v)
 }
 
-func UserSQL(username string, password string, age int, gender string, address string, job string, secondpassword string, iconurl string, marital string) {
+func UserSQL(username string, password string, age int, gender string, address string, job string, secondpassword string, IconURL string, marital string) {
 	o := orm.NewOrm()
 	o.Using("default")
 	v := new(models.User)
@@ -223,7 +223,7 @@ func UserSQL(username string, password string, age int, gender string, address s
 	v.Job = job
 	hashSecondpass, _ := models.PasswordHash(secondpassword)
 	v.SecondPassword = hashSecondpass
-	v.IconUrl = iconurl
+	v.IconURL = IconURL
 	v.Marital = marital
 	o.Insert(v)
 }

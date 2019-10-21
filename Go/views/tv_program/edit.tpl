@@ -9,9 +9,6 @@ p {
   margin-top:20px;
   margin-bottom:20px;
 }
-.textarea {
-  width: 80%;
-}
 
 </style>
 
@@ -19,8 +16,8 @@ p {
   <ons-page>
     {{ template "/common/toolbar.tpl" . }}
     {{ template "/common/alert.tpl" . }}
-    <form id="create_tv_program" action="/tv/tv_program/{{.TvProgram.Id}}" method="post">
-      <div class="tv_form" style="text-align: center">
+    <form id="edit-tv-program" action="/tv/tv_program/{{.TvProgram.Id}}" method="post">
+      <div class="area-center">
         <p>
           <i class="fas fa-flag" style="color:gold;"></i>
           <ons-input name="title" modifier="underbar" value="{{.TvProgram.Title}}" placeholder="タイトル" maxlength="40" float required></ons-input>
@@ -115,7 +112,7 @@ p {
           <ons-input name="production" modifier="underbar" value="{{.TvProgram.Production}}" placeholder="制作会社" maxlength="20" float></ons-input>
         </p>
         <p style="margin-top: 30px;">
-          <ons-button modifier="quiet" onclick="PreviewTvProgram('preview_dialog')">プレビュー</ons-button>
+          <ons-button modifier="quiet" onclick="PreviewTvProgram('preview-dialog')">プレビュー</ons-button>
         </p>
         <p style="margin-top: 30px;">
           <input type="hidden" name="_method" value="PUT">
@@ -125,88 +122,88 @@ p {
     </form>
   </ons-page>
 
-<!--   <template id="alert_tv_title.html">
-    <ons-alert-dialog id="alert_tv_title" modifier="rowfooter">
+<!--   <template id="alert-tv-title.html">
+    <ons-alert-dialog id="alert-tv-title" modifier="rowfooter">
       <div class="alert-dialog-title">Alert</div>
       <div class="alert-dialog-content">
         「{{.TvProgram.Title}}」はすでに存在しています。
       </div>
       <div class="alert-dialog-footer">
-        <ons-alert-dialog-button onclick="hideAlertDialog('alert_tv_title')">OK</ons-alert-dialog-button>
+        <ons-alert-dialog-button onclick="hideAlertDialog('alert-tv-title')">OK</ons-alert-dialog-button>
       </div>
     </ons-alert-dialog>
   </template> -->
 
-  <template id="preview_dialog.html">
-    <ons-dialog id="preview_dialog" modifier="large" cancelable fullscreen>
-      <ons-page>
-        <ons-toolbar>
-          <div class="left">
-            <ons-button id="cancel_button" onclick="hideAlertDialog('preview_dialog')" style="background:left;color: grey;"><i class="fas fa-window-close"></i></ons-button>
-          </div>
-          <div class="center">
-            プレビュー
-          </div>
-        </ons-toolbar>
-        <ons-list>
-          <ons-list-header style="background-color:ghostwhite;">
-            <div style="text-align: left; float:left;" id="preview_on_air_info">
+  <template id="preview-dialog.html">
+      <ons-dialog id="preview-dialog" modifier="large" cancelable fullscreen>
+        <ons-page>
+          <ons-toolbar>
+            <div class="left">
+              <ons-button id="cancel-button" onclick="hideAlertDialog('preview-dialog')" style="background:left;color: grey;"><i class="fas fa-window-close"></i></ons-button>
             </div>
-            <div style="text-align: right;margin-right:5px;">
-              閲覧数：0
+            <div class="center">
+              プレビュー
             </div>
-          </ons-list-header>
-          <ons-list-item id="expandable-list-item" expandable>
-            <div  id="preview_title"></div>
-            <div class="expandable-content">
-              <ons-row>
-                <ons-col>
-                  <div class="content">
-                    <ons-row style="margin-bottom:5px;">
-                      <ons-col width="20%">出演：</ons-col>
-                      <ons-col id="preview_cast"></ons-col>
-                    </ons-row>
-                    <ons-row style="margin-bottom:5px;">
-                      <ons-col width="20%">歌：</ons-col>
-                      <ons-col id="preview_themesong"></ons-col>
-                    </ons-row>
-                    <ons-row style="margin-bottom:5px;">
-                      <ons-col width="20%">監督：</ons-col>
-                      <ons-col id="preview_supervisor"></ons-col>
-                    </ons-row>
-                    <ons-row style="margin-bottom:5px;">
-                      <ons-col width="20%">脚本：</ons-col>
-                      <ons-col id="preview_dramatist"></ons-col>
-                    </ons-row>
-                    <ons-row style="margin-bottom:5px;">
-                      <ons-col width="20%">演出：</ons-col>
-                      <ons-col id="preview_director"></ons-col>
-                    </ons-row>
+          </ons-toolbar>
+          <ons-list>
+            <ons-list-header style="background-color:ghostwhite;">
+              <div class="area-left" id="preview-on-air-info">
+              </div>
+              <div class="area-right list-margin">
+                閲覧数：0
+              </div>
+            </ons-list-header>
+            <ons-list-item id="expandable-list-item" expandable>
+              <div  id="preview-title"></div>
+              <div class="expandable-content">
+                <ons-row>
+                  <ons-col>
+                    <div class="content">
+                      <ons-row style="margin-bottom:5px;">
+                        <ons-col width="20%">出演：</ons-col>
+                        <ons-col id="preview-cast"></ons-col>
+                      </ons-row>
+                      <ons-row style="margin-bottom:5px;">
+                        <ons-col width="20%">歌：</ons-col>
+                        <ons-col id="preview-themesong"></ons-col>
+                      </ons-row>
+                      <ons-row style="margin-bottom:5px;">
+                        <ons-col width="20%">監督：</ons-col>
+                        <ons-col id="preview-supervisor"></ons-col>
+                      </ons-row>
+                      <ons-row style="margin-bottom:5px;">
+                        <ons-col width="20%">脚本：</ons-col>
+                        <ons-col id="preview-dramatist"></ons-col>
+                      </ons-row>
+                      <ons-row style="margin-bottom:5px;">
+                        <ons-col width="20%">演出：</ons-col>
+                        <ons-col id="preview-director"></ons-col>
+                      </ons-row>
+                    </div>
+                  </ons-col>
+                </ons-row>
+                <ons-row>
+                  <ons-col width="30%">
+                    <div class="image" id="preview-img">
+                    </div>
+                  </ons-col>
+                  <ons-col width="70%">
+                    <div class="image" id="preview-movie">
+                    </div>
+                  </ons-col>
+                </ons-row>
+                <ons-list-item expandable>
+                  あらすじ・見どころ
+                  <div class="right">
                   </div>
-                </ons-col>
-              </ons-row>
-              <ons-row>
-                <ons-col width="30%">
-                  <div class="image" align="center" id="preview_img">
-                  </div>
-                </ons-col>
-                <ons-col width="70%">
-                  <div class="movie" align="center" id="preview_movie">
-                  </div>
-                </ons-col>
-              </ons-row>
-              <ons-list-item expandable>
-                あらすじ・見どころ
-                <div class="right">
-                </div>
-                <div class="expandable-content" id="preview_content"></div>
-              </ons-list-item>
-            </div>
-          </ons-list-item>
-        </ons-list>
-      </ons-page>
-    </ons-dialog>
-  </template>
+                  <div class="expandable-content" id="preview-content"></div>
+                </ons-list-item>
+              </div>
+            </ons-list-item>
+          </ons-list>
+        </ons-page>
+      </ons-dialog>
+    </template>
 
   <script type="text/javascript" src="/static/js/common.js"></script>
 
@@ -230,48 +227,50 @@ p {
 
 
   <script type="text/javascript">
-    var PreviewTvProgram = function(elem_id){
+    var PreviewTvProgram = function(elemID){
       ons.ready(function() {
-        var dialog = document.getElementById(elem_id);
+        var dialog = document.getElementById(elemID);
         if (dialog) {
-          document.getElementById('preview_on_air_info').innerHTML = document.getElementsByName('year')[0].value+"年 "+document.getElementsByName('season')[0].value.replace(/\(.+\)/, '')+"（"+document.getElementsByName('week')[0].value+document.getElementsByName('hour')[0].value+"）";
-          document.getElementById('preview_title').innerHTML = document.getElementsByName('title')[0].value;
-          document.getElementById('preview_content').innerHTML = document.getElementsByName('content')[0].value;
-          document.getElementById('preview_cast').innerHTML = document.getElementsByName('cast')[0].value;
-          document.getElementById('preview_themesong').innerHTML = document.getElementsByName('themesong')[0].value;
-          document.getElementById('preview_dramatist').innerHTML = document.getElementsByName('dramatist')[0].value;
-          document.getElementById('preview_supervisor').innerHTML = document.getElementsByName('supervisor')[0].value;
-          document.getElementById('preview_director').innerHTML = document.getElementsByName('director')[0].value;
-          document.getElementById('preview_img').innerHTML = '<img src="'+document.getElementsByName('ImageUrl')[0].value+'" alt="イメージ" width="80%">';
+          document.getElementById('preview-on-air-info').innerHTML = document.getElementsByName('year')[0].value+"年 "+document.getElementsByName('season')[0].value.replace(/\(.+\)/, '')+"（"+document.getElementsByName('week')[0].value+document.getElementsByName('hour')[0].value+"）";
+          document.getElementById('preview-title').innerHTML = document.getElementsByName('title')[0].value;
+          document.getElementById('preview-content').innerHTML = document.getElementsByName('content')[0].value;
+          document.getElementById('preview-cast').innerHTML = document.getElementsByName('cast')[0].value;
+          document.getElementById('preview-themesong').innerHTML = document.getElementsByName('themesong')[0].value;
+          document.getElementById('preview-dramatist').innerHTML = document.getElementsByName('dramatist')[0].value;
+          document.getElementById('preview-supervisor').innerHTML = document.getElementsByName('supervisor')[0].value;
+          document.getElementById('preview-director').innerHTML = document.getElementsByName('director')[0].value;
+          document.getElementById('preview-img').innerHTML = '<img src="'+document.getElementsByName('ImageUrl')[0].value+'" alt="イメージ" width="80%">';
           var movie_url = document.getElementsByName('MovieUrl')[0].value;
           if (movie_url != ""){
             movie_url = movie_url.replace("watch?v=", "embed/");
-            document.getElementById('preview_movie').innerHTML = '<iframe src="'+movie_url+'?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="ムービー" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+            document.getElementById('preview-movie').innerHTML = '<iframe src="'+movie_url+'?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="ムービー" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
           }
 
           document.querySelector('#expandable-list-item').showExpansion();
           dialog.show();
         } else {
-          ons.createElement(elem_id+'.html', { append: true })
+          ons.createElement(elemID+'.html', { append: true })
           .then(function(dialog) {
+            let hour;
             if (document.getElementsByName('hour')[0].value == "指定なし"){
-              var hour = "";
+              hour = "";
             } else {
-              var hour = document.getElementsByName('hour')[0].value;
+              hour = document.getElementsByName('hour')[0].value;
             }
-            document.getElementById('preview_on_air_info').innerHTML = document.getElementsByName('year')[0].value+"年 "+document.getElementsByName('season')[0].value.replace(/\(.+\)/, '')+"（"+document.getElementsByName('week')[0].value+hour+"）";
-            document.getElementById('preview_title').innerHTML = document.getElementsByName('title')[0].value;
-            document.getElementById('preview_content').innerHTML = document.getElementsByName('content')[0].value;
-            document.getElementById('preview_cast').innerHTML = document.getElementsByName('cast')[0].value;
-            document.getElementById('preview_themesong').innerHTML = document.getElementsByName('themesong')[0].value;
-            document.getElementById('preview_dramatist').innerHTML = document.getElementsByName('dramatist')[0].value;
-            document.getElementById('preview_supervisor').innerHTML = document.getElementsByName('supervisor')[0].value;
-            document.getElementById('preview_director').innerHTML = document.getElementsByName('director')[0].value;
-            document.getElementById('preview_img').innerHTML = '<img src="'+document.getElementsByName('ImageUrl')[0].value+'" alt="イメージ" width="80%">';
+            document.getElementById('preview-on-air-info').innerHTML = document.getElementsByName('year')[0].value+"年 "+document.getElementsByName('season')[0].value.replace(/\(.+\)/, '')+"（"+document.getElementsByName('week')[0].value+hour+"）";
+            document.getElementById('preview-title').innerHTML = document.getElementsByName('title')[0].value;
+            document.getElementById('preview-content').innerHTML = document.getElementsByName('content')[0].value;
+            document.getElementById('preview-cast').innerHTML = document.getElementsByName('cast')[0].value;
+            document.getElementById('preview-themesong').innerHTML = document.getElementsByName('themesong')[0].value;
+            document.getElementById('preview-dramatist').innerHTML = document.getElementsByName('dramatist')[0].value;
+            document.getElementById('preview-supervisor').innerHTML = document.getElementsByName('supervisor')[0].value;
+            document.getElementById('preview-director').innerHTML = document.getElementsByName('director')[0].value;
+            document.getElementById('preview-img').innerHTML = '<img src="'+document.getElementsByName('ImageUrl')[0].value+'" alt="イメージ" width="80%">';
+            // console.log(document.getElementsByName('MovieUrl')[0].value);
             var movie_url = document.getElementsByName('MovieUrl')[0].value;
             if (movie_url != ""){
               movie_url = movie_url.replace("watch?v=", "embed/");
-              document.getElementById('preview_movie').innerHTML = '<iframe src="'+movie_url+'?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="ムービー" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+              document.getElementById('preview-movie').innerHTML = '<iframe src="'+movie_url+'?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="ムービー" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
             }
             document.querySelector('#expandable-list-item').showExpansion();
             dialog.show();
@@ -282,27 +281,25 @@ p {
   </script>
 
   <script type="text/javascript">
-    console.log({{.TvProgram}});
     const name = {{.TvProgram.Title}};
-    if (name != "null") {
-      console.log({{.TvProgram.Category}});
-      if ({{.TvProgram.Season.Name}} == "春"){
+    if (name != null) {
+      if ({{.TvProgram.Season.Name}} === "春"){
         document.getElementById('season').value = {{.TvProgram.Season.Name}}+"(4~6)";
       }
-      else if ({{.TvProgram.Season.Name}} == "夏"){
+      else if ({{.TvProgram.Season.Name}} === "夏"){
         document.getElementById('season').value = {{.TvProgram.Season.Name}}+"(7~9)";
       }
-      else if ({{.TvProgram.Season.Name}} == "秋"){
+      else if ({{.TvProgram.Season.Name}} === "秋"){
         document.getElementById('season').value = {{.TvProgram.Season.Name}}+"(10~12)";
       }
-      else if ({{.TvProgram.Season.Name}} == "冬"){
+      else if ({{.TvProgram.Season.Name}} === "冬"){
         document.getElementById('season').value = {{.TvProgram.Season.Name}}+"(1~3)";
       } else {
         document.getElementById('season').value = {{.TvProgram.Season.Name}};
       }
       let time = String({{.TvProgram.Hour}});
       str = ".5";
-      if (time == 100){
+      if (time === 100){
         time = "指定なし";
       } else {
       if (time.indexOf(str) > -1){
@@ -312,13 +309,12 @@ p {
       }
       }
       document.getElementById('hour').value = time;
-      SetMultipleSelection("category", {{.TvProgram.Category}});
+      setMultipleSelection("category", {{.TvProgram.Category}});
       document.getElementById('content').value = {{.TvProgram.Content}};
       document.getElementById('week').value = {{.TvProgram.Week.Name}};
-      DialogBoxEveryone("alert_tv_title");
+      dialogBoxEveryone("alert-tv-title");
     };
   </script>
-
 
 </body>
 </html>

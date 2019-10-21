@@ -65,7 +65,7 @@ func (c *TvProgramController) Post() {
 		if !strings.Contains(movieURL, "embed") {
 			movieURL = strings.Replace(movieURL, "watch?v=", "embed/", -1)
 		}
-		imageURL := c.GetString("IconUrl")
+		imageURL := c.GetString("IconURL")
 		if imageURL == "" {
 			imageURL = "http://hankodeasobu.com/wp-content/uploads/animals_02.png"
 		}

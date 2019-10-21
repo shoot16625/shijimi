@@ -24,8 +24,11 @@
 img {
     max-width: 300px;
 }
-
-.dialog{
+image {
+  max-width: 300px;
+  text-align: center;
+}
+.dialog {
   width: 100%;
   height: 100%;
   max-width: 800px;
@@ -54,16 +57,18 @@ label {
   -ms-scroll-snap-type: mandatory;
 }
 
-#cancel_button {
+#cancel-button {
     background: left;
     color: grey;
 }
-
+.doramas-on-air{
+  margin-bottom: 10px;
+}
 a {
     text-decoration: none;
 }
 
-  .list-item__subtitle{
+.list-item__subtitle{
     word-break: break-all;
   }
 
@@ -92,4 +97,44 @@ a {
 .input-table {
   text-align: center;
   margin-top: 30px;
+}
+
+.area-center {
+  text-align: center;
+}
+
+.area-left {
+  text-align: left;
+  float: left;
+}
+
+.area-right {
+  text-align: right;
+}
+
+.list-margin {
+  margin: 0px 5px 0px 3px;
+}
+.list-margin-bottom {
+  margin-bottom: 5px;
+}
+
+.comment-list-header-font {
+  font-size: 16px;
+}
+.comment-list-content-font {
+  font-size: 14px;
+}
+.tv-program-list-title-font {
+  font-size: 20px;
+}
+.tv-program-watch {
+  text-align: left;
+  margin-left: 5px;
+}
+
+.select-search-table {
+  width: 80%;
+  max-width: 500px;
+  height: 100px;
 }

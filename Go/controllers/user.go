@@ -54,9 +54,9 @@ func (c *UserController) Post() {
 	age, _ := c.GetInt("age")
 	hashPass, _ := models.PasswordHash(c.GetString("password"))
 	hashSecondpass, _ := models.PasswordHash(c.GetString("SecondPassword"))
-	iconURL := c.GetString("IconUrl")
-	if iconURL == "" {
-		iconURL = "http://flat-icon-design.com/f/f_object_174/s512_f_object_174_0bg.png"
+	IconURL := c.GetString("IconURL")
+	if IconURL == "" {
+		IconURL = "http://flat-icon-design.com/f/f_object_174/s512_f_object_174_0bg.png"
 	}
 	// json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 	v := models.User{
@@ -67,7 +67,7 @@ func (c *UserController) Post() {
 		Address:        c.GetString("address"),
 		Gender:         c.GetString("gender"),
 		Job:            c.GetString("job"),
-		IconUrl:        iconURL,
+		IconURL:        IconURL,
 		Marital:        c.GetString("marital"),
 		BloodType:      c.GetString("bloodType"),
 	}
@@ -203,7 +203,7 @@ func (c *UserController) Put() {
 		Address:        c.GetString("address"),
 		Gender:         c.GetString("gender"),
 		Job:            c.GetString("job"),
-		IconUrl:        c.GetString("IconUrl"),
+		IconURL:        c.GetString("IconURL"),
 		Marital:        c.GetString("marital"),
 		BloodType:      c.GetString("bloodType"),
 	}

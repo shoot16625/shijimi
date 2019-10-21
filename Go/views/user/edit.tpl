@@ -9,8 +9,8 @@
     {{ template "/common/toolbar.tpl" . }}
     {{ template "/common/alert.tpl" . }}
 
-    <form id="create_user" action="/tv/user/{{.User.Id}}" method="post">
-      <div style="text-align: center; margin-top: 30px;">
+    <form id="create-user" action="/tv/user/{{.User.Id}}" method="post">
+      <div class='input-table'>
         <p>
           <ons-input name="username" modifier="underbar" placeholder="ユーザー名" value="{{.User.Username}}" minlength="2" maxlength="20" float required></ons-input>
         </p>
@@ -123,8 +123,8 @@
       </p>
 
       <p>
-        <label for="IconUrl">＜プロフィール画像のURL＞</label>
-        <ons-input name="IconUrl" id="IconUrl" value="{{.User.IconUrl}}" modifier="underbar" placeholder="必須ではない" maxlength="200" float></ons-input>
+        <label for="IconURL">＜プロフィール画像のURL＞</label>
+        <ons-input name="IconURL" id="IconURL" value="{{.User.IconURL}}" modifier="underbar" placeholder="必須ではない" maxlength="200" float></ons-input>
       </p>
       <p style="margin-top: 30px;">
         <input type="hidden" name="_method" value="PUT">
@@ -137,9 +137,9 @@
 
 <script type="text/javascript" src="/static/js/common.js"></script>
 <script type="text/javascript">
-  const name_flag = {{.NameFlag}};
-  if (name_flag == true) {
-   DialogBoxEveryone("alert_username_duplicate");
+  const nameFlag = {{.NameFlag}};
+  if (nameFlag == true) {
+   dialogBoxEveryone("alert_username_duplicate");
   };
 </script>
 <script>

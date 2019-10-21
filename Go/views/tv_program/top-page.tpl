@@ -40,7 +40,7 @@
             <p>
               <ons-button
                 modifier="quiet"
-                onclick="GoOtherPage({{.UserId}}, 'tv/tv_program/create_page')"
+                onclick="goOtherPage({{.UserId}}, 'tv/tv_program/create_page')"
                 >ドラマ・映画をつくる</ons-button
               >
             </p>
@@ -56,7 +56,7 @@
             <p>
               <ons-button
                 modifier="quiet"
-                onclick="DialogBoxEveryone('login_dialog')"
+                onclick="dialogBoxEveryone('login-dialog')"
                 >ログイン</ons-button
               >
             </p>
@@ -88,16 +88,15 @@
             swipeable
             overscrollable
             item-width="200px"
-            class="doramas_on_air"
-            style="margin-bottom: 10px;"
+            class="doramas-on-air"
           >
             {{ range.TvProgram_mon }}
             <ons-carousel-item
               modifier="nodivider"
-              class="tv_program"
+              id="{{.Id}}"
               name="{{.Title}}"
             >
-              <div style="padding: 3px; text-align: center;">
+              <div class="area-center" style="padding: 3px;">
                 <div class="thumbnail">
                   <img
                     src="{{.ImageUrl}}"
@@ -124,16 +123,15 @@
             swipeable
             overscrollable
             item-width="200px"
-            class="doramas_on_air"
-            style="margin-bottom: 10px;"
+            class="doramas-on-air"
           >
             {{ range.TvProgram_tue }}
             <ons-carousel-item
               modifier="nodivider"
-              class="tv_program"
+              id="{{.Id}}"
               name="{{.Title}}"
             >
-              <div style="padding: 3px; text-align: center;">
+              <div class="area-center" style="padding: 3px;">
                 <div class="thumbnail">
                   <img
                     src="{{.ImageUrl}}"
@@ -160,16 +158,15 @@
             swipeable
             overscrollable
             item-width="200px"
-            class="doramas_on_air"
-            style="margin-bottom: 10px;"
+            class="doramas-on-air"
           >
             {{ range.TvProgram_wed }}
             <ons-carousel-item
               modifier="nodivider"
-              class="tv_program"
+              id="{{.Id}}"
               name="{{.Title}}"
             >
-              <div style="padding: 3px; text-align: center;">
+              <div class="area-center" style="padding: 3px;">
                 <div class="thumbnail">
                   <img
                     src="{{.ImageUrl}}"
@@ -196,16 +193,15 @@
             swipeable
             overscrollable
             item-width="200px"
-            class="doramas_on_air"
-            style="margin-bottom: 10px;"
+            class="doramas-on-air"
           >
             {{ range.TvProgram_thu }}
             <ons-carousel-item
               modifier="nodivider"
-              class="tv_program"
+              id="{{.Id}}"
               name="{{.Title}}"
             >
-              <div style="padding: 3px; text-align: center;">
+              <div class="area-center" style="padding: 3px;">
                 <div class="thumbnail">
                   <img
                     src="{{.ImageUrl}}"
@@ -232,16 +228,15 @@
             swipeable
             overscrollable
             item-width="200px"
-            class="doramas_on_air"
-            style="margin-bottom: 10px;"
+            class="doramas-on-air"
           >
             {{ range.TvProgram_fri }}
             <ons-carousel-item
               modifier="nodivider"
-              class="tv_program"
+              id="{{.Id}}"
               name="{{.Title}}"
             >
-              <div style="padding: 3px; text-align: center;">
+              <div class="area-center" style="padding: 3px;">
                 <div class="thumbnail">
                   <img
                     src="{{.ImageUrl}}"
@@ -268,16 +263,15 @@
             swipeable
             overscrollable
             item-width="200px"
-            class="doramas_on_air"
-            style="margin-bottom: 10px;"
+            class="doramas-on-air"
           >
             {{ range.TvProgram_sat }}
             <ons-carousel-item
               modifier="nodivider"
-              class="tv_program"
+              id="{{.Id}}"
               name="{{.Title}}"
             >
-              <div style="padding: 3px; text-align: center;">
+              <div class="area-center" style="padding: 3px;">
                 <div class="thumbnail">
                   <img
                     src="{{.ImageUrl}}"
@@ -304,16 +298,15 @@
             swipeable
             overscrollable
             item-width="200px"
-            class="doramas_on_air"
-            style="margin-bottom: 10px;"
+            class="doramas-on-air"
           >
             {{ range.TvProgram_sun }}
             <ons-carousel-item
               modifier="nodivider"
-              class="tv_program"
+              id="{{.Id}}"
               name="{{.Title}}"
             >
-              <div style="padding: 3px; text-align: center;">
+              <div class="area-center" style="padding: 3px;">
                 <div class="thumbnail">
                   <img
                     src="{{.ImageUrl}}"
@@ -331,22 +324,22 @@
       </div>
     </ons-page>
 
-    <template id="login_dialog.html">
-      <ons-dialog id="login_dialog" modifier="large" cancelable fullscreen>
+    <template id="login-dialog.html">
+      <ons-dialog id="login-dialog" modifier="large" cancelable fullscreen>
         <ons-page>
           <ons-toolbar>
             <div class="left">
               <ons-button
-                id="cancel_button"
-                onclick="hideAlertDialog('login_dialog')"
+                id="cancel-button"
+                onclick="hideAlertDialog('login-dialog')"
               >
                 <i class="fas fa-window-close"></i>
               </ons-button>
             </div>
             <div class="center">ログイン</div>
           </ons-toolbar>
-          <form id="login_user" action="/tv/user/login" method="post">
-            <div style="text-align: center; margin-top: 30px;">
+          <form id="login-user" action="/tv/user/login" method="post">
+            <div class="area-center" style="margin-top: 30px;">
               <p>
                 <ons-input
                   name="username"
@@ -384,10 +377,10 @@
               </p>
             </div>
           </form>
-          <p style="text-align: right;">
+          <p class="area-right">
             <a href="tv/user/forget_username_page">ユーザー名を忘れたら...</a>
           </p>
-          <p style="text-align: right;">
+          <p class="area-right">
             <a href="tv/user/forget_password_page">パスワードを忘れたら...</a>
           </p>
         </ons-page>
@@ -408,25 +401,25 @@
     <script type="text/javascript" src="/static/js/common.js"></script>
     <script type="text/javascript">
       if({{.TvProgram_mon}}){
-        AutoScroll(carousel01, {{.TvProgram_mon}}.length);
+        autoScroll(carousel01, {{.TvProgram_mon}}.length);
       }
       if ({{.TvProgram_tue}}) {
-        AutoScroll(carousel02, {{.TvProgram_tue}}.length);
+        autoScroll(carousel02, {{.TvProgram_tue}}.length);
       }
       if ({{.TvProgram_wed}}) {
-        AutoScroll(carousel03, {{.TvProgram_wed}}.length);
+        autoScroll(carousel03, {{.TvProgram_wed}}.length);
       }
       if({{.TvProgram_thu}}){
-        AutoScroll(carousel04, {{.TvProgram_thu}}.length);
+        autoScroll(carousel04, {{.TvProgram_thu}}.length);
       }
       if ({{.TvProgram_fri}}) {
-        AutoScroll(carousel05, {{.TvProgram_fri}}.length);
+        autoScroll(carousel05, {{.TvProgram_fri}}.length);
       }
       if ({{.TvProgram_sat}}) {
-        AutoScroll(carousel06, {{.TvProgram_sat}}.length);
+        autoScroll(carousel06, {{.TvProgram_sat}}.length);
       }
       if ({{.TvProgram_sun}}) {
-        AutoScroll(carousel07, {{.TvProgram_sun}}.length);
+        autoScroll(carousel07, {{.TvProgram_sun}}.length);
       }
     </script>
   </body>

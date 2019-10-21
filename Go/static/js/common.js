@@ -8,11 +8,11 @@ const URL = 'http://192.168.2.174:8080';
 // ons.bootstrap();
 
 // 自動スクロール
-function AutoScroll(varName, len) {
+function autoScroll(varName, len) {
   let indexState = -1;
   setInterval(function() {
     let activeIndex = varName.getActiveIndex();
-    if (indexState == activeIndex) {
+    if (indexState === activeIndex) {
       varName.first();
       indexState = -1;
     } else {
@@ -53,11 +53,11 @@ var hideAlertDialog = function(elem) {
 };
 
 // ツイートボックス
-var DialogBox = function(elemID, userID) {
+var dialogBox = function(elemID, userID) {
   ons.ready(function() {
     var dialog = document.getElementById(elemID);
     if (userID === null) {
-      return DialogBoxEveryone('alert_onlyuser_dialog');
+      return dialogBoxEveryone('alert-only-user-dialog');
     }
     if (dialog) {
       dialog.show();
@@ -72,7 +72,7 @@ var DialogBox = function(elemID, userID) {
 };
 
 // not-userも許可するダイアログボックス
-var DialogBoxEveryone = function(elemID) {
+var dialogBoxEveryone = function(elemID) {
   ons.ready(function() {
     var dialog = document.getElementById(elemID);
     if (dialog) {
@@ -88,7 +88,7 @@ var DialogBoxEveryone = function(elemID) {
 };
 
 // プルフック
-var PullHook = function() {
+var pullHook = function() {
   var pullHook = document.getElementById('pull-hook');
   if (pullHook != null) {
     pullHook.addEventListener('changestate', function(event) {
@@ -113,7 +113,7 @@ var PullHook = function() {
 };
 
 // いいねボタンの色切り替え
-function SetLikeStatus(likeStatus, newColor) {
+function setLikeStatus(likeStatus, newColor) {
   if (likeStatus) {
     return newColor;
   } else {
@@ -122,7 +122,7 @@ function SetLikeStatus(likeStatus, newColor) {
 }
 
 // いいねボタンの色切り替え
-function SetLikeBold(likeStatus) {
+function setLikeBold(likeStatus) {
   if (likeStatus) {
     return 'fas';
   } else {
@@ -131,7 +131,7 @@ function SetLikeBold(likeStatus) {
 }
 
 // 見たボタンの色の切り替え
-function SetWatchStatus(elemID, newColor, status) {
+function setWatchStatus(elemID, newColor, status) {
   var target = document.getElementById(elemID);
   if (status) {
     target.style.color = newColor;
@@ -141,7 +141,7 @@ function SetWatchStatus(elemID, newColor, status) {
 }
 
 // 見たボタンの色の切り替え
-function SetWatchBold(elemID, status) {
+function setWatchBold(elemID, status) {
   var target = document.getElementById(elemID);
   if (status) {
     target.classList.add('fas');
@@ -151,12 +151,12 @@ function SetWatchBold(elemID, status) {
 }
 
 // いいねボタンがクリックされたら色を変える
-function ClickLike(elem) {
+function clickLike(elem) {
   const newColor = 'orchid';
-  if (global_comment_like_status === null) {
-    return DialogBoxEveryone('alert_onlyuser_dialog');
+  if (globalCommentLikeStatus === null) {
+    return dialogBoxEveryone('alert-only-user-dialog');
   }
-  var count = document.getElementById('count_like_' + elem.id);
+  var count = document.getElementById('count-like-' + elem.id);
   let checkFlag;
   let newCount;
   if (elem.style['color'] != newColor) {
@@ -173,16 +173,16 @@ function ClickLike(elem) {
     newCount = parseInt(count.textContent.slice(1), 10) - 1;
   }
   count.textContent = '：' + newCount;
-  CommentLikeStatus(elem, checkFlag);
+  commentLikeStatus(elem, checkFlag);
 }
 
 // 見たボタンのクリック処理
-function ClickWatchStatus(elem) {
-  if (global_watch_status === null) {
-    return DialogBoxEveryone('alert_onlyuser_dialog');
+function clickWatchStatus(elem) {
+  if (globalWatchStatus === null) {
+    return dialogBoxEveryone('alert-only-user-dialog');
   }
-  var count = document.getElementById(elem.id + '_text');
-  const str = 'check_watched';
+  var count = document.getElementById(elem.id + '-text');
+  const str = 'check-watched';
   let newColor;
   if (elem.id.indexOf(str) === 0) {
     newColor = 'lightcoral';
@@ -221,11 +221,11 @@ function ClickWatchStatus(elem) {
 }
 
 // セレクタが複数設定されていた時の再描画処理
-function SetMultipleSelection(elem, data) {
+function setMultipleSelection(elem, data) {
   const d = data.split('、');
-  for (var i = d.length - 1; i >= 0; i--) {
+  for (let i = d.length - 1; i >= 0; i--) {
     var target = document.getElementById(elem);
-    for (var j = target.length - 1; j >= 0; j--) {
+    for (let j = target.length - 1; j >= 0; j--) {
       if (target.options[j].value == d[i]) {
         target.options[j].selected = true;
       }
@@ -234,22 +234,22 @@ function SetMultipleSelection(elem, data) {
 }
 
 // ページの上部へ移動
-function GoTop() {
+function goTop() {
   $('.page__content').animate({ scrollTop: 0 }, 500, 'swing');
 }
 
 // カルーセルを移動してページのトップへ移動
-function GoAnotherCarousel(index) {
+function goAnotherCarousel(index) {
   ons.ready(function() {
     carousel.setActiveIndex(index);
-    GoTop();
+    goTop();
   });
 }
 
 // pathのページへ移動
-function GoOtherPage(userID, path) {
-  if (userID == null) {
-    return DialogBoxEveryone('alert_onlyuser_dialog');
+function goOtherPage(userID, path) {
+  if (userID === null) {
+    return dialogBoxEveryone('alert-only-user-dialog');
   } else {
     window.location.href = path;
   }

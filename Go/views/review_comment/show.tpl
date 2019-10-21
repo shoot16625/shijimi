@@ -33,20 +33,20 @@ select {
         <ons-speed-dial-item>
           <ons-icon
             icon="md-comment-dots"
-            onclick="DialogBox('tweet_dialog', {{.User.Id}})"
+            onclick="dialogBox('tweet_dialog', {{.User.Id}})"
           ></ons-icon>
         </ons-speed-dial-item>
         <ons-speed-dial-item>
           <ons-icon
             icon="md-search"
-            onclick="DialogBoxEveryone('search_dialog')"
+            onclick="dialogBoxEveryone('search-dialog')"
           ></ons-icon>
         </ons-speed-dial-item>
         <ons-speed-dial-item>
-          <ons-icon icon="md-chart" onclick="GoAnotherCarousel(1)"></ons-icon>
+          <ons-icon icon="md-chart" onclick="goAnotherCarousel(1)"></ons-icon>
         </ons-speed-dial-item>
         <ons-speed-dial-item>
-          <ons-icon icon="md-home" onclick="GoTop()"></ons-icon>
+          <ons-icon icon="md-home" onclick="goTop()"></ons-icon>
         </ons-speed-dial-item>
       </ons-speed-dial>
 
@@ -72,7 +72,7 @@ select {
     <ons-page>
       <ons-toolbar>
         <div class="left">
-          <ons-button id="cancel_button" onclick="hideAlertDialog('tweet_dialog')" style="background:left;color: grey;"><i class="fas fa-window-close"></i></ons-button>
+          <ons-button id="cancel-button" onclick="hideAlertDialog('tweet_dialog')" style="background:left;color: grey;"><i class="fas fa-window-close"></i></ons-button>
         </div>
 
         <div class="right">
@@ -154,18 +154,18 @@ select {
 </ons-dialog>
 </template>
 
-<template id="search_dialog.html">
-  <ons-dialog id="search_dialog" modifier="large" cancelable fullscreen>
+<template id="search-dialog.html">
+  <ons-dialog id="search-dialog" modifier="large" cancelable fullscreen>
     <ons-page>
       <ons-toolbar>
         <div class="left">
-          <ons-button id="cancel_button" onclick="hideAlertDialog('search_dialog')" style="background:left;color: grey;"><i class="fas fa-window-close"></i></ons-button>
+          <ons-button id="cancel-button" onclick="hideAlertDialog('search-dialog')" style="background:left;color: grey;"><i class="fas fa-window-close"></i></ons-button>
         </div>
         <div class="center">
           <i class="fas fa-search" style="color: brown;"></i> 詳細検索
         </div>
         <div class="right">
-          <ons-button id="reset_button" onclick="resetSelect()" style="color:chocolate;background:left;"><i class="far fa-trash-alt"></i></ons-button>
+          <ons-button id="reset-button" onclick="resetSelect()" style="color:chocolate;background:left;"><i class="far fa-trash-alt"></i></ons-button>
         </div>
       </ons-toolbar>
       <div class="scroller">
@@ -232,9 +232,9 @@ select {
     console.log({{.SearchWords}});
     if ({{.SearchWords}} != null){
       console.log({{.SearchWords}});
-      SetMultipleSelection("FavoritePoint", {{.SearchWords.Category}});
-      SetMultipleSelection("spoiler", {{.SearchWords.Spoiler}});
-      SetMultipleSelection("star", {{.SearchWords.Star}});
+      setMultipleSelection("FavoritePoint", {{.SearchWords.Category}});
+      setMultipleSelection("spoiler", {{.SearchWords.Spoiler}});
+      setMultipleSelection("star", {{.SearchWords.Star}});
     }
     if ({{.SearchWords.Sortby}} != null){
       document.getElementById('sortby').value = {{.SearchWords.Sortby}};
@@ -248,7 +248,7 @@ select {
 
 <script>
   ons.ready(function() {
-    PullHook();
+    pullHook();
   });
 </script>
 
@@ -263,14 +263,14 @@ select {
   }
   // console.log(ratings);
   const users = {{.Users}};
-  let comment_likes;
+  let commentLikes;
   if ({{.CommentLike}} == null && comments != null){
-    comment_likes = [comments.length];
+    commentLikes = [comments.length];
     for (let i = comments.length - 1; i >= 0; i--) {
-      comment_likes[i] = {Like:false};
+      commentLikes[i] = {Like:false};
     }
   } else {
-    comment_likes = {{.CommentLike}};
+    commentLikes = {{.CommentLike}};
   }
   ons.ready(function() {
     var infiniteList = document.getElementById('comments');
@@ -288,7 +288,7 @@ select {
         if(comments[i].Spoiler){
           fp_text += "<i class='fas fa-hand-paper' style='color:palevioletred;'></i>";
         }
-        return ons.createElement('<div class="comment"><ons-list-header style="background-color:antiquewhite;text-transform:none;"><div style="text-align:left; float:left;font-size:16px;">@' + users[i].Username + '</div><div style="text-align: right;margin-right:5px;">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm:ss") + '</div></ons-list-header><ons-list-item><ons-row><ons-col width="15%"><i class="fas fa-star" style="color:gold;"></i>：' + comments[i].Star +'</ons-col><ons-col style="font-size:12px;">'+ fp_text + '</ons-col></ons-row></ons-list-item><ons-list-item><div class="left"><a href="/tv/user/show/' + users[i].Id + '" title="user_page"><img class="list-item__thumbnail" src="' + users[i].IconUrl + '" alt="@' + users[i].Username + '"></a></div><div class="center"><span class="list-item__subtitle"id="comment_content_' + String(i) + '" style="font-size:14px;">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle" style="text-align: right;"><div style="float:right;" id="count_like_' + i + '">：' + comments[i].CountLike + '</div><div style="float:right;"><i class="' + SetLikeBold(comment_likes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="ClickLike(this)" style="color:' + SetLikeStatus(comment_likes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
+        return ons.createElement('<div class="comment"><ons-list-header style="background-color:antiquewhite;text-transform:none;"><div style="text-align:left; float:left;font-size:16px;">@' + users[i].Username + '</div><div style="text-align: right;margin-right:5px;">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm:ss") + '</div></ons-list-header><ons-list-item><ons-row><ons-col width="15%"><i class="fas fa-star" style="color:gold;"></i>：' + comments[i].Star +'</ons-col><ons-col style="font-size:12px;">'+ fp_text + '</ons-col></ons-row></ons-list-item><ons-list-item><div class="left"><a href="/tv/user/show/' + users[i].Id + '" title="user_page"><img class="list-item__thumbnail" src="' + users[i].IconURL + '" alt="@' + users[i].Username + '"></a></div><div class="center"><span class="list-item__subtitle"id="comment-content-' + String(i) + '" style="font-size:14px;">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle" style="text-align: right;"><div style="float:right;" id="count-like-' + i + '">：' + comments[i].CountLike + '</div><div style="float:right;"><i class="' + setLikeBold(commentLikes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="clickLike(this)" style="color:' + setLikeStatus(commentLikes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
       },
       countItems: function() {
         return comments.length;
@@ -303,38 +303,38 @@ select {
 
 <script type="text/javascript">
 
-  SetWatchBold("check_watched", {{.WatchStatus.Watched}});
-  SetWatchBold("check_wtw", {{.WatchStatus.WantToWatch}});
-  SetWatchStatus("check_watched", "lightcoral", {{.WatchStatus.Watched}});
-  SetWatchStatus("check_wtw", "lightseagreen", {{.WatchStatus.WantToWatch}});
+  setWatchBold("check_watched", {{.WatchStatus.Watched}});
+  setWatchBold("check_wtw", {{.WatchStatus.WantToWatch}});
+  setWatchStatus("check_watched", "lightcoral", {{.WatchStatus.Watched}});
+  setWatchStatus("check_wtw", "lightseagreen", {{.WatchStatus.WantToWatch}});
 
 </script>
 
 
 <script>
-  global_comment_like_status = {{.CommentLike}};
+  globalCommentLikeStatus = {{.CommentLike}};
 </script>
 
 <script type="text/javascript">
-  function CommentLikeStatus(elem, check_flag) {
+  function commentLikeStatus(elem, checkFlag) {
     let url = URL+"/tv/review_comment_like/";
-    var data = global_comment_like_status[elem.id];
+    var data = globalCommentLikeStatus[elem.id];
     let method;
     if (data.Id === 0){
       method = 'POST';
       data.UserId = {{.User.Id}};
-      global_comment_like_status[elem.id].UserId = data.UserId;
+      globalCommentLikeStatus[elem.id].UserId = data.UserId;
       data.ReviewCommentId = {{.Comment}}[elem.id].Id;
-      global_comment_like_status[elem.id].ReviewCommentId = data.ReviewCommentId;
+      globalCommentLikeStatus[elem.id].ReviewCommentId = data.ReviewCommentId;
     } else{
       method = 'PUT';
       url = url+data.Id;
     }
-    data.Like = check_flag;
-      // console.log("flag",global_comment_like_status[elem.id], check_flag);
-      global_comment_like_status[elem.id].Like = data.Like;
+    data.Like = checkFlag;
+      // console.log("flag",globalCommentLikeStatus[elem.id], checkFlag);
+      globalCommentLikeStatus[elem.id].Like = data.Like;
 
-      // console.log("last", global_comment_like_status[elem.id]);
+      // console.log("last", globalCommentLikeStatus[elem.id]);
       var json = JSON.stringify(data);
       var request = new XMLHttpRequest();
       request.open(method, url, true);
@@ -344,7 +344,7 @@ select {
         if (request.readyState == 4 && request.status == "200") {
           console.table(x);
         } else {
-          global_comment_like_status[elem.id].Id = x.Id;
+          globalCommentLikeStatus[elem.id].Id = x.Id;
         }
       }
       request.send(json);
@@ -352,32 +352,32 @@ select {
   </script>
 
   <script type="text/javascript">
-    global_watch_status = {{.WatchStatus}};
+    globalWatchStatus = {{.WatchStatus}};
   </script>
 
 
   <script type="text/javascript">
-    function WatchStatus(elem, check_flag) {
+    function watchStatus(elem, checkFlag) {
       let url = URL+"/tv/watching_status/";
-      var data = global_watch_status;
+      var data = globalWatchStatus;
       let method;
       if (data.Id === 0){
         method = 'POST';
         data.UserId = {{.User.Id}};
-        global_watch_status.UserId = data.UserId;
+        globalWatchStatus.UserId = data.UserId;
         data.TvProgramId = {{.TvProgram.Id}};
-        global_watch_status.TvProgramId = data.TvProgramId;
+        globalWatchStatus.TvProgramId = data.TvProgramId;
       } else{
         method = 'PUT';
         url = url+data.Id;
       }
       const str ="check_watched"
       if (elem.id.indexOf(str)===0) {
-        data.Watched = check_flag;
-        global_watch_status.Watched = data.Watched;
+        data.Watched = checkFlag;
+        globalWatchStatus.Watched = data.Watched;
       } else {
-        data.WantToWatch = check_flag;
-        global_watch_status.WantToWatch = data.WantToWatch;
+        data.WantToWatch = checkFlag;
+        globalWatchStatus.WantToWatch = data.WantToWatch;
 
       }
       var json = JSON.stringify(data);
@@ -389,7 +389,7 @@ select {
         if (request.readyState == 4 && request.status == "200") {
           console.table(x);
         } else {
-          global_watch_status.Id = x.Id;
+          globalWatchStatus.Id = x.Id;
         }
       }
       request.send(json);
@@ -410,7 +410,7 @@ select {
     function PostComment() {
       const text_length = document.getElementById("tweet_dialog_content").value.length;
       if (text_length < 5){
-        return DialogBox('alert_minlength');
+        return dialogBox('alert_minlength');
       }
       let url = URL+"/tv/review_comment/";
       let data = {};
@@ -466,7 +466,7 @@ select {
   <script type="text/javascript">
     document.querySelector('ons-carousel').addEventListener('postchange', function() {
       if (carousel.getActiveIndex() == 1){
-        GoTop();
+        goTop();
       }
     });
   </script>

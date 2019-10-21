@@ -20,7 +20,7 @@ type User struct {
 	Address        string    `orm:"size(20)"`
 	Job            string    `orm:"size(20)"`
 	SecondPassword string    `orm:"size(500)" json:"-"`
-	IconUrl        string    `orm:"size(255);null"`
+	IconURL        string    `orm:"size(255);null"`
 	Marital        string    `orm:"size(20);null"`
 	BloodType      string    `orm:"size(20);null"`
 	Created        time.Time `orm:"auto_now_add;type(datetime)"`

@@ -59,7 +59,7 @@
       </ons-col>
       <ons-col width="33%" align="center">
         <div class="image" align="center">
-          <img src="{{.User.IconUrl}}" alt="{{.Username}}" width="100%" />
+          <img src="{{.User.IconURL}}" alt="{{.Username}}" width="100%" />
         </div>
       </ons-col>
     </ons-row>

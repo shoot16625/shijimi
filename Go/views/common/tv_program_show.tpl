@@ -48,14 +48,14 @@
       </ons-list-item>
       <ons-list-item>
         <div class="left">
-          <i class="fa-laugh-beam" id="check_watched" onclick="ClickWatchStatus(this)"></i>
-          <div id="check_watched_text" style="float:right; margin-left: 5px;margin-right: 8px;">見た：{{.TvProgram.CountWatched}}</div>
-          <i class="fa-bookmark" id="check_wtw" onclick="ClickWatchStatus(this)"></i>
+          <i class="fa-laugh-beam" id="check_watched" onclick="clickWatchStatus(this)"></i>
+          <div id="check-watched-text" style="float:right; margin-left: 5px;margin-right: 8px;">見た：{{.TvProgram.CountWatched}}</div>
+          <i class="fa-bookmark" id="check_wtw" onclick="clickWatchStatus(this)"></i>
           <div id="check_wtw_text" style="float:right; margin-left: 5px;">また今度：{{.TvProgram.CountWantToWatch}}</div>
         </div>
         <div class="right">
           <div id="edit_tv_program">
-          <ons-button modifier="quiet" onclick="GoOtherPage({{.User}},'/tv/tv_program/edit/{{.TvProgram.Id}}')">編集</ons-button>
+          <ons-button modifier="quiet" onclick="goOtherPage({{.User}},'/tv/tv_program/edit/{{.TvProgram.Id}}')">編集</ons-button>
           </div>
         </div>
       </ons-list-item>
