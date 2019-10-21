@@ -191,10 +191,10 @@ func (c *TvProgramController) GetAll() {
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *TvProgramController) Put() {
-	session := c.StartSession()
+	// session := c.StartSession()
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
-	fmt.Println(id)
+	// fmt.Println(id)
 	// v := models.TvProgram{Id: id}
 	year, _ := c.GetInt("year")
 	rep := regexp.MustCompile(`\(.+\)`)
@@ -213,40 +213,59 @@ func (c *TvProgramController) Put() {
 	if !strings.Contains(movieURL, "embed") {
 		movieURL = strings.Replace(movieURL, "watch?v=", "embed/", -1)
 	}
-	imageURL := c.GetString("IconUrl")
+	imageURL := c.GetString("ImageUrl")
 	if imageURL == "" {
 		imageURL = "http://hankodeasobu.com/wp-content/uploads/animals_02.png"
 	}
-	var v models.TvProgram
+	// var v models.TvProgram
 	oldTvInfo, _ := models.GetTvProgramById(id)
-	v = models.TvProgram{
-		Id:                 id,
-		Title:              c.GetString("title"),
-		Content:            c.GetString("content"),
-		ImageUrl:           imageURL,
-		ImageUrlReference:  c.GetString("ImageUrlReference"),
-		MovieUrl:           movieURL,
-		MovieUrlReference:  c.GetString("MovieUrlReference"),
-		Cast:               strings.Replace(c.GetString("cast"), "　", "", -1),
-		Category:           strings.Join(c.GetStrings("category"), "、"),
-		Dramatist:          strings.Replace(c.GetString("dramatist"), "　", "", -1),
-		Supervisor:         strings.Replace(c.GetString("supervisor"), "　", "", -1),
-		Director:           strings.Replace(c.GetString("director"), "　", "", -1),
-		Production:         c.GetString("production"),
-		Year:               year,
-		Season:             &season,
-		Week:               &week,
-		Hour:               float32(hour),
-		Themesong:          c.GetString("themesong"),
-		CreateUserId:       session.Get("UserId").(int64),
-		Star:               oldTvInfo.Star,
-		CountStar:          oldTvInfo.CountStar,
-		CountWatched:       oldTvInfo.CountWatched,
-		CountWantToWatch:   oldTvInfo.CountWantToWatch,
-		CountClicked:       oldTvInfo.CountClicked,
-		CountAuthorization: oldTvInfo.CountAuthorization,
-	}
-	// json.Unmarshal(c.Ctx.Input.RequestBody, &v)
+	v := *oldTvInfo
+	fmt.Println(v)
+	v.Title = c.GetString("title")
+	v.Content = c.GetString("content")
+	v.ImageUrl = imageURL
+	v.ImageUrlReference = c.GetString("ImageUrlReference")
+	v.MovieUrl = movieURL
+	v.MovieUrlReference = c.GetString("MovieUrlReference")
+	v.Cast = strings.Replace(c.GetString("cast"), "　", "", -1)
+	v.Category = strings.Join(c.GetStrings("category"), "、")
+	v.Dramatist = strings.Replace(c.GetString("dramatist"), "　", "", -1)
+	v.Supervisor = strings.Replace(c.GetString("supervisor"), "　", "", -1)
+	v.Director = strings.Replace(c.GetString("director"), "　", "", -1)
+	v.Production = c.GetString("production")
+	v.Season = &season
+	v.Week = &week
+	v.Year = year
+	v.Hour = float32(hour)
+	v.Themesong = c.GetString("themesong")
+	// v = models.TvProgram{
+	// 	Id:                id,
+	// 	Title:             c.GetString("title"),
+	// 	Content:           c.GetString("content"),
+	// 	ImageUrl:          imageURL,
+	// 	ImageUrlReference: c.GetString("ImageUrlReference"),
+	// 	MovieUrl:          movieURL,
+	// 	MovieUrlReference: c.GetString("MovieUrlReference"),
+	// 	Cast:              strings.Replace(c.GetString("cast"), "　", "", -1),
+	// 	Category:          strings.Join(c.GetStrings("category"), "、"),
+	// 	Dramatist:         strings.Replace(c.GetString("dramatist"), "　", "", -1),
+	// 	Supervisor:        strings.Replace(c.GetString("supervisor"), "　", "", -1),
+	// 	Director:          strings.Replace(c.GetString("director"), "　", "", -1),
+	// 	Production:        c.GetString("production"),
+	// 	Year:              year,
+	// 	Season:            &season,
+	// 	Week:              &week,
+	// 	Hour:              float32(hour),
+	// 	Themesong:         c.GetString("themesong"),
+	// 	CreateUserId:      session.Get("UserId").(int64),
+	// 	// Star:               oldTvInfo.Star,
+	// 	// CountStar:          oldTvInfo.CountStar,
+	// 	// CountWatched:       oldTvInfo.CountWatched,
+	// 	// CountWantToWatch:   oldTvInfo.CountWantToWatch,
+	// 	// CountClicked:       oldTvInfo.CountClicked,
+	// 	// CountAuthorization: oldTvInfo.CountAuthorization,
+	// }
+	fmt.Println(v)
 	if err := models.UpdateTvProgramById(&v); err == nil {
 		c.Data["json"] = "OK"
 		c.Redirect("/tv/tv_program/comment/"+idStr, 302)
@@ -363,7 +382,12 @@ func (c *TvProgramController) Search() {
 			UserId: session.Get("UserId").(int64),
 			Word:   strings.Replace(str, " ", "、", -1),
 		}
-		_, _ = models.AddSearchHistory(&u)
+		_, err := models.AddSearchHistory(&u)
+		if err == nil {
+			fmt.Println("error")
+		} else {
+			fmt.Println(u)
+		}
 	}
 	c.TplName = "tv_program/index.tpl"
 }
