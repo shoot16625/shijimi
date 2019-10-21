@@ -11,16 +11,16 @@ import (
 )
 
 type ReviewComment struct {
-	Id          int64 `orm:"auto"`
-	UserId      int64
-	TvProgramId int64
-	Content     string `orm:"size(500)"`
-	CountLike   int32 `orm:"default(0)"`
-	Spoiler   bool
-	Star   int32 `orm:"default(5)"`
-	FavoritePoint string `orm:"size(100)";null"`
-	Created time.Time `orm:"auto_now_add;type(datetime)"`
-	Updated time.Time `orm:"auto_now;type(datetime)"`
+	Id            int64 `orm:"auto"`
+	UserId        int64
+	TvProgramId   int64
+	Content       string `orm:"size(500)"`
+	CountLike     int32  `orm:"default(0)"`
+	Spoiler       bool
+	Star          int32     `orm:"default(5)"`
+	FavoritePoint string    `orm:"size(100)";null"`
+	Created       time.Time `orm:"auto_now_add;type(datetime)"`
+	Updated       time.Time `orm:"auto_now;type(datetime)"`
 }
 
 func init() {
@@ -152,7 +152,7 @@ func DeleteReviewComment(id int64) (err error) {
 
 func GetReviewCommentByTvprogramId(id int64) (v []ReviewComment, err error) {
 	o := orm.NewOrm()
-	if _,err = o.QueryTable(new(ReviewComment)).Filter("TvProgramId", id).OrderBy("-Created").All(&v); err == nil {
+	if _, err = o.QueryTable(new(ReviewComment)).Filter("TvProgramId", id).OrderBy("-Created").All(&v); err == nil {
 		return v, nil
 	}
 	return nil, err
@@ -160,25 +160,25 @@ func GetReviewCommentByTvprogramId(id int64) (v []ReviewComment, err error) {
 
 func GetReviewCommentByUserId(id int64) (v []ReviewComment, err error) {
 	o := orm.NewOrm()
-	if _,err = o.QueryTable(new(ReviewComment)).Filter("UserId", id).OrderBy("-Created").All(&v); err == nil {
+	if _, err = o.QueryTable(new(ReviewComment)).Filter("UserId", id).OrderBy("-Created").All(&v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-func GetReviewCommentByUserIdAndTvProgramId(user_id int64, tv_program_id int64)(v *ReviewComment, err error){
+func GetReviewCommentByUserIdAndTvProgramId(userID int64, tvProgramID int64) (v *ReviewComment, err error) {
 	o := orm.NewOrm()
-	v = &ReviewComment{UserId: user_id, TvProgramId: tv_program_id}
-	if err = o.QueryTable(new(ReviewComment)).Filter("UserId", user_id).Filter("TvProgramId", tv_program_id).RelatedSel().One(v); err == nil {
+	v = &ReviewComment{UserId: userID, TvProgramId: tvProgramID}
+	if err = o.QueryTable(new(ReviewComment)).Filter("UserId", userID).Filter("TvProgramId", tvProgramID).RelatedSel().One(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// func GetRatingTvProgramByUserIdAndTvProgramId(user_id int64, tv_program_id int64)(v *ReviewComment, err error){
+// func GetRatingTvProgramByUserIdAndTvProgramId(userID int64, tvProgramID int64)(v *ReviewComment, err error){
 // 	o := orm.NewOrm()
-// 	v = &ReviewComment{UserId: user_id, TvProgramId: tv_program_id}
-// 	if err = o.QueryTable(new(ReviewComment)).Filter("UserId", user_id).Filter("TvProgramId", tv_program_id).RelatedSel().One(v); err == nil {
+// 	v = &ReviewComment{UserId: userID, TvProgramId: tvProgramID}
+// 	if err = o.QueryTable(new(ReviewComment)).Filter("UserId", userID).Filter("TvProgramId", tvProgramID).RelatedSel().One(v); err == nil {
 // 		return v, nil
 // 	}
 // 	return nil, err
@@ -190,35 +190,35 @@ func SearchReviewComment(query map[string][]string, fields []string, sortby []st
 	qs := o.QueryTable(new(ReviewComment))
 	// fmt.Println(query)
 	// query
-	// cond_only := orm.NewCondition()
-	cond_all := orm.NewCondition()
+	// condOnly := orm.NewCondition()
+	condAll := orm.NewCondition()
 	for k, v := range query {
-		cond_only := orm.NewCondition()
+		condOnly := orm.NewCondition()
 		for _, value := range v {
 			fmt.Println(k, value)
 			if k == "Word" {
-					cond_only = cond_only.And("Content__icontains", value)
-			} else if k == "Star" { 
-					cond_only = cond_only.Or("Star", value)
+				condOnly = condOnly.And("Content__icontains", value)
+			} else if k == "Star" {
+				condOnly = condOnly.Or("Star", value)
 			} else if k == "Spoiler" {
-			fmt.Println("1", v) 
+				fmt.Println("1", v)
 				if value == "ネタバレなし" {
-			fmt.Println("2", v) 
-					cond_only = cond_only.Or("Spoiler", false)
+					fmt.Println("2", v)
+					condOnly = condOnly.Or("Spoiler", false)
 				} else {
-			fmt.Println("3", v) 
-					cond_only = cond_only.Or("Spoiler", true)					
+					fmt.Println("3", v)
+					condOnly = condOnly.Or("Spoiler", true)
 				}
 			} else if k == "FavoritePoint" {
-					cond_only = cond_only.Or("FavoritePoint__icontains", value)
+				condOnly = condOnly.Or("FavoritePoint__icontains", value)
 			} else if k == "TvProgramId" {
-					cond_only = cond_only.Or("TvProgramId", value)
+				condOnly = condOnly.Or("TvProgramId", value)
 			}
 		}
 		// fmt.Println(k,v)
-		cond_all = cond_all.AndCond(cond_only)
+		condAll = condAll.AndCond(condOnly)
 	}
-	qs = qs.SetCond(cond_all)
+	qs = qs.SetCond(condAll)
 	// order by:
 	var sortFields []string
 	if len(sortby) != 0 {

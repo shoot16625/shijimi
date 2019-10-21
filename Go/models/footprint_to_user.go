@@ -10,44 +10,42 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
-type CommentLike struct {
-	Id        int64 `orm:"auto"`
-	UserId    int64
-	CommentId int64
-	Like      bool
-	Created   time.Time `orm:"auto_now_add;type(datetime)"`
-	Updated   time.Time `orm:"auto_now;type(datetime)"`
+type FootPrintToUser struct {
+	Id       int64 `orm:"auto"`
+	UserId   int64
+	ToUserId int64
+	Created  time.Time `orm:"auto_now_add;type(datetime)"`
 }
 
 func init() {
-	orm.RegisterModel(new(CommentLike))
+	orm.RegisterModel(new(FootPrintToUser))
 }
 
-// AddCommentLike insert a new CommentLike into database and returns
+// AddFootPrintToUser insert a new FootPrintToUser into database and returns
 // last inserted Id on success.
-func AddCommentLike(m *CommentLike) (id int64, err error) {
+func AddFootPrintToUser(m *FootPrintToUser) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetCommentLikeById retrieves CommentLike by Id. Returns error if
+// GetFootPrintToUserById retrieves FootPrintToUser by Id. Returns error if
 // Id doesn't exist
-func GetCommentLikeById(id int64) (v *CommentLike, err error) {
+func GetFootPrintToUserById(id int64) (v *FootPrintToUser, err error) {
 	o := orm.NewOrm()
-	v = &CommentLike{Id: id}
-	if err = o.QueryTable(new(CommentLike)).Filter("Id", id).RelatedSel().One(v); err == nil {
+	v = &FootPrintToUser{Id: id}
+	if err = o.QueryTable(new(FootPrintToUser)).Filter("Id", id).RelatedSel().One(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// GetAllCommentLike retrieves all CommentLike matches certain condition. Returns empty list if
+// GetAllFootPrintToUser retrieves all FootPrintToUser matches certain condition. Returns empty list if
 // no records exist
-func GetAllCommentLike(query map[string]string, fields []string, sortby []string, order []string,
+func GetAllFootPrintToUser(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(CommentLike))
+	qs := o.QueryTable(new(FootPrintToUser))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
@@ -93,7 +91,7 @@ func GetAllCommentLike(query map[string]string, fields []string, sortby []string
 		}
 	}
 
-	var l []CommentLike
+	var l []FootPrintToUser
 	qs = qs.OrderBy(sortFields...).RelatedSel()
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -116,11 +114,11 @@ func GetAllCommentLike(query map[string]string, fields []string, sortby []string
 	return nil, err
 }
 
-// UpdateCommentLike updates CommentLike by Id and returns error if
+// UpdateFootPrintToUser updates FootPrintToUser by Id and returns error if
 // the record to be updated doesn't exist
-func UpdateCommentLikeById(m *CommentLike) (err error) {
+func UpdateFootPrintToUserById(m *FootPrintToUser) (err error) {
 	o := orm.NewOrm()
-	v := CommentLike{Id: m.Id}
+	v := FootPrintToUser{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -131,36 +129,17 @@ func UpdateCommentLikeById(m *CommentLike) (err error) {
 	return
 }
 
-// DeleteCommentLike deletes CommentLike by Id and returns error if
+// DeleteFootPrintToUser deletes FootPrintToUser by Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteCommentLike(id int64) (err error) {
+func DeleteFootPrintToUser(id int64) (err error) {
 	o := orm.NewOrm()
-	v := CommentLike{Id: id}
+	v := FootPrintToUser{Id: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&CommentLike{Id: id}); err == nil {
+		if num, err = o.Delete(&FootPrintToUser{Id: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}
 	return
-}
-
-func GetCommentLikeByCommentAndUser(commentID int64, userID int64) (v *CommentLike, err error) {
-	o := orm.NewOrm()
-	v = &CommentLike{CommentId: commentID, UserId: userID}
-	if err = o.QueryTable(new(CommentLike)).Filter("CommentId", commentID).Filter("UserId", userID).RelatedSel().One(v); err == nil {
-		// fmt.Println(v)
-		return v, nil
-	}
-	// fmt.Println(v)
-	return nil, err
-}
-
-func GetCommentLikeByComment(commentID int64) (v []CommentLike, err error) {
-	o := orm.NewOrm()
-	if _, err = o.QueryTable(new(CommentLike)).Filter("CommentId", commentID).All(&v); err == nil {
-		return v, nil
-	}
-	return nil, err
 }

@@ -191,7 +191,7 @@ func (c *TvProgramController) GetAll() {
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *TvProgramController) Put() {
-	// session := c.StartSession()
+	session := c.StartSession()
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	// fmt.Println(id)
@@ -220,7 +220,7 @@ func (c *TvProgramController) Put() {
 	// var v models.TvProgram
 	oldTvInfo, _ := models.GetTvProgramById(id)
 	v := *oldTvInfo
-	fmt.Println(v)
+	// fmt.Println(v)
 	v.Title = c.GetString("title")
 	v.Content = c.GetString("content")
 	v.ImageUrl = imageURL
@@ -265,9 +265,15 @@ func (c *TvProgramController) Put() {
 	// 	// CountClicked:       oldTvInfo.CountClicked,
 	// 	// CountAuthorization: oldTvInfo.CountAuthorization,
 	// }
-	fmt.Println(v)
+	// fmt.Println(v)
 	if err := models.UpdateTvProgramById(&v); err == nil {
 		c.Data["json"] = "OK"
+		var w models.TvProgramUpdateHistory
+		w = models.TvProgramUpdateHistory{
+			UserId:      session.Get("UserId").(int64),
+			TvProgramId: id,
+		}
+		_, _ = models.AddTvProgramUpdateHistory(&w)
 		c.Redirect("/tv/tv_program/comment/"+idStr, 302)
 	} else {
 		c.Data["json"] = err.Error()
@@ -381,6 +387,7 @@ func (c *TvProgramController) Search() {
 		u = models.SearchHistory{
 			UserId: session.Get("UserId").(int64),
 			Word:   strings.Replace(str, " ", "、", -1),
+			Item:   "tv",
 		}
 		_, err := models.AddSearchHistory(&u)
 		if err == nil {
@@ -540,6 +547,7 @@ func (c *TvProgramController) SearchTvProgram() {
 			Category: s.Category,
 			Limit:    s.Limit,
 			Sortby:   s.Sortby,
+			Item:     "tv",
 		}
 		_, _ = models.AddSearchHistory(&u)
 	}

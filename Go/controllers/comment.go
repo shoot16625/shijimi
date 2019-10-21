@@ -336,6 +336,7 @@ func (c *CommentController) SearchComment() {
 			Word:   word,
 			Limit:  s.Limit,
 			Sortby: s.Sortby,
+			Item:   "comment",
 		}
 		_, _ = models.AddSearchHistory(&u)
 	}

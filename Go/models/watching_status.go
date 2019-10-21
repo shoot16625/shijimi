@@ -14,10 +14,10 @@ type WatchingStatus struct {
 	Id          int64 `orm:"auto"`
 	UserId      int64
 	TvProgramId int64
-	Watched     bool `orm:"default(false)"`
-	WantToWatch     bool `orm:"default(false)"`
-	Created time.Time `orm:"auto_now_add;type(datetime)"`
-	Updated time.Time `orm:"auto_now;type(datetime)"`
+	Watched     bool      `orm:"default(false)"`
+	WantToWatch bool      `orm:"default(false)"`
+	Created     time.Time `orm:"auto_now_add;type(datetime)"`
+	Updated     time.Time `orm:"auto_now;type(datetime)"`
 }
 
 func init() {
@@ -147,10 +147,10 @@ func DeleteWatchingStatus(id int64) (err error) {
 	return
 }
 
-func GetWatchingStatusByUserAndTvProgram(user_id int64, tv_program_id int64) (v *WatchingStatus, err error) {
+func GetWatchingStatusByUserAndTvProgram(userID int64, tvProgramID int64) (v *WatchingStatus, err error) {
 	o := orm.NewOrm()
-	v = &WatchingStatus{UserId: user_id, TvProgramId: tv_program_id}
-	if err = o.QueryTable(new(WatchingStatus)).Filter("UserId", user_id).Filter("TvProgramId", tv_program_id).RelatedSel().One(v); err == nil {
+	v = &WatchingStatus{UserId: userID, TvProgramId: tvProgramID}
+	if err = o.QueryTable(new(WatchingStatus)).Filter("UserId", userID).Filter("TvProgramId", tvProgramID).RelatedSel().One(v); err == nil {
 		return v, nil
 	}
 	return nil, err

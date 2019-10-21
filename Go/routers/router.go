@@ -84,6 +84,16 @@ func init() {
 				&controllers.SearchHistoryController{},
 			),
 		),
+		beego.NSNamespace("/tv_program_update_history",
+			beego.NSInclude(
+				&controllers.TvProgramUpdateHistoryController{},
+			),
+		),
+		beego.NSNamespace("/footprint_to_user",
+			beego.NSInclude(
+				&controllers.FootPrintToUserController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }

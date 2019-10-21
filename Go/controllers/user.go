@@ -50,7 +50,7 @@ func (c *UserController) URLMapping() {
 // @Failure 403 body is empty
 // @router / [post]
 func (c *UserController) Post() {
-	var v models.User
+	// var v models.User
 	age, _ := c.GetInt("age")
 	hashPass, _ := models.PasswordHash(c.GetString("password"))
 	hashSecondpass, _ := models.PasswordHash(c.GetString("SecondPassword"))
@@ -59,7 +59,7 @@ func (c *UserController) Post() {
 		iconURL = "http://flat-icon-design.com/f/f_object_174/s512_f_object_174_0bg.png"
 	}
 	// json.Unmarshal(c.Ctx.Input.RequestBody, &v)
-	v = models.User{
+	v := models.User{
 		Username:       c.GetString("username"),
 		Password:       hashPass,
 		SecondPassword: hashSecondpass,
@@ -69,6 +69,7 @@ func (c *UserController) Post() {
 		Job:            c.GetString("job"),
 		IconUrl:        iconURL,
 		Marital:        c.GetString("marital"),
+		BloodType:      c.GetString("bloodType"),
 	}
 
 	// fmt.Println(v)
@@ -126,7 +127,7 @@ func (c *UserController) GetAll() {
 	var sortby []string
 	var order []string
 	var query = make(map[string]string)
-	var limit int64 = 10
+	var limit int64 = 100
 	var offset int64
 
 	// fields: col1,col2,entity.col3
@@ -192,8 +193,8 @@ func (c *UserController) Put() {
 		hashPass = u.Password
 		hashSecondpass = u.SecondPassword
 	}
-	var v models.User
-	v = models.User{
+	// var v models.User
+	v := models.User{
 		Id:             id,
 		Username:       c.GetString("username"),
 		Password:       hashPass,
@@ -204,8 +205,9 @@ func (c *UserController) Put() {
 		Job:            c.GetString("job"),
 		IconUrl:        c.GetString("IconUrl"),
 		Marital:        c.GetString("marital"),
+		BloodType:      c.GetString("bloodType"),
 	}
-	fmt.Println(v)
+	// fmt.Println(v)
 	if err := models.UpdateUserById(&v); err == nil {
 		c.Data["json"] = "OK"
 		c.Redirect("show", 302)
@@ -251,6 +253,7 @@ func (c *UserController) Show() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	// fmt.Println(id)
+	// コメント欄からプロフィールを追ってきた場合
 	if id != 0 {
 		v, _ := models.GetUserById(id)
 		c.Data["User"] = v
@@ -258,22 +261,26 @@ func (c *UserController) Show() {
 		c.Data["Comment"] = w
 
 		var commentLikes []models.CommentLike
-		var MyUserId int64 = 0
+		var myUserID int64 = 0
 		if session.Get("UserId") == nil {
 			c.Data["MyUserId"] = nil
 		} else {
-			MyUserId = session.Get("UserId").(int64)
-			c.Data["MyUserId"] = MyUserId
+			myUserID = session.Get("UserId").(int64)
+			c.Data["MyUserId"] = myUserID
 			for _, comment := range w {
-				u, err := models.GetCommentLikeByCommentAndUser(comment.Id, MyUserId)
+				u, err := models.GetCommentLikeByCommentAndUser(comment.Id, myUserID)
 				if err != nil {
 					u = new(models.CommentLike)
 				}
 				commentLikes = append(commentLikes, *u)
 			}
 			c.Data["CommentLike"] = commentLikes
+			z := models.FootPrintToUser{
+				UserId:   myUserID,
+				ToUserId: id,
+			}
+			_, _ = models.AddFootPrintToUser(&z)
 		}
-		// fmt.Println(commentLikes)
 
 		c.TplName = "user/user_page.tpl"
 	} else {
@@ -337,15 +344,15 @@ func (c *UserController) ShowReview() {
 		if session.Get("UserId") == nil {
 			c.Redirect("/", 302)
 		} else {
-			UserId := session.Get("UserId").(int64)
-			v, _ := models.GetUserById(UserId)
+			userID := session.Get("UserId").(int64)
+			v, _ := models.GetUserById(userID)
 			c.Data["User"] = v
-			w, _ := models.GetReviewCommentByUserId(UserId)
+			w, _ := models.GetReviewCommentByUserId(userID)
 			c.Data["Comment"] = w
 
 			var commentLikes []models.ReviewCommentLike
 			for _, comment := range w {
-				u, err := models.GetReviewCommentLikeByCommentAndUser(comment.Id, UserId)
+				u, err := models.GetReviewCommentLikeByCommentAndUser(comment.Id, userID)
 				if err != nil {
 					u = new(models.ReviewCommentLike)
 				}
@@ -424,8 +431,8 @@ func (c *UserController) ShowWtwTv() {
 
 func (c *UserController) Edit() {
 	session := c.StartSession()
-	UserId := session.Get("UserId").(int64)
-	v, _ := models.GetUserById(UserId)
+	userID := session.Get("UserId").(int64)
+	v, _ := models.GetUserById(userID)
 	c.Data["User"] = v
 	c.TplName = "user/edit.tpl"
 }

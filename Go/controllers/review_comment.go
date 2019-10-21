@@ -341,6 +341,7 @@ func (c *ReviewCommentController) SearchComment() {
 			Star:     s.Star,
 			Limit:    s.Limit,
 			Sortby:   s.Sortby,
+			Item:     "review",
 		}
 		_, _ = models.AddSearchHistory(&u)
 	}

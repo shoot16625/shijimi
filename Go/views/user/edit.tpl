@@ -38,7 +38,16 @@
             </select>
           </ons-select>
         </p>
-
+        <p>
+          <ons-select class="select" name="bloodType" id="bloodType" modifier="underbar" float required>
+            <select class="select-input">
+              <option>A型</option>
+              <option>B型</option>
+              <option>O型</option>
+              <option>AB型</option>
+            </select>
+          </ons-select>
+        </p>
         <p>
           <ons-select class="select" name="address" id="address" modifier="underbar" float required>
             <label for="prefecture">＜居住地＞</label>
@@ -140,6 +149,7 @@
     document.getElementById('marital').value = {{.User.Marital}};
     document.getElementById('job').value = {{.User.Job}};
     document.getElementById('address').value = {{.User.Address}};
+    document.getElementById('bloodType').value = {{.User.BloodType}};
   }
 </script>
 </body>
