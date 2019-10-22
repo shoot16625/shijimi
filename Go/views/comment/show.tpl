@@ -4,18 +4,6 @@
     {{ template "/common/header.tpl" . }}
   </head>
 
-  <style type="text/css">
-    .textarea {
-      width: 100%;
-      background-color: white;
-    }
-    select {
-      width: 80%;
-      max-width: 500px;
-      height: 100px;
-    }
-  </style>
-
   <body>
     <ons-page id="tv-comments">
       {{ template "/common/toolbar.tpl" . }}
@@ -31,7 +19,7 @@
         <ons-speed-dial-item>
           <ons-icon
             icon="md-comment-dots"
-            onclick="dialogBox('tweet_dialog', {{.User.Id}})"
+            onclick="dialogBox('tweet-dialog', {{.User.Id}})"
           ></ons-icon>
         </ons-speed-dial-item>
         <ons-speed-dial-item>
@@ -55,9 +43,9 @@
         id="carousel"
       >
         <ons-carousel-item>
-          {{ template "/common/comment_review_change.tpl" . }}
           {{ template "/common/tv_program_show.tpl" . }}
-          <ons-list style="margin-left: 3px;margin-right: 5px;">
+          {{ template "/common/comment_review_change.tpl" . }}
+          <ons-list class="list-margin">
             <ons-lazy-repeat id="comments"></ons-lazy-repeat>
           </ons-list>
         </ons-carousel-item>
@@ -70,14 +58,14 @@
       </ons-carousel>
     </ons-page>
 
-    <template id="tweet_dialog.html">
-      <ons-dialog id="tweet_dialog" modifier="large" cancelable fullscreen>
+    <template id="tweet-dialog.html">
+      <ons-dialog id="tweet-dialog" modifier="large" cancelable fullscreen>
         <ons-page>
           <ons-toolbar>
             <div class="left">
               <ons-button
                 id="cancel-button"
-                onclick="hideAlertDialog('tweet_dialog')"
+                onclick="hideAlertDialog('tweet-dialog')"
                 style="background:left;color: grey;"
                 ><i class="fas fa-window-close"></i
               ></ons-button>
@@ -88,7 +76,7 @@
             <div class="right">
               <ons-button
                 id="post_button"
-                onclick="PostComment()"
+                onclick="postComment()"
                 style="color:chocolate;background:left;"
                 ><i class="fas fa-book"></i
               ></ons-button>
@@ -96,7 +84,7 @@
           </ons-toolbar>
           <div style="text-align:center;">
             <textarea
-              class="textarea"
+              class="textarea-tweet"
               rows="10"
               id="tweet_dialog_content"
               name="content"
@@ -179,7 +167,7 @@
                   <select
                     name="sortby"
                     id="sortby"
-                    class="select-input select-input--underbar"
+                    class="select-input select-input--underbar select-search-table"
                   >
                     <option>新しい順</option>
                     <option>古い順</option>
@@ -255,10 +243,10 @@
     </script>
 
     <script type="text/javascript">
-      setWatchBold("check_watched", {{.WatchStatus.Watched}});
-      setWatchBold("check_wtw", {{.WatchStatus.WantToWatch}});
-      setWatchStatus("check_watched", "lightcoral", {{.WatchStatus.Watched}});
-      setWatchStatus("check_wtw", "lightseagreen", {{.WatchStatus.WantToWatch}});
+      setWatchBold("check-watched", {{.WatchStatus.Watched}});
+      setWatchBold("check-wtw", {{.WatchStatus.WantToWatch}});
+      setWatchStatus("check-watched", "lightcoral", {{.WatchStatus.Watched}});
+      setWatchStatus("check-wtw", "lightseagreen", {{.WatchStatus.WantToWatch}});
     </script>
 
     <script>
@@ -306,7 +294,7 @@
     </script>
 
     <script type="text/javascript">
-      function watchStatus(elem, checkFlag) {
+      function WatchStatus(elem, checkFlag) {
         let url = URL+"/tv/watching_status/";
         var data = globalWatchStatus;
         let method;
@@ -320,7 +308,7 @@
           method = 'PUT';
           url = url+data.Id;
         }
-        const str ="check_watched"
+        const str ="check-watched"
         if (elem.id.indexOf(str)===0) {
           data.Watched = checkFlag;
           globalWatchStatus.Watched = data.Watched;
@@ -356,11 +344,11 @@
 
     <!-- ツイートを保存する -->
     <script type="text/javascript">
-      function PostComment() {
+      function postComment() {
         const text_length = document.getElementById("tweet_dialog_content").value.length;
         // console.log(text_length);
         if (text_length < 5){
-          return dialogBox('alert_minlength');
+          return dialogBox('alert-min-length');
         }
         let url = URL+"/tv/comment/";
         let data = {};
@@ -382,7 +370,7 @@
           }
         }
         request.send(json);
-        hideAlertDialog('tweet_dialog')
+        hideAlertDialog('tweet-dialog')
         setTimeout(window.location.reload(false), 500);
       };
     </script>
@@ -398,7 +386,7 @@
           time += ":00";
         }
       }
-      document.getElementById('tv_program_hour').innerHTML = time;
+      document.getElementById('tv-program-hour').innerHTML = time;
     </script>
 
     <script type="text/javascript">

@@ -377,7 +377,7 @@ func (c *TvProgramController) Get() {
 }
 
 func (c *TvProgramController) Search() {
-	str := c.GetString("search_word")
+	str := c.GetString("search-word")
 	v, _ := models.SearchTvProgramAll(str)
 	c.Data["TvProgram"] = v
 	session := c.StartSession()

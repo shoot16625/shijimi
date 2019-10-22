@@ -107,7 +107,7 @@ var pullHook = function() {
       pullHook.innerHTML = message;
     });
     pullHook.onAction = function(done) {
-      setTimeout(window.location.reload(false), 1000);
+      setTimeout(window.location.reload(false), 2000);
     };
   }
 };
@@ -183,23 +183,21 @@ function clickWatchStatus(elem) {
   }
   var count = document.getElementById(elem.id + '-text');
   const str = 'check-watched';
-  let newColor;
+  let newColor = 'lightseagreen';
   if (elem.id.indexOf(str) === 0) {
     newColor = 'lightcoral';
-  } else {
-    newColor = 'lightseagreen';
   }
   let checkFlag;
-  let newCount;
+  let rawText = count.textContent.trim();
   if (elem.style['color'] != newColor) {
     $('#' + elem.id).css({ color: newColor });
     elem.classList.remove('far');
     elem.classList.add('fas');
     checkFlag = true;
     if (elem.id.indexOf(str) === 0) {
-      newCount = parseInt(count.textContent.slice(3), 10) + 1;
+      newCount = parseInt(rawText.slice(3), 10) + 1;
     } else {
-      newCount = parseInt(count.textContent.slice(5), 10) + 1;
+      newCount = parseInt(rawText.slice(5), 10) + 1;
     }
   } else {
     $('#' + elem.id).css({ color: 'black' });
@@ -207,9 +205,9 @@ function clickWatchStatus(elem) {
     elem.classList.add('far');
     checkFlag = false;
     if (elem.id.indexOf(str) === 0) {
-      newCount = parseInt(count.textContent.slice(3), 10) - 1;
+      newCount = parseInt(rawText.slice(3), 10) - 1;
     } else {
-      newCount = parseInt(count.textContent.slice(5), 10) - 1;
+      newCount = parseInt(rawText.slice(5), 10) - 1;
     }
   }
   if (elem.id.indexOf(str) === 0) {

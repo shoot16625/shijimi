@@ -1,14 +1,14 @@
 <div class="background" style="background-color: white;"></div>
 
 <ons-toolbar class="toolbar">
-  <div class="left" id="mypage_toolbar">
+  <div class="left" id="mypage-toolbar">
     <ons-toolbar-button
       icon="md-face"
       style="font-size:24px;"
       onclick="location.href='/tv/user/show'"
     ></ons-toolbar-button>
   </div>
-  <div class="center" id="image_toolbar">
+  <div class="center" id="image-toolbar">
     <img
       src="/static/img/shijimi-touka02.png"
       alt="shijimi"
@@ -19,19 +19,19 @@
   <div class="right">
     <ons-toolbar-button
       icon="fa-search"
-      onclick="dialogBoxEveryone('search_toolbar')"
+      onclick="dialogBoxEveryone('search-toolbar')"
     ></ons-toolbar-button>
   </div>
 </ons-toolbar>
 
-<template id="search_toolbar.html">
-  <ons-dialog id="search_toolbar" modifier="large" cancelable fullscreen>
+<template id="search-toolbar.html">
+  <ons-dialog id="search-toolbar" modifier="large" cancelable fullscreen>
     <ons-page>
       <ons-toolbar>
         <div class="left">
           <ons-button
             id="cancel-button"
-            onclick="hideAlertDialog('search_toolbar')"
+            onclick="hideAlertDialog('search-toolbar')"
             style="background:left;color: grey;"
             ><i class="fas fa-window-close"></i
           ></ons-button>
@@ -41,12 +41,12 @@
         </div>
       </ons-toolbar>
       <form id="search_tv_program" action="/tv/tv_program/search" method="post">
-        <div style="text-align: center; margin-top: 30px;">
+        <div class="area-center" style="margin-top: 30px;">
           <p>
             <ons-search-input
-              name="search_word"
+              name="search-word"
               placeholder="Search"
-              id="search_input"
+              id="search-word"
             ></ons-search-input>
           </p>
           <p style="margin-top: 30px;">

@@ -23,7 +23,7 @@
         <form id="search_form" action="/tv/tv_program/search" method="post">
           <p style="margin-top: 20px;">
             <ons-search-input
-              name="search_word"
+              name="search-word"
               placeholder="ドラマ・映画を検索"
             ></ons-search-input>
           </p>

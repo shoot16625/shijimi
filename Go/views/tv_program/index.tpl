@@ -117,7 +117,7 @@
                   <select
                     name="year"
                     id="year"
-                    class="select-input select-input--underbar"
+                    class="select-input select-input--underbar select-search-table"
                     multiple
                   >
                   </select>
@@ -127,7 +127,7 @@
                   <select
                     name="week"
                     id="week"
-                    class="select-input select-input--underbar"
+                    class="select-input select-input--underbar select-search-table"
                     multiple
                   >
                     <option>月</option>
@@ -156,7 +156,7 @@
                   <select
                     name="season"
                     id="season"
-                    class="select-input select-input--underbar"
+                    class="select-input select-input--underbar select-search-table"
                     multiple
                   >
                     <option>春(4~6)</option>
@@ -172,7 +172,7 @@
                   <select
                     name="category"
                     id="category"
-                    class="select-input select-input--underbar"
+                    class="select-input select-input--underbar select-search-table"
                     multiple
                   >
                     <option>アクション</option>
@@ -202,7 +202,7 @@
                   <select
                     name="sortby"
                     id="sortby"
-                    class="select-input select-input--underbar"
+                    class="select-input select-input--underbar select-search-table"
                   >
                     <option>新しい順</option>
                     <option>古い順</option>

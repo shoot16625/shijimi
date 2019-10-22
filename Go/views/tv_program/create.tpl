@@ -4,40 +4,32 @@
   {{ template "/common/header.tpl" . }}
 </head>
 
-<style type="text/css">
-p {
-  margin-top:20px;
-  margin-bottom:20px;
-}
-
-</style>
-
 <body>
   <ons-page>
     {{ template "/common/toolbar.tpl" . }}
     {{ template "/common/alert.tpl" . }}
     <form id="create-tv-program" action="/tv/tv_program/" method="post">
       <div class="area-center">
-        <p>
-          <i class="fas fa-flag" style="color:gold;"></i>
+        <p class='create-tv-margin'>
+          <i class="fas fa-flag flag-color"></i>
           <ons-input name="title" modifier="underbar" value="{{.TvProgram.Title}}" placeholder="タイトル" maxlength="40" float required></ons-input>
         </p>
-        <p>
+        <p class='create-tv-margin'>
           <textarea class="textarea" name="content" id="content" rows="7" placeholder="あらすじ・見どころ" maxlength="200"></textarea>
         </p>
-        <p>
-          <i class="fas fa-flag" style="color:gold;"></i>
+        <p class='create-tv-margin'>
+          <i class="fas fa-flag flag-color"></i>
           <ons-input name="cast" modifier="underbar" value="{{.TvProgram.Cast}}" placeholder="キャスト(ex.小栗旬、石原さとみ)" maxlength="100" float required></ons-input>
         </p>
-        <p>
-          <i class="fas fa-flag" style="color:gold;"></i>
+        <p class='create-tv-margin'>
+          <i class="fas fa-flag flag-color"></i>
           <ons-input type="number" name="year" value="{{.TvProgram.Year}}" modifier="underbar" placeholder="放送年(ex.2012)" min="1900" max="2100" float required></ons-input>
         </p>
-        <p>
+        <p class='create-tv-margin'>
           <ons-input name="themesong" value="{{.TvProgram.Themesong}}" modifier="underbar" placeholder="主題歌(ex.miwa 「ヒカリへ」、複数可)" maxlength="100" float></ons-input>
         </p>
-        <p>
-          <i class="fas fa-flag" style="color:gold;"></i>
+        <p class='create-tv-margin'>
+          <i class="fas fa-flag flag-color"></i>
           <label for="season">＜シーズン＞</label>
           <select name="season" id="season" class="select-input select-input--underbar" required>
             <option>春(4~6)</option>
@@ -46,8 +38,8 @@ p {
             <option>冬(1~3)</option>
           </select>
         </p>
-        <p>
-          <i class="fas fa-flag" style="color:gold;"></i>
+        <p class='create-tv-margin'>
+          <i class="fas fa-flag flag-color"></i>
           <label for="category">＜放送曜日＞</label>
           <select name="week" id="week" class="select-input select-input--underbar" required>
             <option>月</option>
@@ -61,13 +53,13 @@ p {
             <option>映画</option>
           </select>
         </p>
-        <p>
+        <p class='create-tv-margin'>
           <label for="hour">＜時間帯＞</label>
           <select name="hour" id="hour" class="select-input select-input--underbar">
           </select>
         </p>
-        <p>
-          <i class="fas fa-flag" style="color:gold;"></i>
+        <p class='create-tv-margin'>
+          <i class="fas fa-flag flag-color"></i>
           <label for="category">＜ジャンル＞※複数可</label>
           <select name="category" id="category" style="height: 100px;" class="select-input select-input--underbar" required multiple>
             <option>アクション</option>
@@ -93,22 +85,22 @@ p {
             <option>恋愛</option>
           </select>
         </p>
-        <p>
+        <p class='create-tv-margin'>
           <ons-input name="ImageUrl" modifier="underbar" value="{{.TvProgram.ImageUrl}}" placeholder="イメージ画像URL" maxlength="400" float></ons-input>
         </p>
-        <p>
+        <p class='create-tv-margin'>
           <ons-input name="MovieUrl" modifier="underbar" value="{{.TvProgram.MovieUrl}}" placeholder="youtube動画URL" maxlength="400" float></ons-input>
         </p>
-        <p>
+        <p class='create-tv-margin'>
           <ons-input name="dramatist" modifier="underbar" value="{{.TvProgram.Dramatist}}" placeholder="脚本" maxlength="100" float></ons-input>
         </p>
-        <p>
+        <p class='create-tv-margin'>
           <ons-input name="supervisor" modifier="underbar" placeholder="監督" value="{{.TvProgram.Supervisor}}" maxlength="100" float></ons-input>
         </p>
-        <p>
+        <p class='create-tv-margin'>
           <ons-input name="director" value="{{.TvProgram.Director}}" modifier="underbar" placeholder="演出" maxlength="100" float></ons-input>
         </p>
-        <p>
+        <p class='create-tv-margin'>
           <ons-input name="production" modifier="underbar" value="{{.TvProgram.Production}}" placeholder="制作会社" maxlength="20" float></ons-input>
         </p>
         <p style="margin-top: 30px;">

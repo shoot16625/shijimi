@@ -43,14 +43,14 @@
   </ons-alert-dialog>
 </template>
 
-<template id="alert_minlength.html">
-  <ons-alert-dialog id="alert_minlength" modifier="rowfooter">
+<template id="alert-min-length.html">
+  <ons-alert-dialog id="alert-min-length" modifier="rowfooter">
     <div class="alert-dialog-title">Alert</div>
     <div class="alert-dialog-content">
       5文字以上入力してください。
     </div>
     <div class="alert-dialog-footer">
-      <ons-alert-dialog-button onclick="hideAlertDialog('alert_minlength')"
+      <ons-alert-dialog-button onclick="hideAlertDialog('alert-min-length')"
         >OK</ons-alert-dialog-button
       >
     </div>
