@@ -15,7 +15,7 @@
           <ons-input name="title" modifier="underbar" value="{{.TvProgram.Title}}" placeholder="タイトル" maxlength="40" float required></ons-input>
         </p>
         <p class='create-tv-margin'>
-          <textarea class="textarea" name="content" id="content" rows="7" placeholder="あらすじ・見どころ" maxlength="200"></textarea>
+          <textarea class="textarea" style='width: 80%;' name="content" id="content" rows="7" placeholder="あらすじ・見どころ" maxlength="200"></textarea>
         </p>
         <p class='create-tv-margin'>
           <i class="fas fa-flag flag-color"></i>
@@ -103,10 +103,10 @@
         <p class='create-tv-margin'>
           <ons-input name="production" modifier="underbar" value="{{.TvProgram.Production}}" placeholder="制作会社" maxlength="20" float></ons-input>
         </p>
-        <p style="margin-top: 30px;">
+        <p class='create-top-margin'>
           <ons-button modifier="quiet" onclick="PreviewTvProgram('preview-dialog')">プレビュー</ons-button>
         </p>
-        <p style="margin-top: 30px;">
+        <p class='create-top-margin'>
           <button class="button button--outline">作成する</button>
         </p>
       </div>

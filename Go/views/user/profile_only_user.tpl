@@ -1,4 +1,4 @@
-<ons-list>
+<ons-list id="my-profile">
   <ons-list-header>
     <div class="area-left">作成日：{{.User.Created|dateformatJst}}</div>
   </ons-list-header>
@@ -14,16 +14,16 @@
           <p>職業：{{.User.Job}}</p>
         </div>
       </ons-col>
-      <ons-col width="33%">
-        <div class="image area-center">
+      <ons-col width="33%" align="center">
+        <div class="image">
           <img src="{{.User.IconURL}}" alt="{{.Username}}" width="100%" />
         </div>
       </ons-col>
     </ons-row>
-    <a href="/tv/user/edit"><button>プロフィール編集</button></a>
-    <form id="delete-user" action="/tv/user/{{.User.Id}}" method="post">
-      <input type="hidden" name="_method" value="DELETE" />
-      <button type="submit">ユーザーを削除</button>
-    </form>
+    <a href="/tv/user/edit">
+      <button class="button button--light" style="line-height: 12px;">
+        編集
+      </button>
+    </a>
   </ons-list-item>
 </ons-list>

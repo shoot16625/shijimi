@@ -50,14 +50,13 @@
           </ons-list>
         </ons-carousel-item>
         <ons-carousel-item>
-          <p style="text-align:center;">詳細情報や分析結果を表示</p>
-          <p style="text-align:center;">
-            工事中<i class="fas fa-truck-pickup"></i>
-          </p>
+          <div class="area-center">
+            <p>詳細情報や分析結果を表示</p>
+            <p>工事中<i class="fas fa-truck-pickup"></i></p>
+          </div>
         </ons-carousel-item>
       </ons-carousel>
     </ons-page>
-
     <template id="tweet-dialog.html">
       <ons-dialog id="tweet-dialog" modifier="large" cancelable fullscreen>
         <ons-page>
@@ -82,11 +81,11 @@
               ></ons-button>
             </div>
           </ons-toolbar>
-          <div style="text-align:center;">
+          <div class="area-right">
             <textarea
               class="textarea-tweet"
               rows="10"
-              id="tweet_dialog_content"
+              id="tweet-dialog-content"
               name="content"
               type="text"
               minlength="5"
@@ -94,9 +93,7 @@
               required
             ></textarea>
           </div>
-          <div style="text-align:right;">
-            あと<span class="count"></span>文字
-          </div>
+          <div class="area-right">あと<span class="count"></span>文字</div>
         </ons-page>
         <script type="text/javascript">
           $(function() {
@@ -104,10 +101,10 @@
             let text_length;
             let countdown;
             $('.count').text(
-              text_max - $('#tweet_dialog_content').val().length
+              text_max - $('#tweet-dialog-content').val().length
             );
 
-            $('#tweet_dialog_content').on(
+            $('#tweet-dialog-content').on(
               'keydown keyup keypress change',
               function() {
                 text_length = $(this).val().length;
@@ -185,7 +182,7 @@
                     float
                   ></ons-input>
                 </p>
-                <p style="margin-top: 30px;">
+                <p class='create-top-margin'>
                   <button class="button button--outline">search</button>
                 </p>
               </div>
@@ -209,12 +206,12 @@
     </script>
     <script>
       let comments = {{.Comment}};
-      if (comments == "") {
+      if (comments === "") {
         comments = null;
       }
       const users = {{.Users}};
       let commentLikes;
-      if ({{.CommentLike}} == null && comments != null){
+      if ({{.CommentLike}} ===null && comments != null){
         commentLikes = [comments.length];
         for (let i = comments.length - 1; i >= 0; i--) {
           commentLikes[i] = {Like:false};
@@ -229,7 +226,7 @@
         infiniteList.delegate = {
           createItemContent: function(i) {
 
-            return ons.createElement('<div class="comment"><ons-list-header style="background-color:aliceblue;text-transform:none;"><div style="text-align:left; float:left;font-size:16px;">@' + users[i].Username + '</div><div style="text-align: right;margin-right:5px;">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm:ss") + '</div></ons-list-header><ons-list-item><div class="left"><a href="/tv/user/show/' + users[i].Id + '" title="user_page"><img class="list-item__thumbnail" src="' + users[i].IconURL + '" alt="@' + users[i].Username + '"></a></div><div class="center"><span class="list-item__subtitle"id="comment-content-' + String(i) + '" style="font-size:14px;">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle" style="text-align: right;"><div style="float:right;" id="count-like-' + i + '">：' + comments[i].CountLike + '</div><div style="float:right;"><i class="' + setLikeBold(commentLikes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="clickLike(this)" style="color:' + setLikeStatus(commentLikes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
+            return ons.createElement('<div class="comment"><ons-list-header style="background-color:aliceblue;text-transform:none;"><div class="area-left comment-list-header-font">@' + users[i].Username + '</div><div class="area-right list-margin">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm:ss") + '</div></ons-list-header><ons-list-item><div class="left"><a href="/tv/user/show/' + users[i].Id + '" title="user_page"><img class="list-item__thumbnail" src="' + users[i].IconURL + '" alt="@' + users[i].Username + '"></a></div><div class="center"><span class="list-item__subtitle comment-list-content-font" id="comment-content-' + String(i) + '">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle area-right"><div style="float:right;" id="count-like-' + i + '">：' + comments[i].CountLike + '</div><div style="float:right;"><i class="' + setLikeBold(commentLikes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="clickLike(this)" style="color:' + setLikeStatus(commentLikes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
           },
           countItems: function() {
             return comments.length;
@@ -245,7 +242,7 @@
     <script type="text/javascript">
       setWatchBold("check-watched", {{.WatchStatus.Watched}});
       setWatchBold("check-wtw", {{.WatchStatus.WantToWatch}});
-      setWatchStatus("check-watched", "lightcoral", {{.WatchStatus.Watched}});
+      setWatchStatus("check-watched", "deeppink", {{.WatchStatus.Watched}});
       setWatchStatus("check-wtw", "lightseagreen", {{.WatchStatus.WantToWatch}});
     </script>
 
@@ -345,7 +342,7 @@
     <!-- ツイートを保存する -->
     <script type="text/javascript">
       function postComment() {
-        const text_length = document.getElementById("tweet_dialog_content").value.length;
+        const text_length = document.getElementById("tweet-dialog-content").value.length;
         // console.log(text_length);
         if (text_length < 5){
           return dialogBox('alert-min-length');
@@ -355,7 +352,7 @@
         data.Id  = 0;
         data.UserId = {{.User.Id}};
         data.TvProgramId  = {{.TvProgram.Id}};
-        data.Content = document.getElementById("tweet_dialog_content").value;
+        data.Content = document.getElementById("tweet-dialog-content").value;
         data.CountLike  = 0;
         var json = JSON.stringify(data);
         var request = new XMLHttpRequest();
@@ -377,7 +374,7 @@
     <script>
       let time = String({{.TvProgram.Hour}});
       str = ".5";
-      if (time == "100"){
+      if (time === "100"){
         time = "";
       } else {
         if (time.indexOf(str) > -1){

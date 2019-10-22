@@ -229,14 +229,13 @@ func (c *UserController) Delete() {
 	session := c.StartSession()
 	id := session.Get("UserId").(int64)
 	if err := models.DeleteUser(id); err == nil {
-		c.Data["json"] = "OK"
 		c.Data["Status"] = "ユーザを削除"
 	} else {
-		c.Data["json"] = err.Error()
+		c.Data["Status"] = "退会に失敗"
 	}
-	c.ServeJSON()
 	session.Delete("UserId")
 	session.Delete("Username")
+	// 過去の履歴・データを削除する機能が必要
 	c.TplName = "user/logout.tpl"
 }
 

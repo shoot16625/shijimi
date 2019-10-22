@@ -45,7 +45,7 @@
               パスワードを表示
             </label>
           </p>
-          <p style="margin-top: 30px;">
+          <p class='create-top-margin'>
             <button class="button button--outline">ユーザー名を検索</button>
           </p>
         </div>

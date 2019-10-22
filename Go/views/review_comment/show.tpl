@@ -48,7 +48,7 @@
       </ons-list>
     </ons-carousel-item>
     <ons-carousel-item>
-      <div class="center">
+      <div class="area-center">
         <p>詳細情報や分析結果を表示</p>
         <p>
           工事中<i class="fas fa-truck-pickup"></i>
@@ -203,7 +203,7 @@
           <p>
             <ons-input type="number" name="limit" id="limit" modifier="underbar" value="{{.SearchWords.Limit}}" placeholder="表示数(デフォルト:100)" float></ons-input>
           </p>
-          <p style="margin-top: 30px;">
+          <p class='create-top-margin'>
             <button class="button button--outline">search</button>
           </p>
         </div>
@@ -219,7 +219,7 @@
     target.innerHTML = text;
   </script>
   <script type="text/javascript">
-    // console.log({{.SearchWords}});
+    console.log({{.SearchWords}});
     if ({{.SearchWords}} != null){
       // console.log({{.SearchWords}});
       setMultipleSelection("favorite-point", {{.SearchWords.Category}});
@@ -292,7 +292,7 @@
 <script type="text/javascript">
   setWatchBold("check-watched", {{.WatchStatus.Watched}});
   setWatchBold("check-wtw", {{.WatchStatus.WantToWatch}});
-  setWatchStatus("check-watched", "lightcoral", {{.WatchStatus.Watched}});
+  setWatchStatus("check-watched", "deeppink", {{.WatchStatus.Watched}});
   setWatchStatus("check-wtw", "lightseagreen", {{.WatchStatus.WantToWatch}});
 </script>
 
@@ -316,10 +316,7 @@
       url = url+data.Id;
     }
     data.Like = checkFlag;
-      // console.log("flag",globalCommentLikeStatus[elem.id], checkFlag);
       globalCommentLikeStatus[elem.id].Like = data.Like;
-
-      // console.log("last", globalCommentLikeStatus[elem.id]);
       var json = JSON.stringify(data);
       var request = new XMLHttpRequest();
       request.open(method, url, true);
@@ -355,7 +352,7 @@
         method = 'PUT';
         url = url+data.Id;
       }
-      const str ="check-watched"
+      const str ="check-watched";
       if (elem.id.indexOf(str)===0) {
         data.Watched = checkFlag;
         globalWatchStatus.Watched = data.Watched;
@@ -432,21 +429,20 @@
       setTimeout(window.location.reload(false), 500);
     };
   </script>
-
-  <!-- <script>
-    let time = String({{.TvProgram.Hour}});
-    str = ".5";
-    if (time === "100"){
-      time = "";
-    } else {
-      if (time.indexOf(str) > -1){
-        time = time.replace(str, ":30")
+  <script>
+      let time = String({{.TvProgram.Hour}});
+      str = ".5";
+      if (time === "100"){
+        time = "";
       } else {
-        time += ":00";
+        if (time.indexOf(str) > -1){
+          time = time.replace(str, ":30")
+        } else {
+          time += ":00";
+        }
       }
-    }
-    document.getElementById('tv-program-hour').innerHTML = time;
-  </script> -->
+      document.getElementById('tv-program-hour').innerHTML = time;
+    </script>
   <script type="text/javascript">
     document.querySelector('ons-carousel').addEventListener('postchange', function() {
       if (carousel.getActiveIndex() == 1){

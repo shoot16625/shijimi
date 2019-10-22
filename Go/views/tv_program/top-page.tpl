@@ -13,7 +13,7 @@
     <ons-page id="top-page">
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
-      <div style="margin-left: 5px; margin-right: 5px;">
+      <div class="list-margin">
         <ons-card
           style="text-align: center;background-color:linen;margin:10px;"
         >
@@ -339,7 +339,7 @@
             <div class="center">ログイン</div>
           </ons-toolbar>
           <form id="login-user" action="/tv/user/login" method="post">
-            <div class="area-center" style="margin-top: 30px;">
+            <div class="area-center create-tv-margin">
               <p>
                 <ons-input
                   name="username"

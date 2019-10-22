@@ -164,20 +164,14 @@ func (c *ReviewCommentController) Delete() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	if err := models.DeleteReviewComment(id); err == nil {
-		c.Data["json"] = "OK"
 		u, err := models.GetReviewCommentLikeByComment(id)
 		if err == nil {
 			for _, value := range u {
 				_ = models.DeleteReviewCommentLike(value.Id)
 			}
-		} else {
-			c.Data["json"] = err.Error()
 		}
-	} else {
-		c.Data["json"] = err.Error()
 	}
 	c.Redirect("/tv/user/show_review", 302)
-	c.ServeJSON()
 }
 
 func (c *ReviewCommentController) Show() {
@@ -205,30 +199,15 @@ func (c *ReviewCommentController) Show() {
 	}
 	c.Data["Users"] = users
 
-	// var rating_tv_program []models.ReviewComment
-	// for _, comment := range l {
-	// 	u, err := models.GetReviewCommentByUserIdAndTvProgramId(comment.UserId, tvProgramID)
-	// 	if err != nil{
-	// 		u = new(models.ReviewComment)
-	// 	}
-	// 	fmt.Println(u)
-	// // fmt.Println(u)
-	// 	rating_tv_program = append(rating_tv_program, *u)
-	// }
-	// c.Data["RatingTvProgram"] = rating_tv_program
-
 	session := c.StartSession()
 	if session.Get("UserId") == nil {
 		fmt.Println("you are not user, so your tv_Like break.")
 	} else {
 		userID := session.Get("UserId").(int64)
-		// fmt.Println(userID, "user id")
 		w, err := models.GetWatchingStatusByUserAndTvProgram(userID, tvProgramID)
 		if err != nil {
-			// fmt.Println(w)
 			c.Data["WatchStatus"] = new(models.WatchingStatus)
 		} else {
-			// fmt.Println(w)
 			c.Data["WatchStatus"] = w
 		}
 
@@ -241,7 +220,6 @@ func (c *ReviewCommentController) Show() {
 			if err != nil {
 				u = new(models.ReviewCommentLike)
 			}
-			// fmt.Println(u)
 			reviewCommentLikes = append(reviewCommentLikes, *u)
 		}
 		c.Data["CommentLike"] = reviewCommentLikes
@@ -277,11 +255,10 @@ func (c *ReviewCommentController) SearchComment() {
 		Sortby   string
 	}
 	if v := c.GetString("word"); v != "" {
-		// word = strings.Replace(v, "　", " ", -1)
 		word = strings.Split(strings.Replace(v, "　", " ", -1), " ")
 		query["Word"] = word
 	}
-	if v := c.GetStrings("FavoritePoint"); v != nil {
+	if v := c.GetStrings("favorite-point"); v != nil {
 		query["FavoritePoint"] = v
 	}
 
@@ -316,19 +293,16 @@ func (c *ReviewCommentController) SearchComment() {
 			order = append(order, "asc")
 		}
 	}
-	fmt.Println(query)
-
-	var s SearchWords
-	s = SearchWords{
+	// var s SearchWords
+	s := SearchWords{
 		Word:     c.GetString("word"),
-		Category: strings.Join(c.GetStrings("FavoritePoint"), "、"),
+		Category: strings.Join(c.GetStrings("favorite-point"), "、"),
 		Spoiler:  strings.Join(c.GetStrings("spoiler"), "、"),
 		Star:     strings.Join(c.GetStrings("star"), "、"),
 		Limit:    limit,
 		Sortby:   c.GetString("sortby"),
 	}
 	c.Data["SearchWords"] = s
-	fmt.Println("SearchWords", s)
 
 	session := c.StartSession()
 	if session.Get("UserId") != nil {
@@ -348,28 +322,25 @@ func (c *ReviewCommentController) SearchComment() {
 
 	l, err := models.SearchReviewComment(query, fields, sortby, order, offset, limit)
 	c.Data["Comment"] = l
-	// fmt.Println(l[0].(models.Comment).Id)
 	var users []models.User
 	for _, comment := range l {
 		u, _ := models.GetUserById(comment.(models.ReviewComment).UserId)
 		users = append(users, *u)
 	}
 	c.Data["Users"] = users
-	// session := c.StartSession()
 	// 閲覧数カウント
 	if session.Get(tvProgramID) == nil {
 		fmt.Println("first tv click")
 		if session.Get("UserId") != nil {
 			userID := session.Get("UserId").(int64)
-			var b models.BrowsingHistory
-			b = models.BrowsingHistory{
+			b := models.BrowsingHistory{
 				UserId:      userID,
 				TvProgramId: tvProgramID,
 			}
 			_, err = models.AddBrowsingHistory(&b)
-			if err == nil {
-				fmt.Println("browsing_history", b)
-			}
+			// if err == nil {
+			// 	fmt.Println("browsing_history", b)
+			// }
 		}
 		v.CountClicked++
 		_ = models.UpdateTvProgramById(v)
@@ -377,7 +348,7 @@ func (c *ReviewCommentController) SearchComment() {
 	}
 
 	if session.Get("UserId") == nil {
-		fmt.Println("you are not user, so your tv_Like break.")
+		fmt.Println("You are not user, so your tv_Like break.")
 	} else {
 		userID := session.Get("UserId").(int64)
 		w, err := models.GetWatchingStatusByUserAndTvProgram(userID, tvProgramID)

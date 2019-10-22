@@ -19,25 +19,25 @@ p {
     <form id="edit-tv-program" action="/tv/tv_program/{{.TvProgram.Id}}" method="post">
       <div class="area-center">
         <p>
-          <i class="fas fa-flag" style="color:gold;"></i>
+          <i class="fas fa-flag flag-color"></i>
           <ons-input name="title" modifier="underbar" value="{{.TvProgram.Title}}" placeholder="タイトル" maxlength="40" float required></ons-input>
         </p>
         <p>
-          <textarea class="textarea" name="content" id="content" rows="7" placeholder="あらすじ・見どころ" maxlength="200"></textarea>
+          <textarea class="textarea" style='width: 80%;' name="content" id="content" rows="7" placeholder="あらすじ・見どころ" maxlength="200"></textarea>
         </p>
         <p>
-          <i class="fas fa-flag" style="color:gold;"></i>
+          <i class="fas fa-flag flag-color"></i>
           <ons-input name="cast" modifier="underbar" value="{{.TvProgram.Cast}}" placeholder="キャスト(ex.小栗旬、石原さとみ)" maxlength="100" float required></ons-input>
         </p>
         <p>
-          <i class="fas fa-flag" style="color:gold;"></i>
+          <i class="fas fa-flag flag-color"></i>
           <ons-input type="number" name="year" value="{{.TvProgram.Year}}" modifier="underbar" placeholder="放送年(ex.2012)" min="1900" max="2100" float required></ons-input>
         </p>
         <p>
           <ons-input name="themesong" value="{{.TvProgram.Themesong}}" modifier="underbar" placeholder="主題歌(ex.miwa 「ヒカリへ」、複数可)" maxlength="100" float></ons-input>
         </p>
         <p>
-          <i class="fas fa-flag" style="color:gold;"></i>
+          <i class="fas fa-flag flag-color"></i>
           <label for="season">＜シーズン＞</label>
           <select name="season" id="season" class="select-input select-input--underbar" required>
             <option>春(4~6)</option>
@@ -47,7 +47,7 @@ p {
           </select>
         </p>
         <p>
-          <i class="fas fa-flag" style="color:gold;"></i>
+          <i class="fas fa-flag flag-color"></i>
           <label for="category">＜放送曜日＞</label>
           <select name="week" id="week" class="select-input select-input--underbar" required>
             <option>月</option>
@@ -67,7 +67,7 @@ p {
           </select>
         </p>
         <p>
-          <i class="fas fa-flag" style="color:gold;"></i>
+          <i class="fas fa-flag flag-color"></i>
           <label for="category">＜ジャンル＞※複数可</label>
           <select name="category" id="category" style="height: 100px;" class="select-input select-input--underbar" required multiple>
             <option>アクション</option>
@@ -111,28 +111,16 @@ p {
         <p>
           <ons-input name="production" modifier="underbar" value="{{.TvProgram.Production}}" placeholder="制作会社" maxlength="20" float></ons-input>
         </p>
-        <p style="margin-top: 30px;">
+        <p class='create-top-margin'>
           <ons-button modifier="quiet" onclick="PreviewTvProgram('preview-dialog')">プレビュー</ons-button>
         </p>
-        <p style="margin-top: 30px;">
+        <p class='create-top-margin'>
           <input type="hidden" name="_method" value="PUT">
           <button class="button button--outline">作成する</button>
         </p>
       </div>
     </form>
   </ons-page>
-
-<!--   <template id="alert-tv-title.html">
-    <ons-alert-dialog id="alert-tv-title" modifier="rowfooter">
-      <div class="alert-dialog-title">Alert</div>
-      <div class="alert-dialog-content">
-        「{{.TvProgram.Title}}」はすでに存在しています。
-      </div>
-      <div class="alert-dialog-footer">
-        <ons-alert-dialog-button onclick="hideAlertDialog('alert-tv-title')">OK</ons-alert-dialog-button>
-      </div>
-    </ons-alert-dialog>
-  </template> -->
 
   <template id="preview-dialog.html">
       <ons-dialog id="preview-dialog" modifier="large" cancelable fullscreen>
@@ -183,11 +171,11 @@ p {
                   </ons-col>
                 </ons-row>
                 <ons-row>
-                  <ons-col width="30%">
+                  <ons-col width="30%" align='center'>
                     <div class="image" id="preview-img">
                     </div>
                   </ons-col>
-                  <ons-col width="70%">
+                  <ons-col width="70%" align='center'>
                     <div class="image" id="preview-movie">
                     </div>
                   </ons-col>
@@ -212,7 +200,7 @@ p {
     let text = "<option>指定なし</option>";
     let t;
     for (let i = 0; i < 48; i++) {
-      if (i % 2 == 0){
+      if (i % 2 === 0){
         // console.log(String(i/2)+":00");
         t = String(i/2)+":00";
         text += "<option>"+t+"</option>"

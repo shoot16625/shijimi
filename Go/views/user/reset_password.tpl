@@ -31,7 +31,7 @@
           パスワードを表示
         </label>
         </p>
-        <p style="margin-top: 30px;">
+        <p class='create-top-margin'>
           <input type="hidden" name="_method" value="PUT">
           <button class="button button--outline">パスワード再設定</button>
         </p>

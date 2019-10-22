@@ -217,7 +217,7 @@
               required
             ></ons-input>
           </p>
-          <p style="margin-top: 30px;">
+          <p class='create-top-margin'>
             <button class="button button--outline">作成する</button>
           </p>
         </div>
@@ -229,7 +229,7 @@
     <script type="text/javascript">
       const name = {{.User.Username}};
       if (name != null) {
-        dialogBoxEveryone("alert_username_duplicate");
+        dialogBoxEveryone("alert-username-duplicate");
       };
     </script>
     <script>

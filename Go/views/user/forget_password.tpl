@@ -32,7 +32,7 @@
               required
             ></ons-input>
           </p>
-          <p style="margin-top: 30px;">
+          <p class='create-top-margin'>
             <button class="button button--outline">パスワードを再設定</button>
           </p>
         </div>

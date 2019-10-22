@@ -185,7 +185,7 @@ function clickWatchStatus(elem) {
   const str = 'check-watched';
   let newColor = 'lightseagreen';
   if (elem.id.indexOf(str) === 0) {
-    newColor = 'lightcoral';
+    newColor = 'deeppink';
   }
   let checkFlag;
   let rawText = count.textContent.trim();
