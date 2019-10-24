@@ -24,13 +24,11 @@
             ></ons-input>
           </p>
           <p>
-            <a href="forget_password_page">パスワードの変更はこちら</a>
-          </p>
-          <p>
-            <label for="age">＜年齢＞</label>
+            <label for="age">＜ 年齢 ＞</label>
             <ons-input
               type="number"
               name="age"
+              id="age"
               value="{{.User.Age}}"
               modifier="underbar"
               placeholder="年齢"
@@ -192,7 +190,10 @@
             <input type="hidden" name="_method" value="PUT" />
             <button class="button button--outline">更新</button>
           </p>
-          <p class='area-right'>
+          <p class="area-right">
+            <a href="forget_password_page">パスワードの変更はこちら</a>
+          </p>
+          <p class="area-right">
             <ons-button
               modifier="quiet"
               onclick="dialogBox('unsubscribe-dialog',{{.User.Id}})"
@@ -211,7 +212,7 @@
       };
     </script>
     <script>
-      if ({{.User}}===null){;
+      if ({{.User}} === null){;
       } else {
         document.getElementById('gender').value = {{.User.Gender}};
         document.getElementById('marital').value = {{.User.Marital}};

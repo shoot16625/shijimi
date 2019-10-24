@@ -4,7 +4,7 @@ import (
 	"app/models"
 	_ "app/routers"
 
-	"app/db"
+	// "app/db"
 	"fmt"
 	"strconv"
 	"strings"
@@ -39,9 +39,9 @@ func init() {
 	orm.RegisterDriver(beego.AppConfig.String("driver"), orm.DRMySQL)
 	orm.RegisterDataBase("default", beego.AppConfig.String("driver"), beego.AppConfig.String("sqlconn")+"?charset=utf8mb4&loc=Asia%2FTokyo")
 	// データを初期化して起動
-	err := orm.RunSyncdb("default", true, false)
+	// err := orm.RunSyncdb("default", true, false)
 	// データの変更点を追加して起動
-	// err := orm.RunSyncdb("default", false, false)
+	err := orm.RunSyncdb("default", false, false)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -68,11 +68,13 @@ func init() {
 	go beego.GlobalSessions.GC()
 
 	// 初期データの投入
-	execInitSQL()
-	execSQL()
-	db.Scraping("https://ja.wikipedia.org/wiki/日本のテレビドラマ一覧_(2010年代)")
-	db.Scraping("https://ja.wikipedia.org/wiki/日本のテレビドラマ一覧_(2000年代)")
-	db.UpdateTvProgramsInformation()
+	// execInitSQL()
+	// execSQL()
+	// db.GetWikiDoramas("https://ja.wikipedia.org/wiki/日本のテレビドラマ一覧_(2010年代)")
+	// db.GetWikiDoramas("https://ja.wikipedia.org/wiki/日本のテレビドラマ一覧_(2000年代)")
+	// db.UpdateTvProgramsInformation()
+	// db.GetMovieWalker("2017", "01")
+	// db.GetMovieWalkers()
 	// tvProgram = db.GetTvProgramInformation("偽装不倫")
 	// fmt.Println(tvProgram)
 }

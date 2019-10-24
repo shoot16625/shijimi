@@ -174,13 +174,13 @@
                 </ons-col>
               </ons-row>
               <ons-row>
-                <ons-col width="30%">
-                  <div class="image" id="preview-img">
-                  </div>
-                </ons-col>
-                <ons-col width="70%">
-                  <div class="image" id="preview-movie">
-                  </div>
+                <ons-col width="30%" align='center'>
+                    <div class="image" id="preview-img">
+                    </div>
+                  </ons-col>
+                  <ons-col width="70%" align='center'>
+                    <div class="image" id="preview-movie">
+                    </div>
                 </ons-col>
               </ons-row>
               <ons-list-item expandable>
@@ -288,7 +288,7 @@
       }
       let time = String({{.TvProgram.Hour}});
       str = ".5";
-      if (time === 100){
+      if (time === "100"){
         time = "指定なし";
       } else {
       if (time.indexOf(str) > -1){

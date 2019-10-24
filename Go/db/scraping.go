@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 	"unicode/utf8"
 
 	"github.com/PuerkitoBio/goquery"
@@ -12,10 +13,11 @@ import (
 )
 
 // Scraping TvPrograms by wiki list.
-func Scraping(referencePath string) {
+func GetWikiDoramas(referencePath string) {
 	doc, err := goquery.NewDocument(referencePath)
 	if err != nil {
 		fmt.Print("url scarapping failed\n")
+		return
 	}
 	var year []string
 	doc.Find("span.mw-headline").Each(func(_ int, s *goquery.Selection) {
@@ -72,12 +74,14 @@ func Scraping(referencePath string) {
 					if weekName == "平" {
 						weekStruct.Name = "平日"
 					}
-				} else if data[3] == "参照" || weekNameLen == 0 || weekNameLen > 3 {
+				} else if data[3] == "参照" || weekNameLen == 0 {
 					weekStruct.Name = "?"
+				} else if weekNameLen > 3 {
+					weekStruct.Name = "スペシャル"
 				} else if weekNameLen == 3 && strings.Contains(weekName, " ") {
 					weekStruct.Name = strings.Split(weekName, " ")[1]
 				} else {
-					weekStruct.Name = weekName
+					weekStruct.Name = "?"
 					// fmt.Println(weekName, weekNameLen)
 				}
 				tvProgram.Week = &weekStruct
@@ -141,6 +145,9 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 				html, _ := t.Find("td").Html()
 				content := strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
 				content = strings.Replace(content, "\n", "", -1)
+				// if strings.HasSuffix(content, "、") {
+				// 	content = strings.Replace(content, "、", "")
+				// }
 				switch th {
 				case "脚本":
 					newTvProgram.Dramatist = content
@@ -157,6 +164,7 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 						newTvProgram.Production = content
 					}
 				case "オープニング":
+					content = strings.Replace(content, "、「", "「", -1)
 					newTvProgram.Themesong = content
 				case "エンディング":
 					if strings.TrimSpace(t.Find("td").Text()) != "同上" {
@@ -202,6 +210,7 @@ func UpdateTvProgramsInformation() {
 		if h, err := models.GetAllTvProgramUpdateHistory(query, fields, sortby, order, offset, limit); err == nil && len(h) == 0 {
 			GetTvProgramInformation(tvProgram.(models.TvProgram))
 		} else {
+			// updateしたuserIDがすべて0番＝admin
 			var n int64 = 0
 			for _, v := range h {
 				n += v.(models.TvProgramUpdateHistory).UserId
@@ -211,5 +220,77 @@ func UpdateTvProgramsInformation() {
 			}
 		}
 
+	}
+}
+
+func GetMovieWalker(year string, month string) {
+	referencePath := "https://movie.walkerplus.com/list/" + year + "/" + month
+	doc, err := goquery.NewDocument(referencePath)
+	if err != nil {
+		fmt.Print("url scarapping failed\n")
+		return
+	}
+	yearInt, _ := strconv.Atoi(year)
+	seasonName := ""
+	monthInt, _ := strconv.Atoi(month)
+	if monthInt <= 3 {
+		seasonName = "冬"
+	} else if monthInt <= 6 {
+		seasonName = "春"
+	} else if monthInt <= 9 {
+		seasonName = "夏"
+	} else if monthInt <= 12 {
+		seasonName = "秋"
+	}
+	var floatHour float32 = 100
+	doc.Find(".movie").Each(func(_ int, m *goquery.Selection) {
+		var tvProgram models.TvProgram
+		seasonStruct := *new(models.Season)
+		seasonStruct.Name = seasonName
+		tvProgram.Season = &seasonStruct
+		weekStruct := *new(models.Week)
+		weekStruct.Name = "映画"
+		tvProgram.Week = &weekStruct
+		tvProgram.Title = m.Find("h3").Text()
+		tvProgram.Year = yearInt
+		tvProgram.Hour = floatHour
+		id, _ := m.Find("h3 > a").Attr("href")
+		id = strings.Replace(id, "/", "", -1)
+		id = strings.Replace(id, "mv", "", -1)
+		tvProgram.ImageURL = "https://movie.walkerplus.com/api/resizeimage/content/" + id + "?w=260"
+		tvProgram.Content = m.Find(".info > p").Text()
+		director := strings.TrimSpace(m.Find(".info > .directorList > dd").Text())
+		director = strings.Replace(director, " ", "", -1)
+		director = strings.Replace(director, "\n\n\n\n", "、", -1)
+		tvProgram.Director = director
+		cast := strings.TrimSpace(m.Find(".info > .roleList > dd").Text())
+		cast = strings.Replace(cast, " ", "", -1)
+		cast = strings.Replace(cast, "\n\n\n\n", "、", -1)
+		tvProgram.Cast = cast
+		if _, err := models.AddTvProgram(&tvProgram); err != nil {
+			fmt.Println(err)
+		}
+		// fmt.Println(tvProgram.Title)
+	})
+}
+
+func GetMovieWalkers() {
+	var start int = 2000
+	var end int = time.Now().Year()
+	y := 0
+	for {
+		year := strconv.Itoa(start + y)
+		for m := 1; m <= 12; m++ {
+			month := strconv.Itoa(m)
+			if len(month) == 1 {
+				month = "0" + month
+			}
+			fmt.Println(year, month)
+			GetMovieWalker(year, month)
+		}
+		y++
+		if (end - start + 1) == y {
+			break
+		}
 	}
 }

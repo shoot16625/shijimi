@@ -300,16 +300,16 @@ func (c *UserController) Show() {
 		if session.Get("UserId") == nil {
 			c.Redirect("/", 302)
 		} else {
-			UserId := session.Get("UserId").(int64)
-			v, _ := models.GetUserById(UserId)
+			UserID := session.Get("UserId").(int64)
+			v, _ := models.GetUserById(UserID)
 			c.Data["User"] = v
-			w, _ := models.GetCommentByUserId(UserId)
+			w, _ := models.GetCommentByUserId(UserID)
 			c.Data["Comment"] = w
 
 			var commentLikes []models.CommentLike
 			var tvPrograms []models.TvProgram
 			for _, comment := range w {
-				u, err := models.GetCommentLikeByCommentAndUser(comment.Id, UserId)
+				u, err := models.GetCommentLikeByCommentAndUser(comment.Id, UserID)
 				if err != nil {
 					u = new(models.CommentLike)
 				}
@@ -414,6 +414,7 @@ func (c *UserController) ShowWatchedTv() {
 	sortby = append(sortby, "Updated")
 	order = append(order, "desc")
 	query["Watched"] = "1"
+	query["UserId"] = strconv.FormatInt(userID, 10)
 	v, _ := models.GetAllWatchingStatus(query, fields, sortby, order, offset, limit)
 	c.Data["WatchStatus"] = v
 
@@ -447,6 +448,7 @@ func (c *UserController) ShowWtwTv() {
 	sortby = append(sortby, "Updated")
 	order = append(order, "desc")
 	query["WantToWatch"] = "1"
+	query["UserId"] = strconv.FormatInt(userID, 10)
 	v, _ := models.GetAllWatchingStatus(query, fields, sortby, order, offset, limit)
 	c.Data["WatchStatus"] = v
 

@@ -4,9 +4,6 @@ const URL = 'http://192.168.2.174:8080';
 // const URL = "http://www.cmplx.cse.nagoya-u.ac.jp";
 //const URL = "localhost:8080";
 
-// 一度のみでいい
-// ons.bootstrap();
-
 // 自動スクロール
 function autoScroll(varName, len) {
   let indexState = -1;

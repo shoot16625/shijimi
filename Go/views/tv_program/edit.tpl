@@ -16,7 +16,7 @@ p {
     {{ template "/common/toolbar.tpl" . }}
     {{ template "/common/alert.tpl" . }}
     <form id="edit-tv-program" action="/tv/tv_program/{{.TvProgram.Id}}" method="post">
-      <div class="area-center">
+      <div class="input-table">
         <p>
           <i class="fas fa-flag flag-color"></i>
           <ons-input name="title" modifier="underbar" value="{{.TvProgram.Title}}" placeholder="タイトル" maxlength="40" float required></ons-input>
@@ -288,7 +288,7 @@ p {
       }
       let time = String({{.TvProgram.Hour}});
       str = ".5";
-      if (time === 100){
+      if (time === "100"){
         time = "指定なし";
       } else {
       if (time.indexOf(str) > -1){

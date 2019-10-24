@@ -12,28 +12,13 @@
       <ons-pull-hook id="pull-hook">
         Pull to refresh
       </ons-pull-hook>
-      <ons-speed-dial position="bottom right" direction="up" ripple>
-        <ons-fab>
-          <ons-icon icon="md-share"></ons-icon>
-        </ons-fab>
-        <ons-speed-dial-item>
-          <ons-icon
-            icon="md-comment-dots"
-            onclick="dialogBox('tweet-dialog', {{.User.Id}})"
-          ></ons-icon>
-        </ons-speed-dial-item>
-        <ons-speed-dial-item>
-          <ons-icon
-            icon="md-search"
-            onclick="dialogBoxEveryone('search-dialog')"
-          ></ons-icon>
-        </ons-speed-dial-item>
-        <ons-speed-dial-item>
-          <ons-icon icon="md-chart" onclick="goAnotherCarousel(1)"></ons-icon>
-        </ons-speed-dial-item>
-        <ons-speed-dial-item>
-          <ons-icon icon="md-home" onclick="goTop()"></ons-icon>
-        </ons-speed-dial-item>
+      <ons-speed-dial
+        id="speed-dial"
+        position="bottom right"
+        direction="up"
+        ripple
+      >
+        <ons-fab> </ons-fab>
       </ons-speed-dial>
       <ons-carousel
         swipeable
@@ -206,7 +191,7 @@
     </script>
     <script>
       let comments = {{.Comment}};
-      if (comments === "") {
+      if (comments.length === 0) {
         comments = null;
       }
       const users = {{.Users}};
@@ -226,7 +211,7 @@
         infiniteList.delegate = {
           createItemContent: function(i) {
 
-            return ons.createElement('<div class="comment"><ons-list-header style="background-color:aliceblue;text-transform:none;"><div class="area-left comment-list-header-font">@' + users[i].Username + '</div><div class="area-right list-margin">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm:ss") + '</div></ons-list-header><ons-list-item><div class="left"><a href="/tv/user/show/' + users[i].Id + '" title="user_comment"><img class="list-item__thumbnail" src="' + users[i].IconURL + '" alt="@' + users[i].Username + '"></a></div><div class="center"><span class="list-item__subtitle comment-list-content-font" id="comment-content-' + String(i) + '">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle area-right"><div style="float:right;" id="count-like-' + i + '">：' + comments[i].CountLike + '</div><div style="float:right;"><i class="' + setLikeBold(commentLikes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="clickLike(this)" style="color:' + setLikeStatus(commentLikes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
+            return ons.createElement('<div class="user-' + users[i].Id + '"><ons-list-header style="background-color:aliceblue;text-transform:none;"><div class="area-left comment-list-header-font">@' + users[i].Username + '</div><div class="area-right list-margin">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm") + '</div></ons-list-header><ons-list-item><div class="left"><a href="/tv/user/show/' + users[i].Id + '" title="user_comment"><img class="list-item__thumbnail" src="' + users[i].IconURL + '" alt="@' + users[i].Username + '"></a></div><div class="center"><span class="list-item__subtitle comment-list-content-font" id="comment-content-' + String(i) + '">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle area-right"><div style="float:right;" id="count-like-' + i + '">：' + comments[i].CountLike + '</div><div style="float:right;"><i class="' + setLikeBold(commentLikes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="clickLike(this)" style="color:' + setLikeStatus(commentLikes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
           },
           countItems: function() {
             return comments.length;
@@ -234,8 +219,8 @@
         };
         infiniteList.refresh();
         } else {
-            infiniteList.innerHTML = "<div style='text-align:center;margin-top:40px;'><i class='far fa-surprise'>Not Found !!</i></div>"
-          }
+            infiniteList.innerHTML = "<div style='text-align:center;margin-top:40px;'><i class='far fa-surprise' style='color:chocolate;'></i> Not Found !!</div>"
+        }
       });
     </script>
 
@@ -330,15 +315,6 @@
       };
     </script>
 
-    <!-- リロードしたらexpandable-listを閉じた状態にする -->
-    <!--   <script>
-    if (window.performance) {
-      if (performance.navigation.type != 1) {
-        document.querySelector('#expandable-list-item').showExpansion();
-      }
-    }
-  </script> -->
-
     <!-- ツイートを保存する -->
     <script type="text/javascript">
       function postComment() {
@@ -401,6 +377,11 @@
         document.getElementById('word').value = '';
         document.getElementById('limit').value = '';
       }
+    </script>
+    <script>
+      var dial = document.getElementById('speed-dial');
+      dial.innerHTML =
+        "<ons-fab><ons-icon icon='md-share'></ons-icon></ons-fab><ons-speed-dial-item><ons-icon icon='md-comment-dots' onclick='dialogBox(\"tweet-dialog\", {{.User.Id}})'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-search' onclick='dialogBoxEveryone(\"search-dialog\")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-chart' onclick='goAnotherCarousel(1)'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-home' onclick='goTop()'></ons-icon></ons-speed-dial-item>";
     </script>
   </body>
 </html>

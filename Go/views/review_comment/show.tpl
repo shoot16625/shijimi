@@ -14,11 +14,11 @@
       Pull to refresh
     </ons-pull-hook>
 
-    <ons-speed-dial position="bottom right" direction="up" ripple>
+    <ons-speed-dial id="speed-dial" position="bottom right" direction="up" ripple>
         <ons-fab>
-          <ons-icon icon="md-share"></ons-icon>
+          <!-- <ons-icon icon="md-share"></ons-icon> -->
         </ons-fab>
-        <ons-speed-dial-item>
+        <!-- <ons-speed-dial-item>
           <ons-icon
             icon="md-comment-dots"
             onclick="dialogBox('tweet-dialog', {{.User.Id}})"
@@ -35,7 +35,7 @@
         </ons-speed-dial-item>
         <ons-speed-dial-item>
           <ons-icon icon="md-home" onclick="goTop()"></ons-icon>
-        </ons-speed-dial-item>
+        </ons-speed-dial-item> -->
       </ons-speed-dial>
 
     <ons-carousel swipeable overscrollable auto-scroll auto-refresh id="carousel">
@@ -244,12 +244,9 @@
 
 <script>
   let comments = {{.Comment}};
-  // var ratings = {{.RatingTvProgram}};
-  if (comments === "") {
+  if (comments.length === 0) {
     comments = null;
-    // ratings = null;
   }
-  // console.log(ratings);
   const users = {{.Users}};
   let commentLikes;
   if ({{.CommentLike}} === null && comments != null){
@@ -263,11 +260,8 @@
   ons.ready(function() {
     var infiniteList = document.getElementById('comments');
     if (comments != null) {
-      // console.log(comments);
-
       infiniteList.delegate = {
         createItemContent: function(i) {
-        // console.log(ratings);
         const fps = comments[i].FavoritePoint.split('、');
         let fpText = "";
         for (let j = fps.length - 1; j >= 0; j--) {
@@ -276,16 +270,16 @@
         if(comments[i].Spoiler){
           fpText += "<i class='fas fa-hand-paper' style='color:palevioletred;'></i>";
         }
-        return ons.createElement('<div class="' + users[i].Id + '"><ons-list-header style="background-color:antiquewhite;text-transform:none;"><div class="area-left comment-list-header-font">@' + users[i].Username + '</div><div class="area-right list-margin">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm:ss") + '</div></ons-list-header><ons-list-item><ons-row><ons-col width="15%"><i class="fas fa-star" style="color:gold;"></i>：' + comments[i].Star +'</ons-col><ons-col style="font-size:12px;">'+ fpText + '</ons-col></ons-row></ons-list-item><ons-list-item><div class="left"><a href="/tv/user/show/' + users[i].Id + '" title="' + users[i].Username + '"><img class="list-item__thumbnail" src="' + users[i].IconURL + '" alt="@' + users[i].Username + '"></a></div><div class="center"><span class="list-item__subtitle"id="comment-content-' + users[i].Id + '" style="font-size:14px;">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle" class="area-right"><div style="float:right;" id="count-like-' + i + '">：' + comments[i].CountLike + '</div><div style="float:right;"><i class="' + setLikeBold(commentLikes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="clickLike(this)" style="color:' + setLikeStatus(commentLikes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
+        return ons.createElement('<div class="user-' + users[i].Id + '"><ons-list-header style="background-color:antiquewhite;text-transform:none;"><div class="area-left comment-list-header-font">@' + users[i].Username + '</div><div class="area-right list-margin">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm") + '</div></ons-list-header><ons-list-item><ons-row><ons-col width="15%"><i class="fas fa-star" style="color:gold;"></i>：' + comments[i].Star +'</ons-col><ons-col style="font-size:12px;">'+ fpText + '</ons-col></ons-row></ons-list-item><ons-list-item><div class="left"><a href="/tv/user/show/' + users[i].Id + '" title="' + users[i].Username + '"><img class="list-item__thumbnail" src="' + users[i].IconURL + '" alt="@' + users[i].Username + '"></a></div><div class="center"><span class="list-item__subtitle"id="comment-content-' + users[i].Id + '" style="font-size:14px;">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle" class="area-right"><div style="float:right;" id="count-like-' + i + '">：' + comments[i].CountLike + '</div><div style="float:right;"><i class="' + setLikeBold(commentLikes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="clickLike(this)" style="color:' + setLikeStatus(commentLikes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
       },
       countItems: function() {
         return comments.length;
       }
     };
     infiniteList.refresh();
-  } else {
-    infiniteList.innerHTML = "<div style='text-align:center;margin-top:40px;'><i class='far fa-surprise'>Not Found !!</i></div>"
-  }
+    } else {
+            infiniteList.innerHTML = "<div style='text-align:center;margin-top:40px;'><i class='far fa-surprise' style='color:chocolate;'></i> Not Found !!</div>"
+        }
 });
 </script>
 
@@ -377,15 +371,6 @@
     };
   </script>
 
-  <!-- リロードしたらexpandable-listを閉じた状態にする -->
- <!--  <script>
-    if (window.performance) {
-      if (performance.navigation.type != 1) {
-        document.querySelector('#expandable-list-item').showExpansion();
-      }
-    }
-  </script> -->
-
   <!-- ツイートを保存する -->
   <script type="text/javascript">
     function postComment() {
@@ -457,5 +442,10 @@
       document.getElementById("limit").value = "";
     };
   </script>
+  <script>
+      var dial = document.getElementById('speed-dial');
+      dial.innerHTML =
+        "<ons-fab><ons-icon icon='md-share'></ons-icon></ons-fab><ons-speed-dial-item><ons-icon icon='md-comment-dots' onclick='dialogBox(\"tweet-dialog\", {{.User.Id}})'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-search' onclick='dialogBoxEveryone(\"search-dialog\")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-chart' onclick='goAnotherCarousel(1)'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-home' onclick='goTop()'></ons-icon></ons-speed-dial-item>";
+    </script>
 </body>
 </html>

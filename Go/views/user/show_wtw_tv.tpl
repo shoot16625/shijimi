@@ -16,20 +16,8 @@
     </ons-page>
     <script type="text/javascript" src="/static/js/common.js"></script>
     <script>
-      let tvPrograms = {{.TvProgram}};
-      if (tvPrograms === "") {
-        tvPrograms = null;
-      }
-      let watchStatus;
-      if ({{.WatchStatus}} == null && tvPrograms != null){
-        watchStatus = [tvPrograms.length];
-        for (let i = tvPrograms.length - 1; i >= 0; i--) {
-          watchStatus[i] = {Watched:false, WantToWatch:false};
-        }
-      } else {
-        watchStatus = {{.WatchStatus}};
-      }
-
+      const tvPrograms = {{.TvProgram}};
+      const watchStatus= {{.WatchStatus}};
       ons.ready(function() {
         var infiniteList = document.getElementById('tv-programs');
         if (tvPrograms != null) {
@@ -72,8 +60,8 @@
           };
           infiniteList.refresh();
           } else {
-            infiniteList.innerHTML = "<div style='text-align:center;margin-top:40px;'><i class='far fa-surprise'>Not Found !!</i></div><div style='text-align:center;'>トップページから番組を登録してね<i class='fas fa-male'></i></div>"
-          }
+            infiniteList.innerHTML = "<div style='text-align:center;margin-top:40px;'><i class='far fa-surprise' style='color:chocolate;'></i> Not Found !!</div>"
+        }
       });
     </script>
 

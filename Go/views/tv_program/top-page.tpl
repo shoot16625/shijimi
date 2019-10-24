@@ -18,7 +18,7 @@
           style="text-align: center;background-color:linen;margin:10px;"
         >
           「ShiJimi」<br />
-          SNSとレビューサイトを足して2で割ったような．
+          SNSとレビューサイトを足して<br>2で割ったような．
         </ons-card>
         <form id="search_form" action="/tv/tv_program/search" method="post">
           <p style="margin-top: 20px;">
@@ -78,7 +78,7 @@
           <p
             style="margin-top: 25px;border-bottom: solid thin lightgray;text-align: left;"
           >
-            <i class="far fa-moon" style="color:gold;"></i> 月
+            <i class="far fa-moon" style="color:rgb(235, 200, 3);"></i> 月
           </p>
           <ons-carousel
             id="carousel01"
@@ -113,7 +113,7 @@
           <p
             style="margin-top: 25px;border-bottom: solid thin lightgray;text-align: left;"
           >
-            <i class="fas fa-fire" style="color:red;"></i> 火
+            <i class="fas fa-fire" style="color:rgb(235, 30, 30);"></i> 火
           </p>
           <ons-carousel
             id="carousel02"
@@ -148,7 +148,7 @@
           <p
             style="margin-top: 25px;border-bottom: solid thin lightgray;text-align: left;"
           >
-            <i class="fas fa-tint" style="color:blue;"></i> 水
+            <i class="fas fa-tint" style="color:rgb(95, 149, 231);"></i> 水
           </p>
           <ons-carousel
             id="carousel03"
@@ -218,7 +218,7 @@
           <p
             style="margin-top: 25px;border-bottom: solid thin lightgray;text-align: left;"
           >
-            <i class="fas fa-coins" style="color:gold;"></i> 金
+            <i class="fas fa-coins" style="color:rgb(187, 162, 24);"></i> 金
           </p>
           <ons-carousel
             id="carousel05"
@@ -253,7 +253,7 @@
           <p
             style="margin-top: 25px;border-bottom: solid thin lightgray;text-align: left;"
           >
-            <i class="fas fa-globe" style="color:rgb(116, 168, 192);"></i> 土
+            <i class="fas fa-globe" style="color:rgb(138, 193, 219);"></i> 土
           </p>
           <ons-carousel
             id="carousel06"
@@ -288,7 +288,7 @@
           <p
             style="margin-top: 25px;border-bottom: solid thin lightgray;text-align: left;"
           >
-            <i class="fas fa-sun" style="color:gold;"></i> 日
+            <i class="fas fa-sun" style="color:rgb(255, 166, 0);"></i> 日
           </p>
           <ons-carousel
             id="carousel07"
@@ -339,7 +339,7 @@
             <div class="center">ログイン</div>
           </ons-toolbar>
           <form id="login-user" action="/tv/user/login" method="post">
-            <div class="area-center create-tv-margin">
+            <div class="input-table">
               <p>
                 <ons-input
                   name="username"

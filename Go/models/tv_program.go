@@ -28,7 +28,7 @@ type TvProgram struct {
 	Year               int       `orm:"null"`
 	Season             *Season   `orm:"rel(fk);null"`
 	Week               *Week     `orm:"rel(fk);null"`
-	Hour               float32   `orm:"null`
+	Hour               float32   `orm:"default(100)`
 	Themesong          string    `orm:"size(256);null"`
 	CreateUserId       int64     `orm:"default(0)"`
 	Star               float32   `orm:"default(2.5)"`
@@ -253,15 +253,15 @@ func SearchTvProgram(query map[string][]string, fields []string, sortby []string
 			} else if k == "Themesong" {
 				condOnly = condOnly.Or("Themesong__icontains", value)
 			} else if k == "Year" {
-				condOnly = condOnly.And("Year", value)
+				condOnly = condOnly.Or("Year", value)
 			} else if k == "Week" {
-				condOnly = condOnly.And("Week__Name", value)
+				condOnly = condOnly.Or("Week__Name", value)
 			} else if k == "Hour" {
-				condOnly = condOnly.And("Hour", value)
+				condOnly = condOnly.Or("Hour", value)
 			} else if k == "Season" {
-				condOnly = condOnly.And("Season__Name", value)
+				condOnly = condOnly.Or("Season__Name", value)
 			} else if k == "Category" {
-				condOnly = condOnly.And("Category__icontains", value)
+				condOnly = condOnly.Or("Category__icontains", value)
 			}
 		}
 		// fmt.Println(k,v)
