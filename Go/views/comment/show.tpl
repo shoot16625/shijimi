@@ -4,48 +4,21 @@
     {{ template "/common/header.tpl" . }}
   </head>
 
-  <style type="text/css">
-    .textarea {
-      width: 100%;
-      background-color: white;
-    }
-    select {
-      width: 80%;
-      max-width: 500px;
-      height: 100px;
-    }
-  </style>
-
   <body>
-    <ons-page>
+    <ons-page id="tv-comments">
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
 
       <ons-pull-hook id="pull-hook">
         Pull to refresh
       </ons-pull-hook>
-      <ons-speed-dial position="bottom right" direction="up" ripple>
-        <ons-fab>
-          <ons-icon icon="md-share"></ons-icon>
-        </ons-fab>
-        <ons-speed-dial-item>
-          <ons-icon
-            icon="md-comment-dots"
-            onclick="DialogBox('tweet_dialog', {{.User.Id}})"
-          ></ons-icon>
-        </ons-speed-dial-item>
-        <ons-speed-dial-item>
-          <ons-icon
-            icon="md-search"
-            onclick="DialogBoxEveryone('search_dialog')"
-          ></ons-icon>
-        </ons-speed-dial-item>
-        <ons-speed-dial-item>
-          <ons-icon icon="md-chart" onclick="GoAnotherCarousel(1)"></ons-icon>
-        </ons-speed-dial-item>
-        <ons-speed-dial-item>
-          <ons-icon icon="md-home" onclick="GoTop()"></ons-icon>
-        </ons-speed-dial-item>
+      <ons-speed-dial
+        id="speed-dial"
+        position="bottom right"
+        direction="up"
+        ripple
+      >
+        <ons-fab> </ons-fab>
       </ons-speed-dial>
       <ons-carousel
         swipeable
@@ -55,29 +28,28 @@
         id="carousel"
       >
         <ons-carousel-item>
-          {{ template "/common/comment_review_change.tpl" . }}
           {{ template "/common/tv_program_show.tpl" . }}
-          <ons-list style="margin-left: 3px;margin-right: 5px;">
+          {{ template "/common/comment_review_change.tpl" . }}
+          <ons-list class="list-margin">
             <ons-lazy-repeat id="comments"></ons-lazy-repeat>
           </ons-list>
         </ons-carousel-item>
         <ons-carousel-item>
-          <p style="text-align:center;">詳細情報や分析結果を表示</p>
-          <p style="text-align:center;">
-            工事中<i class="fas fa-truck-pickup"></i>
-          </p>
+          <div class="area-center">
+            <p>詳細情報や分析結果を表示</p>
+            <p>工事中<i class="fas fa-truck-pickup"></i></p>
+          </div>
         </ons-carousel-item>
       </ons-carousel>
     </ons-page>
-
-    <template id="tweet_dialog.html">
-      <ons-dialog id="tweet_dialog" modifier="large" cancelable fullscreen>
+    <template id="tweet-dialog.html">
+      <ons-dialog id="tweet-dialog" modifier="large" cancelable fullscreen>
         <ons-page>
           <ons-toolbar>
             <div class="left">
               <ons-button
-                id="cancel_button"
-                onclick="hideAlertDialog('tweet_dialog')"
+                id="cancel-button"
+                onclick="hideAlertDialog('tweet-dialog')"
                 style="background:left;color: grey;"
                 ><i class="fas fa-window-close"></i
               ></ons-button>
@@ -88,17 +60,17 @@
             <div class="right">
               <ons-button
                 id="post_button"
-                onclick="PostComment()"
+                onclick="postComment()"
                 style="color:chocolate;background:left;"
                 ><i class="fas fa-book"></i
               ></ons-button>
             </div>
           </ons-toolbar>
-          <div style="text-align:center;">
+          <div class="area-right">
             <textarea
-              class="textarea"
+              class="textarea-tweet"
               rows="10"
-              id="tweet_dialog_content"
+              id="tweet-dialog-content"
               name="content"
               type="text"
               minlength="5"
@@ -106,9 +78,7 @@
               required
             ></textarea>
           </div>
-          <div style="text-align:right;">
-            あと<span class="count"></span>文字
-          </div>
+          <div class="area-right">あと<span class="count"></span>文字</div>
         </ons-page>
         <script type="text/javascript">
           $(function() {
@@ -116,10 +86,10 @@
             let text_length;
             let countdown;
             $('.count').text(
-              text_max - $('#tweet_dialog_content').val().length
+              text_max - $('#tweet-dialog-content').val().length
             );
 
-            $('#tweet_dialog_content').on(
+            $('#tweet-dialog-content').on(
               'keydown keyup keypress change',
               function() {
                 text_length = $(this).val().length;
@@ -132,14 +102,14 @@
       </ons-dialog>
     </template>
 
-    <template id="search_dialog.html">
-      <ons-dialog id="search_dialog" modifier="large" cancelable fullscreen>
+    <template id="search-dialog.html">
+      <ons-dialog id="search-dialog" modifier="large" cancelable fullscreen>
         <ons-page>
           <ons-toolbar>
             <div class="left">
               <ons-button
-                id="cancel_button"
-                onclick="hideAlertDialog('search_dialog')"
+                id="cancel-button"
+                onclick="hideAlertDialog('search-dialog')"
                 style="background:left;color: grey;"
                 ><i class="fas fa-window-close"></i
               ></ons-button>
@@ -149,7 +119,7 @@
             </div>
             <div class="right">
               <ons-button
-                id="reset_button"
+                id="reset-button"
                 onclick="resetSelect()"
                 style="color:chocolate;background:left;"
                 ><i class="far fa-trash-alt"></i
@@ -179,7 +149,7 @@
                   <select
                     name="sortby"
                     id="sortby"
-                    class="select-input select-input--underbar"
+                    class="select-input select-input--underbar select-search-table"
                   >
                     <option>新しい順</option>
                     <option>古い順</option>
@@ -197,7 +167,7 @@
                     float
                   ></ons-input>
                 </p>
-                <p style="margin-top: 30px;">
+                <p class="create-top-margin">
                   <button class="button button--outline">search</button>
                 </p>
               </div>
@@ -216,23 +186,23 @@
     <script type="text/javascript" src="/static/js/common.js"></script>
     <script>
       ons.ready(function() {
-        PullHook();
+        pullHook();
       });
     </script>
     <script>
       let comments = {{.Comment}};
-      if (comments == "") {
+      if (comments.length === 0) {
         comments = null;
       }
       const users = {{.Users}};
-      let comment_likes;
-      if ({{.CommentLike}} == null && comments != null){
-        comment_likes = [comments.length];
+      let commentLikes;
+      if ({{.CommentLike}} ===null && comments != null){
+        commentLikes = [comments.length];
         for (let i = comments.length - 1; i >= 0; i--) {
-          comment_likes[i] = {Like:false};
+          commentLikes[i] = {Like:false};
         }
       } else {
-        comment_likes = {{.CommentLike}};
+        commentLikes = {{.CommentLike}};
       }
       ons.ready(function() {
         var infiniteList = document.getElementById('comments');
@@ -241,7 +211,7 @@
         infiniteList.delegate = {
           createItemContent: function(i) {
 
-            return ons.createElement('<div class="comment"><ons-list-header style="background-color:aliceblue;text-transform:none;"><div style="text-align:left; float:left;font-size:16px;">@' + users[i].Username + '</div><div style="text-align: right;margin-right:5px;">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm:ss") + '</div></ons-list-header><ons-list-item><div class="left"><a href="/tv/user/show/' + users[i].Id + '" title="user_page"><img class="list-item__thumbnail" src="' + users[i].IconUrl + '" alt="@' + users[i].Username + '"></a></div><div class="center"><span class="list-item__subtitle"id="comment_content_' + String(i) + '" style="font-size:14px;">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle" style="text-align: right;"><div style="float:right;" id="count_like_' + i + '">：' + comments[i].CountLike + '</div><div style="float:right;"><i class="' + SetLikeBold(comment_likes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="ClickLike(this)" style="color:' + SetLikeStatus(comment_likes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
+            return ons.createElement('<div class="user-' + users[i].Id + '"><ons-list-header style="background-color:aliceblue;text-transform:none;"><div class="area-left comment-list-header-font">@' + users[i].Username + '</div><div class="area-right list-margin">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm") + '</div></ons-list-header><ons-list-item><div class="left"><a href="/tv/user/show/' + users[i].Id + '" title="user_comment"><img class="list-item__thumbnail" src="' + users[i].IconURL + '" alt="@' + users[i].Username + '"></a></div><div class="center"><span class="list-item__subtitle comment-list-content-font" id="comment-content-' + String(i) + '">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle area-right"><div style="float:right;" id="count-like-' + i + '">：' + comments[i].CountLike + '</div><div style="float:right;"><i class="' + setLikeBold(commentLikes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="clickLike(this)" style="color:' + setLikeStatus(commentLikes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
           },
           countItems: function() {
             return comments.length;
@@ -249,42 +219,42 @@
         };
         infiniteList.refresh();
         } else {
-            infiniteList.innerHTML = "<div style='text-align:center;margin-top:40px;'><i class='far fa-surprise'>Not Found !!</i></div>"
-          }
+            infiniteList.innerHTML = "<div style='text-align:center;margin-top:40px;'><i class='far fa-surprise' style='color:chocolate;'></i> Not Found !!</div>"
+        }
       });
     </script>
 
     <script type="text/javascript">
-      SetWatchBold("check_watched", {{.WatchStatus.Watched}});
-      SetWatchBold("check_wtw", {{.WatchStatus.WantToWatch}});
-      SetWatchStatus("check_watched", "lightcoral", {{.WatchStatus.Watched}});
-      SetWatchStatus("check_wtw", "lightseagreen", {{.WatchStatus.WantToWatch}});
+      setWatchBold("check-watched", {{.WatchStatus.Watched}});
+      setWatchBold("check-wtw", {{.WatchStatus.WantToWatch}});
+      setWatchStatus("check-watched", "deeppink", {{.WatchStatus.Watched}});
+      setWatchStatus("check-wtw", "lightseagreen", {{.WatchStatus.WantToWatch}});
     </script>
 
     <script>
-      global_comment_like_status = {{.CommentLike}};
+      globalCommentLikeStatus = {{.CommentLike}};
     </script>
 
     <script type="text/javascript">
-      function CommentLikeStatus(elem, check_flag) {
+      function commentLikeStatus(elem, checkFlag) {
         let url = URL+"/tv/comment_like/";
-        var data = global_comment_like_status[elem.id];
+        var data = globalCommentLikeStatus[elem.id];
         let method;
         if (data.Id === 0){
           method = 'POST';
           data.UserId = {{.User.Id}};
-          global_comment_like_status[elem.id].UserId = data.UserId;
+          globalCommentLikeStatus[elem.id].UserId = data.UserId;
           data.CommentId = {{.Comment}}[elem.id].Id;
-          global_comment_like_status[elem.id].CommentId = data.CommentId;
+          globalCommentLikeStatus[elem.id].CommentId = data.CommentId;
         } else {
           method = 'PUT';
           url = url+data.Id;
         }
-        data.Like = check_flag;
-        // console.log("flag",global_comment_like_status[elem.id], check_flag);
-        global_comment_like_status[elem.id].Like = data.Like;
+        data.Like = checkFlag;
+        // console.log("flag",globalCommentLikeStatus[elem.id], checkFlag);
+        globalCommentLikeStatus[elem.id].Like = data.Like;
 
-        // console.log("last", global_comment_like_status[elem.id]);
+        // console.log("last", globalCommentLikeStatus[elem.id]);
         var json = JSON.stringify(data);
         var request = new XMLHttpRequest();
         request.open(method, url, true);
@@ -294,7 +264,7 @@
           if (request.readyState == 4 && request.status == "200") {
             console.table(x);
           } else {
-            global_comment_like_status[elem.id].Id = x.Id;
+            globalCommentLikeStatus[elem.id].Id = x.Id;
           }
         }
         request.send(json);
@@ -302,31 +272,31 @@
     </script>
 
     <script type="text/javascript">
-      global_watch_status = {{.WatchStatus}};
+      globalWatchStatus = {{.WatchStatus}};
     </script>
 
     <script type="text/javascript">
-      function WatchStatus(elem, check_flag) {
+      function WatchStatus(elem, checkFlag) {
         let url = URL+"/tv/watching_status/";
-        var data = global_watch_status;
+        var data = globalWatchStatus;
         let method;
         if (data.Id === 0){
           method = 'POST';
           data.UserId = {{.User.Id}};
-          global_watch_status.UserId = data.UserId;
+          globalWatchStatus.UserId = data.UserId;
           data.TvProgramId = {{.TvProgram.Id}};
-          global_watch_status.TvProgramId = data.TvProgramId;
+          globalWatchStatus.TvProgramId = data.TvProgramId;
         } else{
           method = 'PUT';
           url = url+data.Id;
         }
-        const str ="check_watched"
+        const str ="check-watched"
         if (elem.id.indexOf(str)===0) {
-          data.Watched = check_flag;
-          global_watch_status.Watched = data.Watched;
+          data.Watched = checkFlag;
+          globalWatchStatus.Watched = data.Watched;
         } else {
-          data.WantToWatch = check_flag;
-          global_watch_status.WantToWatch = data.WantToWatch;
+          data.WantToWatch = checkFlag;
+          globalWatchStatus.WantToWatch = data.WantToWatch;
 
         }
         var json = JSON.stringify(data);
@@ -338,36 +308,27 @@
           if (request.readyState == 4 && request.status == "200") {
             console.table(x);
           } else {
-            global_watch_status.Id = x.Id;
+            globalWatchStatus.Id = x.Id;
           }
         }
         request.send(json);
       };
     </script>
 
-    <!-- リロードしたらexpandable-listを閉じた状態にする -->
-    <!--   <script>
-    if (window.performance) {
-      if (performance.navigation.type != 1) {
-        document.querySelector('#expandable-list-item').showExpansion();
-      }
-    }
-  </script> -->
-
     <!-- ツイートを保存する -->
     <script type="text/javascript">
-      function PostComment() {
-        const text_length = document.getElementById("tweet_dialog_content").value.length;
+      function postComment() {
+        const text_length = document.getElementById("tweet-dialog-content").value.length;
         // console.log(text_length);
         if (text_length < 5){
-          return DialogBox('alert_minlength');
+          return dialogBox('alert-min-length');
         }
         let url = URL+"/tv/comment/";
         let data = {};
         data.Id  = 0;
         data.UserId = {{.User.Id}};
         data.TvProgramId  = {{.TvProgram.Id}};
-        data.Content = document.getElementById("tweet_dialog_content").value;
+        data.Content = document.getElementById("tweet-dialog-content").value;
         data.CountLike  = 0;
         var json = JSON.stringify(data);
         var request = new XMLHttpRequest();
@@ -382,14 +343,14 @@
           }
         }
         request.send(json);
-        hideAlertDialog('tweet_dialog')
+        hideAlertDialog('tweet-dialog')
         setTimeout(window.location.reload(false), 500);
       };
     </script>
     <script>
       let time = String({{.TvProgram.Hour}});
       str = ".5";
-      if (time == "100"){
+      if (time === "100"){
         time = "";
       } else {
         if (time.indexOf(str) > -1){
@@ -398,7 +359,7 @@
           time += ":00";
         }
       }
-      document.getElementById('tv_program_hour').innerHTML = time;
+      document.getElementById('tv-program-hour').innerHTML = time;
     </script>
 
     <script type="text/javascript">
@@ -406,7 +367,7 @@
         .querySelector('ons-carousel')
         .addEventListener('postchange', function() {
           if (carousel.getActiveIndex() == 1) {
-            GoTop();
+            goTop();
           }
         });
     </script>
@@ -416,6 +377,11 @@
         document.getElementById('word').value = '';
         document.getElementById('limit').value = '';
       }
+    </script>
+    <script>
+      var dial = document.getElementById('speed-dial');
+      dial.innerHTML =
+        "<ons-fab><ons-icon icon='md-share'></ons-icon></ons-fab><ons-speed-dial-item><ons-icon icon='md-comment-dots' onclick='dialogBox(\"tweet-dialog\", {{.User.Id}})'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-search' onclick='dialogBoxEveryone(\"search-dialog\")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-chart' onclick='goAnotherCarousel(1)'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-home' onclick='goTop()'></ons-icon></ons-speed-dial-item>";
     </script>
   </body>
 </html>

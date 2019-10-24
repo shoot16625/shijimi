@@ -184,18 +184,14 @@ func (c *CommentController) Delete() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	if err := models.DeleteComment(id); err == nil {
-		c.Data["json"] = "OK"
 		u, err := models.GetCommentLikeByComment(id)
 		if err == nil {
 			for _, value := range u {
 				_ = models.DeleteCommentLike(value.Id)
 			}
 		}
-	} else {
-		c.Data["json"] = err.Error()
 	}
 	c.Redirect("/tv/user/show", 302)
-	c.ServeJSON()
 }
 
 func (c *CommentController) Show() {
@@ -336,6 +332,7 @@ func (c *CommentController) SearchComment() {
 			Word:   word,
 			Limit:  s.Limit,
 			Sortby: s.Sortby,
+			Item:   "comment",
 		}
 		_, _ = models.AddSearchHistory(&u)
 	}

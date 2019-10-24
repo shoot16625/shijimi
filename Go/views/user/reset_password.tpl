@@ -9,8 +9,8 @@
     {{ template "/common/toolbar.tpl" . }}
     {{ template "/common/alert.tpl" . }}
 
-    <form id="update_user" action="/tv/user/{{.User.Id}}" method="post">
-      <div style="text-align: center; margin-top: 30px;">
+    <form id="update-user" action="/tv/user/{{.User.Id}}" method="post">
+      <div class='input-table'>
         <p>
           <label for="password">パスワード</label>
           <ons-input name="password" modifier="underbar" type="password" placeholder="パスワード" minlength="8" id="password" float required></ons-input>
@@ -20,7 +20,7 @@
         <input type="hidden" name="job" value="{{.User.Job}}"></input>
         <input type="hidden" name="gender" value="{{.User.Gender}}"></input>
         <input type="hidden" name="address" value="{{.User.Address}}"></input>
-        <input type="hidden" name="IconUrl" value="{{.User.IconUrl}}"></input>
+        <input type="hidden" name="IconURL" value="{{.User.IconURL}}"></input>
         <input type="hidden" name="marital" value="{{.User.Marital}}"></input>
         <input type="hidden" name="SecondPassword" value="{{.User.SecondPassword}}"></input>
         <p>
@@ -31,7 +31,7 @@
           パスワードを表示
         </label>
         </p>
-        <p style="margin-top: 30px;">
+        <p class='create-top-margin'>
           <input type="hidden" name="_method" value="PUT">
           <button class="button button--outline">パスワード再設定</button>
         </p>

@@ -15,8 +15,8 @@ type ReviewCommentLike struct {
 	UserId          int64
 	ReviewCommentId int64
 	Like            bool
-	Created time.Time `orm:"auto_now_add;type(datetime)"`
-	Updated time.Time `orm:"auto_now;type(datetime)"`
+	Created         time.Time `orm:"auto_now_add;type(datetime)"`
+	Updated         time.Time `orm:"auto_now;type(datetime)"`
 }
 
 func init() {
@@ -146,18 +146,18 @@ func DeleteReviewCommentLike(id int64) (err error) {
 	return
 }
 
-func GetReviewCommentLikeByCommentAndUser(comment_id int64, user_id int64) (v *ReviewCommentLike, err error) {
+func GetReviewCommentLikeByCommentAndUser(commentID int64, userID int64) (v *ReviewCommentLike, err error) {
 	o := orm.NewOrm()
-	v = &ReviewCommentLike{ReviewCommentId: comment_id, UserId: user_id}
-	if err = o.QueryTable(new(ReviewCommentLike)).Filter("ReviewCommentId", comment_id).Filter("UserId", user_id).RelatedSel().One(v); err == nil {
+	v = &ReviewCommentLike{ReviewCommentId: commentID, UserId: userID}
+	if err = o.QueryTable(new(ReviewCommentLike)).Filter("ReviewCommentId", commentID).Filter("UserId", userID).RelatedSel().One(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-func GetReviewCommentLikeByComment(comment_id int64) (v []ReviewCommentLike, err error) {
+func GetReviewCommentLikeByComment(commentID int64) (v []ReviewCommentLike, err error) {
 	o := orm.NewOrm()
-	if _,err = o.QueryTable(new(ReviewCommentLike)).Filter("ReviewCommentId", comment_id).All(&v); err == nil {
+	if _, err = o.QueryTable(new(ReviewCommentLike)).Filter("ReviewCommentId", commentID).All(&v); err == nil {
 		return v, nil
 	}
 	return nil, err

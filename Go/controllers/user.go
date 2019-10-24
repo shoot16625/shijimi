@@ -50,16 +50,16 @@ func (c *UserController) URLMapping() {
 // @Failure 403 body is empty
 // @router / [post]
 func (c *UserController) Post() {
-	var v models.User
+	// var v models.User
 	age, _ := c.GetInt("age")
 	hashPass, _ := models.PasswordHash(c.GetString("password"))
 	hashSecondpass, _ := models.PasswordHash(c.GetString("SecondPassword"))
-	iconURL := c.GetString("IconUrl")
-	if iconURL == "" {
-		iconURL = "http://flat-icon-design.com/f/f_object_174/s512_f_object_174_0bg.png"
+	IconURL := c.GetString("IconURL")
+	if IconURL == "" {
+		IconURL = "http://flat-icon-design.com/f/f_object_174/s512_f_object_174_0bg.png"
 	}
 	// json.Unmarshal(c.Ctx.Input.RequestBody, &v)
-	v = models.User{
+	v := models.User{
 		Username:       c.GetString("username"),
 		Password:       hashPass,
 		SecondPassword: hashSecondpass,
@@ -67,8 +67,9 @@ func (c *UserController) Post() {
 		Address:        c.GetString("address"),
 		Gender:         c.GetString("gender"),
 		Job:            c.GetString("job"),
-		IconUrl:        iconURL,
+		IconURL:        IconURL,
 		Marital:        c.GetString("marital"),
+		BloodType:      c.GetString("bloodType"),
 	}
 
 	// fmt.Println(v)
@@ -126,7 +127,7 @@ func (c *UserController) GetAll() {
 	var sortby []string
 	var order []string
 	var query = make(map[string]string)
-	var limit int64 = 10
+	var limit int64 = 100
 	var offset int64
 
 	// fields: col1,col2,entity.col3
@@ -192,8 +193,8 @@ func (c *UserController) Put() {
 		hashPass = u.Password
 		hashSecondpass = u.SecondPassword
 	}
-	var v models.User
-	v = models.User{
+	// var v models.User
+	v := models.User{
 		Id:             id,
 		Username:       c.GetString("username"),
 		Password:       hashPass,
@@ -202,10 +203,11 @@ func (c *UserController) Put() {
 		Address:        c.GetString("address"),
 		Gender:         c.GetString("gender"),
 		Job:            c.GetString("job"),
-		IconUrl:        c.GetString("IconUrl"),
+		IconURL:        c.GetString("IconURL"),
 		Marital:        c.GetString("marital"),
+		BloodType:      c.GetString("bloodType"),
 	}
-	fmt.Println(v)
+	// fmt.Println(v)
 	if err := models.UpdateUserById(&v); err == nil {
 		c.Data["json"] = "OK"
 		c.Redirect("show", 302)
@@ -227,14 +229,13 @@ func (c *UserController) Delete() {
 	session := c.StartSession()
 	id := session.Get("UserId").(int64)
 	if err := models.DeleteUser(id); err == nil {
-		c.Data["json"] = "OK"
-		c.Data["Status"] = "ユーザを削除"
+		c.Data["Status"] = "ユーザを削除しました"
 	} else {
-		c.Data["json"] = err.Error()
+		c.Data["Status"] = "退会に失敗しました"
 	}
-	c.ServeJSON()
 	session.Delete("UserId")
 	session.Delete("Username")
+	// 過去の履歴・データを削除する機能が必要
 	c.TplName = "user/logout.tpl"
 }
 
@@ -251,6 +252,7 @@ func (c *UserController) Show() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	// fmt.Println(id)
+	// コメント欄からプロフィール遷移してきた場合
 	if id != 0 {
 		v, _ := models.GetUserById(id)
 		c.Data["User"] = v
@@ -258,38 +260,56 @@ func (c *UserController) Show() {
 		c.Data["Comment"] = w
 
 		var commentLikes []models.CommentLike
-		var MyUserId int64 = 0
+		var tvPrograms []models.TvProgram
+		var myUserID int64 = 0
 		if session.Get("UserId") == nil {
 			c.Data["MyUserId"] = nil
-		} else {
-			MyUserId = session.Get("UserId").(int64)
-			c.Data["MyUserId"] = MyUserId
 			for _, comment := range w {
-				u, err := models.GetCommentLikeByCommentAndUser(comment.Id, MyUserId)
+				v, err := models.GetTvProgramById(comment.TvProgramId)
+				if err != nil {
+					v = new(models.TvProgram)
+				}
+				tvPrograms = append(tvPrograms, *v)
+			}
+			c.Data["TvProgram"] = tvPrograms
+		} else {
+			myUserID = session.Get("UserId").(int64)
+			c.Data["MyUserId"] = myUserID
+			for _, comment := range w {
+				u, err := models.GetCommentLikeByCommentAndUser(comment.Id, myUserID)
 				if err != nil {
 					u = new(models.CommentLike)
 				}
 				commentLikes = append(commentLikes, *u)
+				v, err := models.GetTvProgramById(comment.TvProgramId)
+				if err != nil {
+					v = new(models.TvProgram)
+				}
+				tvPrograms = append(tvPrograms, *v)
 			}
 			c.Data["CommentLike"] = commentLikes
+			c.Data["TvProgram"] = tvPrograms
+			z := models.FootPrintToUser{
+				UserId:   myUserID,
+				ToUserId: id,
+			}
+			_, _ = models.AddFootPrintToUser(&z)
 		}
-		// fmt.Println(commentLikes)
-
-		c.TplName = "user/user_page.tpl"
+		c.TplName = "user/user_comment.tpl"
 	} else {
 		if session.Get("UserId") == nil {
 			c.Redirect("/", 302)
 		} else {
-			UserId := session.Get("UserId").(int64)
-			v, _ := models.GetUserById(UserId)
+			UserID := session.Get("UserId").(int64)
+			v, _ := models.GetUserById(UserID)
 			c.Data["User"] = v
-			w, _ := models.GetCommentByUserId(UserId)
+			w, _ := models.GetCommentByUserId(UserID)
 			c.Data["Comment"] = w
 
 			var commentLikes []models.CommentLike
 			var tvPrograms []models.TvProgram
 			for _, comment := range w {
-				u, err := models.GetCommentLikeByCommentAndUser(comment.Id, UserId)
+				u, err := models.GetCommentLikeByCommentAndUser(comment.Id, UserID)
 				if err != nil {
 					u = new(models.CommentLike)
 				}
@@ -303,7 +323,7 @@ func (c *UserController) Show() {
 			c.Data["CommentLike"] = commentLikes
 			c.Data["TvProgram"] = tvPrograms
 		}
-		c.TplName = "user/show.tpl"
+		c.TplName = "user/show_comment.tpl"
 	}
 }
 
@@ -319,39 +339,62 @@ func (c *UserController) ShowReview() {
 		c.Data["Comment"] = w
 		if session.Get("UserId") == nil {
 			c.Data["MyUserId"] = nil
+			var tvPrograms []models.TvProgram
+			for _, comment := range w {
+				v, err := models.GetTvProgramById(comment.TvProgramId)
+				if err != nil {
+					v = new(models.TvProgram)
+				}
+				tvPrograms = append(tvPrograms, *v)
+			}
+			c.Data["TvProgram"] = tvPrograms
 		} else {
 			c.Data["MyUserId"] = session.Get("UserId").(int64)
 
 			var commentLikes []models.ReviewCommentLike
+			var tvPrograms []models.TvProgram
 			for _, comment := range w {
 				u, err := models.GetReviewCommentLikeByCommentAndUser(comment.Id, id)
 				if err != nil {
 					u = new(models.ReviewCommentLike)
 				}
 				commentLikes = append(commentLikes, *u)
+				v, err := models.GetTvProgramById(comment.TvProgramId)
+				if err != nil {
+					v = new(models.TvProgram)
+				}
+				tvPrograms = append(tvPrograms, *v)
 			}
 			c.Data["CommentLike"] = commentLikes
+			c.Data["TvProgram"] = tvPrograms
 		}
 		c.TplName = "user/user_review.tpl"
 	} else {
 		if session.Get("UserId") == nil {
 			c.Redirect("/", 302)
 		} else {
-			UserId := session.Get("UserId").(int64)
-			v, _ := models.GetUserById(UserId)
+			userID := session.Get("UserId").(int64)
+			v, _ := models.GetUserById(userID)
 			c.Data["User"] = v
-			w, _ := models.GetReviewCommentByUserId(UserId)
+			w, _ := models.GetReviewCommentByUserId(userID)
 			c.Data["Comment"] = w
 
 			var commentLikes []models.ReviewCommentLike
+			var tvPrograms []models.TvProgram
 			for _, comment := range w {
-				u, err := models.GetReviewCommentLikeByCommentAndUser(comment.Id, UserId)
+				u, err := models.GetReviewCommentLikeByCommentAndUser(comment.Id, userID)
 				if err != nil {
 					u = new(models.ReviewCommentLike)
 				}
 				commentLikes = append(commentLikes, *u)
+				v, err := models.GetTvProgramById(comment.TvProgramId)
+				if err != nil {
+					v = new(models.TvProgram)
+				}
+				tvPrograms = append(tvPrograms, *v)
 			}
 			c.Data["CommentLike"] = commentLikes
+			c.Data["TvProgram"] = tvPrograms
 		}
 		c.TplName = "user/show_review.tpl"
 	}
@@ -371,6 +414,7 @@ func (c *UserController) ShowWatchedTv() {
 	sortby = append(sortby, "Updated")
 	order = append(order, "desc")
 	query["Watched"] = "1"
+	query["UserId"] = strconv.FormatInt(userID, 10)
 	v, _ := models.GetAllWatchingStatus(query, fields, sortby, order, offset, limit)
 	c.Data["WatchStatus"] = v
 
@@ -404,6 +448,7 @@ func (c *UserController) ShowWtwTv() {
 	sortby = append(sortby, "Updated")
 	order = append(order, "desc")
 	query["WantToWatch"] = "1"
+	query["UserId"] = strconv.FormatInt(userID, 10)
 	v, _ := models.GetAllWatchingStatus(query, fields, sortby, order, offset, limit)
 	c.Data["WatchStatus"] = v
 
@@ -424,8 +469,8 @@ func (c *UserController) ShowWtwTv() {
 
 func (c *UserController) Edit() {
 	session := c.StartSession()
-	UserId := session.Get("UserId").(int64)
-	v, _ := models.GetUserById(UserId)
+	userID := session.Get("UserId").(int64)
+	v, _ := models.GetUserById(userID)
 	c.Data["User"] = v
 	c.TplName = "user/edit.tpl"
 }
@@ -435,7 +480,7 @@ func (c *UserController) Login() {
 	v, _ := models.GetUserByUsername(c.GetString("username"))
 	if v == nil {
 		fmt.Println("not user")
-		c.Data["Status"] = "ログインに失敗"
+		c.Data["Status"] = "ログインに失敗しました"
 		c.TplName = "user/logout.tpl"
 	} else {
 		if models.UserPassMach(v.Password, c.GetString("password")) {
@@ -451,7 +496,8 @@ func (c *UserController) Login() {
 			c.Redirect("/tv/user/show", 302)
 		} else {
 			fmt.Println("bad password")
-			c.TplName = "user/login_error.tpl"
+			c.Data["Status"] = "ログインに失敗しました"
+			c.TplName = "user/logout.tpl"
 		}
 	}
 }
@@ -464,7 +510,7 @@ func (c *UserController) Logout() {
 		session.Delete("Username")
 		fmt.Println(userID, ":logout")
 	}
-	c.Data["Status"] = "ログアウト"
+	c.Data["Status"] = "ログアウトしました"
 	c.TplName = "user/logout.tpl"
 }
 

@@ -10,45 +10,42 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
-type RatingTvProgram struct {
+type TvProgramUpdateHistory struct {
 	Id          int64 `orm:"auto"`
 	UserId      int64
 	TvProgramId int64
-	Star   int64 `orm:"default(5)"`
-	FavoritePoint string `orm:";null"`
-	Created time.Time `orm:"auto_now_add;type(datetime)"`
-	Updated time.Time `orm:"auto_now;type(datetime)"`
+	Created     time.Time `orm:"auto_now_add;type(datetime)"`
 }
 
 func init() {
-	orm.RegisterModel(new(RatingTvProgram))
+	orm.RegisterModel(new(TvProgramUpdateHistory))
 }
 
-// AddRatingTvProgram insert a new RatingTvProgram into database and returns
+// AddTvProgramUpdateHistory insert a new TvProgramUpdateHistory into database and returns
 // last inserted Id on success.
-func AddRatingTvProgram(m *RatingTvProgram) (id int64, err error) {
+func AddTvProgramUpdateHistory(m *TvProgramUpdateHistory) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetRatingTvProgramById retrieves RatingTvProgram by Id. Returns error if
+// GetTvProgramUpdateHistoryById retrieves TvProgramUpdateHistory by Id. Returns error if
 // Id doesn't exist
-func GetRatingTvProgramById(id int64) (v *RatingTvProgram, err error) {
+func GetTvProgramUpdateHistoryById(id int64) (v *TvProgramUpdateHistory, err error) {
 	o := orm.NewOrm()
-	v = &RatingTvProgram{Id: id}
-	if err = o.QueryTable(new(RatingTvProgram)).Filter("Id", id).RelatedSel().One(v); err == nil {
+	v = &TvProgramUpdateHistory{Id: id}
+	if err = o.QueryTable(new(TvProgramUpdateHistory)).Filter("Id", id).RelatedSel().One(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// GetAllRatingTvProgram retrieves all RatingTvProgram matches certain condition. Returns empty list if
+// GetAllTvProgramUpdateHistory retrieves all TvProgramUpdateHistory matches certain condition. Returns empty list if
 // no records exist
-func GetAllRatingTvProgram(query map[string]string, fields []string, sortby []string, order []string,
+func GetAllTvProgramUpdateHistory(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(RatingTvProgram))
+	qs := o.QueryTable(new(TvProgramUpdateHistory))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
@@ -94,7 +91,7 @@ func GetAllRatingTvProgram(query map[string]string, fields []string, sortby []st
 		}
 	}
 
-	var l []RatingTvProgram
+	var l []TvProgramUpdateHistory
 	qs = qs.OrderBy(sortFields...).RelatedSel()
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -117,11 +114,11 @@ func GetAllRatingTvProgram(query map[string]string, fields []string, sortby []st
 	return nil, err
 }
 
-// UpdateRatingTvProgram updates RatingTvProgram by Id and returns error if
+// UpdateTvProgramUpdateHistory updates TvProgramUpdateHistory by Id and returns error if
 // the record to be updated doesn't exist
-func UpdateRatingTvProgramById(m *RatingTvProgram) (err error) {
+func UpdateTvProgramUpdateHistoryById(m *TvProgramUpdateHistory) (err error) {
 	o := orm.NewOrm()
-	v := RatingTvProgram{Id: m.Id}
+	v := TvProgramUpdateHistory{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -132,26 +129,17 @@ func UpdateRatingTvProgramById(m *RatingTvProgram) (err error) {
 	return
 }
 
-// DeleteRatingTvProgram deletes RatingTvProgram by Id and returns error if
+// DeleteTvProgramUpdateHistory deletes TvProgramUpdateHistory by Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteRatingTvProgram(id int64) (err error) {
+func DeleteTvProgramUpdateHistory(id int64) (err error) {
 	o := orm.NewOrm()
-	v := RatingTvProgram{Id: id}
+	v := TvProgramUpdateHistory{Id: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&RatingTvProgram{Id: id}); err == nil {
+		if num, err = o.Delete(&TvProgramUpdateHistory{Id: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}
 	return
 }
-
-// func GetRatingTvProgramByUserIdAndTvProgramId(user_id int64, tv_program_id int64)(v *RatingTvProgram, err error){
-// 	o := orm.NewOrm()
-// 	v = &RatingTvProgram{UserId: user_id, TvProgramId: tv_program_id}
-// 	if err = o.QueryTable(new(RatingTvProgram)).Filter("UserId", user_id).Filter("TvProgramId", tv_program_id).RelatedSel().One(v); err == nil {
-// 		return v, nil
-// 	}
-// 	return nil, err
-// }

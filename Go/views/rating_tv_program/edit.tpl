@@ -1,1 +1,0 @@
-/go/src/app/views/RatingTvProgram/edit.tpl

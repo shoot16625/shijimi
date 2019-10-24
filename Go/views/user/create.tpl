@@ -4,19 +4,13 @@
     {{ template "/common/header.tpl" . }}
   </head>
 
-  <style type="text/css">
-    /*  label {
-    color: lightslategrey;
-  }*/
-  </style>
-
   <body>
     <ons-page>
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
 
-      <form id="create_user" action="/tv/user/" method="post">
-        <div style="text-align: center; margin-top: 30px;">
+      <form id="create-user" action="/tv/user/" method="post">
+        <div class="input-table">
           <p>
             <ons-input
               name="username"
@@ -82,7 +76,23 @@
               </select>
             </ons-select>
           </p>
-
+          <p>
+            <ons-select
+              class="select"
+              name="bloodType"
+              id="bloodType"
+              modifier="underbar"
+              float
+              required
+            >
+              <select class="select-input">
+                <option>A型</option>
+                <option>B型</option>
+                <option>O型</option>
+                <option>AB型</option>
+              </select>
+            </ons-select>
+          </p>
           <p>
             <ons-select
               class="select"
@@ -184,11 +194,11 @@
             ></ons-input>
           </p>
           <p>
-            <label for="IconUrl">＜プロフィール画像のURL＞</label>
+            <label for="IconURL">＜プロフィール画像のURL＞</label>
             <ons-input
-              name="IconUrl"
-              id="IconUrl"
-              value="{{.User.IconUrl}}"
+              name="IconURL"
+              id="IconURL"
+              value="{{.User.IconURL}}"
               modifier="underbar"
               placeholder="必須ではない"
               maxlength="200"
@@ -207,7 +217,7 @@
               required
             ></ons-input>
           </p>
-          <p style="margin-top: 30px;">
+          <p class='create-top-margin'>
             <button class="button button--outline">作成する</button>
           </p>
         </div>
@@ -219,7 +229,7 @@
     <script type="text/javascript">
       const name = {{.User.Username}};
       if (name != null) {
-        DialogBoxEveryone("alert_username_duplicate");
+        dialogBoxEveryone("alert-username-duplicate");
       };
     </script>
     <script>
@@ -230,6 +240,7 @@
         document.getElementById('marital').value = {{.User.Marital}};
         document.getElementById('job').value = {{.User.Job}};
         document.getElementById('address').value = {{.User.Address}};
+        document.getElementById('bloodType').value = {{.User.BloodType}};
       }
     </script>
   </body>

@@ -12,18 +12,19 @@ import (
 )
 
 type User struct {
-	Id       int64  `orm:"auto"`
-	Username     string `orm:"size(30);unique"`
-	Password string `orm:"size(500)" json:"-"`
-	Age      int
-	Gender   string `orm:"size(20)"`
-	Address  string `orm:"size(20)"`
-	Job      string `orm:"size(20)"`
-	SecondPassword string `orm:"size(500)" json:"-"`
-	IconUrl string `orm:"size(255);null"`
-	Marital string `orm:"size(20);null"`
-	Created time.Time `orm:"auto_now_add;type(datetime)"`
-	Updated time.Time `orm:"auto_now;type(datetime)"`
+	Id             int64  `orm:"auto"`
+	Username       string `orm:"size(30);unique"`
+	Password       string `orm:"size(500)" json:"-"`
+	Age            int
+	Gender         string    `orm:"size(20)"`
+	Address        string    `orm:"size(20)"`
+	Job            string    `orm:"size(20)"`
+	SecondPassword string    `orm:"size(500)" json:"-"`
+	IconURL        string    `orm:"size(255);null"`
+	Marital        string    `orm:"size(20);null"`
+	BloodType      string    `orm:"size(20);null"`
+	Created        time.Time `orm:"auto_now_add;type(datetime)"`
+	Updated        time.Time `orm:"auto_now;type(datetime)"`
 }
 
 func init() {
@@ -168,15 +169,15 @@ func GetUserByPasswords(password string, SecondPassword string) (v *User, err er
 	num := 0
 	var d User
 	if _, err = o.QueryTable(new(User)).All(&u); err == nil {
-		for _, value := range u{
-			if UserPassMach(value.Password, password){
-				if UserPassMach(value.SecondPassword, SecondPassword){
-					num ++
+		for _, value := range u {
+			if UserPassMach(value.Password, password) {
+				if UserPassMach(value.SecondPassword, SecondPassword) {
+					num++
 					d = value
 				}
 			}
 		}
-		if num==1 {
+		if num == 1 {
 			return &d, nil
 		}
 	}
@@ -184,9 +185,9 @@ func GetUserByPasswords(password string, SecondPassword string) (v *User, err er
 }
 
 func GetUserByUsernameAndPassword(username string, SecondPassword string) (v *User, err error) {
-	v,err = GetUserByUsername(username)
+	v, err = GetUserByUsername(username)
 	if err != nil {
-		return nil, err		
+		return nil, err
 	}
 	if UserPassMach(v.SecondPassword, SecondPassword) {
 		return v, nil
@@ -203,6 +204,6 @@ func PasswordHash(pw string) (string, error) {
 	return string(hash), err
 }
 
-func UserPassMach(hash,pw string)bool{
+func UserPassMach(hash, pw string) bool {
 	return bcrypt.CompareHashAndPassword([]byte(hash), []byte(pw)) == nil
 }

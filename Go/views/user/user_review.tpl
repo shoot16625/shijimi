@@ -7,69 +7,76 @@
     <ons-page>
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
-      {{ template "/user/profile.tpl" . }}
+      {{ template "/user/profile_everyone.tpl" . }}
+      {{ template "/common/comment_review_change_everyone.tpl" . }}
 
-      <ons-list style="margin-left: 3px;margin-right: 5px;">
+      <ons-list class="list-margin">
         <ons-lazy-repeat id="comments"></ons-lazy-repeat>
       </ons-list>
     </ons-page>
     <script type="text/javascript" src="/static/js/common.js"></script>
     <script>
-
-        let comments = {{.Comment}};
-        let user = {{.User}};
-        let comment_likes;
-        if ({{.CommentLike}} == null){
-          comment_likes = [comments.length];
-          for (let i = comments.length - 1; i >= 0; i--) {
-            comment_likes[i] = {Like:false};
-          }
-        } else {
-          comment_likes = {{.CommentLike}};
+      let comments = {{.Comment}};
+      if (comments.length === 0) {
+        comments = null;
+      }
+      const user = {{.User}};
+      const tvPrograms = {{.TvProgram}};
+      let commentLikes = {{.CommentLike}};
+      if ({{.CommentLike}} === null && comments != null){
+        commentLikes = [comments.length];
+        for (let i = comments.length - 1; i >= 0; i--) {
+          commentLikes[i] = {Like:false};
         }
-        // console.log(comment_likes);
+      }
         ons.ready(function() {
           var infiniteList = document.getElementById('comments');
-
-          infiniteList.delegate = {
-            createItemContent: function(i) {
-             return ons.createElement('<div class="comment"><ons-list-header style="background-color:antiquewhite;text-transform:none;"><div style="text-align:left; float:left;font-size:16px;">@' + user.Username + '</div><div style="text-align: right;margin-right:5px;">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm:ss") + '</div></ons-list-header><ons-list-item><div class="left"><a href="/tv/user/show/' + user.Id + '" title="user_page"><img class="list-item__thumbnail" src="' + user.IconUrl + '" alt="@' + user.Username + '"></a></div><div class="center"><span class="list-item__subtitle"id="comment_content_' + String(i) + '" style="font-size:14px;">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle" style="text-align: right;"><div style="float:right;" id="count_like_' + i + '">：' + comments[i].CountLike + '</div><div style="float:right;"><i class="' + SetLikeBold(comment_likes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="ClickLike(this)" style="color:' + SetLikeStatus(comment_likes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
-           },
-           countItems: function() {
-            return comments.length;
-          }
-        };
-        infiniteList.refresh();
+          if (comments != null) {
+            infiniteList.delegate = {
+              createItemContent: function(i) {
+                const fps = comments[i].FavoritePoint.split('、');
+              let fpText = "";
+              for (let j = fps.length - 1; j >= 0; j--) {
+                fpText += "<span style='padding:3px;color:blue;'>#"+fps[j]+"</span>";
+              }
+              if(comments[i].Spoiler){
+                fpText += "<i class='fas fa-hand-paper' style='color:palevioletred;'></i>";
+              }
+              return ons.createElement('<div class="comment-' + comments[i].Id + '"><ons-list-header style="background-color:antiquewhite;text-transform:none;"><div class="area-left profile-comment-list-header-font"><a href="/tv/tv_program/review/'+tvPrograms[i].Id+'" style="color:black;">' + tvPrograms[i].Title + '</a></div><div class="area-right list-margin">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm") + '</div></ons-list-header><ons-list-item><ons-row><ons-col width="15%"><i class="fas fa-star" style="color:gold;"></i>：' + comments[i].Star +'</ons-col><ons-col style="font-size:12px;">'+ fpText + '</ons-col></ons-row></ons-list-item><ons-list-item><div class="left"><a href="/tv/user/show/' + user.Id + '" title="user-page"><img class="list-item__thumbnail" src="' + user.IconURL + '" alt="@' + user.Username + '"></a></div><div class="center"><span class="list-item__subtitle"id="comment-content-' + comments[i].Id + '" class="comment-list-content-font">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle" class="area-right"><div style="float:right;" id="count-like-' + i + '">：' + comments[i].CountLike + '</div><div class="area-right"><i class="' + setLikeBold(commentLikes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="clickLike(this)" style="color:' + setLikeStatus(commentLikes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
+            },
+            countItems: function() {
+              return comments.length;
+            }
+          };
+          infiniteList.refresh();
+        } else {
+            infiniteList.innerHTML = "<div style='text-align:center;margin-top:40px;'><i class='far fa-surprise' style='color:chocolate;'></i> Not Found !!</div>"
+        }
       });
     </script>
 
     <script>
-      global_comment_like_status = {{.CommentLike}};
+      globalCommentLikeStatus = {{.CommentLike}};
     </script>
 
     <script type="text/javascript">
-      function CommentLikeStatus(elem, check_flag) {
-        // console.log(check_flag);
+      function commentLikeStatus(elem, checkFlag) {
         let url = URL+"/tv/review_comment_like/";
-        let data = global_comment_like_status[elem.id];
-          // console.log("here1;",data);
+        let data = globalCommentLikeStatus[elem.id];
         let method;
         if (data.Id === 0){
           method = 'POST';
           data.UserId = {{.MyUserId}};
-          global_comment_like_status[elem.id].UserId = data.UserId;
+          globalCommentLikeStatus[elem.id].UserId = data.UserId;
           data.ReviewCommentId = {{.Comment}}[elem.id].Id;
-          global_comment_like_status[elem.id].ReviewCommentId = data.ReviewCommentId;
+          globalCommentLikeStatus[elem.id].ReviewCommentId = data.ReviewCommentId;
         } else {
           method = 'PUT';
           url = url+data.Id;
         }
-        data.Like = check_flag;
-        // console.log("flag",global_comment_like_status[elem.id], check_flag);
-        // console.log("data",data);
-        global_comment_like_status[elem.id].Like = data.Like;
+        data.Like = checkFlag;
+        globalCommentLikeStatus[elem.id].Like = data.Like;
 
-        // console.log("last", global_comment_like_status[elem.id]);
         var json = JSON.stringify(data);
         var request = new XMLHttpRequest();
         request.open(method, url, true);
@@ -79,7 +86,7 @@
           if (request.readyState == 4 && request.status == "200") {
             console.table(x);
           } else {
-            global_comment_like_status[elem.id].Id = x.Id;
+            globalCommentLikeStatus[elem.id].Id = x.Id;
           }
         }
         request.send(json);

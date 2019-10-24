@@ -1,1 +1,0 @@
-/go/src/app/views/ReviewComment/create.tpl

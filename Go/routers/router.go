@@ -49,11 +49,6 @@ func init() {
 			beego.NSRouter("/search/", &controllers.TvProgramController{}, "*:Search"),
 			beego.NSRouter("/search_tv_program/", &controllers.TvProgramController{}, "*:SearchTvProgram"),
 		),
-		// beego.NSNamespace("/rating_tv_program",
-		//     beego.NSInclude(
-		//         &controllers.RatingTvProgramController{},
-		//     ),
-		// ),
 		beego.NSNamespace("/watching_status",
 			beego.NSInclude(
 				&controllers.WatchingStatusController{},
@@ -87,6 +82,16 @@ func init() {
 		beego.NSNamespace("/search_history",
 			beego.NSInclude(
 				&controllers.SearchHistoryController{},
+			),
+		),
+		beego.NSNamespace("/tv_program_update_history",
+			beego.NSInclude(
+				&controllers.TvProgramUpdateHistoryController{},
+			),
+		),
+		beego.NSNamespace("/footprint_to_user",
+			beego.NSInclude(
+				&controllers.FootPrintToUserController{},
 			),
 		),
 	)

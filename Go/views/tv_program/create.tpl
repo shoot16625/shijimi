@@ -4,43 +4,32 @@
   {{ template "/common/header.tpl" . }}
 </head>
 
-<style type="text/css">
-p {
-  margin-top:20px;
-  margin-bottom:20px;
-}
-.textarea {
-  width: 80%;
-}
-
-</style>
-
 <body>
   <ons-page>
     {{ template "/common/toolbar.tpl" . }}
     {{ template "/common/alert.tpl" . }}
-    <form id="create_tv_program" action="/tv/tv_program/" method="post">
-      <div class="tv_form" style="text-align: center">
-        <p>
-          <i class="fas fa-flag" style="color:gold;"></i>
+    <form id="create-tv-program" action="/tv/tv_program/" method="post">
+      <div class="area-center">
+        <p class='create-tv-margin'>
+          <i class="fas fa-flag flag-color"></i>
           <ons-input name="title" modifier="underbar" value="{{.TvProgram.Title}}" placeholder="タイトル" maxlength="40" float required></ons-input>
         </p>
-        <p>
-          <textarea class="textarea" name="content" id="content" rows="7" placeholder="あらすじ・見どころ" maxlength="200"></textarea>
+        <p class='create-tv-margin'>
+          <textarea class="textarea" style='width: 80%;' name="content" id="content" rows="7" placeholder="あらすじ・見どころ" maxlength="200"></textarea>
         </p>
-        <p>
-          <i class="fas fa-flag" style="color:gold;"></i>
+        <p class='create-tv-margin'>
+          <i class="fas fa-flag flag-color"></i>
           <ons-input name="cast" modifier="underbar" value="{{.TvProgram.Cast}}" placeholder="キャスト(ex.小栗旬、石原さとみ)" maxlength="100" float required></ons-input>
         </p>
-        <p>
-          <i class="fas fa-flag" style="color:gold;"></i>
+        <p class='create-tv-margin'>
+          <i class="fas fa-flag flag-color"></i>
           <ons-input type="number" name="year" value="{{.TvProgram.Year}}" modifier="underbar" placeholder="放送年(ex.2012)" min="1900" max="2100" float required></ons-input>
         </p>
-        <p>
+        <p class='create-tv-margin'>
           <ons-input name="themesong" value="{{.TvProgram.Themesong}}" modifier="underbar" placeholder="主題歌(ex.miwa 「ヒカリへ」、複数可)" maxlength="100" float></ons-input>
         </p>
-        <p>
-          <i class="fas fa-flag" style="color:gold;"></i>
+        <p class='create-tv-margin'>
+          <i class="fas fa-flag flag-color"></i>
           <label for="season">＜シーズン＞</label>
           <select name="season" id="season" class="select-input select-input--underbar" required>
             <option>春(4~6)</option>
@@ -49,8 +38,8 @@ p {
             <option>冬(1~3)</option>
           </select>
         </p>
-        <p>
-          <i class="fas fa-flag" style="color:gold;"></i>
+        <p class='create-tv-margin'>
+          <i class="fas fa-flag flag-color"></i>
           <label for="category">＜放送曜日＞</label>
           <select name="week" id="week" class="select-input select-input--underbar" required>
             <option>月</option>
@@ -64,13 +53,13 @@ p {
             <option>映画</option>
           </select>
         </p>
-        <p>
+        <p class='create-tv-margin'>
           <label for="hour">＜時間帯＞</label>
           <select name="hour" id="hour" class="select-input select-input--underbar">
           </select>
         </p>
-        <p>
-          <i class="fas fa-flag" style="color:gold;"></i>
+        <p class='create-tv-margin'>
+          <i class="fas fa-flag flag-color"></i>
           <label for="category">＜ジャンル＞※複数可</label>
           <select name="category" id="category" style="height: 100px;" class="select-input select-input--underbar" required multiple>
             <option>アクション</option>
@@ -96,52 +85,52 @@ p {
             <option>恋愛</option>
           </select>
         </p>
-        <p>
-          <ons-input name="ImageUrl" modifier="underbar" value="{{.TvProgram.ImageUrl}}" placeholder="イメージ画像URL" maxlength="400" float></ons-input>
+        <p class='create-tv-margin'>
+          <ons-input name="ImageURL" modifier="underbar" value="{{.TvProgram.ImageURL}}" placeholder="イメージ画像URL" maxlength="400" float></ons-input>
         </p>
-        <p>
-          <ons-input name="MovieUrl" modifier="underbar" value="{{.TvProgram.MovieUrl}}" placeholder="youtube動画URL" maxlength="400" float></ons-input>
+        <p class='create-tv-margin'>
+          <ons-input name="MovieURL" modifier="underbar" value="{{.TvProgram.MovieURL}}" placeholder="youtube動画URL" maxlength="400" float></ons-input>
         </p>
-        <p>
+        <p class='create-tv-margin'>
           <ons-input name="dramatist" modifier="underbar" value="{{.TvProgram.Dramatist}}" placeholder="脚本" maxlength="100" float></ons-input>
         </p>
-        <p>
+        <p class='create-tv-margin'>
           <ons-input name="supervisor" modifier="underbar" placeholder="監督" value="{{.TvProgram.Supervisor}}" maxlength="100" float></ons-input>
         </p>
-        <p>
+        <p class='create-tv-margin'>
           <ons-input name="director" value="{{.TvProgram.Director}}" modifier="underbar" placeholder="演出" maxlength="100" float></ons-input>
         </p>
-        <p>
+        <p class='create-tv-margin'>
           <ons-input name="production" modifier="underbar" value="{{.TvProgram.Production}}" placeholder="制作会社" maxlength="20" float></ons-input>
         </p>
-        <p style="margin-top: 30px;">
-          <ons-button modifier="quiet" onclick="PreviewTvProgram('preview_dialog')">プレビュー</ons-button>
+        <p class='create-top-margin'>
+          <ons-button modifier="quiet" onclick="PreviewTvProgram('preview-dialog')">プレビュー</ons-button>
         </p>
-        <p style="margin-top: 30px;">
+        <p class='create-top-margin'>
           <button class="button button--outline">作成する</button>
         </p>
       </div>
     </form>
   </ons-page>
 
-  <template id="alert_tv_title.html">
-    <ons-alert-dialog id="alert_tv_title" modifier="rowfooter">
+  <template id="alert-tv-title.html">
+    <ons-alert-dialog id="alert-tv-title" modifier="rowfooter">
       <div class="alert-dialog-title">Alert</div>
       <div class="alert-dialog-content">
         「{{.TvProgram.Title}}」はすでに存在しています。
       </div>
       <div class="alert-dialog-footer">
-        <ons-alert-dialog-button onclick="hideAlertDialog('alert_tv_title')">OK</ons-alert-dialog-button>
+        <ons-alert-dialog-button onclick="hideAlertDialog('alert-tv-title')">OK</ons-alert-dialog-button>
       </div>
     </ons-alert-dialog>
   </template>
 
-  <template id="preview_dialog.html">
-    <ons-dialog id="preview_dialog" modifier="large" cancelable fullscreen>
+  <template id="preview-dialog.html">
+    <ons-dialog id="preview-dialog" modifier="large" cancelable fullscreen>
       <ons-page>
         <ons-toolbar>
           <div class="left">
-            <ons-button id="cancel_button" onclick="hideAlertDialog('preview_dialog')" style="background:left;color: grey;"><i class="fas fa-window-close"></i></ons-button>
+            <ons-button id="cancel-button" onclick="hideAlertDialog('preview-dialog')" style="background:left;color: grey;"><i class="fas fa-window-close"></i></ons-button>
           </div>
           <div class="center">
             プレビュー
@@ -149,56 +138,56 @@ p {
         </ons-toolbar>
         <ons-list>
           <ons-list-header style="background-color:ghostwhite;">
-            <div style="text-align: left; float:left;" id="preview_on_air_info">
+            <div class="area-left" id="preview-on-air-info">
             </div>
-            <div style="text-align: right;margin-right:5px;">
+            <div class="area-right list-margin">
               閲覧数：0
             </div>
           </ons-list-header>
           <ons-list-item id="expandable-list-item" expandable>
-            <div  id="preview_title"></div>
+            <div  id="preview-title"></div>
             <div class="expandable-content">
               <ons-row>
                 <ons-col>
                   <div class="content">
                     <ons-row style="margin-bottom:5px;">
                       <ons-col width="20%">出演：</ons-col>
-                      <ons-col id="preview_cast"></ons-col>
+                      <ons-col id="preview-cast"></ons-col>
                     </ons-row>
                     <ons-row style="margin-bottom:5px;">
                       <ons-col width="20%">歌：</ons-col>
-                      <ons-col id="preview_themesong"></ons-col>
+                      <ons-col id="preview-themesong"></ons-col>
                     </ons-row>
                     <ons-row style="margin-bottom:5px;">
                       <ons-col width="20%">監督：</ons-col>
-                      <ons-col id="preview_supervisor"></ons-col>
+                      <ons-col id="preview-supervisor"></ons-col>
                     </ons-row>
                     <ons-row style="margin-bottom:5px;">
                       <ons-col width="20%">脚本：</ons-col>
-                      <ons-col id="preview_dramatist"></ons-col>
+                      <ons-col id="preview-dramatist"></ons-col>
                     </ons-row>
                     <ons-row style="margin-bottom:5px;">
                       <ons-col width="20%">演出：</ons-col>
-                      <ons-col id="preview_director"></ons-col>
+                      <ons-col id="preview-director"></ons-col>
                     </ons-row>
                   </div>
                 </ons-col>
               </ons-row>
               <ons-row>
-                <ons-col width="30%">
-                  <div class="image" align="center" id="preview_img">
-                  </div>
-                </ons-col>
-                <ons-col width="70%">
-                  <div class="movie" align="center" id="preview_movie">
-                  </div>
+                <ons-col width="30%" align='center'>
+                    <div class="image" id="preview-img">
+                    </div>
+                  </ons-col>
+                  <ons-col width="70%" align='center'>
+                    <div class="image" id="preview-movie">
+                    </div>
                 </ons-col>
               </ons-row>
               <ons-list-item expandable>
                 あらすじ・見どころ
                 <div class="right">
                 </div>
-                <div class="expandable-content" id="preview_content"></div>
+                <div class="expandable-content" id="preview-content"></div>
               </ons-list-item>
             </div>
           </ons-list-item>
@@ -213,7 +202,7 @@ p {
     let target = document.getElementById('hour');
     let text = "<option>指定なし</option>";
     let t;
-    for (let i = 0; i < 48; i++) {
+    for (let i = 0; i <= 48; i++) {
       if (i % 2 == 0){
         t = String(i/2)+":00";
         text += "<option>"+t+"</option>"
@@ -231,19 +220,19 @@ p {
       ons.ready(function() {
         var dialog = document.getElementById(elemID);
         if (dialog) {
-          document.getElementById('preview_on_air_info').innerHTML = document.getElementsByName('year')[0].value+"年 "+document.getElementsByName('season')[0].value.replace(/\(.+\)/, '')+"（"+document.getElementsByName('week')[0].value+document.getElementsByName('hour')[0].value+"）";
-          document.getElementById('preview_title').innerHTML = document.getElementsByName('title')[0].value;
-          document.getElementById('preview_content').innerHTML = document.getElementsByName('content')[0].value;
-          document.getElementById('preview_cast').innerHTML = document.getElementsByName('cast')[0].value;
-          document.getElementById('preview_themesong').innerHTML = document.getElementsByName('themesong')[0].value;
-          document.getElementById('preview_dramatist').innerHTML = document.getElementsByName('dramatist')[0].value;
-          document.getElementById('preview_supervisor').innerHTML = document.getElementsByName('supervisor')[0].value;
-          document.getElementById('preview_director').innerHTML = document.getElementsByName('director')[0].value;
-          document.getElementById('preview_img').innerHTML = '<img src="'+document.getElementsByName('ImageUrl')[0].value+'" alt="イメージ" width="80%">';
-          var movie_url = document.getElementsByName('MovieUrl')[0].value;
+          document.getElementById('preview-on-air-info').innerHTML = document.getElementsByName('year')[0].value+"年 "+document.getElementsByName('season')[0].value.replace(/\(.+\)/, '')+"（"+document.getElementsByName('week')[0].value+document.getElementsByName('hour')[0].value+"）";
+          document.getElementById('preview-title').innerHTML = document.getElementsByName('title')[0].value;
+          document.getElementById('preview-content').innerHTML = document.getElementsByName('content')[0].value;
+          document.getElementById('preview-cast').innerHTML = document.getElementsByName('cast')[0].value;
+          document.getElementById('preview-themesong').innerHTML = document.getElementsByName('themesong')[0].value;
+          document.getElementById('preview-dramatist').innerHTML = document.getElementsByName('dramatist')[0].value;
+          document.getElementById('preview-supervisor').innerHTML = document.getElementsByName('supervisor')[0].value;
+          document.getElementById('preview-director').innerHTML = document.getElementsByName('director')[0].value;
+          document.getElementById('preview-img').innerHTML = '<img src="'+document.getElementsByName('ImageURL')[0].value+'" alt="イメージ" width="80%">';
+          var movie_url = document.getElementsByName('MovieURL')[0].value;
           if (movie_url != ""){
             movie_url = movie_url.replace("watch?v=", "embed/");
-            document.getElementById('preview_movie').innerHTML = '<iframe src="'+movie_url+'?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="ムービー" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+            document.getElementById('preview-movie').innerHTML = '<iframe src="'+movie_url+'?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="ムービー" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
           }
 
           document.querySelector('#expandable-list-item').showExpansion();
@@ -257,20 +246,20 @@ p {
             } else {
               hour = document.getElementsByName('hour')[0].value;
             }
-            document.getElementById('preview_on_air_info').innerHTML = document.getElementsByName('year')[0].value+"年 "+document.getElementsByName('season')[0].value.replace(/\(.+\)/, '')+"（"+document.getElementsByName('week')[0].value+hour+"）";
-            document.getElementById('preview_title').innerHTML = document.getElementsByName('title')[0].value;
-            document.getElementById('preview_content').innerHTML = document.getElementsByName('content')[0].value;
-            document.getElementById('preview_cast').innerHTML = document.getElementsByName('cast')[0].value;
-            document.getElementById('preview_themesong').innerHTML = document.getElementsByName('themesong')[0].value;
-            document.getElementById('preview_dramatist').innerHTML = document.getElementsByName('dramatist')[0].value;
-            document.getElementById('preview_supervisor').innerHTML = document.getElementsByName('supervisor')[0].value;
-            document.getElementById('preview_director').innerHTML = document.getElementsByName('director')[0].value;
-            document.getElementById('preview_img').innerHTML = '<img src="'+document.getElementsByName('ImageUrl')[0].value+'" alt="イメージ" width="80%">';
-            // console.log(document.getElementsByName('MovieUrl')[0].value);
-            var movie_url = document.getElementsByName('MovieUrl')[0].value;
+            document.getElementById('preview-on-air-info').innerHTML = document.getElementsByName('year')[0].value+"年 "+document.getElementsByName('season')[0].value.replace(/\(.+\)/, '')+"（"+document.getElementsByName('week')[0].value+hour+"）";
+            document.getElementById('preview-title').innerHTML = document.getElementsByName('title')[0].value;
+            document.getElementById('preview-content').innerHTML = document.getElementsByName('content')[0].value;
+            document.getElementById('preview-cast').innerHTML = document.getElementsByName('cast')[0].value;
+            document.getElementById('preview-themesong').innerHTML = document.getElementsByName('themesong')[0].value;
+            document.getElementById('preview-dramatist').innerHTML = document.getElementsByName('dramatist')[0].value;
+            document.getElementById('preview-supervisor').innerHTML = document.getElementsByName('supervisor')[0].value;
+            document.getElementById('preview-director').innerHTML = document.getElementsByName('director')[0].value;
+            document.getElementById('preview-img').innerHTML = '<img src="'+document.getElementsByName('ImageURL')[0].value+'" alt="イメージ" width="80%">';
+            // console.log(document.getElementsByName('MovieURL')[0].value);
+            var movie_url = document.getElementsByName('MovieURL')[0].value;
             if (movie_url != ""){
               movie_url = movie_url.replace("watch?v=", "embed/");
-              document.getElementById('preview_movie').innerHTML = '<iframe src="'+movie_url+'?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="ムービー" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+              document.getElementById('preview-movie').innerHTML = '<iframe src="'+movie_url+'?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="ムービー" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
             }
             document.querySelector('#expandable-list-item').showExpansion();
             dialog.show();
@@ -283,23 +272,23 @@ p {
   <script type="text/javascript">
     const name = {{.TvProgram.Title}};
     if (name != null) {
-      if ({{.TvProgram.Season.Name}} == "春"){
+      if ({{.TvProgram.Season.Name}} === "春"){
         document.getElementById('season').value = {{.TvProgram.Season.Name}}+"(4~6)";
       }
-      else if ({{.TvProgram.Season.Name}} == "夏"){
+      else if ({{.TvProgram.Season.Name}} === "夏"){
         document.getElementById('season').value = {{.TvProgram.Season.Name}}+"(7~9)";
       }
-      else if ({{.TvProgram.Season.Name}} == "秋"){
+      else if ({{.TvProgram.Season.Name}} === "秋"){
         document.getElementById('season').value = {{.TvProgram.Season.Name}}+"(10~12)";
       }
-      else if ({{.TvProgram.Season.Name}} == "冬"){
+      else if ({{.TvProgram.Season.Name}} === "冬"){
         document.getElementById('season').value = {{.TvProgram.Season.Name}}+"(1~3)";
       } else {
         document.getElementById('season').value = {{.TvProgram.Season.Name}};
       }
       let time = String({{.TvProgram.Hour}});
       str = ".5";
-      if (time == 100){
+      if (time === "100"){
         time = "指定なし";
       } else {
       if (time.indexOf(str) > -1){
@@ -309,10 +298,10 @@ p {
       }
       }
       document.getElementById('hour').value = time;
-      SetMultipleSelection("category", {{.TvProgram.Category}});
+      setMultipleSelection("category", {{.TvProgram.Category}});
       document.getElementById('content').value = {{.TvProgram.Content}};
       document.getElementById('week').value = {{.TvProgram.Week.Name}};
-      DialogBoxEveryone("alert_tv_title");
+      dialogBoxEveryone("alert-tv-title");
     };
   </script>
 </body>

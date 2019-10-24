@@ -11,19 +11,20 @@ import (
 )
 
 type SearchHistory struct {
-	Id     int64 `orm:"auto"`
-	UserId int64
-	Word string `orm:"size(60);null"`
-	Year string `orm:"size(200);null"`
-	Season string `orm:"size(60);null"`
-	Week string `orm:"size(60);null"`
-	Hour string `orm:"size(60);null"`
+	Id       int64 `orm:"auto"`
+	UserId   int64
+	Word     string `orm:"size(200);null"`
+	Year     string `orm:"size(200);null"`
+	Season   string `orm:"size(60);null"`
+	Week     string `orm:"size(60);null"`
+	Hour     string `orm:"size(100);null"`
 	Category string `orm:"size(60);null"`
-	Spoiler string
-	Star string`orm:"size(60);null"`
-	Limit int64
-	Sortby string `orm:"size(60);null"`
-	Created time.Time `orm:"auto_now_add;type(datetime)"`
+	Spoiler  string
+	Star     string `orm:"size(60);null"`
+	Limit    int64
+	Sortby   string    `orm:"size(60);null"`
+	Item     string    `orm:"size(20);null"`
+	Created  time.Time `orm:"auto_now_add;type(datetime)"`
 }
 
 func init() {
