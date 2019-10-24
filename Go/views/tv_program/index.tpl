@@ -177,27 +177,27 @@
                     class="select-input select-input--underbar select-search-table"
                     multiple
                   >
-                    <option>アクション</option>
-                    <option>アニメ映画</option>
-                    <option>SF</option>
+                    <option>コメディ・パロディ</option>
+                    <option>恋愛</option>
                     <option>学園・青春</option>
                     <option>グルメ</option>
+                    <option>ホーム・ヒューマン</option>
                     <option>企業・オフィス</option>
                     <option>刑事・検事</option>
-                    <option>コメディ</option>
+                    <option>弁護士</option>
+                    <option>医療</option>
                     <option>時代劇</option>
                     <option>スポーツ</option>
                     <option>政治</option>
-                    <option>探偵・推理</option>
-                    <option>ドキュメンタリー</option>
-                    <option>犯罪・復讐</option>
-                    <option>パロディ</option>
                     <option>不倫</option>
-                    <option>弁護士</option>
-                    <option>ホーム・ヒューマン</option>
-                    <option>ホラー</option>
                     <option>ミステリー・サスペンス</option>
-                    <option>恋愛</option>
+                    <option>探偵・推理</option>
+                    <option>犯罪・復讐</option>
+                    <option>ホラー</option>
+                    <option>ドキュメンタリー</option>
+                    <option>アクション</option>
+                    <option>アニメ映画</option>
+                    <option>SF</option>
                   </select>
                 </p>
                 <p>

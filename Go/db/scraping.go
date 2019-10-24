@@ -60,7 +60,44 @@ func GetWikiDoramas(referencePath string) {
 			wikiURL, _ := t.Find("a").Attr("href")
 			if len(data) == 5 {
 				tvProgram.Title = strings.Replace(data[0], "、", " ", -1)
-				tvProgram.Category = strings.Replace(data[1], "ドラマ", "", -1)
+				category := strings.Replace(data[1], "ドラマ", "", -1)
+				tvProgram.Category = category
+				switch category {
+				case "刑事", "検事", "スピンオフ刑事", "刑事ミステリー", "刑事コメディー", "刑事推理", "警察学園":
+					tvProgram.Category = "刑事・検事"
+				case "社会派", "ビジネス", "企業", "オフィス", "ロマンティック・コメディ経済", "空港", "会社", "業界":
+					tvProgram.Category = "企業・オフィス"
+				case "学園", "青春", "学園コメディ", "学園コメディー", "学園恋愛", "学園アクション", "青春ホラー":
+					tvProgram.Category = "学園・青春"
+				case "ホーム", "ヒューマン", "人間", "SF人間", "ホームヒューマン", "女性":
+					tvProgram.Category = "ホーム・ヒューマン"
+				case "ラブコメディ", "SF・恋愛", "ラブストーリー":
+					tvProgram.Category = "恋愛"
+				case "ミステリー", "推理サスペンス", "サスペンス", "SFサスペンス", "コメディーミステリー", "ロマンチックミステリー", "犯罪サスペンス", "ホームサスペンス", "逃亡サスペンス", "サスペンス推理", "サバイバルサスペンス", "クライム・サスペンス", "純愛ミステリー", "学園青春サスペンス":
+					tvProgram.Category = "ミステリー・サスペンス"
+				case "大河", "伝記", "SF歴史", "戦国":
+					tvProgram.Category = "時代劇"
+				case "法律", "法廷もの", "法廷ものコメディー", "裁判":
+					tvProgram.Category = "弁護士"
+				case "探偵", "推理", "サイコスリラー", "推理アクション":
+					tvProgram.Category = "探偵・推理"
+				case "シリアス・コメディ", "ファンタジー", "ファンタジーコメディ", "コメディ", "パロディ", "音楽コメディ", "冒険コメディ", "コメディヒューマン", "ケータイ発", "ロマンティック・コメディ", "冒険コメディー", "ヒューマンコメディー", "ホラーコメディ":
+					tvProgram.Category = "コメディ・パロディ"
+				case "経済", "金融", "政治コメディ":
+					tvProgram.Category = "政治"
+				case "料理・人間", "料理":
+					tvProgram.Category = "グルメ"
+				case "サスペンス犯罪", "犯罪", "復讐":
+					tvProgram.Category = "犯罪・復讐"
+				case "医療アクション", "医療恋愛":
+					tvProgram.Category = "医療"
+				case "スポーツコメディ":
+					tvProgram.Category = "スポーツ"
+				case "スパイコメディ", "アクションサスペンス":
+					tvProgram.Category = "アクション"
+				case "SF・ファンタジー", "特撮":
+					tvProgram.Category = "SF"
+				}
 				tvProgram.Production = data[2]
 				tvProgram.Cast = data[4]
 				tvProgram.ImageURL = "http://hankodeasobu.com/wp-content/uploads/animals_02.png"
@@ -108,10 +145,8 @@ func GetWikiDoramas(referencePath string) {
 				}
 				if _, err := models.AddTvProgram(&tvProgram); err != nil {
 					fmt.Println(err)
-					// fmt.Println(weekName, data[0])
 				}
 			}
-			// fmt.Println(tvProgram)
 		})
 		if season[:2] == "10" {
 			n++
@@ -126,7 +161,6 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 		fmt.Print("URL scarapping failed\n")
 		return
 	}
-	// fmt.Println(tvProgram)
 	p := bluemonday.NewPolicy()
 	p.AllowElements("br").AllowElements("td")
 	s := doc.Find("table.infobox")
@@ -145,10 +179,12 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 				html, _ := t.Find("td").Html()
 				content := strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
 				content = strings.Replace(content, "\n", "", -1)
-				// if strings.HasSuffix(content, "、") {
-				// 	content = strings.Replace(content, "、", "")
-				// }
 				switch th {
+				case "ジャンル":
+					content = strings.Replace(content, "ドラマ", "", -1)
+					if content != "連続" && tvProgram.Category == "" {
+						newTvProgram.Category = content
+					}
 				case "脚本":
 					newTvProgram.Dramatist = content
 				case "演出":
@@ -159,7 +195,7 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 					if len(tvProgram.Cast) < len(content) {
 						newTvProgram.Cast = content
 					}
-				case "制作":
+				case "制作", "製作":
 					if tvProgram.Production == "" {
 						newTvProgram.Production = content
 					}
@@ -168,7 +204,7 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 					newTvProgram.Themesong = content
 				case "エンディング":
 					if strings.TrimSpace(t.Find("td").Text()) != "同上" {
-						if tvProgram.Themesong == "" {
+						if newTvProgram.Themesong == "" {
 							newTvProgram.Themesong = content
 						} else {
 							newTvProgram.Themesong += "、" + content
@@ -178,20 +214,68 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 					if strings.TrimSpace(t.Find("td").Text()) != "日本" {
 						doramaFlag = false
 					}
+				case "放送期間":
+					contents := strings.Split(content, "年")
+					if tvProgram.Year == 0 {
+						year, _ := strconv.Atoi(contents[0])
+						newTvProgram.Year = year
+					}
+					contents = strings.Split(contents[1], "月")
+					if tvProgram.Season == nil {
+						month, _ := strconv.Atoi(contents[0])
+						seasonName := ""
+						if month <= 3 {
+							seasonName = "冬"
+						} else if month <= 6 {
+							seasonName = "春"
+						} else if month <= 9 {
+							seasonName = "夏"
+						} else if month <= 12 {
+							seasonName = "秋"
+						}
+						seasonStruct := *new(models.Season)
+						seasonStruct.Name = seasonName
+						newTvProgram.Season = &seasonStruct
+					}
+				case "放送時間":
+					contents := strings.Split(content, "曜")
+					if tvProgram.Week == nil {
+						weekStruct := *new(models.Week)
+						weekStruct.Name = contents[0]
+						newTvProgram.Week = &weekStruct
+					}
+					if tvProgram.Hour == 100 {
+						contents = strings.Split(contents[1], "-")
+						content = strings.TrimSpace(contents[0])
+						contents = strings.Split(content, ":")
+						var floatHour float32 = 100
+						if len(contents) == 2 {
+							hours, _ := strconv.Atoi(contents[0])
+							mins, _ := strconv.Atoi(contents[1])
+							if 15 > mins && mins >= 0 {
+								floatHour = float32(hours) + 0.0
+							} else if 45 > mins && mins >= 15 {
+								floatHour = float32(hours) + 0.5
+							} else if 60 > mins && mins >= 45 {
+								floatHour = float32(hours) + 1.0
+							}
+							newTvProgram.Hour = floatHour
+						}
+					}
 				}
 			}
 		})
+		// fmt.Println(newTvProgram.Season.Name, newTvProgram.Week.Name, newTvProgram.Year, newTvProgram.Hour, newTvProgram.Production, newTvProgram.Category)
+
 		if doramaFlag {
 			if err := models.UpdateTvProgramById(&newTvProgram); err != nil {
 				fmt.Println(err)
 			}
-			// var w models.TvProgramUpdateHistory
 			w := models.TvProgramUpdateHistory{
 				UserId:      0,
 				TvProgramId: tvProgram.Id,
 			}
 			_, _ = models.AddTvProgramUpdateHistory(&w)
-			// fmt.Println(tvProgram.Title)
 		}
 	})
 }
@@ -293,4 +377,114 @@ func GetMovieWalkers() {
 			break
 		}
 	}
+}
+
+// Scraping TvProgram Information directly by wikiReferenceURL.
+func GetTvProgramInformationByURL(wikiReferenceURL string) {
+	doc, err := goquery.NewDocument(wikiReferenceURL)
+	if err != nil {
+		fmt.Print("URL scarapping failed\n")
+		return
+	}
+	p := bluemonday.NewPolicy()
+	p.AllowElements("br").AllowElements("td")
+	s := doc.Find("table.infobox")
+	s.Each(func(_ int, u *goquery.Selection) {
+		doramaFlag := false
+		newTvProgram := *new(models.TvProgram)
+		newTvProgram.Title = doc.Find("h1").Text()
+		newTvProgram.WikiReference = wikiReferenceURL
+		u.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
+			c, _ := t.Find("td").Attr("class")
+			if c == "category" {
+				if strings.Contains(t.Find("td").Text(), "ドラマ") || t.Find("td").Text() == "医療ミステリー" {
+					doramaFlag = true
+				}
+			}
+			if doramaFlag {
+				th := t.Find("th").Text()
+				html, _ := t.Find("td").Html()
+				content := strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
+				content = strings.Replace(content, "\n", "", -1)
+				switch th {
+				case "ジャンル":
+					content = strings.Replace(content, "ドラマ", "", -1)
+					newTvProgram.Category = content
+				case "脚本":
+					newTvProgram.Dramatist = content
+				case "演出":
+					newTvProgram.Director = content
+				case "監督":
+					newTvProgram.Supervisor = content
+				case "出演者":
+					newTvProgram.Cast = content
+				case "制作", "製作":
+					newTvProgram.Production = content
+				case "オープニング":
+					content = strings.Replace(content, "、「", "「", -1)
+					newTvProgram.Themesong = content
+				case "エンディング":
+					if strings.TrimSpace(t.Find("td").Text()) != "同上" {
+						if newTvProgram.Themesong == "" {
+							newTvProgram.Themesong = content
+						} else {
+							newTvProgram.Themesong += "、" + content
+						}
+					}
+				case "放送国・地域":
+					if strings.TrimSpace(t.Find("td").Text()) != "日本" {
+						doramaFlag = false
+					}
+				case "放送期間":
+					contents := strings.Split(content, "年")
+					year, _ := strconv.Atoi(contents[0])
+					newTvProgram.Year = year
+					contents = strings.Split(contents[1], "月")
+					month, _ := strconv.Atoi(contents[0])
+					seasonName := ""
+					if month <= 3 {
+						seasonName = "冬"
+					} else if month <= 6 {
+						seasonName = "春"
+					} else if month <= 9 {
+						seasonName = "夏"
+					} else if month <= 12 {
+						seasonName = "秋"
+					}
+					seasonStruct := *new(models.Season)
+					seasonStruct.Name = seasonName
+					newTvProgram.Season = &seasonStruct
+				case "放送時間":
+					contents := strings.Split(content, "曜")
+					weekStruct := *new(models.Week)
+					weekStruct.Name = contents[0]
+					newTvProgram.Week = &weekStruct
+					contents = strings.Split(contents[1], "-")
+					content = strings.TrimSpace(contents[0])
+					contents = strings.Split(content, ":")
+					var floatHour float32 = 100
+					if len(contents) == 2 {
+						hours, _ := strconv.Atoi(contents[0])
+						mins, _ := strconv.Atoi(contents[1])
+						if 15 > mins && mins >= 0 {
+							floatHour = float32(hours) + 0.0
+						} else if 45 > mins && mins >= 15 {
+							floatHour = float32(hours) + 0.5
+						} else if 60 > mins && mins >= 45 {
+							floatHour = float32(hours) + 1.0
+						}
+						newTvProgram.Hour = floatHour
+					}
+				}
+			}
+		})
+
+		if doramaFlag {
+			// fmt.Println(newTvProgram.Season.Name, newTvProgram.Week.Name, newTvProgram.Year, newTvProgram.Hour, newTvProgram.Production, newTvProgram.Category)
+			// fmt.Println(newTvProgram)
+			if _, err := models.AddTvProgram(&newTvProgram); err != nil {
+				fmt.Println(err)
+			}
+		}
+	})
 }
