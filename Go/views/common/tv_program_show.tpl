@@ -37,7 +37,7 @@
         </ons-col>
       </ons-row>
       <div class="image" align="center">
-        <img src="{{.TvProgram.ImageUrl}}" alt="{{.Title}}" width="80%" />
+        <img src="{{.TvProgram.ImageURL}}" alt="{{.Title}}" width="80%" />
       </div>
       <ons-list-item expandable>
         あらすじ・見どころ

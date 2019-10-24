@@ -229,9 +229,9 @@ func (c *UserController) Delete() {
 	session := c.StartSession()
 	id := session.Get("UserId").(int64)
 	if err := models.DeleteUser(id); err == nil {
-		c.Data["Status"] = "ユーザを削除"
+		c.Data["Status"] = "ユーザを削除しました"
 	} else {
-		c.Data["Status"] = "退会に失敗"
+		c.Data["Status"] = "退会に失敗しました"
 	}
 	session.Delete("UserId")
 	session.Delete("Username")
@@ -264,7 +264,6 @@ func (c *UserController) Show() {
 		var myUserID int64 = 0
 		if session.Get("UserId") == nil {
 			c.Data["MyUserId"] = nil
-			var tvPrograms []models.TvProgram
 			for _, comment := range w {
 				v, err := models.GetTvProgramById(comment.TvProgramId)
 				if err != nil {
@@ -296,8 +295,7 @@ func (c *UserController) Show() {
 			}
 			_, _ = models.AddFootPrintToUser(&z)
 		}
-
-		c.TplName = "user/user_page.tpl"
+		c.TplName = "user/user_comment.tpl"
 	} else {
 		if session.Get("UserId") == nil {
 			c.Redirect("/", 302)
@@ -325,7 +323,7 @@ func (c *UserController) Show() {
 			c.Data["CommentLike"] = commentLikes
 			c.Data["TvProgram"] = tvPrograms
 		}
-		c.TplName = "user/show.tpl"
+		c.TplName = "user/show_comment.tpl"
 	}
 }
 
@@ -480,7 +478,7 @@ func (c *UserController) Login() {
 	v, _ := models.GetUserByUsername(c.GetString("username"))
 	if v == nil {
 		fmt.Println("not user")
-		c.Data["Status"] = "ログインに失敗"
+		c.Data["Status"] = "ログインに失敗しました"
 		c.TplName = "user/logout.tpl"
 	} else {
 		if models.UserPassMach(v.Password, c.GetString("password")) {
@@ -496,7 +494,8 @@ func (c *UserController) Login() {
 			c.Redirect("/tv/user/show", 302)
 		} else {
 			fmt.Println("bad password")
-			c.TplName = "user/login_error.tpl"
+			c.Data["Status"] = "ログインに失敗しました"
+			c.TplName = "user/logout.tpl"
 		}
 	}
 }
@@ -509,7 +508,7 @@ func (c *UserController) Logout() {
 		session.Delete("Username")
 		fmt.Println(userID, ":logout")
 	}
-	c.Data["Status"] = "ログアウト"
+	c.Data["Status"] = "ログアウトしました"
 	c.TplName = "user/logout.tpl"
 }
 

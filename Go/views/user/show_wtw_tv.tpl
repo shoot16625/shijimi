@@ -9,7 +9,7 @@
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
       {{ template "/user/profile_only_user.tpl" . }}
-      {{ template "/common/comment_review_change_profile.tpl" . }}
+      {{ template "/common/comment_review_change_only_user.tpl" . }}
       <ons-list class="list-margin">
         <ons-lazy-repeat id="tv-programs"></ons-lazy-repeat>
       </ons-list>
@@ -36,10 +36,10 @@
           infiniteList.delegate = {
             createItemContent: function(i) {
               let moviePosition;
-              if (tvPrograms[i].MovieUrl==""){
-                moviePosition = '<img id="image-' + i + '" src="'+tvPrograms[i].ImageUrl+'" alt="' + tvPrograms[i].Title + '" width="80%">';
+              if (tvPrograms[i].MovieURL==""){
+                moviePosition = '<img id="image-' + i + '" src="'+tvPrograms[i].ImageURL+'" alt="' + tvPrograms[i].Title + '" width="80%">';
               } else {
-                moviePosition = '<iframe id="movie-' + i + '" src="'+tvPrograms[i].MovieUrl+'?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="' + tvPrograms[i].Title + '" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+                moviePosition = '<iframe id="movie-' + i + '" src="'+tvPrograms[i].MovieURL+'?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="' + tvPrograms[i].Title + '" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
               }
               let time = String(tvPrograms[i].Hour);
               str = ".5";

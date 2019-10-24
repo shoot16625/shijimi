@@ -99,7 +99,7 @@
               <div class="area-center" style="padding: 3px;">
                 <div class="thumbnail">
                   <img
-                    src="{{.ImageUrl}}"
+                    src="{{.ImageURL}}"
                     alt="{{.Title}}"
                     style="width: 80%"
                   />
@@ -134,7 +134,7 @@
               <div class="area-center" style="padding: 3px;">
                 <div class="thumbnail">
                   <img
-                    src="{{.ImageUrl}}"
+                    src="{{.ImageURL}}"
                     alt="{{.Title}}"
                     style="width: 80%"
                   />
@@ -169,7 +169,7 @@
               <div class="area-center" style="padding: 3px;">
                 <div class="thumbnail">
                   <img
-                    src="{{.ImageUrl}}"
+                    src="{{.ImageURL}}"
                     alt="{{.Title}}"
                     style="width: 80%"
                   />
@@ -204,7 +204,7 @@
               <div class="area-center" style="padding: 3px;">
                 <div class="thumbnail">
                   <img
-                    src="{{.ImageUrl}}"
+                    src="{{.ImageURL}}"
                     alt="{{.Title}}"
                     style="width: 80%"
                   />
@@ -239,7 +239,7 @@
               <div class="area-center" style="padding: 3px;">
                 <div class="thumbnail">
                   <img
-                    src="{{.ImageUrl}}"
+                    src="{{.ImageURL}}"
                     alt="{{.Title}}"
                     style="width: 80%"
                   />
@@ -274,7 +274,7 @@
               <div class="area-center" style="padding: 3px;">
                 <div class="thumbnail">
                   <img
-                    src="{{.ImageUrl}}"
+                    src="{{.ImageURL}}"
                     alt="{{.Title}}"
                     style="width: 80%"
                   />
@@ -309,7 +309,7 @@
               <div class="area-center" style="padding: 3px;">
                 <div class="thumbnail">
                   <img
-                    src="{{.ImageUrl}}"
+                    src="{{.ImageURL}}"
                     alt="{{.Title}}"
                     style="width: 80%"
                   />

@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
-	"strconv"
 	"strings"
 	"time"
 
@@ -15,10 +14,11 @@ type TvProgram struct {
 	Id                 int64     `orm:"auto"`
 	Title              string    `orm:"size(128);unique"`
 	Content            string    `orm:"size(500);null"`
-	ImageUrl           string    `orm:"size(500);null"`
-	ImageUrlReference  string    `orm:"size(128);null"`
-	MovieUrl           string    `orm:"size(500);null"`
-	MovieUrlReference  string    `orm:"size(128);null"`
+	ImageURL           string    `orm:"size(500);null"`
+	ImageURLReference  string    `orm:"size(200);null"`
+	MovieURL           string    `orm:"size(500);null"`
+	MovieURLReference  string    `orm:"size(200);null"`
+	WikiReference      string    `orm:"size(500);null"`
 	Cast               string    `orm:"size(256);null"`
 	Category           string    `orm:"size(32);null"`
 	Dramatist          string    `orm:"size(128);null"`
@@ -29,7 +29,7 @@ type TvProgram struct {
 	Season             *Season   `orm:"rel(fk);null"`
 	Week               *Week     `orm:"rel(fk);null"`
 	Hour               float32   `orm:"null`
-	Themesong          string    `orm:"size(128);null"`
+	Themesong          string    `orm:"size(256);null"`
 	CreateUserId       int64     `orm:"default(0)"`
 	Star               float32   `orm:"default(2.5)"`
 	CountStar          int32     `orm:"default(0)"`
@@ -181,10 +181,11 @@ func UpdateTvProgramById(m *TvProgram) (err error) {
 	v := TvProgram{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
-		var num int64
-		if num, err = o.Update(m); err == nil {
-			fmt.Println("Number of records updated in database:", num)
-		}
+		_, _ = o.Update(m)
+		// var num int64
+		// if num, err = o.Update(m); err == nil {
+		// 	fmt.Println("Number of records updated in database:", num)
+		// }
 	}
 	return
 }
@@ -204,17 +205,13 @@ func DeleteTvProgram(id int64) (err error) {
 	return
 }
 
+// ツールバーの検索機能
 func SearchTvProgramAll(str string) (v []TvProgram, err error) {
 	o := orm.NewOrm()
 	condAll := orm.NewCondition()
 	str = strings.Replace(str, "　", " ", -1)
 	for _, v := range strings.Split(str, " ") {
 		cond := orm.NewCondition()
-		v_float, _ := strconv.ParseFloat(v, 32)
-		if v_float == 0 {
-			// Hourに条件「文字式」を入れると自動的に0になっちゃうので，回避
-			v_float = 100
-		}
 		cond = cond.Or("Title__icontains", v)
 		cond = cond.Or("Cast__icontains", v)
 		cond = cond.Or("Category__icontains", v)
@@ -226,7 +223,6 @@ func SearchTvProgramAll(str string) (v []TvProgram, err error) {
 		cond = cond.Or("Week__Name", v)
 		cond = cond.Or("Production__icontains", v)
 		cond = cond.Or("Year", v)
-		cond = cond.Or("Hour", v_float)
 
 		condAll = condAll.AndCond(cond)
 	}
@@ -237,13 +233,11 @@ func SearchTvProgramAll(str string) (v []TvProgram, err error) {
 	return nil, err
 }
 
+// 詳細検索機能
 func SearchTvProgram(query map[string][]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(TvProgram))
-	// fmt.Println(query)
-	// query
-	// condOnly := orm.NewCondition()
 	condAll := orm.NewCondition()
 	for k, v := range query {
 		condOnly := orm.NewCondition()
@@ -259,15 +253,15 @@ func SearchTvProgram(query map[string][]string, fields []string, sortby []string
 			} else if k == "Themesong" {
 				condOnly = condOnly.Or("Themesong__icontains", value)
 			} else if k == "Year" {
-				condOnly = condOnly.Or("Year", value)
+				condOnly = condOnly.And("Year", value)
 			} else if k == "Week" {
-				condOnly = condOnly.Or("Week__Name", value)
+				condOnly = condOnly.And("Week__Name", value)
 			} else if k == "Hour" {
-				condOnly = condOnly.Or("Hour", value)
+				condOnly = condOnly.And("Hour", value)
 			} else if k == "Season" {
-				condOnly = condOnly.Or("Season", value)
+				condOnly = condOnly.And("Season__Name", value)
 			} else if k == "Category" {
-				condOnly = condOnly.Or("Category__icontains", value)
+				condOnly = condOnly.And("Category__icontains", value)
 			}
 		}
 		// fmt.Println(k,v)

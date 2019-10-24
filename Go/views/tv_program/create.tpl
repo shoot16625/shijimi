@@ -86,10 +86,10 @@
           </select>
         </p>
         <p class='create-tv-margin'>
-          <ons-input name="ImageUrl" modifier="underbar" value="{{.TvProgram.ImageUrl}}" placeholder="イメージ画像URL" maxlength="400" float></ons-input>
+          <ons-input name="ImageURL" modifier="underbar" value="{{.TvProgram.ImageURL}}" placeholder="イメージ画像URL" maxlength="400" float></ons-input>
         </p>
         <p class='create-tv-margin'>
-          <ons-input name="MovieUrl" modifier="underbar" value="{{.TvProgram.MovieUrl}}" placeholder="youtube動画URL" maxlength="400" float></ons-input>
+          <ons-input name="MovieURL" modifier="underbar" value="{{.TvProgram.MovieURL}}" placeholder="youtube動画URL" maxlength="400" float></ons-input>
         </p>
         <p class='create-tv-margin'>
           <ons-input name="dramatist" modifier="underbar" value="{{.TvProgram.Dramatist}}" placeholder="脚本" maxlength="100" float></ons-input>
@@ -202,7 +202,7 @@
     let target = document.getElementById('hour');
     let text = "<option>指定なし</option>";
     let t;
-    for (let i = 0; i < 48; i++) {
+    for (let i = 0; i <= 48; i++) {
       if (i % 2 == 0){
         t = String(i/2)+":00";
         text += "<option>"+t+"</option>"
@@ -228,8 +228,8 @@
           document.getElementById('preview-dramatist').innerHTML = document.getElementsByName('dramatist')[0].value;
           document.getElementById('preview-supervisor').innerHTML = document.getElementsByName('supervisor')[0].value;
           document.getElementById('preview-director').innerHTML = document.getElementsByName('director')[0].value;
-          document.getElementById('preview-img').innerHTML = '<img src="'+document.getElementsByName('ImageUrl')[0].value+'" alt="イメージ" width="80%">';
-          var movie_url = document.getElementsByName('MovieUrl')[0].value;
+          document.getElementById('preview-img').innerHTML = '<img src="'+document.getElementsByName('ImageURL')[0].value+'" alt="イメージ" width="80%">';
+          var movie_url = document.getElementsByName('MovieURL')[0].value;
           if (movie_url != ""){
             movie_url = movie_url.replace("watch?v=", "embed/");
             document.getElementById('preview-movie').innerHTML = '<iframe src="'+movie_url+'?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="ムービー" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
@@ -254,9 +254,9 @@
             document.getElementById('preview-dramatist').innerHTML = document.getElementsByName('dramatist')[0].value;
             document.getElementById('preview-supervisor').innerHTML = document.getElementsByName('supervisor')[0].value;
             document.getElementById('preview-director').innerHTML = document.getElementsByName('director')[0].value;
-            document.getElementById('preview-img').innerHTML = '<img src="'+document.getElementsByName('ImageUrl')[0].value+'" alt="イメージ" width="80%">';
-            // console.log(document.getElementsByName('MovieUrl')[0].value);
-            var movie_url = document.getElementsByName('MovieUrl')[0].value;
+            document.getElementById('preview-img').innerHTML = '<img src="'+document.getElementsByName('ImageURL')[0].value+'" alt="イメージ" width="80%">';
+            // console.log(document.getElementsByName('MovieURL')[0].value);
+            var movie_url = document.getElementsByName('MovieURL')[0].value;
             if (movie_url != ""){
               movie_url = movie_url.replace("watch?v=", "embed/");
               document.getElementById('preview-movie').innerHTML = '<iframe src="'+movie_url+'?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="ムービー" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';

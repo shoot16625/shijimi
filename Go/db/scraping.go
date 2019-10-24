@@ -1,26 +1,21 @@
 package db
 
 import (
-	// _ "app/routers"
 	"app/models"
 	"fmt"
 	"strconv"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/PuerkitoBio/goquery"
-	// "time"
 	"github.com/microcosm-cc/bluemonday"
-	// "github.com/astaxie/beego"
-	// "github.com/astaxie/beego/orm"
-	// _ "github.com/go-sql-driver/mysql"
 )
 
-const location = "Asia/Tokyo"
-
-func Scraping() {
-	doc, err := goquery.NewDocument("https://ja.wikipedia.org/wiki/日本のテレビドラマ一覧_(2010年代)")
+// Scraping TvPrograms by wiki list.
+func Scraping(referencePath string) {
+	doc, err := goquery.NewDocument(referencePath)
 	if err != nil {
-		fmt.Print("url scarapping failed")
+		fmt.Print("url scarapping failed\n")
 	}
 	var year []string
 	doc.Find("span.mw-headline").Each(func(_ int, s *goquery.Selection) {
@@ -28,13 +23,14 @@ func Scraping() {
 		text = text
 		if len(year) < 10 {
 			year = append(year, text[:4])
-			// fmt.Println(year)
 		}
 	})
+	p := bluemonday.NewPolicy()
+	p.AllowElements("br").AllowElements("td")
 	n := 0
 	doc.Find("table.wikitable").Each(func(_ int, s *goquery.Selection) {
 		season := string(s.Find("caption").Text())
-		var seasonName string
+		seasonName := ""
 		if season[:1] == "4" {
 			seasonName = "春"
 		} else if season[:1] == "7" {
@@ -43,8 +39,6 @@ func Scraping() {
 			seasonName = "秋"
 		} else if season[:1] == "1" {
 			seasonName = "冬"
-		} else {
-			seasonName = ""
 		}
 		s.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
 			var tvProgram models.TvProgram
@@ -55,41 +49,65 @@ func Scraping() {
 			tvProgram.Year = y
 			var data []string
 			t.Find("td").Each(func(_ int, u *goquery.Selection) {
-				data = append(data, u.Text())
+				// data = append(data, u.Text())
+				html, _ := u.Html()
+				content := strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
+				content = strings.Replace(content, "\n", "、", -1)
+				data = append(data, content)
 			})
+			wikiURL, _ := t.Find("a").Attr("href")
 			if len(data) == 5 {
-				tvProgram.Title = data[0]
+				tvProgram.Title = strings.Replace(data[0], "、", " ", -1)
 				tvProgram.Category = strings.Replace(data[1], "ドラマ", "", -1)
 				tvProgram.Production = data[2]
 				tvProgram.Cast = data[4]
-				tvProgram.ImageUrl = "http://hankodeasobu.com/wp-content/uploads/animals_02.png"
-
+				tvProgram.ImageURL = "http://hankodeasobu.com/wp-content/uploads/animals_02.png"
+				tvProgram.WikiReference = "https://ja.wikipedia.org" + wikiURL
 				weekStruct := *new(models.Week)
-				weekStruct.Name = data[3][:3]
+				data[3] = strings.Replace(data[3], "平日", "平曜", -1)
+				weekName := strings.Split(data[3], "曜")[0]
+				weekNameLen := utf8.RuneCountInString(weekName)
+				if weekNameLen == 1 {
+					weekStruct.Name = weekName
+					if weekName == "平" {
+						weekStruct.Name = "平日"
+					}
+				} else if data[3] == "参照" || weekNameLen == 0 || weekNameLen > 3 {
+					weekStruct.Name = "?"
+				} else if weekNameLen == 3 && strings.Contains(weekName, " ") {
+					weekStruct.Name = strings.Split(weekName, " ")[1]
+				} else {
+					weekStruct.Name = weekName
+					// fmt.Println(weekName, weekNameLen)
+				}
 				tvProgram.Week = &weekStruct
-				hourBlock := strings.Split(data[3][6:], " - ")
+
+				hourBlock := strings.Split(strings.Split(data[3], "-")[0], "曜")
+				var floatHour float32 = 100
 				if len(hourBlock) == 2 {
-					hourStart := strings.Split(hourBlock[0], ":")
+					startTime := strings.TrimSpace(hourBlock[1])
+					hourStart := strings.Split(startTime, ":")
 					hours, _ := strconv.Atoi(hourStart[0])
 					mins, _ := strconv.Atoi(hourStart[1])
-					var floatHour float32
 					if 15 > mins && mins >= 0 {
 						floatHour = float32(hours) + 0.0
 					} else if 45 > mins && mins >= 15 {
 						floatHour = float32(hours) + 0.5
 					} else if 60 > mins && mins >= 45 {
 						floatHour = float32(hours) + 1.0
-						if floatHour == 24.0 {
-							floatHour = 23.30
-
-						}
+					}
+					// 無記入のとき
+					if startTime == ":00" {
+						floatHour = 100
 					}
 					tvProgram.Hour = floatHour
 				}
 				if _, err := models.AddTvProgram(&tvProgram); err != nil {
 					fmt.Println(err)
+					// fmt.Println(weekName, data[0])
 				}
 			}
+			// fmt.Println(tvProgram)
 		})
 		if season[:2] == "10" {
 			n++
@@ -97,63 +115,77 @@ func Scraping() {
 	})
 }
 
-func GetTvProgramInformation(title string) (tvProgram models.TvProgram) {
-	doc, err := goquery.NewDocument("https://ja.wikipedia.org/wiki/" + title)
+// Scraping TvProgram Information by wikiReferenceURL.
+func GetTvProgramInformation(tvProgram models.TvProgram) {
+	doc, err := goquery.NewDocument(tvProgram.WikiReference)
 	if err != nil {
-		fmt.Print("url scarapping failed")
+		fmt.Print("URL scarapping failed\n")
+		return
 	}
-	s := doc.Find("table.infobox")
-	tvProgram.Title = title
+	// fmt.Println(tvProgram)
 	p := bluemonday.NewPolicy()
 	p.AllowElements("br").AllowElements("td")
+	s := doc.Find("table.infobox")
 	s.Each(func(_ int, u *goquery.Selection) {
 		doramaFlag := false
+		newTvProgram := tvProgram
 		u.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
 			c, _ := t.Find("td").Attr("class")
 			if c == "category" {
-				if strings.Contains(t.Find("td").Text(), "ドラマ") {
+				if strings.Contains(t.Find("td").Text(), "ドラマ") || t.Find("td").Text() == "医療ミステリー" {
 					doramaFlag = true
 				}
 			}
 			if doramaFlag {
 				th := t.Find("th").Text()
+				html, _ := t.Find("td").Html()
+				content := strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
+				content = strings.Replace(content, "\n", "", -1)
 				switch th {
 				case "脚本":
-					html, _ := t.Find("td").Html()
-					tvProgram.Dramatist = strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
+					newTvProgram.Dramatist = content
 				case "演出":
-					html, _ := t.Find("td").Html()
-					tvProgram.Director = strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
+					newTvProgram.Director = content
 				case "監督":
-					html, _ := t.Find("td").Html()
-					tvProgram.Supervisor = strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
+					newTvProgram.Supervisor = content
 				case "出演者":
-					html, _ := t.Find("td").Html()
-					tvProgram.Cast = strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
-				// case "制作":
-				// tvProgram.Production = t.Find("td").Text()
+					if len(tvProgram.Cast) < len(content) {
+						newTvProgram.Cast = content
+					}
+				case "制作":
+					if tvProgram.Production == "" {
+						newTvProgram.Production = content
+					}
 				case "オープニング":
-					html, _ := t.Find("td").Html()
-					tvProgram.Themesong = strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
+					newTvProgram.Themesong = content
 				case "エンディング":
-					html, _ := t.Find("td").Html()
-					if t.Find("td").Text() != "同上" {
+					if strings.TrimSpace(t.Find("td").Text()) != "同上" {
 						if tvProgram.Themesong == "" {
-							tvProgram.Themesong = strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
+							newTvProgram.Themesong = content
 						} else {
-							tvProgram.Themesong += "、" + strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
+							newTvProgram.Themesong += "、" + content
 						}
 					}
+				case "放送国・地域":
+					if strings.TrimSpace(t.Find("td").Text()) != "日本" {
+						doramaFlag = false
+					}
 				}
-				// if t.Find("th").Text() == "脚本" {
-				// 	tvProgram.Dramatist = t.Find("td").Text()
-				// }
-
 			}
 		})
-		// fmt.Println(tvProgram)
+		if doramaFlag {
+			if err := models.UpdateTvProgramById(&newTvProgram); err != nil {
+				fmt.Println(err)
+			}
+			// var w models.TvProgramUpdateHistory
+			w := models.TvProgramUpdateHistory{
+				UserId:      0,
+				TvProgramId: tvProgram.Id,
+			}
+			_, _ = models.AddTvProgramUpdateHistory(&w)
+			// fmt.Println(tvProgram.Title)
+		}
 	})
-	return tvProgram
 }
 
 func UpdateTvProgramsInformation() {
@@ -164,42 +196,20 @@ func UpdateTvProgramsInformation() {
 	var limit int64 = 1000000
 	var offset int64
 
-	var newTvProgram models.TvProgram
 	l, _ := models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
 	for _, tvProgram := range l {
-		// newTvProgram = tvProgram
-		tvInfo := GetTvProgramInformation(tvProgram.(models.TvProgram).Title)
-		newTvProgram = models.TvProgram{
-			Id:                 tvProgram.(models.TvProgram).Id,
-			Title:              tvProgram.(models.TvProgram).Title,
-			Content:            tvProgram.(models.TvProgram).Content,
-			ImageUrl:           tvProgram.(models.TvProgram).ImageUrl,
-			ImageUrlReference:  tvProgram.(models.TvProgram).ImageUrlReference,
-			MovieUrl:           tvProgram.(models.TvProgram).MovieUrl,
-			MovieUrlReference:  tvProgram.(models.TvProgram).MovieUrlReference,
-			Cast:               tvInfo.Cast,
-			Category:           tvInfo.Category,
-			Dramatist:          tvInfo.Dramatist,
-			Supervisor:         tvInfo.Supervisor,
-			Director:           tvInfo.Director,
-			Production:         tvInfo.Production,
-			Year:               tvProgram.(models.TvProgram).Year,
-			Season:             tvProgram.(models.TvProgram).Season,
-			Week:               tvProgram.(models.TvProgram).Week,
-			Hour:               tvProgram.(models.TvProgram).Hour,
-			Themesong:          tvInfo.Themesong,
-			CreateUserId:       tvProgram.(models.TvProgram).CreateUserId,
-			Star:               tvProgram.(models.TvProgram).Star,
-			CountStar:          tvProgram.(models.TvProgram).CountStar,
-			CountWatched:       tvProgram.(models.TvProgram).CountWatched,
-			CountWantToWatch:   tvProgram.(models.TvProgram).CountWantToWatch,
-			CountClicked:       tvProgram.(models.TvProgram).CountClicked,
-			CountAuthorization: tvProgram.(models.TvProgram).CountAuthorization,
-		}
-		if err := models.UpdateTvProgramById(&newTvProgram); err != nil {
-			fmt.Println("Miss")
+		query["TvProgramId"] = strconv.FormatInt(tvProgram.(models.TvProgram).Id, 10)
+		if h, err := models.GetAllTvProgramUpdateHistory(query, fields, sortby, order, offset, limit); err == nil && len(h) == 0 {
+			GetTvProgramInformation(tvProgram.(models.TvProgram))
 		} else {
-			fmt.Println(newTvProgram)
+			var n int64 = 0
+			for _, v := range h {
+				n += v.(models.TvProgramUpdateHistory).UserId
+			}
+			if n == 0 {
+				GetTvProgramInformation(tvProgram.(models.TvProgram))
+			}
 		}
+
 	}
 }

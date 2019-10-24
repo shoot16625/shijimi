@@ -3,13 +3,14 @@
   <head>
     {{ template "/common/header.tpl" . }}
   </head>
+
   <body>
     <ons-page>
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
-      {{ template "/user/profile.tpl" . }}
-
-      <ons-list style="margin-left: 3px;margin-right: 5px;">
+      {{ template "/user/profile_only_user.tpl" . }}
+      {{ template "/common/comment_review_change_only_user.tpl" . }}
+      <ons-list class="list-margin">
         <ons-lazy-repeat id="comments"></ons-lazy-repeat>
       </ons-list>
     </ons-page>
@@ -18,6 +19,7 @@
 
       let comments = {{.Comment}};
       let user = {{.User}};
+      let tvPrograms = {{.TvProgram}};
       let commentLikes;
       if ({{.CommentLike}} == null){
         commentLikes = [comments.length];
@@ -33,8 +35,9 @@
         infiniteList.delegate = {
           createItemContent: function(i) {
 
-            return ons.createElement('<div class="comment"><ons-list-header style="background-color:aliceblue;text-transform:none;"><div style="text-align:left; float:left;font-size:16px;">@' + user.Username + '</div><div style="text-align: right;margin-right:5px;">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm:ss") + '</div></ons-list-header><ons-list-item><div class="left"><a href="/tv/user/show/' + user.Id + '" title="user_page"><img class="list-item__thumbnail" src="' + user.IconURL + '" alt="@' + user.Username + '"></a></div><div class="center"><span class="list-item__subtitle"id="comment-content-' + String(i) + '" style="font-size:14px;">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle" style="text-align: right;"><div style="float:right;" id="count-like-' + i + '">：' + comments[i].CountLike + '</div><div style="float:right;"><i class="' + setLikeBold(commentLikes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="clickLike(this)" style="color:' + setLikeStatus(commentLikes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
+            return ons.createElement('<div id="' + comments[i].Id + '"><ons-list-header style="background-color:aliceblue;text-transform:none;"><div class="area-left comment-list-header-font">' + tvPrograms[i].Title + '</div><div class="area-right list-margin">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm:ss") + '</div></ons-list-header><ons-list-item><div class="left"><a href="/tv/user/show/' + user.Id + '" title="user_comment"><img class="list-item__thumbnail" src="' + user.IconURL + '" alt="@' + user.Username + '"></a></div><div class="center"><span class="list-item__subtitle"id="comment-content-' + comments[i].Id + '" class="comment-list-content-font">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle" class="area-right"><div style="float:right;" id="count-like-' + i + '">：' + comments[i].CountLike + '</div><div class="area-right"><i class="' + setLikeBold(commentLikes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="clickLike(this)" style="color:' + setLikeStatus(commentLikes[i].Like, 'orchid') + ';"></i></div></span><span class="list-item__subtitle area-right"><div style="float:right;"><form id="delete-comment-' + comments[i].Id + '" action="/tv/comment/' + comments[i].Id + '" method="post"><input type="hidden" name="_method" value="DELETE"><input type="hidden"><button class="button button--light" style="line-height: 8px; font-size:12px;" type="submit">del</button></form></div></span></div></ons-list-item></div>');
           },
+
           countItems: function() {
             return comments.length;
           }
@@ -54,7 +57,7 @@
         let method;
         if (data.Id === 0){
           method = 'POST';
-          data.UserId = {{.MyUserId}};
+          data.UserId = {{.User.Id}};
           globalCommentLikeStatus[elem.id].UserId = data.UserId;
           data.CommentId = {{.Comment}}[elem.id].Id;
           globalCommentLikeStatus[elem.id].CommentId = data.CommentId;
@@ -63,7 +66,6 @@
           url = url+data.Id;
         }
         data.Like = checkFlag;
-        // console.log(data)
         // console.log("flag",globalCommentLikeStatus[elem.id], checkFlag);
         globalCommentLikeStatus[elem.id].Like = data.Like;
 

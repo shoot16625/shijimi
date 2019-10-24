@@ -10,7 +10,7 @@
       {{ template "/common/toolbar.tpl" . }}
       <div class="toast toast--material">
         <div class="toast__message toast--material__message">
-          {{.Status}}しました
+          {{.Status}}
         </div>
       </div>
     </ons-page>
