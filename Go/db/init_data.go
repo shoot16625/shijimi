@@ -2,6 +2,7 @@ package db
 
 import (
 	"app/models"
+	"fmt"
 	"strconv"
 
 	"github.com/astaxie/beego/orm"
@@ -38,14 +39,15 @@ func ExecTestSQL() {
 	}
 
 	for i := 1; i < 5; i++ {
-		TvProgramSQL("TestTest:"+strconv.Itoa(i), "hogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehoge", "https://1.bp.blogspot.com/-dkBk4bYQrTk/XVKfloSYxiI/AAAAAAABUC8/j6K3SGQG0WMxKFn71LzznPz0SPgI5ufGQCLcBGAs/s1600/bird_sekisei_inko_blue.png", "イラストや", "https://www.youtube.com/watch?v=AIMjbleH394", "milet「us」MUSIC VIDEO（日本テレビ系水曜ドラマ『偽装不倫』主題歌）", "TestA、TestB、TestC、TestD、TestE、TestF", "恋愛、不倫、コメディ・パロディ", "TestG、TestH", "TestI、TestJ", "TestK、TestL", "日テレ", 2019, "秋", "milet 「us」", "月", float32(i+18), 2.5, 0, 0, 0)
+		TvProgramSQL("TestTest:"+strconv.Itoa(i), "hogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehoge", "https://1.bp.blogspot.com/-dkBk4bYQrTk/XVKfloSYxiI/AAAAAAABUC8/j6K3SGQG0WMxKFn71LzznPz0SPgI5ufGQCLcBGAs/s1600/bird_sekisei_inko_blue.png", "イラストや", "https://www.youtube.com/embed/AIMjbleH394", "milet「us」MUSIC VIDEO（日本テレビ系水曜ドラマ『偽装不倫』主題歌）", "TestA、TestB、TestC、TestD、TestE、TestF", "恋愛、不倫、コメディ・パロディ", "TestG、TestH", "TestI、TestJ", "TestK、TestL", "日テレ", 2019, "秋", "milet 「us」", "月", float32(i+18), 2.5, 0, 0, 0)
 
-		for j := 1; j < 1000; j++ {
+		for j := 1; j < 10; j++ {
 			CommentSQL("hogehoge\r\nfugafuga\r\n"+strconv.Itoa(i), 3, int64(i+1), 0)
 			CommentSQL("hogehogefugafugahogehogefugafugahogehogefugafuga\r\n"+strconv.Itoa(i), 4, int64(i+1), 0)
 		}
 		ReviewCommentSQL("レビューネタバレありコメント\nレビューは一人一回\n", 3, int64(i+1), 0, true, "神曲", int32(6))
 		ReviewCommentSQL("レビューネタバレなしコメント\n", 4, int64(i+1), 0, false, "泣きっぱなし、演技すごい", int32(4))
+		fmt.Println("update:", i)
 	}
 }
 
@@ -72,6 +74,7 @@ func TvProgramSQL(title string, content string, imageURL string, imageURLreferen
 	w := *new(models.Week)
 	w.Name = week
 	v.Week = &w
+	v.Themesong = themesong
 	v.Hour = hour
 	v.Star = star
 	v.CountStar = countstar

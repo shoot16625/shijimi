@@ -21,8 +21,8 @@
             float
           ></ons-input>
           <button
-            class="button button--outline"
-            style="font-size: 14px; margin-top: 10px;"
+            class="button button--cta"
+            style="font-size: 14px; margin:10px 0 10px 0;"
           >
             データ取得(ドラマのみ対応中)
           </button>
@@ -30,7 +30,7 @@
       </div>
       <form id="create-tv-program" action="/tv/tv_program/" method="post">
         <div class="area-center">
-          <p class="create-tv-margin">
+          <p>
             <i class="fas fa-flag flag-color"></i>
             <ons-input
               name="title"
@@ -42,7 +42,7 @@
               required
             ></ons-input>
           </p>
-          <p class="create-tv-margin">
+          <p>
             <textarea
               class="textarea"
               style="width: 80%;"
@@ -53,7 +53,7 @@
               maxlength="200"
             ></textarea>
           </p>
-          <p class="create-tv-margin">
+          <p>
             <i class="fas fa-flag flag-color"></i>
             <ons-input
               name="cast"
@@ -65,7 +65,7 @@
               required
             ></ons-input>
           </p>
-          <p class="create-tv-margin">
+          <p>
             <i class="fas fa-flag flag-color"></i>
             <ons-input
               type="number"
@@ -79,7 +79,7 @@
               required
             ></ons-input>
           </p>
-          <p class="create-tv-margin">
+          <p>
             <ons-input
               name="themesong"
               value="{{.TvProgram.Themesong}}"
@@ -89,13 +89,13 @@
               float
             ></ons-input>
           </p>
-          <p class="create-tv-margin">
+          <p>
             <i class="fas fa-flag flag-color"></i>
             <label for="season">＜シーズン＞</label>
             <select
               name="season"
               id="season"
-              class="select-input select-input--underbar"
+              class="select-input select-input--underbar select-search-table"
               required
             >
               <option>春(4~6)</option>
@@ -104,13 +104,13 @@
               <option>冬(1~3)</option>
             </select>
           </p>
-          <p class="create-tv-margin">
+          <p>
             <i class="fas fa-flag flag-color"></i>
-            <label for="category">＜放送曜日＞</label>
+            <label for="week">＜放送曜日＞</label>
             <select
               name="week"
               id="week"
-              class="select-input select-input--underbar"
+              class="select-input select-input--underbar select-search-table"
               required
             >
               <option>月</option>
@@ -124,23 +124,23 @@
               <option>映画</option>
             </select>
           </p>
-          <p class="create-tv-margin">
+          <p>
             <label for="hour">＜時間帯＞</label>
             <select
               name="hour"
               id="hour"
-              class="select-input select-input--underbar"
+              class="select-input select-input--underbar select-search-table"
             >
             </select>
           </p>
-          <p class="create-tv-margin">
+          <p>
             <i class="fas fa-flag flag-color"></i>
             <label for="category">＜ジャンル＞※複数可</label>
             <select
               name="category"
               id="category"
-              style="height: 100px;"
-              class="select-input select-input--underbar"
+              style="height: 130px;"
+              class="select-input select-input--underbar select-search-table"
               required
               multiple
             >
@@ -167,7 +167,7 @@
               <option>SF</option>
             </select>
           </p>
-          <p class="create-tv-margin">
+          <p>
             <ons-input
               name="ImageURL"
               modifier="underbar"
@@ -177,7 +177,7 @@
               float
             ></ons-input>
           </p>
-          <p class="create-tv-margin">
+          <p>
             <ons-input
               name="MovieURL"
               modifier="underbar"
@@ -187,7 +187,7 @@
               float
             ></ons-input>
           </p>
-          <p class="create-tv-margin">
+          <p>
             <ons-input
               name="dramatist"
               modifier="underbar"
@@ -197,7 +197,7 @@
               float
             ></ons-input>
           </p>
-          <p class="create-tv-margin">
+          <p>
             <ons-input
               name="supervisor"
               modifier="underbar"
@@ -207,7 +207,7 @@
               float
             ></ons-input>
           </p>
-          <p class="create-tv-margin">
+          <p>
             <ons-input
               name="director"
               value="{{.TvProgram.Director}}"
@@ -217,7 +217,7 @@
               float
             ></ons-input>
           </p>
-          <p class="create-tv-margin">
+          <p>
             <ons-input
               name="production"
               modifier="underbar"
@@ -239,7 +239,7 @@
           <p class="create-top-margin">
             <ons-button
               modifier="quiet"
-              onclick="PreviewTvProgram('preview-dialog')"
+              onclick="previewTvProgram('preview-dialog')"
               >プレビュー</ons-button
             >
           </p>
@@ -280,68 +280,70 @@
               プレビュー
             </div>
           </ons-toolbar>
-          <ons-list>
-            <ons-list-header style="background-color:ghostwhite;">
-              <div class="area-left" id="preview-on-air-info"></div>
-              <div class="area-right list-margin">
-                閲覧数：0
-              </div>
-            </ons-list-header>
-            <ons-list-item id="expandable-list-item" expandable>
-              <div id="preview-title"></div>
-              <div class="expandable-content">
-                <ons-row>
-                  <ons-col>
-                    <div class="content">
-                      <ons-row class="list-margin-bottom">
-                        <ons-col width="20%">出演：</ons-col>
-                        <ons-col id="preview-cast"></ons-col>
-                      </ons-row>
-                      <ons-row class="list-margin-bottom">
-                        <ons-col width="20%">歌：</ons-col>
-                        <ons-col id="preview-themesong"></ons-col>
-                      </ons-row>
-                      <ons-row class="list-margin-bottom">
-                        <ons-col width="20%">タグ：</ons-col>
-                        <ons-col>{{.TvProgram.Category}}</ons-col>
-                      </ons-row>
-                      <ons-row class="list-margin-bottom">
-                        <ons-col width="20%">制作：</ons-col>
-                        <ons-col>{{.TvProgram.Production}}</ons-col>
-                      </ons-row>
-                      <ons-row class="list-margin-bottom">
-                        <ons-col width="20%">監督：</ons-col>
-                        <ons-col id="preview-supervisor"></ons-col>
-                      </ons-row>
-                      <ons-row class="list-margin-bottom">
-                        <ons-col width="20%">脚本：</ons-col>
-                        <ons-col id="preview-dramatist"></ons-col>
-                      </ons-row>
-                      <ons-row class="list-margin-bottom">
-                        <ons-col width="20%">演出：</ons-col>
-                        <ons-col id="preview-director"></ons-col>
-                      </ons-row>
-                    </div>
-                  </ons-col>
-                </ons-row>
-                <ons-row>
-                  <ons-col width="30%" align="center">
-                    <div class="image" id="preview-img"></div>
-                  </ons-col>
-                  <ons-col width="70%" align="center">
-                    <div class="div-iframe">
-                      <div id="preview-movie"></div>
-                    </div>
-                  </ons-col>
-                </ons-row>
-                <ons-list-item expandable>
-                  あらすじ・見どころ
-                  <div class="right"></div>
-                  <div class="expandable-content" id="preview-content"></div>
-                </ons-list-item>
-              </div>
-            </ons-list-item>
-          </ons-list>
+          <div class="scroller">
+            <ons-list>
+              <ons-list-header style="background-color:ghostwhite;">
+                <div class="area-left" id="preview-on-air-info"></div>
+                <div class="area-right list-margin">
+                  閲覧数：0
+                </div>
+              </ons-list-header>
+              <ons-list-item id="expandable-list-item" expandable>
+                <div id="preview-title"></div>
+                <div class="expandable-content">
+                  <ons-row>
+                    <ons-col>
+                      <div class="content">
+                        <ons-row class="list-margin-bottom">
+                          <ons-col width="20%">出演：</ons-col>
+                          <ons-col id="preview-cast"></ons-col>
+                        </ons-row>
+                        <ons-row class="list-margin-bottom">
+                          <ons-col width="20%">歌：</ons-col>
+                          <ons-col id="preview-themesong"></ons-col>
+                        </ons-row>
+                        <ons-row class="list-margin-bottom">
+                          <ons-col width="20%">タグ：</ons-col>
+                          <ons-col id="preview-category"></ons-col>
+                        </ons-row>
+                        <ons-row class="list-margin-bottom">
+                          <ons-col width="20%">制作：</ons-col>
+                          <ons-col id="preview-production"></ons-col>
+                        </ons-row>
+                        <ons-row class="list-margin-bottom">
+                          <ons-col width="20%">監督：</ons-col>
+                          <ons-col id="preview-supervisor"></ons-col>
+                        </ons-row>
+                        <ons-row class="list-margin-bottom">
+                          <ons-col width="20%">脚本：</ons-col>
+                          <ons-col id="preview-dramatist"></ons-col>
+                        </ons-row>
+                        <ons-row class="list-margin-bottom">
+                          <ons-col width="20%">演出：</ons-col>
+                          <ons-col id="preview-director"></ons-col>
+                        </ons-row>
+                      </div>
+                    </ons-col>
+                  </ons-row>
+                  <ons-row>
+                    <ons-col width="30%" align="center">
+                      <div class="image" id="preview-img"></div>
+                    </ons-col>
+                    <ons-col width="70%" align="center">
+                      <div class="div-iframe">
+                        <div id="preview-movie"></div>
+                      </div>
+                    </ons-col>
+                  </ons-row>
+                  <ons-list-item expandable>
+                    あらすじ・見どころ
+                    <div class="right"></div>
+                    <div class="expandable-content" id="preview-content"></div>
+                  </ons-list-item>
+                </div>
+              </ons-list-item>
+            </ons-list>
+          </div>
         </ons-page>
       </ons-dialog>
     </template>
@@ -365,7 +367,7 @@
     </script>
 
     <script type="text/javascript">
-      var PreviewTvProgram = function(elemID) {
+      var previewTvProgram = function(elemID) {
         ons.ready(function() {
           var dialog = document.getElementById(elemID);
           if (dialog) {
@@ -391,6 +393,19 @@
             document.getElementById(
               'preview-themesong'
             ).innerHTML = document.getElementsByName('themesong')[0].value;
+            let categories = document.getElementById('category');
+            let category = '';
+            let tag;
+            for (let index = 0; index < categories.length; index++) {
+              tag = categories[index];
+              if (tag.selected) {
+                category += tag.value + ' ';
+              }
+            }
+            document.getElementById('preview-category').innerHTML = category;
+            document.getElementById(
+              'preview-production'
+            ).innerHTML = document.getElementsByName('production')[0].value;
             document.getElementById(
               'preview-dramatist'
             ).innerHTML = document.getElementsByName('dramatist')[0].value;
@@ -452,6 +467,21 @@
                 document.getElementById(
                   'preview-themesong'
                 ).innerHTML = document.getElementsByName('themesong')[0].value;
+                let categories = document.getElementById('category');
+                let category = '';
+                let tag;
+                for (let index = 0; index < categories.length; index++) {
+                  tag = categories[index];
+                  if (tag.selected) {
+                    category += tag.value + ' ';
+                  }
+                }
+                document.getElementById(
+                  'preview-category'
+                ).innerHTML = category;
+                document.getElementById(
+                  'preview-production'
+                ).innerHTML = document.getElementsByName('production')[0].value;
                 document.getElementById(
                   'preview-dramatist'
                 ).innerHTML = document.getElementsByName('dramatist')[0].value;
@@ -487,7 +517,7 @@
 
     <script type="text/javascript">
       const tvProgram = {{.TvProgram}};
-      if (tvProgram != null && tvProgram.Id != 0) {
+      if (tvProgram != null) {
         const seasonName = tvProgram.Season.Name;
         if (seasonName === "春"){
           document.getElementById('season').value = seasonName+"(4~6)";

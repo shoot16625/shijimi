@@ -21,7 +21,9 @@
             ></ons-input>
           </p>
           <p>
-            <label for="SecondPassword">第2パスワード</label>
+            <label for="SecondPassword" style="margin: 0 30px 0 30px;"
+              >＜第2パスワード＞</label
+            >
             <ons-input
               id="SecondPassword"
               name="SecondPassword"
@@ -32,7 +34,7 @@
               required
             ></ons-input>
           </p>
-          <p class='create-top-margin'>
+          <p class="create-top-margin">
             <button class="button button--outline">パスワードを再設定</button>
           </p>
         </div>
@@ -55,7 +57,6 @@
     <script type="text/javascript" src="/static/js/common.js"></script>
     <script type="text/javascript">
       const name = {{.User}};
-      // console.log(name);
       if (name != null){
         dialogBoxEveryone('alert-username-not-found');
       }

@@ -8,11 +8,16 @@
     <ons-page>
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
-      <ons-speed-dial position="bottom right" direction="up" ripple>
+      <ons-speed-dial
+        id="speed-dial"
+        position="bottom right"
+        direction="up"
+        ripple
+      >
         <ons-fab>
           <ons-icon icon="md-share"></ons-icon>
         </ons-fab>
-        <ons-speed-dial-item>
+        <!-- <ons-speed-dial-item>
           <ons-icon
             icon="md-search"
             onclick="dialogBoxEveryone('search-dialog')"
@@ -23,7 +28,7 @@
         </ons-speed-dial-item>
         <ons-speed-dial-item>
           <ons-icon icon="md-home" onclick="goTop()"></ons-icon>
-        </ons-speed-dial-item>
+        </ons-speed-dial-item> -->
       </ons-speed-dial>
       <ons-carousel
         swipeable
@@ -117,16 +122,18 @@
                   <select
                     name="year"
                     id="year"
+                    style="height: 130px;"
                     class="select-input select-input--underbar select-search-table"
                     multiple
                   >
                   </select>
                 </p>
                 <p>
-                  <label for="season">＜放送曜日＞</label>
+                  <label for="week">＜放送曜日＞</label>
                   <select
                     name="week"
                     id="week"
+                    style="height: 130px;"
                     class="select-input select-input--underbar select-search-table"
                     multiple
                   >
@@ -144,13 +151,14 @@
                   </select>
                 </p>
                 <p>
-                  <label for="season" style="margin-right:8px;margin-left:8px;"
+                  <label for="hour" style="margin-right:8px;margin-left:8px;"
                     >＜時間帯＞</label
                   >
                   <select
                     name="hour"
                     id="hour"
-                    class="select-input select-input--underbar"
+                    style="height: 130px;"
+                    class="select-input select-input--underbar select-search-table"
                     multiple
                   >
                   </select>
@@ -160,6 +168,7 @@
                   <select
                     name="season"
                     id="season"
+                    style="height: 130px;"
                     class="select-input select-input--underbar select-search-table"
                     multiple
                   >
@@ -170,10 +179,11 @@
                   </select>
                 </p>
                 <p>
-                  <label for="season">＜ジャンル＞</label>
+                  <label for="category">＜ジャンル＞</label>
                   <select
                     name="category"
                     id="category"
+                    style="height: 130px;"
                     class="select-input select-input--underbar select-search-table"
                     multiple
                   >
@@ -288,8 +298,9 @@
       let tvPrograms = {{.TvProgram}};
       if (tvPrograms.length === 0) {
         tvPrograms = null;
-      }
+      } else {
       console.log("表示数：", tvPrograms.length);
+      }
       let watchStatus;
       if ({{.WatchStatus}} === null && tvPrograms != null){
         watchStatus = [tvPrograms.length];
@@ -410,12 +421,9 @@
         });
     </script>
     <script>
-      $('img').on('error', function() {
-        $(this).attr(
-          'src',
-          'http://hankodeasobu.com/wp-content/uploads/animals_02.png'
-        );
-      });
+      var dial = document.getElementById('speed-dial');
+      dial.innerHTML =
+        "<ons-fab><ons-icon icon='md-share'></ons-icon></ons-fab><ons-speed-dial-item><ons-icon icon='md-search' onclick='dialogBoxEveryone(\"search-dialog\")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-chart' onclick='goAnotherCarousel(1)'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-home' onclick='goTop()'></ons-icon></ons-speed-dial-item>";
     </script>
   </body>
 </html>

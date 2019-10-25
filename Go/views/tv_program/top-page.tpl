@@ -108,7 +108,7 @@
                   <img
                     src="{{.ImageURL}}"
                     alt="{{.Title}}"
-                    style="width: 80%"
+                    class="image-carousel"
                     onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
@@ -144,7 +144,7 @@
                   <img
                     src="{{.ImageURL}}"
                     alt="{{.Title}}"
-                    style="width: 80%"
+                    class="image-carousel"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -179,7 +179,7 @@
                   <img
                     src="{{.ImageURL}}"
                     alt="{{.Title}}"
-                    style="width: 80%"
+                    class="image-carousel"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -214,7 +214,7 @@
                   <img
                     src="{{.ImageURL}}"
                     alt="{{.Title}}"
-                    style="width: 80%"
+                    class="image-carousel"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -249,7 +249,7 @@
                   <img
                     src="{{.ImageURL}}"
                     alt="{{.Title}}"
-                    style="width: 80%"
+                    class="image-carousel"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -284,7 +284,7 @@
                   <img
                     src="{{.ImageURL}}"
                     alt="{{.Title}}"
-                    style="width: 80%"
+                    class="image-carousel"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -319,7 +319,7 @@
                   <img
                     src="{{.ImageURL}}"
                     alt="{{.Title}}"
-                    style="width: 80%"
+                    class="image-carousel"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>

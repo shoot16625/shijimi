@@ -68,7 +68,7 @@ func (c *TvProgramController) Post() {
 		if !strings.Contains(movieURL, "embed") {
 			movieURL = strings.Replace(movieURL, "watch?v=", "embed/", -1)
 		}
-		imageURL := c.GetString("IconURL")
+		imageURL := c.GetString("ImageURL")
 		if imageURL == "" {
 			imageURL = "http://hankodeasobu.com/wp-content/uploads/animals_02.png"
 		}
@@ -576,7 +576,6 @@ func (c *TvProgramController) CreatePage() {
 func (c *TvProgramController) GetWikiInfo() {
 	wikiReference := c.GetString("wikiReference")
 	tvProgram := db.GetTvProgramInformationByURL(wikiReference)
-	fmt.Println(tvProgram.Title)
 	c.Data["TvProgram"] = tvProgram
 	c.Data["GetWikiInfo"] = true
 	c.TplName = "tv_program/create.tpl"

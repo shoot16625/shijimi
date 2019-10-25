@@ -392,10 +392,6 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (tvProgram models.TvP
 	s := doc.Find("table.infobox")
 	doramaFlag := false
 	s.Each(func(_ int, u *goquery.Selection) {
-		// doramaFlag = false
-		// if doramaFlag {
-		// 	continue
-		// }
 		tvProgram = *new(models.TvProgram)
 		tvProgram.Title = doc.Find("h1").Text()
 		tvProgram.WikiReference = wikiReferenceURL
@@ -437,7 +433,7 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (tvProgram models.TvP
 						}
 					}
 				case "放送国・地域":
-					if strings.TrimSpace(t.Find("td").Text()) != "日本" {
+					if strings.TrimSpace(content) != "日本" {
 						doramaFlag = false
 					}
 				case "放送期間":
@@ -485,12 +481,9 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (tvProgram models.TvP
 		})
 
 		if doramaFlag {
-			fmt.Println(tvProgram.Season.Name, tvProgram.Week.Name, tvProgram.Year, tvProgram.Hour, tvProgram.Production, tvProgram.Category)
-			return
+			fmt.Println(tvProgram.Title, tvProgram.Season.Name, tvProgram.Week.Name, tvProgram.Year, tvProgram.Hour, tvProgram.Production, tvProgram.Category)
 			// fmt.Println(tvProgram)
-			// if _, err := models.AddTvProgram(&tvProgram); err != nil {
-			// 	fmt.Println(err)
-			// }
+			return
 		}
 	})
 	if doramaFlag {
@@ -498,5 +491,16 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (tvProgram models.TvP
 	} else {
 		tvProgram = *new(models.TvProgram)
 		return tvProgram
+	}
+}
+
+func AddRecentTvInfo() {
+	wikiTitles := []string{"4分間のマリーゴールド", "モトカレマニア", "G線上のあなたと私", "同期のサクラ", "時効警察はじめました", "俺の話は長い", "グランメゾン東京", "ニッポンノワール-刑事Yの反乱-"}
+	for _, v := range wikiTitles {
+		v = "https://ja.wikipedia.org/wiki/" + v
+		tvProgram := GetTvProgramInformationByURL(v)
+		if _, err := models.AddTvProgram(&tvProgram); err != nil {
+			fmt.Println(err)
+		}
 	}
 }

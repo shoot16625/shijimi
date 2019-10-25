@@ -68,11 +68,11 @@ func init() {
 	// 初期データの投入
 	db.ExecInitSQL()
 	db.ExecTestSQL()
-	// execSQL()
-	// db.GetWikiDoramas("https://ja.wikipedia.org/wiki/日本のテレビドラマ一覧_(2010年代)")
-	// db.GetWikiDoramas("https://ja.wikipedia.org/wiki/日本のテレビドラマ一覧_(2000年代)")
-	// db.UpdateTvProgramsInformation()
-	// db.GetMovieWalkers()
+	db.AddRecentTvInfo()
+	db.GetWikiDoramas("https://ja.wikipedia.org/wiki/日本のテレビドラマ一覧_(2010年代)")
+	db.GetWikiDoramas("https://ja.wikipedia.org/wiki/日本のテレビドラマ一覧_(2000年代)")
+	db.UpdateTvProgramsInformation()
+	db.GetMovieWalkers()
 }
 
 // func execInitSQL() {

@@ -48,7 +48,7 @@
         <img
           src="{{.TvProgram.ImageURL}}"
           alt="{{.Title}}"
-          width="80%"
+          class="image"
           onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
         />
       </div>

@@ -86,7 +86,7 @@
             <select
               name="season"
               id="season"
-              class="select-input select-input--underbar"
+              class="select-input select-input--underbar select-search-table"
               required
             >
               <option>春(4~6)</option>
@@ -97,11 +97,11 @@
           </p>
           <p>
             <i class="fas fa-flag flag-color"></i>
-            <label for="category">＜放送曜日＞</label>
+            <label for="week">＜放送曜日＞</label>
             <select
               name="week"
               id="week"
-              class="select-input select-input--underbar"
+              class="select-input select-input--underbar select-search-table"
               required
             >
               <option>月</option>
@@ -122,7 +122,7 @@
             <select
               name="hour"
               id="hour"
-              class="select-input select-input--underbar"
+              class="select-input select-input--underbar select-search-table"
             >
             </select>
           </p>
@@ -132,8 +132,8 @@
             <select
               name="category"
               id="category"
-              style="height: 100px;"
-              class="select-input select-input--underbar"
+              style="height: 130px;"
+              class="select-input select-input--underbar select-search-table"
               required
               multiple
             >
@@ -233,7 +233,7 @@
           <p class="create-top-margin">
             <ons-button
               modifier="quiet"
-              onclick="PreviewTvProgram('preview-dialog')"
+              onclick="previewTvProgram('preview-dialog')"
               >プレビュー</ons-button
             >
           </p>
@@ -261,68 +261,70 @@
               プレビュー
             </div>
           </ons-toolbar>
-          <ons-list>
-            <ons-list-header style="background-color:ghostwhite;">
-              <div class="area-left" id="preview-on-air-info"></div>
-              <div class="area-right list-margin">
-                閲覧数：0
-              </div>
-            </ons-list-header>
-            <ons-list-item id="expandable-list-item" expandable>
-              <div id="preview-title"></div>
-              <div class="expandable-content">
-                <ons-row>
-                  <ons-col>
-                    <div class="content">
-                      <ons-row class="list-margin-bottom">
-                        <ons-col width="20%">出演：</ons-col>
-                        <ons-col id="preview-cast"></ons-col>
-                      </ons-row>
-                      <ons-row class="list-margin-bottom">
-                        <ons-col width="20%">歌：</ons-col>
-                        <ons-col id="preview-themesong"></ons-col>
-                      </ons-row>
-                      <ons-row class="list-margin-bottom">
-                        <ons-col width="20%">タグ：</ons-col>
-                        <ons-col>{{.TvProgram.Category}}</ons-col>
-                      </ons-row>
-                      <ons-row class="list-margin-bottom">
-                        <ons-col width="20%">制作：</ons-col>
-                        <ons-col>{{.TvProgram.Production}}</ons-col>
-                      </ons-row>
-                      <ons-row class="list-margin-bottom">
-                        <ons-col width="20%">監督：</ons-col>
-                        <ons-col id="preview-supervisor"></ons-col>
-                      </ons-row>
-                      <ons-row class="list-margin-bottom">
-                        <ons-col width="20%">脚本：</ons-col>
-                        <ons-col id="preview-dramatist"></ons-col>
-                      </ons-row>
-                      <ons-row class="list-margin-bottom">
-                        <ons-col width="20%">演出：</ons-col>
-                        <ons-col id="preview-director"></ons-col>
-                      </ons-row>
-                    </div>
-                  </ons-col>
-                </ons-row>
-                <ons-row>
-                  <ons-col width="30%" align="center">
-                    <div class="image" id="preview-img"></div>
-                  </ons-col>
-                  <ons-col width="70%" align="center">
-                    <div class="div-iframe">
-                      <div id="preview-movie"></div>
-                    </div>
-                  </ons-col>
-                </ons-row>
-                <ons-list-item expandable>
-                  あらすじ・見どころ
-                  <div class="right"></div>
-                  <div class="expandable-content" id="preview-content"></div>
-                </ons-list-item>
-              </div>
-            </ons-list-item>
-          </ons-list>
+          <div class="scroller">
+            <ons-list>
+              <ons-list-header style="background-color:ghostwhite;">
+                <div class="area-left" id="preview-on-air-info"></div>
+                <div class="area-right list-margin">
+                  閲覧数：0
+                </div>
+              </ons-list-header>
+              <ons-list-item id="expandable-list-item" expandable>
+                <div id="preview-title"></div>
+                <div class="expandable-content">
+                  <ons-row>
+                    <ons-col>
+                      <div class="content">
+                        <ons-row class="list-margin-bottom">
+                          <ons-col width="20%">出演：</ons-col>
+                          <ons-col id="preview-cast"></ons-col>
+                        </ons-row>
+                        <ons-row class="list-margin-bottom">
+                          <ons-col width="20%">歌：</ons-col>
+                          <ons-col id="preview-themesong"></ons-col>
+                        </ons-row>
+                        <ons-row class="list-margin-bottom">
+                          <ons-col width="20%">タグ：</ons-col>
+                          <ons-col id="preview-category"></ons-col>
+                        </ons-row>
+                        <ons-row class="list-margin-bottom">
+                          <ons-col width="20%">制作：</ons-col>
+                          <ons-col id="preview-production"></ons-col>
+                        </ons-row>
+                        <ons-row class="list-margin-bottom">
+                          <ons-col width="20%">監督：</ons-col>
+                          <ons-col id="preview-supervisor"></ons-col>
+                        </ons-row>
+                        <ons-row class="list-margin-bottom">
+                          <ons-col width="20%">脚本：</ons-col>
+                          <ons-col id="preview-dramatist"></ons-col>
+                        </ons-row>
+                        <ons-row class="list-margin-bottom">
+                          <ons-col width="20%">演出：</ons-col>
+                          <ons-col id="preview-director"></ons-col>
+                        </ons-row>
+                      </div>
+                    </ons-col>
+                  </ons-row>
+                  <ons-row>
+                    <ons-col width="30%" align="center">
+                      <div class="image" id="preview-img"></div>
+                    </ons-col>
+                    <ons-col width="70%" align="center">
+                      <div class="div-iframe">
+                        <div id="preview-movie"></div>
+                      </div>
+                    </ons-col>
+                  </ons-row>
+                  <ons-list-item expandable>
+                    あらすじ・見どころ
+                    <div class="right"></div>
+                    <div class="expandable-content" id="preview-content"></div>
+                  </ons-list-item>
+                </div>
+              </ons-list-item>
+            </ons-list>
+          </div>
         </ons-page>
       </ons-dialog>
     </template>
@@ -335,11 +337,9 @@
       let t;
       for (let i = 0; i <= 48; i++) {
         if (i % 2 === 0) {
-          // console.log(String(i/2)+":00");
           t = String(i / 2) + ':00';
           text += '<option>' + t + '</option>';
         } else {
-          // console.log(String((i-1)/2)+":30");
           t = String((i - 1) / 2) + ':30';
           text += '<option>' + t + '</option>';
         }
@@ -348,7 +348,7 @@
     </script>
 
     <script type="text/javascript">
-      var PreviewTvProgram = function(elemID) {
+      var previewTvProgram = function(elemID) {
         ons.ready(function() {
           var dialog = document.getElementById(elemID);
           if (dialog) {
@@ -374,6 +374,19 @@
             document.getElementById(
               'preview-themesong'
             ).innerHTML = document.getElementsByName('themesong')[0].value;
+            let categories = document.getElementById('category');
+            let category = '';
+            let tag;
+            for (let index = 0; index < categories.length; index++) {
+              tag = categories[index];
+              if (tag.selected) {
+                category += tag.value + ' ';
+              }
+            }
+            document.getElementById('preview-category').innerHTML = category;
+            document.getElementById(
+              'preview-production'
+            ).innerHTML = document.getElementsByName('production')[0].value;
             document.getElementById(
               'preview-dramatist'
             ).innerHTML = document.getElementsByName('dramatist')[0].value;
@@ -430,6 +443,21 @@
                 document.getElementById(
                   'preview-themesong'
                 ).innerHTML = document.getElementsByName('themesong')[0].value;
+                let categories = document.getElementById('category');
+                let category = '';
+                let tag;
+                for (let index = 0; index < categories.length; index++) {
+                  tag = categories[index];
+                  if (tag.selected) {
+                    category += tag.value + ' ';
+                  }
+                }
+                document.getElementById(
+                  'preview-category'
+                ).innerHTML = category;
+                document.getElementById(
+                  'preview-production'
+                ).innerHTML = document.getElementsByName('production')[0].value;
                 document.getElementById(
                   'preview-dramatist'
                 ).innerHTML = document.getElementsByName('dramatist')[0].value;

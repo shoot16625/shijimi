@@ -19,7 +19,7 @@
         direction="up"
         ripple
       >
-        <ons-fab> </ons-fab>
+        <ons-fab></ons-fab>
       </ons-speed-dial>
 
       <ons-carousel
@@ -128,7 +128,7 @@
                   name="favorite-point"
                   id="favorite-point"
                   class="select-input select-input--underbar select-search-table restrict"
-                  style="height: 100px;"
+                  style="height: 130px;"
                   required
                   multiple
                 >
@@ -216,7 +216,7 @@
               action="/tv/tv_program/review/search_comment/{{.TvProgram.Id}}"
               method="post"
             >
-              <div style="text-align: center; margin-top: 30px;">
+              <div class="area-center create-top-margin">
                 <p>
                   <ons-input
                     type="text"
@@ -236,6 +236,7 @@
                     name="star"
                     id="star"
                     class="select-input select-input--underbar select-search-table"
+                    style="height: 130px;"
                     multiple
                   >
                   </select>
@@ -246,7 +247,7 @@
                     name="favorite-point"
                     id="favorite-point"
                     class="select-input select-input--underbar select-search-table restrict"
-                    style="height: 100px;"
+                    style="height: 130px;"
                     multiple
                   >
                     <option>演技すごい</option>

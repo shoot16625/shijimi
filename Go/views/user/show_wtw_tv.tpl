@@ -25,7 +25,7 @@
             createItemContent: function(i) {
               let moviePosition;
               if (tvPrograms[i].MovieURL==""){
-                moviePosition = '<img id="image-' + i + '" src="'+tvPrograms[i].ImageURL+'" alt="' + tvPrograms[i].Title + '" width="80%">';
+                moviePosition = '<img id="image-' + i + '" src="'+tvPrograms[i].ImageURL+'" alt="' + tvPrograms[i].Title + '" class="image">';
               } else {
                 moviePosition = '<iframe id="movie-' + i + '" src="'+tvPrograms[i].MovieURL+'?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="' + tvPrograms[i].Title + '" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
               }
