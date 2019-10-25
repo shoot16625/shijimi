@@ -99,6 +99,7 @@ func (c *TvProgramController) Post() {
 			c.Redirect("/tv/tv_program/comment/"+strconv.FormatInt(v.Id, 10), 302)
 		} else {
 			c.Data["TvProgram"] = v
+			c.Data["GetWikiInfo"] = false
 			c.TplName = "tv_program/create.tpl"
 		}
 	}
@@ -353,18 +354,34 @@ func (c *TvProgramController) Get() {
 
 func (c *TvProgramController) Search() {
 	str := c.GetString("search-word")
-	v, _ := models.SearchTvProgramAll(str)
-	c.Data["TvProgram"] = v
+	l, _ := models.SearchTvProgramAll(str)
+	c.Data["TvProgram"] = l
 	session := c.StartSession()
 	if session.Get("UserId") != nil {
+		userID := session.Get("UserId").(int64)
 		var u models.SearchHistory
 		str = strings.Replace(str, "　", " ", -1)
 		u = models.SearchHistory{
-			UserId: session.Get("UserId").(int64),
+			UserId: userID,
 			Word:   strings.Replace(str, " ", "、", -1),
 			Item:   "tv",
 		}
 		_, _ = models.AddSearchHistory(&u)
+
+		var ratings []models.WatchingStatus
+		for _, tvProgram := range l {
+			// fmt.Println(tvProgram)
+			r, err := models.GetWatchingStatusByUserAndTvProgram(userID, tvProgram.Id)
+			// fmt.Println(r, err)
+			if err != nil {
+				ratings = append(ratings, *new(models.WatchingStatus))
+			} else {
+				ratings = append(ratings, *r)
+			}
+			c.Data["WatchStatus"] = ratings
+			v, _ := models.GetUserById(userID)
+			c.Data["User"] = v
+		}
 	}
 	c.TplName = "tv_program/index.tpl"
 }

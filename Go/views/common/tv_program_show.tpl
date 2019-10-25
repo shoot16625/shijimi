@@ -26,9 +26,9 @@
               <ons-col>{{.TvProgram.Category}}</ons-col>
             </ons-row>
             <ons-row class="list-margin-bottom">
-                <ons-col width="20%">制作：</ons-col>
-                <ons-col>{{.TvProgram.Production}}</ons-col>
-              </ons-row>
+              <ons-col width="20%">制作：</ons-col>
+              <ons-col>{{.TvProgram.Production}}</ons-col>
+            </ons-row>
             <ons-row class="list-margin-bottom">
               <ons-col width="20%">監督：</ons-col>
               <ons-col>{{.TvProgram.Supervisor}}</ons-col>
@@ -45,7 +45,12 @@
         </ons-col>
       </ons-row>
       <div class="area-center">
-        <img src="{{.TvProgram.ImageURL}}" alt="{{.Title}}" width="80%" />
+        <img
+          src="{{.TvProgram.ImageURL}}"
+          alt="{{.Title}}"
+          width="80%"
+          onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
+        />
       </div>
       <ons-list-item expandable>
         あらすじ・見どころ

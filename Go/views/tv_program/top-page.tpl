@@ -18,7 +18,7 @@
           style="text-align: center;background-color:linen;margin:10px;"
         >
           「ShiJimi」<br />
-          SNSとレビューサイトを足して<br>2で割ったような．
+          SNSとレビューサイトを足して<br />2で割ったような．
         </ons-card>
         <form id="search_form" action="/tv/tv_program/search" method="post">
           <p style="margin-top: 20px;">
@@ -42,6 +42,13 @@
                 modifier="quiet"
                 onclick="goOtherPage({{.UserId}}, 'tv/tv_program/create_page')"
                 >ドラマ・映画をつくる</ons-button
+              >
+            </p>
+            <p>
+              <ons-button
+                modifier="quiet"
+                onclick="location.href='tv/tv_program/comment/1'"
+                >お問い合わせ</ons-button
               >
             </p>
           </ons-col>
@@ -102,6 +109,7 @@
                     src="{{.ImageURL}}"
                     alt="{{.Title}}"
                     style="width: 80%"
+                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>

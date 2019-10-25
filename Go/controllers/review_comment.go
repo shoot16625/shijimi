@@ -185,7 +185,7 @@ func (c *ReviewCommentController) Show() {
 		c.Data["TvProgram"] = v
 	}
 
-	l, err := models.GetReviewCommentByTvprogramId(tvProgramID)
+	l, err := models.GetReviewCommentByTvProgramId(tvProgramID)
 	if err != nil {
 		c.Data["Comment"] = nil
 	} else {

@@ -289,6 +289,7 @@
       if (tvPrograms.length === 0) {
         tvPrograms = null;
       }
+      console.log("表示数：", tvPrograms.length);
       let watchStatus;
       if ({{.WatchStatus}} === null && tvPrograms != null){
         watchStatus = [tvPrograms.length];
@@ -306,7 +307,7 @@
             createItemContent: function(i) {
               let moviePosition;
               if (tvPrograms[i].MovieURL===""){
-                moviePosition = '<img id="image-' + tvPrograms[i].Id + '" src="'+tvPrograms[i].ImageURL+'" alt="' + tvPrograms[i].Title + '" width="80%">';
+                moviePosition = '<img class="image" id="image-' + tvPrograms[i].Id + '" src="'+tvPrograms[i].ImageURL+'" alt="' + tvPrograms[i].Title + '" width="80%" onerror="this.src=\'http://hankodeasobu.com/wp-content/uploads/animals_02.png\'">';
               } else {
                 moviePosition = '<iframe id="movie-' + tvPrograms[i].Id + '" class="movie" src="'+tvPrograms[i].MovieURL+'?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="' + tvPrograms[i].Title + '" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
               }
@@ -333,9 +334,15 @@
               } else {
                 headerColor = "ghostwhite";
               }
-              var casts = tvPrograms[i].Cast;
+              let casts = tvPrograms[i].Cast;
               casts = casts.split("、").slice(0, 5).join("、");
-              return ons.createElement('<div id="' + tvPrograms[i].Id + '"><ons-list-header style="background-color:'+ headerColor +';"><div class="area-left">' + tvPrograms[i].Year + '年 ' + tvPrograms[i].Season.Name + '（' + tvPrograms[i].Week.Name + time + '）</div><div class="area-right list-margin">閲覧数：' + tvPrograms[i].CountClicked + '</div></ons-list-header><ons-list-item><div class="tv-program-list-title-font">' + tvPrograms[i].Title + '</div></ons-list-item><ons-list-item><ons-row><ons-col><ons-row class="list-margin-bottom"><ons-col width="20%">出演：</ons-col><ons-col>' + casts + '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">歌：</ons-col><ons-col>' + tvPrograms[i].Themesong+ '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">監督：</ons-col><ons-col>' + tvPrograms[i].Supervisor+ '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">脚本：</ons-col><ons-col>' + tvPrograms[i].Dramatist+ '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">演出：</ons-col><ons-col>' + tvPrograms[i].Director+ '</ons-col></ons-row></ons-col><ons-row></ons-list-item><div class="area-center" style="margin:5px;">' + moviePosition + '</div><ons-list-item expandable>あらすじ・見どころ<div class="expandable-content">' + tvPrograms[i].Content + '</div></ons-list-item><ons-list-item modifier="nodivider"><i class="'+ setLikeBold(watchStatus[i].Watched) +' fa-laugh-beam" id="check-watched-' + i + '" onclick="clickWatchStatus(this)" style="color:' + setLikeStatus(watchStatus[i].Watched, 'deeppink') + ';"></i><div id="check-watched-' + i + '-text" class="tv-program-watch" style="margin-right: 8px;">見た：' + tvPrograms[i].CountWatched + '</div><i class="'+ setLikeBold(watchStatus[i].WantToWatch) +' fa-bookmark" id="check-wan2wat-' + i + '" onclick="clickWatchStatus(this)" style="color:' + setLikeStatus(watchStatus[i].WantToWatch, 'lightseagreen') + ';"></i><div id="check-wan2wat-' + i + '-text" class="tv-program-watch">また今度：' + tvPrograms[i].CountWantToWatch + '</div></ons-list-item><ons-list-item><div class="right list-item__right"><a href="/tv/tv_program/comment/' + tvPrograms[i].Id + '" style="text-decoration: none;">コメントを見る</a></div></ons-list-item></div>');
+              let referenceSite = tvPrograms[i].ImageURL;
+              if (referenceSite.includes("walkerplus")){
+                referenceSite = "@MovieWalker"
+              } else {
+                referenceSite = ""
+              }
+              return ons.createElement('<div id="' + tvPrograms[i].Id + '"><ons-list-header style="background-color:'+ headerColor +';"><div class="area-left">' + tvPrograms[i].Year + '年 ' + tvPrograms[i].Season.Name + '（' + tvPrograms[i].Week.Name + time + '）</div><div class="area-right list-margin">閲覧数：' + tvPrograms[i].CountClicked + '</div></ons-list-header><ons-list-item><div class="tv-program-list-title-font">' + tvPrograms[i].Title + '</div></ons-list-item><ons-list-item><ons-row><ons-col><ons-row class="list-margin-bottom"><ons-col width="20%">出演：</ons-col><ons-col>' + casts + '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">歌：</ons-col><ons-col>' + tvPrograms[i].Themesong+ '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">監督：</ons-col><ons-col>' + tvPrograms[i].Supervisor+ '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">脚本：</ons-col><ons-col>' + tvPrograms[i].Dramatist+ '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">演出：</ons-col><ons-col>' + tvPrograms[i].Director+ '</ons-col></ons-row></ons-col><ons-row></ons-list-item><div class="area-center" style="margin:5px;">' + moviePosition + '<div class="reference">'+referenceSite+'</div></div><ons-list-item expandable>あらすじ・見どころ<div class="expandable-content">' + tvPrograms[i].Content + '</div></ons-list-item><ons-list-item modifier="nodivider"><i class="'+ setLikeBold(watchStatus[i].Watched) +' fa-laugh-beam" id="check-watched-' + i + '" onclick="clickWatchStatus(this)" style="color:' + setLikeStatus(watchStatus[i].Watched, 'deeppink') + ';"></i><div id="check-watched-' + i + '-text" class="tv-program-watch" style="margin-right: 8px;">見た：' + tvPrograms[i].CountWatched + '</div><i class="'+ setLikeBold(watchStatus[i].WantToWatch) +' fa-bookmark" id="check-wan2wat-' + i + '" onclick="clickWatchStatus(this)" style="color:' + setLikeStatus(watchStatus[i].WantToWatch, 'lightseagreen') + ';"></i><div id="check-wan2wat-' + i + '-text" class="tv-program-watch">また今度：' + tvPrograms[i].CountWantToWatch + '</div></ons-list-item><ons-list-item><div class="right list-item__right"><a href="/tv/tv_program/comment/' + tvPrograms[i].Id + '" style="text-decoration: none;">コメントを見る</a></div></ons-list-item></div>');
             },
             countItems: function() {
               return tvPrograms.length;
@@ -401,6 +408,14 @@
             goTop();
           }
         });
+    </script>
+    <script>
+      $('img').on('error', function() {
+        $(this).attr(
+          'src',
+          'http://hankodeasobu.com/wp-content/uploads/animals_02.png'
+        );
+      });
     </script>
   </body>
 </html>

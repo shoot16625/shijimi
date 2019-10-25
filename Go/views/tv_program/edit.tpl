@@ -185,7 +185,7 @@
               name="WikiReference"
               modifier="underbar"
               value="{{.TvProgram.WikiReference}}"
-              placeholder="Wikipediaの番組URL"
+              placeholder="URL @Wikipedia"
               maxlength="400"
               float
             ></ons-input>
@@ -310,7 +310,9 @@
                     <div class="image" id="preview-img"></div>
                   </ons-col>
                   <ons-col width="70%" align="center">
-                    <div class="image" id="preview-movie"></div>
+                    <div class="div-iframe">
+                      <div id="preview-movie"></div>
+                    </div>
                   </ons-col>
                 </ons-row>
                 <ons-list-item expandable>
@@ -391,7 +393,7 @@
               document.getElementById('preview-movie').innerHTML =
                 '<iframe src="' +
                 movieURL +
-                '?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="ムービー" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+                '?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="ムービー" width="200" height="112.5" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
             }
 
             document.querySelector('#expandable-list-item').showExpansion();
@@ -447,7 +449,7 @@
                   document.getElementById('preview-movie').innerHTML =
                     '<iframe src="' +
                     movieURL +
-                    '?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="ムービー" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+                    '?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="ムービー" width="200" height="112.5" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
                 }
                 document.querySelector('#expandable-list-item').showExpansion();
                 dialog.show();

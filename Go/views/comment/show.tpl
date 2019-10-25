@@ -66,7 +66,7 @@
               ></ons-button>
             </div>
           </ons-toolbar>
-          <div class="area-right">
+          <div class="area-center">
             <textarea
               class="textarea-tweet"
               rows="10"

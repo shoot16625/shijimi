@@ -23,12 +23,19 @@
     zoom:1;/*IE*/
 }
 img {
-    max-width: 300px;
+    max-width: 260px;
+    /* height: auto; */
 }
 .image {
-  max-width: 300px;
-  text-align: center;
+  max-width: 260px;
+  height: auto;
 }
+
+.div-iframe {
+  margin: 0 auto;
+  width: 200px;
+}
+
 /* dialog box */
 .dialog {
   width: 100%;
@@ -38,7 +45,7 @@ img {
 }
 
 .textarea-tweet {
-  width: 100%;
+  width: 95%;
   background-color: white;
 }
 
@@ -65,6 +72,11 @@ label {
 }
 .doramas-on-air{
   margin-bottom: 10px;
+}
+.reference {
+  text-align: right;
+  font-size: 8px;
+  color: rgb(156, 149, 149);
 }
 a {
     text-decoration: none;

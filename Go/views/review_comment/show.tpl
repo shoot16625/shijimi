@@ -19,27 +19,7 @@
         direction="up"
         ripple
       >
-        <ons-fab>
-          <!-- <ons-icon icon="md-share"></ons-icon> -->
-        </ons-fab>
-        <!-- <ons-speed-dial-item>
-          <ons-icon
-            icon="md-comment-dots"
-            onclick="dialogBox('tweet-dialog', {{.User.Id}})"
-          ></ons-icon>
-        </ons-speed-dial-item>
-        <ons-speed-dial-item>
-          <ons-icon
-            icon="md-search"
-            onclick="dialogBoxEveryone('search-dialog')"
-          ></ons-icon>
-        </ons-speed-dial-item>
-        <ons-speed-dial-item>
-          <ons-icon icon="md-chart" onclick="goAnotherCarousel(1)"></ons-icon>
-        </ons-speed-dial-item>
-        <ons-speed-dial-item>
-          <ons-icon icon="md-home" onclick="goTop()"></ons-icon>
-        </ons-speed-dial-item> -->
+        <ons-fab> </ons-fab>
       </ons-speed-dial>
 
       <ons-carousel
@@ -114,7 +94,7 @@
                 >
                   <ons-icon
                     icon="md-thumb-down"
-                    style="color:cadetblue;"
+                    style="color:rgb(71, 119, 121);"
                   ></ons-icon>
                 </ons-col>
                 <ons-col>
@@ -136,7 +116,10 @@
                   class="area-center"
                   style="line-height: 31px;"
                 >
-                  <ons-icon icon="md-thumb-up" style="color:violet;"></ons-icon>
+                  <ons-icon
+                    icon="md-thumb-up"
+                    style="color:rgb(241, 161, 86);"
+                  ></ons-icon>
                 </ons-col>
               </ons-row>
               <p>
