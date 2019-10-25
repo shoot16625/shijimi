@@ -204,6 +204,7 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 					newTvProgram.Themesong = content
 				case "エンディング":
 					if strings.TrimSpace(t.Find("td").Text()) != "同上" {
+						content = strings.Replace(content, "、「", "「", -1)
 						if newTvProgram.Themesong == "" {
 							newTvProgram.Themesong = content
 						} else {
@@ -341,7 +342,7 @@ func GetMovieWalker(year string, month string) {
 		id, _ := m.Find("h3 > a").Attr("href")
 		id = strings.Replace(id, "/", "", -1)
 		id = strings.Replace(id, "mv", "", -1)
-		tvProgram.ImageURL = "https://movie.walkerplus.com/api/resizeimage/content/" + id + "?w=260"
+		tvProgram.ImageURL = "https://movie.walkerplus.com/api/resizeimage/content/" + id + "?w=300"
 		tvProgram.Content = m.Find(".info > p").Text()
 		director := strings.TrimSpace(m.Find(".info > .directorList > dd").Text())
 		director = strings.Replace(director, " ", "", -1)
@@ -380,20 +381,24 @@ func GetMovieWalkers() {
 }
 
 // Scraping TvProgram Information directly by wikiReferenceURL.
-func GetTvProgramInformationByURL(wikiReferenceURL string) {
+func GetTvProgramInformationByURL(wikiReferenceURL string) (tvProgram models.TvProgram) {
 	doc, err := goquery.NewDocument(wikiReferenceURL)
 	if err != nil {
 		fmt.Print("URL scarapping failed\n")
-		return
+		return tvProgram
 	}
 	p := bluemonday.NewPolicy()
 	p.AllowElements("br").AllowElements("td")
 	s := doc.Find("table.infobox")
+	doramaFlag := false
 	s.Each(func(_ int, u *goquery.Selection) {
-		doramaFlag := false
-		newTvProgram := *new(models.TvProgram)
-		newTvProgram.Title = doc.Find("h1").Text()
-		newTvProgram.WikiReference = wikiReferenceURL
+		// doramaFlag = false
+		// if doramaFlag {
+		// 	continue
+		// }
+		tvProgram = *new(models.TvProgram)
+		tvProgram.Title = doc.Find("h1").Text()
+		tvProgram.WikiReference = wikiReferenceURL
 		u.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
 			c, _ := t.Find("td").Attr("class")
 			if c == "category" {
@@ -409,26 +414,26 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) {
 				switch th {
 				case "ジャンル":
 					content = strings.Replace(content, "ドラマ", "", -1)
-					newTvProgram.Category = content
+					tvProgram.Category = content
 				case "脚本":
-					newTvProgram.Dramatist = content
+					tvProgram.Dramatist = content
 				case "演出":
-					newTvProgram.Director = content
+					tvProgram.Director = content
 				case "監督":
-					newTvProgram.Supervisor = content
+					tvProgram.Supervisor = content
 				case "出演者":
-					newTvProgram.Cast = content
+					tvProgram.Cast = content
 				case "制作", "製作":
-					newTvProgram.Production = content
+					tvProgram.Production = content
 				case "オープニング":
 					content = strings.Replace(content, "、「", "「", -1)
-					newTvProgram.Themesong = content
+					tvProgram.Themesong = content
 				case "エンディング":
 					if strings.TrimSpace(t.Find("td").Text()) != "同上" {
-						if newTvProgram.Themesong == "" {
-							newTvProgram.Themesong = content
+						if tvProgram.Themesong == "" {
+							tvProgram.Themesong = content
 						} else {
-							newTvProgram.Themesong += "、" + content
+							tvProgram.Themesong += "、" + content
 						}
 					}
 				case "放送国・地域":
@@ -438,7 +443,7 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) {
 				case "放送期間":
 					contents := strings.Split(content, "年")
 					year, _ := strconv.Atoi(contents[0])
-					newTvProgram.Year = year
+					tvProgram.Year = year
 					contents = strings.Split(contents[1], "月")
 					month, _ := strconv.Atoi(contents[0])
 					seasonName := ""
@@ -453,12 +458,12 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) {
 					}
 					seasonStruct := *new(models.Season)
 					seasonStruct.Name = seasonName
-					newTvProgram.Season = &seasonStruct
+					tvProgram.Season = &seasonStruct
 				case "放送時間":
 					contents := strings.Split(content, "曜")
 					weekStruct := *new(models.Week)
 					weekStruct.Name = contents[0]
-					newTvProgram.Week = &weekStruct
+					tvProgram.Week = &weekStruct
 					contents = strings.Split(contents[1], "-")
 					content = strings.TrimSpace(contents[0])
 					contents = strings.Split(content, ":")
@@ -473,18 +478,25 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) {
 						} else if 60 > mins && mins >= 45 {
 							floatHour = float32(hours) + 1.0
 						}
-						newTvProgram.Hour = floatHour
+						tvProgram.Hour = floatHour
 					}
 				}
 			}
 		})
 
 		if doramaFlag {
-			// fmt.Println(newTvProgram.Season.Name, newTvProgram.Week.Name, newTvProgram.Year, newTvProgram.Hour, newTvProgram.Production, newTvProgram.Category)
-			// fmt.Println(newTvProgram)
-			if _, err := models.AddTvProgram(&newTvProgram); err != nil {
-				fmt.Println(err)
-			}
+			fmt.Println(tvProgram.Season.Name, tvProgram.Week.Name, tvProgram.Year, tvProgram.Hour, tvProgram.Production, tvProgram.Category)
+			return
+			// fmt.Println(tvProgram)
+			// if _, err := models.AddTvProgram(&tvProgram); err != nil {
+			// 	fmt.Println(err)
+			// }
 		}
 	})
+	if doramaFlag {
+		return tvProgram
+	} else {
+		tvProgram = *new(models.TvProgram)
+		return tvProgram
+	}
 }

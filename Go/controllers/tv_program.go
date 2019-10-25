@@ -1,7 +1,9 @@
 package controllers
 
 import (
+	"app/db"
 	"app/models"
+
 	// "encoding/json"
 	"errors"
 	"regexp"
@@ -33,6 +35,7 @@ func (c *TvProgramController) URLMapping() {
 	c.Mapping("SearchTvProgram", c.SearchTvProgram)
 	// c.Mapping("Create", c.Create)
 	c.Mapping("CreatePage", c.CreatePage)
+	c.Mapping("GetWikiInfo", c.GetWikiInfo)
 }
 
 // Post ...
@@ -77,6 +80,7 @@ func (c *TvProgramController) Post() {
 			ImageURLReference: c.GetString("ImageURLReference"),
 			MovieURL:          movieURL,
 			MovieURLReference: c.GetString("MovieURLReference"),
+			WikiReference:     c.GetString("WikiReference"),
 			Cast:              strings.Replace(c.GetString("cast"), "　", "", -1),
 			Category:          strings.Join(c.GetStrings("category"), "、"),
 			Dramatist:         strings.Replace(c.GetString("dramatist"), "　", "", -1),
@@ -227,6 +231,7 @@ func (c *TvProgramController) Put() {
 	v.ImageURLReference = c.GetString("ImageURLReference")
 	v.MovieURL = movieURL
 	v.MovieURLReference = c.GetString("MovieURLReference")
+	v.WikiReference = c.GetString("WikiReference")
 	v.Cast = strings.Replace(c.GetString("cast"), "　", "", -1)
 	v.Category = strings.Join(c.GetStrings("category"), "、")
 	v.Dramatist = strings.Replace(c.GetString("dramatist"), "　", "", -1)
@@ -238,36 +243,8 @@ func (c *TvProgramController) Put() {
 	v.Year = year
 	v.Hour = float32(hour)
 	v.Themesong = c.GetString("themesong")
-	// v = models.TvProgram{
-	// 	Id:                id,
-	// 	Title:             c.GetString("title"),
-	// 	Content:           c.GetString("content"),
-	// 	ImageURL:          imageURL,
-	// 	ImageURLReference: c.GetString("ImageURLReference"),
-	// 	MovieURL:          movieURL,
-	// 	MovieURLReference: c.GetString("MovieURLReference"),
-	// 	Cast:              strings.Replace(c.GetString("cast"), "　", "", -1),
-	// 	Category:          strings.Join(c.GetStrings("category"), "、"),
-	// 	Dramatist:         strings.Replace(c.GetString("dramatist"), "　", "", -1),
-	// 	Supervisor:        strings.Replace(c.GetString("supervisor"), "　", "", -1),
-	// 	Director:          strings.Replace(c.GetString("director"), "　", "", -1),
-	// 	Production:        c.GetString("production"),
-	// 	Year:              year,
-	// 	Season:            &season,
-	// 	Week:              &week,
-	// 	Hour:              float32(hour),
-	// 	Themesong:         c.GetString("themesong"),
-	// 	CreateUserId:      session.Get("UserId").(int64),
-	// 	// Star:               oldTvInfo.Star,
-	// 	// CountStar:          oldTvInfo.CountStar,
-	// 	// CountWatched:       oldTvInfo.CountWatched,
-	// 	// CountWantToWatch:   oldTvInfo.CountWantToWatch,
-	// 	// CountClicked:       oldTvInfo.CountClicked,
-	// 	// CountAuthorization: oldTvInfo.CountAuthorization,
-	// }
-	// fmt.Println(v)
+
 	if err := models.UpdateTvProgramById(&v); err == nil {
-		// var w models.TvProgramUpdateHistory
 		w := models.TvProgramUpdateHistory{
 			UserId:      session.Get("UserId").(int64),
 			TvProgramId: id,
@@ -577,4 +554,13 @@ func (c *TvProgramController) CreatePage() {
 	} else {
 		c.TplName = "tv_program/create.tpl"
 	}
+}
+
+func (c *TvProgramController) GetWikiInfo() {
+	wikiReference := c.GetString("wikiReference")
+	tvProgram := db.GetTvProgramInformationByURL(wikiReference)
+	fmt.Println(tvProgram.Title)
+	c.Data["TvProgram"] = tvProgram
+	c.Data["GetWikiInfo"] = true
+	c.TplName = "tv_program/create.tpl"
 }
