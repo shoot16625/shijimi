@@ -53,6 +53,9 @@
                 headerColor = "ghostwhite";
               }
               let categories = tvPrograms[i].Category.split('、');
+              if (tvPrograms[i].Category === ""){
+                categories = [];
+              }
               let category = "";
               for (let j = categories.length - 1; j >= 0; j--) {
                 category += "<span style='padding:3px;'>#"+categories[j]+"</span>";

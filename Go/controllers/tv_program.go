@@ -339,7 +339,7 @@ func (c *TvProgramController) Get() {
 	query["Year"] = strconv.Itoa(time.Now().Year())
 	query["Season"] = models.GetOnairSeason()
 	week := [7]string{"月", "火", "水", "木", "金", "土", "日"}
-	weekName := [7]string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "San"}
+	weekName := [7]string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"}
 	for i, v := range week {
 		query["Week.Name"] = v
 		w, err := models.GetAllTvProgram(query, fields, sortby, order, offset, limit)

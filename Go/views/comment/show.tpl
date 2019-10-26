@@ -386,6 +386,9 @@
     <script>
       let categoryArea = document.getElementById("category-area");
       let categories = {{.TvProgram.Category}}.split('、');
+      if ({{.TvProgram.Category}} === ""){
+        categories = [];
+      }
       let category = "";
       for (let j = categories.length - 1; j >= 0; j--) {
         category += "<span style='padding:3px;'>#"+categories[j]+"</span>";

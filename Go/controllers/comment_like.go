@@ -1,14 +1,14 @@
 package controllers
 
 import (
-		"app/models"
-		"encoding/json"
-		"errors"
-		"strconv"
-		"strings"
-		"fmt"
+	"app/models"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"strconv"
+	"strings"
 
-		"github.com/astaxie/beego"
+	"github.com/astaxie/beego"
 )
 
 //  CommentLikeController operations for CommentLike
@@ -38,23 +38,20 @@ func (c *CommentLikeController) Post() {
 	if _, err := models.AddCommentLike(&v); err == nil {
 		c.Ctx.Output.SetStatus(201)
 		c.Data["json"] = v
-	} else {
-		c.Data["json"] = err.Error()
 	}
-	c.ServeJSON()
-	fmt.Println(v.CommentId)
-	w,_ := models.GetCommentById(v.CommentId)
-	fmt.Println(v.Like)
+	// c.ServeJSON()
+	// fmt.Println(v.CommentId)
+	w, _ := models.GetCommentById(v.CommentId)
+	// fmt.Println(v.Like)
 	if v.Like {
 		w.CountLike++
 	} else {
 		w.CountLike--
 	}
-	fmt.Println("new count like:", w.CountLike)
+	// fmt.Println("new count like:", w.CountLike)
 	if err := models.UpdateCommentById(w); err != nil {
 		fmt.Println(err.Error())
 	}
-	// PUT mo douyou ni
 }
 
 // GetOne ...
@@ -154,19 +151,17 @@ func (c *CommentLikeController) Put() {
 	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 	if err := models.UpdateCommentLikeById(&v); err == nil {
 		c.Data["json"] = "OK"
-	} else {
-		c.Data["json"] = err.Error()
 	}
-	c.ServeJSON()
-	fmt.Println(v.CommentId)
-	w,_ := models.GetCommentById(v.CommentId)
-	fmt.Println(v.Like)
+	// c.ServeJSON()
+	// fmt.Println(v.CommentId)
+	w, _ := models.GetCommentById(v.CommentId)
+	// fmt.Println(v.Like)
 	if v.Like {
 		w.CountLike++
 	} else {
 		w.CountLike--
 	}
-	fmt.Println("new count like:", w.CountLike)
+	// fmt.Println("new count like:", w.CountLike)
 	if err := models.UpdateCommentById(w); err == nil {
 		c.Data["json"] = "OK"
 	} else {

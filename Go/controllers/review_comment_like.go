@@ -4,9 +4,9 @@ import (
 	"app/models"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
-	"fmt"
 
 	"github.com/astaxie/beego"
 )
@@ -38,19 +38,17 @@ func (c *ReviewCommentLikeController) Post() {
 	if _, err := models.AddReviewCommentLike(&v); err == nil {
 		c.Ctx.Output.SetStatus(201)
 		c.Data["json"] = v
-	} else {
-		c.Data["json"] = err.Error()
 	}
-	c.ServeJSON()
-	fmt.Println(v.ReviewCommentId)
-	w,_ := models.GetReviewCommentById(v.ReviewCommentId)
-	fmt.Println(v.Like)
+	// c.ServeJSON()
+	// fmt.Println(v.ReviewCommentId)
+	w, _ := models.GetReviewCommentById(v.ReviewCommentId)
+	// fmt.Println(v.Like)
 	if v.Like {
 		w.CountLike++
 	} else {
 		w.CountLike--
 	}
-	fmt.Println("new count like:", w.CountLike)
+	// fmt.Println("new count like:", w.CountLike)
 	if err := models.UpdateReviewCommentById(w); err != nil {
 		fmt.Println(err.Error())
 	}
@@ -153,19 +151,17 @@ func (c *ReviewCommentLikeController) Put() {
 	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 	if err := models.UpdateReviewCommentLikeById(&v); err == nil {
 		c.Data["json"] = "OK"
-	} else {
-		c.Data["json"] = err.Error()
 	}
-	c.ServeJSON()
-	fmt.Println(v.ReviewCommentId)
-	w,_ := models.GetReviewCommentById(v.ReviewCommentId)
-	fmt.Println(v.Like)
+	// c.ServeJSON()
+	// fmt.Println(v.ReviewCommentId)
+	w, _ := models.GetReviewCommentById(v.ReviewCommentId)
+	// fmt.Println(v.Like)
 	if v.Like {
 		w.CountLike++
 	} else {
 		w.CountLike--
 	}
-	fmt.Println("new count like:", w.CountLike)
+	// fmt.Println("new count like:", w.CountLike)
 	if err := models.UpdateReviewCommentById(w); err == nil {
 		c.Data["json"] = "OK"
 	} else {
