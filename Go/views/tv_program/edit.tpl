@@ -239,7 +239,7 @@
           </p>
           <p class="create-top-margin">
             <input type="hidden" name="_method" value="PUT" />
-            <button class="button button--outline">作成する</button>
+            <button class="button button--outline">更新する</button>
           </p>
         </div>
       </form>
@@ -399,7 +399,7 @@
             document.getElementById('preview-img').innerHTML =
               '<img src="' +
               document.getElementsByName('ImageURL')[0].value +
-              '" alt="イメージ" width="80%">';
+              '" alt="イメージ" width="80%" onerror="this.src=\'http://hankodeasobu.com/wp-content/uploads/animals_02.png\'">';
             var movieURL = document.getElementsByName('MovieURL')[0].value;
             if (movieURL != '') {
               movieURL = movieURL.replace('watch?v=', 'embed/');
@@ -470,7 +470,7 @@
                 document.getElementById('preview-img').innerHTML =
                   '<img src="' +
                   document.getElementsByName('ImageURL')[0].value +
-                  '" alt="イメージ" width="80%">';
+                  '" alt="イメージ" width="80%" onerror="this.src=\'http://hankodeasobu.com/wp-content/uploads/animals_02.png\'">';
                 var movieURL = document.getElementsByName('MovieURL')[0].value;
                 if (movieURL != '') {
                   movieURL = movieURL.replace('watch?v=', 'embed/');

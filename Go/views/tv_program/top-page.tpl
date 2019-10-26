@@ -145,6 +145,7 @@
                     src="{{.ImageURL}}"
                     alt="{{.Title}}"
                     class="image-carousel"
+                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -180,6 +181,7 @@
                     src="{{.ImageURL}}"
                     alt="{{.Title}}"
                     class="image-carousel"
+                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -215,6 +217,7 @@
                     src="{{.ImageURL}}"
                     alt="{{.Title}}"
                     class="image-carousel"
+                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -250,6 +253,7 @@
                     src="{{.ImageURL}}"
                     alt="{{.Title}}"
                     class="image-carousel"
+                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -285,6 +289,7 @@
                     src="{{.ImageURL}}"
                     alt="{{.Title}}"
                     class="image-carousel"
+                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -320,6 +325,7 @@
                     src="{{.ImageURL}}"
                     alt="{{.Title}}"
                     class="image-carousel"
+                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>

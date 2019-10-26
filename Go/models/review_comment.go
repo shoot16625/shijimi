@@ -98,6 +98,10 @@ func GetAllReviewComment(query map[string]string, fields []string, sortby []stri
 	}
 
 	var l []ReviewComment
+	var maxLimit int64 = 2000
+	if maxLimit < limit {
+		limit = maxLimit
+	}
 	qs = qs.OrderBy(sortFields...).RelatedSel()
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {

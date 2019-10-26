@@ -481,8 +481,7 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (tvProgram models.TvP
 		})
 
 		if doramaFlag {
-			fmt.Println(tvProgram.Title, tvProgram.Season.Name, tvProgram.Week.Name, tvProgram.Year, tvProgram.Hour, tvProgram.Production, tvProgram.Category)
-			// fmt.Println(tvProgram)
+			fmt.Println(tvProgram.Title, tvProgram.Season.Name, tvProgram.Week.Name, tvProgram.Year, tvProgram.Hour, tvProgram.Production, tvProgram.Category, tvProgram.Themesong)
 			return
 		}
 	})
@@ -499,6 +498,7 @@ func AddRecentTvInfo() {
 	for _, v := range wikiTitles {
 		v = "https://ja.wikipedia.org/wiki/" + v
 		tvProgram := GetTvProgramInformationByURL(v)
+		fmt.Println(tvProgram)
 		if _, err := models.AddTvProgram(&tvProgram); err != nil {
 			fmt.Println(err)
 		}

@@ -421,7 +421,9 @@
                 'http://hankodeasobu.com/wp-content/uploads/animals_02.png';
             }
             document.getElementById('preview-img').innerHTML =
-              '<img src="' + imageURL + '" alt="イメージ" width="80%">';
+              '<img src="' +
+              imageURL +
+              '" alt="イメージ" width="80%" onerror="this.src=\'http://hankodeasobu.com/wp-content/uploads/animals_02.png\'">';
             let movieURL = document.getElementsByName('MovieURL')[0].value;
             if (movieURL != '') {
               movieURL = movieURL.replace('watch?v=', 'embed/');
@@ -497,8 +499,9 @@
                     'http://hankodeasobu.com/wp-content/uploads/animals_02.png';
                 }
                 document.getElementById('preview-img').innerHTML =
-                  '<img src="' + imageURL + '" alt="イメージ" width="80%">';
-                // console.log(document.getElementsByName('MovieURL')[0].value);
+                  '<img src="' +
+                  imageURL +
+                  '" alt="イメージ" width="80%" onerror="this.src=\'http://hankodeasobu.com/wp-content/uploads/animals_02.png\'">';
                 var movieURL = document.getElementsByName('MovieURL')[0].value;
                 if (movieURL != '') {
                   movieURL = movieURL.replace('watch?v=', 'embed/');

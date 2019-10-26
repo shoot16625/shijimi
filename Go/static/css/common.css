@@ -91,7 +91,10 @@ a {
 }
 
 .list-item__subtitle{
-    word-break: break-all;
+    word-break: break-word;
+  }
+.list-item__expandable-content{
+    word-break: break-word;
   }
 
 .input-range {
