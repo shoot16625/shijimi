@@ -12,7 +12,9 @@
       <form id="login-user" action="/tv/user/forget_username" method="post">
         <div class="input-table">
           <p>
-            <label for="password">パスワード</label>
+            <label for="password" style="margin: 0 30px 0 30px;"
+              >＜パスワード＞</label
+            >
             <ons-input
               name="password"
               modifier="underbar"
@@ -25,7 +27,9 @@
             ></ons-input>
           </p>
           <p>
-            <label for="SecondPassword">第2パスワード</label>
+            <label for="SecondPassword" style="margin: 0 30px 0 30px;"
+              >＜第2パスワード＞</label
+            >
             <ons-input
               id="SecondPassword"
               name="SecondPassword"
@@ -45,7 +49,7 @@
               パスワードを表示
             </label>
           </p>
-          <p class='create-top-margin'>
+          <p class="create-top-margin">
             <button class="button button--outline">ユーザー名を検索</button>
           </p>
         </div>
@@ -65,15 +69,15 @@
         </ons-alert-dialog>
       </template>
 
-      <template id="comfirm-username-dialog.html">
-        <ons-alert-dialog id="comfirm-username-dialog" modifier="rowfooter">
+      <template id="confirm-username-dialog.html">
+        <ons-alert-dialog id="confirm-username-dialog" modifier="rowfooter">
           <div class="alert-dialog-title">Alert</div>
           <div class="alert-dialog-content">
             あなたのユーザー名は，「{{.User.Username}}」です
           </div>
           <div class="alert-dialog-footer">
             <ons-alert-dialog-button
-              onclick="hideAlertDialog('comfirm-username-dialog')"
+              onclick="hideAlertDialog('confirm-username-dialog')"
               >OK</ons-alert-dialog-button
             >
           </div>
@@ -88,7 +92,7 @@
          if (name == ""){
           dialogBoxEveryone('alert-username-not-found');
         } else {
-          dialogBoxEveryone('comfirm-username-dialog');
+          dialogBoxEveryone('confirm-username-dialog');
         }
       }
     </script>

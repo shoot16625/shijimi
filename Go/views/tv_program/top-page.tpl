@@ -18,7 +18,7 @@
           style="text-align: center;background-color:linen;margin:10px;"
         >
           「ShiJimi」<br />
-          SNSとレビューサイトを足して<br>2で割ったような．
+          SNSとレビューサイトを足して<br />2で割ったような．
         </ons-card>
         <form id="search_form" action="/tv/tv_program/search" method="post">
           <p style="margin-top: 20px;">
@@ -42,6 +42,13 @@
                 modifier="quiet"
                 onclick="goOtherPage({{.UserId}}, 'tv/tv_program/create_page')"
                 >ドラマ・映画をつくる</ons-button
+              >
+            </p>
+            <p>
+              <ons-button
+                modifier="quiet"
+                onclick="location.href='tv/tv_program/comment/1'"
+                >お問い合わせ</ons-button
               >
             </p>
           </ons-col>
@@ -90,7 +97,7 @@
             item-width="200px"
             class="doramas-on-air"
           >
-            {{ range.TvProgram_mon }}
+            {{ range.TvProgramMon }}
             <ons-carousel-item
               modifier="nodivider"
               id="{{.Id}}"
@@ -101,7 +108,8 @@
                   <img
                     src="{{.ImageURL}}"
                     alt="{{.Title}}"
-                    style="width: 80%"
+                    class="image-carousel"
+                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -125,7 +133,7 @@
             item-width="200px"
             class="doramas-on-air"
           >
-            {{ range.TvProgram_tue }}
+            {{ range.TvProgramTue }}
             <ons-carousel-item
               modifier="nodivider"
               id="{{.Id}}"
@@ -136,7 +144,8 @@
                   <img
                     src="{{.ImageURL}}"
                     alt="{{.Title}}"
-                    style="width: 80%"
+                    class="image-carousel"
+                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -160,7 +169,7 @@
             item-width="200px"
             class="doramas-on-air"
           >
-            {{ range.TvProgram_wed }}
+            {{ range.TvProgramWed }}
             <ons-carousel-item
               modifier="nodivider"
               id="{{.Id}}"
@@ -171,7 +180,8 @@
                   <img
                     src="{{.ImageURL}}"
                     alt="{{.Title}}"
-                    style="width: 80%"
+                    class="image-carousel"
+                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -195,7 +205,7 @@
             item-width="200px"
             class="doramas-on-air"
           >
-            {{ range.TvProgram_thu }}
+            {{ range.TvProgramThu }}
             <ons-carousel-item
               modifier="nodivider"
               id="{{.Id}}"
@@ -206,7 +216,8 @@
                   <img
                     src="{{.ImageURL}}"
                     alt="{{.Title}}"
-                    style="width: 80%"
+                    class="image-carousel"
+                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -230,7 +241,7 @@
             item-width="200px"
             class="doramas-on-air"
           >
-            {{ range.TvProgram_fri }}
+            {{ range.TvProgramFri }}
             <ons-carousel-item
               modifier="nodivider"
               id="{{.Id}}"
@@ -241,7 +252,8 @@
                   <img
                     src="{{.ImageURL}}"
                     alt="{{.Title}}"
-                    style="width: 80%"
+                    class="image-carousel"
+                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -265,7 +277,7 @@
             item-width="200px"
             class="doramas-on-air"
           >
-            {{ range.TvProgram_sat }}
+            {{ range.TvProgramSat }}
             <ons-carousel-item
               modifier="nodivider"
               id="{{.Id}}"
@@ -276,7 +288,8 @@
                   <img
                     src="{{.ImageURL}}"
                     alt="{{.Title}}"
-                    style="width: 80%"
+                    class="image-carousel"
+                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -300,7 +313,7 @@
             item-width="200px"
             class="doramas-on-air"
           >
-            {{ range.TvProgram_sun }}
+            {{ range.TvProgramSun }}
             <ons-carousel-item
               modifier="nodivider"
               id="{{.Id}}"
@@ -311,7 +324,8 @@
                   <img
                     src="{{.ImageURL}}"
                     alt="{{.Title}}"
-                    style="width: 80%"
+                    class="image-carousel"
+                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -400,26 +414,26 @@
 
     <script type="text/javascript" src="/static/js/common.js"></script>
     <script type="text/javascript">
-      if({{.TvProgram_mon}}){
-        autoScroll(carousel01, {{.TvProgram_mon}}.length);
+      if({{.TvProgramMon}}){
+        autoScroll(carousel01, {{.TvProgramMon}}.length);
       }
-      if ({{.TvProgram_tue}}) {
-        autoScroll(carousel02, {{.TvProgram_tue}}.length);
+      if ({{.TvProgramTue}}) {
+        autoScroll(carousel02, {{.TvProgramTue}}.length);
       }
-      if ({{.TvProgram_wed}}) {
-        autoScroll(carousel03, {{.TvProgram_wed}}.length);
+      if ({{.TvProgramWed}}) {
+        autoScroll(carousel03, {{.TvProgramWed}}.length);
       }
-      if({{.TvProgram_thu}}){
-        autoScroll(carousel04, {{.TvProgram_thu}}.length);
+      if({{.TvProgramThu}}){
+        autoScroll(carousel04, {{.TvProgramThu}}.length);
       }
-      if ({{.TvProgram_fri}}) {
-        autoScroll(carousel05, {{.TvProgram_fri}}.length);
+      if ({{.TvProgramFri}}) {
+        autoScroll(carousel05, {{.TvProgramFri}}.length);
       }
-      if ({{.TvProgram_sat}}) {
-        autoScroll(carousel06, {{.TvProgram_sat}}.length);
+      if ({{.TvProgramSat}}) {
+        autoScroll(carousel06, {{.TvProgramSat}}.length);
       }
-      if ({{.TvProgram_sun}}) {
-        autoScroll(carousel07, {{.TvProgram_sun}}.length);
+      if ({{.TvProgramSun}}) {
+        autoScroll(carousel07, {{.TvProgramSun}}.length);
       }
     </script>
   </body>

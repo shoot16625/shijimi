@@ -4,7 +4,6 @@ import (
 	"app/models"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -36,18 +35,21 @@ func (c *ReviewCommentController) URLMapping() {
 // @router / [post]
 func (c *ReviewCommentController) Post() {
 	var v models.ReviewComment
-	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
-	_, err := models.GetReviewCommentByUserIdAndTvProgramId(v.UserId, v.TvProgramId)
-	if err != nil {
-		fmt.Println("first review!!")
-		if _, err := models.AddReviewComment(&v); err == nil {
-			c.Ctx.Output.SetStatus(201)
-			c.Data["json"] = v
-		} else {
-			c.Data["json"] = err.Error()
+	session := c.StartSession()
+	if session.Get("UserId") != nil {
+		json.Unmarshal(c.Ctx.Input.RequestBody, &v)
+		_, err := models.GetReviewCommentByUserIdAndTvProgramId(v.UserId, v.TvProgramId)
+		if err != nil {
+			// fmt.Println("first review!!")
+			if _, err := models.AddReviewComment(&v); err == nil {
+				c.Ctx.Output.SetStatus(201)
+				c.Data["json"] = v
+			} else {
+				c.Data["json"] = err.Error()
+			}
 		}
 	}
-	c.ServeJSON()
+	// c.ServeJSON()
 }
 
 // GetOne ...
@@ -141,16 +143,16 @@ func (c *ReviewCommentController) GetAll() {
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *ReviewCommentController) Put() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.ParseInt(idStr, 0, 64)
-	v := models.ReviewComment{Id: id}
-	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
-	if err := models.UpdateReviewCommentById(&v); err == nil {
-		c.Data["json"] = "OK"
-	} else {
-		c.Data["json"] = err.Error()
-	}
-	c.ServeJSON()
+	// idStr := c.Ctx.Input.Param(":id")
+	// id, _ := strconv.ParseInt(idStr, 0, 64)
+	// v := models.ReviewComment{Id: id}
+	// json.Unmarshal(c.Ctx.Input.RequestBody, &v)
+	// if err := models.UpdateReviewCommentById(&v); err == nil {
+	// 	c.Data["json"] = "OK"
+	// } else {
+	// 	c.Data["json"] = err.Error()
+	// }
+	// c.ServeJSON()
 }
 
 // Delete ...
@@ -163,11 +165,14 @@ func (c *ReviewCommentController) Put() {
 func (c *ReviewCommentController) Delete() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
-	if err := models.DeleteReviewComment(id); err == nil {
-		u, err := models.GetReviewCommentLikeByComment(id)
-		if err == nil {
-			for _, value := range u {
-				_ = models.DeleteReviewCommentLike(value.Id)
+	session := c.StartSession()
+	if session.Get("UserId") != nil {
+		if err := models.DeleteReviewComment(id); err == nil {
+			u, err := models.GetReviewCommentLikeByComment(id)
+			if err == nil {
+				for _, value := range u {
+					_ = models.DeleteReviewCommentLike(value.Id)
+				}
 			}
 		}
 	}
@@ -185,7 +190,7 @@ func (c *ReviewCommentController) Show() {
 		c.Data["TvProgram"] = v
 	}
 
-	l, err := models.GetReviewCommentByTvprogramId(tvProgramID)
+	l, err := models.GetReviewCommentByTvProgramId(tvProgramID)
 	if err != nil {
 		c.Data["Comment"] = nil
 	} else {
@@ -200,9 +205,9 @@ func (c *ReviewCommentController) Show() {
 	c.Data["Users"] = users
 
 	session := c.StartSession()
-	if session.Get("UserId") == nil {
-		fmt.Println("you are not user, so your tv_Like break.")
-	} else {
+	if session.Get("UserId") != nil {
+		// 	fmt.Println("you are not user, so your tv_Like break.")
+		// } else {
 		userID := session.Get("UserId").(int64)
 		w, err := models.GetWatchingStatusByUserAndTvProgram(userID, tvProgramID)
 		if err != nil {
@@ -330,7 +335,7 @@ func (c *ReviewCommentController) SearchComment() {
 	c.Data["Users"] = users
 	// 閲覧数カウント
 	if session.Get(tvProgramID) == nil {
-		fmt.Println("first tv click")
+		// fmt.Println("first tv click")
 		if session.Get("UserId") != nil {
 			userID := session.Get("UserId").(int64)
 			b := models.BrowsingHistory{
@@ -347,9 +352,9 @@ func (c *ReviewCommentController) SearchComment() {
 		session.Set(tvProgramID, true)
 	}
 
-	if session.Get("UserId") == nil {
-		fmt.Println("You are not user, so your tv_Like break.")
-	} else {
+	if session.Get("UserId") != nil {
+		// 	fmt.Println("You are not user, so your tv_Like break.")
+		// } else {
 		userID := session.Get("UserId").(int64)
 		w, err := models.GetWatchingStatusByUserAndTvProgram(userID, tvProgramID)
 		if err != nil {

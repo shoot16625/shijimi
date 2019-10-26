@@ -10,7 +10,7 @@
   </div>
   <div class="center" id="image-toolbar">
     <img
-      src="/static/img/shijimi-touka02.png"
+      src="/static/img/shijimi-transparence.png"
       alt="shijimi"
       height="42px;"
       onclick="location.href='/'"
@@ -49,7 +49,7 @@
               id="search-word"
             ></ons-search-input>
           </p>
-          <p class='create-top-margin'>
+          <p class="create-top-margin">
             <button class="button button--outline">search</button>
           </p>
           <p style="margin-top: 40px;">

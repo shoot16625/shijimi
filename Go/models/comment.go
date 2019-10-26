@@ -11,13 +11,13 @@ import (
 )
 
 type Comment struct {
-	Id      int64  `orm:"auto"`
-	Content string `orm:"type(longtext)"`
+	Id          int64  `orm:"auto"`
+	Content     string `orm:"type(longtext)"`
 	TvProgramId int64
-	UserId int64
-	CountLike   int32 `orm:"default(0)"`
-	Created time.Time `orm:"auto_now_add;type(datetime)"`
-	Updated time.Time `orm:"auto_now;type(datetime)"`
+	UserId      int64
+	CountLike   int32     `orm:"default(0)"`
+	Created     time.Time `orm:"auto_now_add;type(datetime)"`
+	Updated     time.Time `orm:"auto_now;type(datetime)"`
 }
 
 func init() {
@@ -54,7 +54,7 @@ func GetAllComment(query map[string]string, fields []string, sortby []string, or
 		// rewrite dot-notation to Object__Attribute
 		k = strings.Replace(k, ".", "__", -1)
 		v = strings.Replace(v, "　", " ", -1)
-		for _, value := range strings.Split(v, " "){
+		for _, value := range strings.Split(v, " ") {
 			qs = qs.Filter(k, value)
 		}
 	}
@@ -99,6 +99,10 @@ func GetAllComment(query map[string]string, fields []string, sortby []string, or
 
 	var l []Comment
 	qs = qs.OrderBy(sortFields...).RelatedSel()
+	var maxLimit int64 = 2000
+	if maxLimit < limit {
+		limit = maxLimit
+	}
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
 			for _, v := range l {
@@ -152,15 +156,16 @@ func DeleteComment(id int64) (err error) {
 
 func GetCommentByTvprogramId(id int64) (v []Comment, err error) {
 	o := orm.NewOrm()
-	if _,err = o.QueryTable(new(Comment)).Filter("TvProgramId", id).OrderBy("-Created").All(&v); err == nil {
+	if _, err = o.QueryTable(new(Comment)).Filter("TvProgramId", id).OrderBy("-Created").All(&v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
 func GetCommentByUserId(id int64) (v []Comment, err error) {
+	var limit int64 = 5000
 	o := orm.NewOrm()
-	if _,err = o.QueryTable(new(Comment)).Filter("UserId", id).OrderBy("-Created").All(&v); err == nil {
+	if _, err = o.QueryTable(new(Comment)).Filter("UserId", id).Limit(limit).OrderBy("-Created").All(&v); err == nil {
 		return v, nil
 	}
 	return nil, err

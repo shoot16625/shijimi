@@ -8,22 +8,15 @@
     <ons-page>
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
-      <ons-speed-dial position="bottom right" direction="up" ripple>
+      <ons-speed-dial
+        id="speed-dial"
+        position="bottom right"
+        direction="up"
+        ripple
+      >
         <ons-fab>
           <ons-icon icon="md-share"></ons-icon>
         </ons-fab>
-        <ons-speed-dial-item>
-          <ons-icon
-            icon="md-search"
-            onclick="dialogBoxEveryone('search-dialog')"
-          ></ons-icon>
-        </ons-speed-dial-item>
-        <ons-speed-dial-item>
-          <ons-icon icon="md-chart" onclick="goAnotherCarousel(1)"></ons-icon>
-        </ons-speed-dial-item>
-        <ons-speed-dial-item>
-          <ons-icon icon="md-home" onclick="goTop()"></ons-icon>
-        </ons-speed-dial-item>
       </ons-speed-dial>
       <ons-carousel
         swipeable
@@ -117,16 +110,18 @@
                   <select
                     name="year"
                     id="year"
+                    style="height: 130px;"
                     class="select-input select-input--underbar select-search-table"
                     multiple
                   >
                   </select>
                 </p>
                 <p>
-                  <label for="season">＜放送曜日＞</label>
+                  <label for="week">＜放送曜日＞</label>
                   <select
                     name="week"
                     id="week"
+                    style="height: 130px;"
                     class="select-input select-input--underbar select-search-table"
                     multiple
                   >
@@ -144,13 +139,14 @@
                   </select>
                 </p>
                 <p>
-                  <label for="season" style="margin-right:8px;margin-left:8px;"
+                  <label for="hour" style="margin-right:8px;margin-left:8px;"
                     >＜時間帯＞</label
                   >
                   <select
                     name="hour"
                     id="hour"
-                    class="select-input select-input--underbar"
+                    style="height: 130px;"
+                    class="select-input select-input--underbar select-search-table"
                     multiple
                   >
                   </select>
@@ -160,6 +156,7 @@
                   <select
                     name="season"
                     id="season"
+                    style="height: 130px;"
                     class="select-input select-input--underbar select-search-table"
                     multiple
                   >
@@ -170,34 +167,35 @@
                   </select>
                 </p>
                 <p>
-                  <label for="season">＜ジャンル＞</label>
+                  <label for="category">＜ジャンル＞</label>
                   <select
                     name="category"
                     id="category"
+                    style="height: 130px;"
                     class="select-input select-input--underbar select-search-table"
                     multiple
                   >
-                    <option>アクション</option>
-                    <option>アニメ映画</option>
-                    <option>SF</option>
+                    <option>コメディ・パロディ</option>
+                    <option>恋愛</option>
                     <option>学園・青春</option>
                     <option>グルメ</option>
+                    <option>ホーム・ヒューマン</option>
                     <option>企業・オフィス</option>
                     <option>刑事・検事</option>
-                    <option>コメディ</option>
+                    <option>弁護士</option>
+                    <option>医療</option>
                     <option>時代劇</option>
                     <option>スポーツ</option>
                     <option>政治</option>
-                    <option>探偵・推理</option>
-                    <option>ドキュメンタリー</option>
-                    <option>犯罪・復讐</option>
-                    <option>パロディ</option>
                     <option>不倫</option>
-                    <option>弁護士</option>
-                    <option>ホーム・ヒューマン</option>
-                    <option>ホラー</option>
                     <option>ミステリー・サスペンス</option>
-                    <option>恋愛</option>
+                    <option>探偵・推理</option>
+                    <option>犯罪・復讐</option>
+                    <option>ホラー</option>
+                    <option>ドキュメンタリー</option>
+                    <option>アクション</option>
+                    <option>アニメ映画</option>
+                    <option>SF</option>
                   </select>
                 </p>
                 <p>
@@ -288,6 +286,8 @@
       let tvPrograms = {{.TvProgram}};
       if (tvPrograms.length === 0) {
         tvPrograms = null;
+      } else {
+      console.log("表示数：", tvPrograms.length);
       }
       let watchStatus;
       if ({{.WatchStatus}} === null && tvPrograms != null){
@@ -306,7 +306,7 @@
             createItemContent: function(i) {
               let moviePosition;
               if (tvPrograms[i].MovieURL===""){
-                moviePosition = '<img id="image-' + tvPrograms[i].Id + '" src="'+tvPrograms[i].ImageURL+'" alt="' + tvPrograms[i].Title + '" width="80%">';
+                moviePosition = '<img class="image" id="image-' + tvPrograms[i].Id + '" src="'+tvPrograms[i].ImageURL+'" alt="' + tvPrograms[i].Title + '" width="80%" onerror="this.src=\'http://hankodeasobu.com/wp-content/uploads/animals_02.png\'">';
               } else {
                 moviePosition = '<iframe id="movie-' + tvPrograms[i].Id + '" class="movie" src="'+tvPrograms[i].MovieURL+'?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="' + tvPrograms[i].Title + '" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
               }
@@ -333,9 +333,25 @@
               } else {
                 headerColor = "ghostwhite";
               }
-              var casts = tvPrograms[i].Cast;
+              let casts = tvPrograms[i].Cast;
               casts = casts.split("、").slice(0, 5).join("、");
-              return ons.createElement('<div id="' + tvPrograms[i].Id + '"><ons-list-header style="background-color:'+ headerColor +';"><div class="area-left">' + tvPrograms[i].Year + '年 ' + tvPrograms[i].Season.Name + '（' + tvPrograms[i].Week.Name + time + '）</div><div class="area-right list-margin">閲覧数：' + tvPrograms[i].CountClicked + '</div></ons-list-header><ons-list-item><div class="tv-program-list-title-font">' + tvPrograms[i].Title + '</div></ons-list-item><ons-list-item><ons-row><ons-col><ons-row class="list-margin-bottom"><ons-col width="20%">出演：</ons-col><ons-col>' + casts + '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">歌：</ons-col><ons-col>' + tvPrograms[i].Themesong+ '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">監督：</ons-col><ons-col>' + tvPrograms[i].Supervisor+ '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">脚本：</ons-col><ons-col>' + tvPrograms[i].Dramatist+ '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">演出：</ons-col><ons-col>' + tvPrograms[i].Director+ '</ons-col></ons-row></ons-col><ons-row></ons-list-item><div class="area-center" style="margin:5px;">' + moviePosition + '</div><ons-list-item expandable>あらすじ・見どころ<div class="expandable-content">' + tvPrograms[i].Content + '</div></ons-list-item><ons-list-item modifier="nodivider"><i class="'+ setLikeBold(watchStatus[i].Watched) +' fa-laugh-beam" id="check-watched-' + i + '" onclick="clickWatchStatus(this)" style="color:' + setLikeStatus(watchStatus[i].Watched, 'deeppink') + ';"></i><div id="check-watched-' + i + '-text" class="tv-program-watch" style="margin-right: 8px;">見た：' + tvPrograms[i].CountWatched + '</div><i class="'+ setLikeBold(watchStatus[i].WantToWatch) +' fa-bookmark" id="check-wan2wat-' + i + '" onclick="clickWatchStatus(this)" style="color:' + setLikeStatus(watchStatus[i].WantToWatch, 'lightseagreen') + ';"></i><div id="check-wan2wat-' + i + '-text" class="tv-program-watch">また今度：' + tvPrograms[i].CountWantToWatch + '</div></ons-list-item><ons-list-item><div class="right list-item__right"><a href="/tv/tv_program/comment/' + tvPrograms[i].Id + '" style="text-decoration: none;">コメントを見る</a></div></ons-list-item></div>');
+              let referenceSite = tvPrograms[i].ImageURL;
+              if (referenceSite.includes("walkerplus")){
+                referenceSite = "@MovieWalker"
+              } else {
+                referenceSite = ""
+              }
+              let supervisors = tvPrograms[i].Supervisor;
+              supervisors = supervisors.split("、").slice(0, 3).join("、");
+              let categories = tvPrograms[i].Category.split('、');
+              if (tvPrograms[i].Category === ""){
+                categories = [];
+              }
+              let category = "";
+              for (let j = categories.length - 1; j >= 0; j--) {
+                category += "<span style='padding:3px;'>#"+categories[j]+"</span>";
+              }
+              return ons.createElement('<div id="' + tvPrograms[i].Id + '"><ons-list-header style="background-color:'+ headerColor +';"><div class="area-left">' + tvPrograms[i].Year + '年 ' + tvPrograms[i].Season.Name + '（' + tvPrograms[i].Week.Name + time + '）</div><div class="area-right list-margin">閲覧数：' + tvPrograms[i].CountClicked + '</div></ons-list-header><ons-list-item><div class="tv-program-list-title-font">' + tvPrograms[i].Title + '</div></ons-list-item><ons-list-item><ons-row><ons-col><ons-row class="list-margin-bottom"><ons-col width="20%">出演：</ons-col><ons-col>' + casts + '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">歌：</ons-col><ons-col>' + tvPrograms[i].Themesong+ '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">監督：</ons-col><ons-col>' + supervisors + '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col class="category-area">' + category + '</ons-col></ons-row><ons-row></ons-list-item><div class="area-center" style="margin:5px;">' + moviePosition + '<div class="reference">'+referenceSite+'</div></div><ons-list-item expandable>あらすじ・見どころ<div class="expandable-content">' + tvPrograms[i].Content + '</div></ons-list-item><ons-list-item modifier="nodivider"><i class="'+ setLikeBold(watchStatus[i].Watched) +' fa-laugh-beam" id="check-watched-' + i + '" onclick="clickWatchStatus(this)" style="color:' + setLikeStatus(watchStatus[i].Watched, 'deeppink') + ';"></i><div id="check-watched-' + i + '-text" class="tv-program-watch" style="margin-right: 8px;">見た：' + tvPrograms[i].CountWatched + '</div><i class="'+ setLikeBold(watchStatus[i].WantToWatch) +' fa-bookmark" id="check-wan2wat-' + i + '" onclick="clickWatchStatus(this)" style="color:' + setLikeStatus(watchStatus[i].WantToWatch, 'lightseagreen') + ';"></i><div id="check-wan2wat-' + i + '-text" class="tv-program-watch">また今度：' + tvPrograms[i].CountWantToWatch + '</div></ons-list-item><ons-list-item><div class="right list-item__right"><a href="/tv/tv_program/comment/' + tvPrograms[i].Id + '" style="text-decoration: none;">コメントを見る</a></div></ons-list-item></div>');
             },
             countItems: function() {
               return tvPrograms.length;
@@ -401,6 +417,11 @@
             goTop();
           }
         });
+    </script>
+    <script>
+      var dial = document.getElementById('speed-dial');
+      dial.innerHTML =
+        "<ons-fab><ons-icon icon='md-share'></ons-icon></ons-fab><ons-speed-dial-item><ons-icon icon='md-search' onclick='dialogBoxEveryone(\"search-dialog\")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-chart' onclick='goAnotherCarousel(1)'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-home' onclick='goTop()'></ons-icon></ons-speed-dial-item>";
     </script>
   </body>
 </html>

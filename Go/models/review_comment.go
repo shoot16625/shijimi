@@ -98,6 +98,10 @@ func GetAllReviewComment(query map[string]string, fields []string, sortby []stri
 	}
 
 	var l []ReviewComment
+	var maxLimit int64 = 2000
+	if maxLimit < limit {
+		limit = maxLimit
+	}
 	qs = qs.OrderBy(sortFields...).RelatedSel()
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -150,7 +154,7 @@ func DeleteReviewComment(id int64) (err error) {
 	return
 }
 
-func GetReviewCommentByTvprogramId(id int64) (v []ReviewComment, err error) {
+func GetReviewCommentByTvProgramId(id int64) (v []ReviewComment, err error) {
 	o := orm.NewOrm()
 	if _, err = o.QueryTable(new(ReviewComment)).Filter("TvProgramId", id).OrderBy("-Created").All(&v); err == nil {
 		return v, nil
@@ -159,8 +163,9 @@ func GetReviewCommentByTvprogramId(id int64) (v []ReviewComment, err error) {
 }
 
 func GetReviewCommentByUserId(id int64) (v []ReviewComment, err error) {
+	var limit int64 = 5000
 	o := orm.NewOrm()
-	if _, err = o.QueryTable(new(ReviewComment)).Filter("UserId", id).OrderBy("-Created").All(&v); err == nil {
+	if _, err = o.QueryTable(new(ReviewComment)).Filter("UserId", id).Limit(limit).OrderBy("-Created").All(&v); err == nil {
 		return v, nil
 	}
 	return nil, err

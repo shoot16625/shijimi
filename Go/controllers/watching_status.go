@@ -4,9 +4,9 @@ import (
 	"app/models"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
-	"fmt"
 
 	"github.com/astaxie/beego"
 )
@@ -43,11 +43,11 @@ func (c *WatchingStatusController) Post() {
 	}
 	c.ServeJSON()
 	// fmt.Println(v.TvProgramId)
-	w,_ := models.GetTvProgramById(v.TvProgramId)
+	w, _ := models.GetTvProgramById(v.TvProgramId)
 	if v.Watched {
-		w.CountWatched ++
+		w.CountWatched++
 	} else if v.WantToWatch {
-		w.CountWantToWatch ++
+		w.CountWantToWatch++
 	} else {
 		fmt.Println("WatchingStatus：ありえない分岐に到達")
 	}
@@ -161,20 +161,20 @@ func (c *WatchingStatusController) Put() {
 	}
 	c.ServeJSON()
 	// fmt.Println(v.TvProgramId)
-	w,_ := models.GetTvProgramById(v.TvProgramId)
+	w, _ := models.GetTvProgramById(v.TvProgramId)
 	if v.Watched != u.Watched {
-	if v.Watched {
-		w.CountWatched ++
-	} else {
-		w.CountWatched --	
-	}
+		if v.Watched {
+			w.CountWatched++
 		} else {
-	if v.WantToWatch {
-		w.CountWantToWatch ++
-	} else {
-		w.CountWantToWatch --
-	}			
+			w.CountWatched--
 		}
+	} else {
+		if v.WantToWatch {
+			w.CountWantToWatch++
+		} else {
+			w.CountWantToWatch--
+		}
+	}
 	// fmt.Println(v.Watched)
 	// fmt.Println(v.WantToWatch)
 	if err := models.UpdateTvProgramById(w); err != nil {

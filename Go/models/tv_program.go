@@ -31,7 +31,7 @@ type TvProgram struct {
 	Hour               float32   `orm:"default(100)`
 	Themesong          string    `orm:"size(256);null"`
 	CreateUserId       int64     `orm:"default(0)"`
-	Star               float32   `orm:"default(2.5)"`
+	Star               float32   `orm:"default(5)"`
 	CountStar          int32     `orm:"default(0)"`
 	CountWatched       int32     `orm:"default(0)"`
 	CountWantToWatch   int32     `orm:"default(0)"`
@@ -206,7 +206,8 @@ func DeleteTvProgram(id int64) (err error) {
 }
 
 // ツールバーの検索機能
-func SearchTvProgramAll(str string) (v []TvProgram, err error) {
+func SearchTvProgramAll(str string) (l []TvProgram, err error) {
+	var limit int64 = 100
 	o := orm.NewOrm()
 	condAll := orm.NewCondition()
 	str = strings.Replace(str, "　", " ", -1)
@@ -227,8 +228,8 @@ func SearchTvProgramAll(str string) (v []TvProgram, err error) {
 		condAll = condAll.AndCond(cond)
 	}
 
-	if _, err = o.QueryTable(new(TvProgram)).SetCond(condAll).OrderBy("-Year", "-Season__Id", "Week__Id", "Hour").All(&v); err == nil {
-		return v, nil
+	if _, err = o.QueryTable(new(TvProgram)).SetCond(condAll).Limit(limit).OrderBy("-Year", "-Season__Id", "Week__Id", "Hour").All(&l); err == nil {
+		return l, nil
 	}
 	return nil, err
 }
@@ -309,6 +310,10 @@ func SearchTvProgram(query map[string][]string, fields []string, sortby []string
 
 	var l []TvProgram
 	qs = qs.OrderBy(sortFields...).RelatedSel()
+	var maxLimit int64 = 2000
+	if maxLimit < limit {
+		limit = maxLimit
+	}
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
 			for _, v := range l {

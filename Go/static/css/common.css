@@ -23,12 +23,26 @@
     zoom:1;/*IE*/
 }
 img {
-    max-width: 300px;
+    max-width: 260px;
+    /* height: auto; */
 }
 .image {
-  max-width: 300px;
-  text-align: center;
+  max-width: 260px;
+  max-height: 130px;
+  width: auto;
+  height: auto;
 }
+.image-carousel {
+  max-width: 150px;
+  max-height: 100px;
+  width: auto;
+  height: auto;
+}
+.div-iframe {
+  margin: 0 auto;
+  width: 200px;
+}
+
 /* dialog box */
 .dialog {
   width: 100%;
@@ -38,7 +52,7 @@ img {
 }
 
 .textarea-tweet {
-  width: 100%;
+  width: 95%;
   background-color: white;
 }
 
@@ -50,6 +64,7 @@ label {
   color: lightslategrey;
 }
 
+/* ダイアログ上でのスクロールを可能にする */
 .scroller {
   display: block;
   height: 100%;
@@ -66,12 +81,20 @@ label {
 .doramas-on-air{
   margin-bottom: 10px;
 }
+.reference {
+  text-align: right;
+  font-size: 8px;
+  color: rgb(156, 149, 149);
+}
 a {
     text-decoration: none;
 }
 
 .list-item__subtitle{
-    word-break: break-all;
+    word-break: break-word;
+  }
+.list-item__expandable-content{
+    word-break: break-word;
   }
 
 .input-range {
@@ -149,8 +172,13 @@ a {
 .select-search-table {
   width: 80%;
   max-width: 500px;
-  height: 100px;
 }
+
 .flag-color {
   color: rgb(213, 236, 6);
+}
+.category-area {
+  color: blue;
+  font-size: 14px;
+  text-align: right;
 }

@@ -242,8 +242,11 @@ function goAnotherCarousel(index) {
 }
 
 // pathのページへ移動
-function goOtherPage(userID, path) {
-  if (userID === null) {
+function goOtherPage(user, path) {
+  // let URL = path.split('/');
+  if (user === null) {
+    return dialogBoxEveryone('alert-only-user-dialog');
+  } else if (path.split('/')[4] === '1' && user.Id != 1) {
     return dialogBoxEveryone('alert-only-user-dialog');
   } else {
     window.location.href = path;

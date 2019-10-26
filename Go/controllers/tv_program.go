@@ -1,7 +1,9 @@
 package controllers
 
 import (
+	"app/db"
 	"app/models"
+
 	// "encoding/json"
 	"errors"
 	"regexp"
@@ -33,6 +35,7 @@ func (c *TvProgramController) URLMapping() {
 	c.Mapping("SearchTvProgram", c.SearchTvProgram)
 	// c.Mapping("Create", c.Create)
 	c.Mapping("CreatePage", c.CreatePage)
+	c.Mapping("GetWikiInfo", c.GetWikiInfo)
 }
 
 // Post ...
@@ -65,7 +68,7 @@ func (c *TvProgramController) Post() {
 		if !strings.Contains(movieURL, "embed") {
 			movieURL = strings.Replace(movieURL, "watch?v=", "embed/", -1)
 		}
-		imageURL := c.GetString("IconURL")
+		imageURL := c.GetString("ImageURL")
 		if imageURL == "" {
 			imageURL = "http://hankodeasobu.com/wp-content/uploads/animals_02.png"
 		}
@@ -77,6 +80,7 @@ func (c *TvProgramController) Post() {
 			ImageURLReference: c.GetString("ImageURLReference"),
 			MovieURL:          movieURL,
 			MovieURLReference: c.GetString("MovieURLReference"),
+			WikiReference:     c.GetString("WikiReference"),
 			Cast:              strings.Replace(c.GetString("cast"), "　", "", -1),
 			Category:          strings.Join(c.GetStrings("category"), "、"),
 			Dramatist:         strings.Replace(c.GetString("dramatist"), "　", "", -1),
@@ -95,6 +99,7 @@ func (c *TvProgramController) Post() {
 			c.Redirect("/tv/tv_program/comment/"+strconv.FormatInt(v.Id, 10), 302)
 		} else {
 			c.Data["TvProgram"] = v
+			c.Data["GetWikiInfo"] = false
 			c.TplName = "tv_program/create.tpl"
 		}
 	}
@@ -227,6 +232,7 @@ func (c *TvProgramController) Put() {
 	v.ImageURLReference = c.GetString("ImageURLReference")
 	v.MovieURL = movieURL
 	v.MovieURLReference = c.GetString("MovieURLReference")
+	v.WikiReference = c.GetString("WikiReference")
 	v.Cast = strings.Replace(c.GetString("cast"), "　", "", -1)
 	v.Category = strings.Join(c.GetStrings("category"), "、")
 	v.Dramatist = strings.Replace(c.GetString("dramatist"), "　", "", -1)
@@ -238,36 +244,8 @@ func (c *TvProgramController) Put() {
 	v.Year = year
 	v.Hour = float32(hour)
 	v.Themesong = c.GetString("themesong")
-	// v = models.TvProgram{
-	// 	Id:                id,
-	// 	Title:             c.GetString("title"),
-	// 	Content:           c.GetString("content"),
-	// 	ImageURL:          imageURL,
-	// 	ImageURLReference: c.GetString("ImageURLReference"),
-	// 	MovieURL:          movieURL,
-	// 	MovieURLReference: c.GetString("MovieURLReference"),
-	// 	Cast:              strings.Replace(c.GetString("cast"), "　", "", -1),
-	// 	Category:          strings.Join(c.GetStrings("category"), "、"),
-	// 	Dramatist:         strings.Replace(c.GetString("dramatist"), "　", "", -1),
-	// 	Supervisor:        strings.Replace(c.GetString("supervisor"), "　", "", -1),
-	// 	Director:          strings.Replace(c.GetString("director"), "　", "", -1),
-	// 	Production:        c.GetString("production"),
-	// 	Year:              year,
-	// 	Season:            &season,
-	// 	Week:              &week,
-	// 	Hour:              float32(hour),
-	// 	Themesong:         c.GetString("themesong"),
-	// 	CreateUserId:      session.Get("UserId").(int64),
-	// 	// Star:               oldTvInfo.Star,
-	// 	// CountStar:          oldTvInfo.CountStar,
-	// 	// CountWatched:       oldTvInfo.CountWatched,
-	// 	// CountWantToWatch:   oldTvInfo.CountWantToWatch,
-	// 	// CountClicked:       oldTvInfo.CountClicked,
-	// 	// CountAuthorization: oldTvInfo.CountAuthorization,
-	// }
-	// fmt.Println(v)
+
 	if err := models.UpdateTvProgramById(&v); err == nil {
-		// var w models.TvProgramUpdateHistory
 		w := models.TvProgramUpdateHistory{
 			UserId:      session.Get("UserId").(int64),
 			TvProgramId: id,
@@ -361,14 +339,14 @@ func (c *TvProgramController) Get() {
 	query["Year"] = strconv.Itoa(time.Now().Year())
 	query["Season"] = models.GetOnairSeason()
 	week := [7]string{"月", "火", "水", "木", "金", "土", "日"}
-	weekName := [7]string{"mon", "tue", "wed", "thu", "fri", "sat", "san"}
+	weekName := [7]string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"}
 	for i, v := range week {
 		query["Week.Name"] = v
 		w, err := models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
 		if err != nil {
-			c.Data["TvProgram_"+weekName[i]] = nil
+			c.Data["TvProgram"+weekName[i]] = nil
 		} else {
-			c.Data["TvProgram_"+weekName[i]] = w
+			c.Data["TvProgram"+weekName[i]] = w
 		}
 	}
 	c.TplName = "tv_program/top-page.tpl"
@@ -376,18 +354,34 @@ func (c *TvProgramController) Get() {
 
 func (c *TvProgramController) Search() {
 	str := c.GetString("search-word")
-	v, _ := models.SearchTvProgramAll(str)
-	c.Data["TvProgram"] = v
+	l, _ := models.SearchTvProgramAll(str)
+	c.Data["TvProgram"] = l
 	session := c.StartSession()
 	if session.Get("UserId") != nil {
+		userID := session.Get("UserId").(int64)
 		var u models.SearchHistory
 		str = strings.Replace(str, "　", " ", -1)
 		u = models.SearchHistory{
-			UserId: session.Get("UserId").(int64),
+			UserId: userID,
 			Word:   strings.Replace(str, " ", "、", -1),
 			Item:   "tv",
 		}
 		_, _ = models.AddSearchHistory(&u)
+
+		var ratings []models.WatchingStatus
+		for _, tvProgram := range l {
+			// fmt.Println(tvProgram)
+			r, err := models.GetWatchingStatusByUserAndTvProgram(userID, tvProgram.Id)
+			// fmt.Println(r, err)
+			if err != nil {
+				ratings = append(ratings, *new(models.WatchingStatus))
+			} else {
+				ratings = append(ratings, *r)
+			}
+			c.Data["WatchStatus"] = ratings
+			v, _ := models.GetUserById(userID)
+			c.Data["User"] = v
+		}
 	}
 	c.TplName = "tv_program/index.tpl"
 }
@@ -577,4 +571,12 @@ func (c *TvProgramController) CreatePage() {
 	} else {
 		c.TplName = "tv_program/create.tpl"
 	}
+}
+
+func (c *TvProgramController) GetWikiInfo() {
+	wikiReference := c.GetString("wikiReference")
+	tvProgram := db.GetTvProgramInformationByURL(wikiReference)
+	c.Data["TvProgram"] = tvProgram
+	c.Data["GetWikiInfo"] = true
+	c.TplName = "tv_program/create.tpl"
 }

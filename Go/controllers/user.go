@@ -405,7 +405,7 @@ func (c *UserController) ShowWatchedTv() {
 	var sortby []string
 	var order []string
 	var query = make(map[string]string)
-	var limit int64 = 10000
+	var limit int64 = 5000
 	var offset int64
 
 	session := c.StartSession()
@@ -439,7 +439,7 @@ func (c *UserController) ShowWtwTv() {
 	var sortby []string
 	var order []string
 	var query = make(map[string]string)
-	var limit int64 = 10000
+	var limit int64 = 5000
 	var offset int64
 
 	session := c.StartSession()

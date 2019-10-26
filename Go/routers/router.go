@@ -42,6 +42,7 @@ func init() {
 			beego.NSRouter("/edit/:id", &controllers.TvProgramController{}, "*:EditPage"),
 			// beego.NSRouter("/create", &controllers.TvProgramController{},"*:Create"),
 			beego.NSRouter("/create_page", &controllers.TvProgramController{}, "*:CreatePage"),
+			beego.NSRouter("/get_info", &controllers.TvProgramController{}, "*:GetWikiInfo"),
 			beego.NSRouter("/comment/:id", &controllers.CommentController{}, "*:Show"),
 			beego.NSRouter("/comment/search_comment/:id", &controllers.CommentController{}, "*:SearchComment"),
 			beego.NSRouter("/review/:id", &controllers.ReviewCommentController{}, "*:Show"),
