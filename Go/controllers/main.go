@@ -8,6 +8,7 @@ type MainController struct {
 	beego.Controller
 }
 
+// 使っていない
 func (c *MainController) Get() {
 	c.Data["Website"] = "どらまば"
 	c.Data["Email"] = "commentspace@gmail.com"

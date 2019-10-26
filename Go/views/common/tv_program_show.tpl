@@ -22,14 +22,6 @@
               <ons-col>{{.TvProgram.Themesong}}</ons-col>
             </ons-row>
             <ons-row class="list-margin-bottom">
-              <ons-col width="20%">タグ：</ons-col>
-              <ons-col>{{.TvProgram.Category}}</ons-col>
-            </ons-row>
-            <ons-row class="list-margin-bottom">
-              <ons-col width="20%">制作：</ons-col>
-              <ons-col>{{.TvProgram.Production}}</ons-col>
-            </ons-row>
-            <ons-row class="list-margin-bottom">
               <ons-col width="20%">監督：</ons-col>
               <ons-col>{{.TvProgram.Supervisor}}</ons-col>
             </ons-row>
@@ -40,6 +32,17 @@
             <ons-row class="list-margin-bottom">
               <ons-col width="20%">演出：</ons-col>
               <ons-col>{{.TvProgram.Director}}</ons-col>
+            </ons-row>
+            <ons-row class="list-margin-bottom">
+              <ons-col width="20%">制作：</ons-col>
+              <ons-col>{{.TvProgram.Production}}</ons-col>
+            </ons-row>
+            <ons-row class="list-margin-bottom">
+              <ons-col
+                class="category-area"
+                id="category-area"
+              >
+              </ons-col>
             </ons-row>
           </div>
         </ons-col>

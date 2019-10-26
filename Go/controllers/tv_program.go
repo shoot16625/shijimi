@@ -339,14 +339,14 @@ func (c *TvProgramController) Get() {
 	query["Year"] = strconv.Itoa(time.Now().Year())
 	query["Season"] = models.GetOnairSeason()
 	week := [7]string{"月", "火", "水", "木", "金", "土", "日"}
-	weekName := [7]string{"mon", "tue", "wed", "thu", "fri", "sat", "san"}
+	weekName := [7]string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "San"}
 	for i, v := range week {
 		query["Week.Name"] = v
 		w, err := models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
 		if err != nil {
-			c.Data["TvProgram_"+weekName[i]] = nil
+			c.Data["TvProgram"+weekName[i]] = nil
 		} else {
-			c.Data["TvProgram_"+weekName[i]] = w
+			c.Data["TvProgram"+weekName[i]] = w
 		}
 	}
 	c.TplName = "tv_program/top-page.tpl"

@@ -383,5 +383,14 @@
       dial.innerHTML =
         "<ons-fab><ons-icon icon='md-share'></ons-icon></ons-fab><ons-speed-dial-item><ons-icon icon='md-comment-dots' onclick='dialogBox(\"tweet-dialog\", {{.User.Id}})'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-search' onclick='dialogBoxEveryone(\"search-dialog\")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-chart' onclick='goAnotherCarousel(1)'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-home' onclick='goTop()'></ons-icon></ons-speed-dial-item>";
     </script>
+    <script>
+      let categoryArea = document.getElementById("category-area");
+      let categories = {{.TvProgram.Category}}.split('、');
+      let category = "";
+      for (let j = categories.length - 1; j >= 0; j--) {
+        category += "<span style='padding:3px;'>#"+categories[j]+"</span>";
+      }
+      categoryArea.innerHTML = category;
+    </script>
   </body>
 </html>
