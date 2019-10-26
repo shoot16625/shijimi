@@ -337,7 +337,7 @@ func (c *TvProgramController) Get() {
 	sortby = append(sortby, "Hour")
 	order = append(order, "asc")
 	query["Year"] = strconv.Itoa(time.Now().Year())
-	query["Season"] = models.GetOnairSeason()
+	query["Season"] = models.GetOnAirSeason()
 	week := [7]string{"月", "火", "水", "木", "金", "土", "日"}
 	weekName := [7]string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"}
 	for i, v := range week {
@@ -526,7 +526,7 @@ func (c *TvProgramController) SearchTvProgram() {
 		var u models.SearchHistory
 		u = models.SearchHistory{
 			UserId:   session.Get("UserId").(int64),
-			Word:     s.Title + " " + s.Staff + " " + s.Themesong,
+			Word:     s.Title + "、" + s.Staff + "、" + s.Themesong,
 			Year:     s.Year,
 			Season:   s.Season,
 			Week:     s.Week,
@@ -543,9 +543,9 @@ func (c *TvProgramController) SearchTvProgram() {
 	l, _ := models.SearchTvProgram(query, fields, sortby, order, offset, limit)
 	c.Data["TvProgram"] = l
 	// session := c.StartSession()
-	if session.Get("UserId") == nil {
-		fmt.Println("you are not user, so your tv_Like break.")
-	} else {
+	if session.Get("UserId") != nil {
+		// 	fmt.Println("you are not user, so your tv_Like break.")
+		// } else {
 		userID := session.Get("UserId").(int64)
 		var ratings []models.WatchingStatus
 		for _, tvProgram := range l {

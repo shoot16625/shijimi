@@ -163,6 +163,7 @@ func GetUserByUsername(username string) (v *User, err error) {
 	return nil, err
 }
 
+// ユーザ名の検索
 func GetUserByPasswords(password string, SecondPassword string) (v *User, err error) {
 	o := orm.NewOrm()
 	var u []User
@@ -184,6 +185,7 @@ func GetUserByPasswords(password string, SecondPassword string) (v *User, err er
 	return nil, err
 }
 
+// ユーザー名と第2パスワードを使ってパスワードの再設定
 func GetUserByUsernameAndPassword(username string, SecondPassword string) (v *User, err error) {
 	v, err = GetUserByUsername(username)
 	if err != nil {
@@ -196,6 +198,7 @@ func GetUserByUsernameAndPassword(username string, SecondPassword string) (v *Us
 	}
 }
 
+// パスワードのハッシュ化
 func PasswordHash(pw string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(pw), bcrypt.DefaultCost)
 	if err != nil {
@@ -204,6 +207,14 @@ func PasswordHash(pw string) (string, error) {
 	return string(hash), err
 }
 
+// 入力パスワードが合っているか判定
 func UserPassMach(hash, pw string) bool {
 	return bcrypt.CompareHashAndPassword([]byte(hash), []byte(pw)) == nil
+}
+
+// The number of users.
+func GetUserCount() (cnt int64) {
+	o := orm.NewOrm()
+	cnt, _ = o.QueryTable(new(User)).Count()
+	return cnt
 }

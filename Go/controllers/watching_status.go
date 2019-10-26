@@ -190,12 +190,12 @@ func (c *WatchingStatusController) Put() {
 // @Failure 403 id is empty
 // @router /:id [delete]
 func (c *WatchingStatusController) Delete() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.ParseInt(idStr, 0, 64)
-	if err := models.DeleteWatchingStatus(id); err == nil {
-		c.Data["json"] = "OK"
-	} else {
-		c.Data["json"] = err.Error()
-	}
-	c.ServeJSON()
+	// idStr := c.Ctx.Input.Param(":id")
+	// id, _ := strconv.ParseInt(idStr, 0, 64)
+	// if err := models.DeleteWatchingStatus(id); err == nil {
+	// 	c.Data["json"] = "OK"
+	// } else {
+	// 	c.Data["json"] = err.Error()
+	// }
+	// c.ServeJSON()
 }

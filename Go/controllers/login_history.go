@@ -134,16 +134,16 @@ func (c *LoginHistoryController) GetAll() {
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *LoginHistoryController) Put() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.ParseInt(idStr, 0, 64)
-	v := models.LoginHistory{Id: id}
-	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
-	if err := models.UpdateLoginHistoryById(&v); err == nil {
-		c.Data["json"] = "OK"
-	} else {
-		c.Data["json"] = err.Error()
-	}
-	c.ServeJSON()
+	// idStr := c.Ctx.Input.Param(":id")
+	// id, _ := strconv.ParseInt(idStr, 0, 64)
+	// v := models.LoginHistory{Id: id}
+	// json.Unmarshal(c.Ctx.Input.RequestBody, &v)
+	// if err := models.UpdateLoginHistoryById(&v); err == nil {
+	// 	c.Data["json"] = "OK"
+	// } else {
+	// 	c.Data["json"] = err.Error()
+	// }
+	// c.ServeJSON()
 }
 
 // Delete ...
@@ -154,12 +154,12 @@ func (c *LoginHistoryController) Put() {
 // @Failure 403 id is empty
 // @router /:id [delete]
 func (c *LoginHistoryController) Delete() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.ParseInt(idStr, 0, 64)
-	if err := models.DeleteLoginHistory(id); err == nil {
-		c.Data["json"] = "OK"
-	} else {
-		c.Data["json"] = err.Error()
-	}
-	c.ServeJSON()
+	// idStr := c.Ctx.Input.Param(":id")
+	// id, _ := strconv.ParseInt(idStr, 0, 64)
+	// if err := models.DeleteLoginHistory(id); err == nil {
+	// 	c.Data["json"] = "OK"
+	// } else {
+	// 	c.Data["json"] = err.Error()
+	// }
+	// c.ServeJSON()
 }

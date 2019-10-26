@@ -9,12 +9,12 @@
           {{.User.Username}}
         </div>
         <div class="content">
-          <p>年齢：{{.User.Age}}</p>
+          <p>年齢　：{{.User.Age}}</p>
           <p>居住地：{{.User.Address}}</p>
         </div>
       </ons-col>
-      <ons-col width="33%" align="center">
-        <div class="image">
+      <ons-col width="50%">
+        <div class="image" style="max-height: 190px;">
           <img src="{{.User.IconURL}}" alt="{{.Username}}" width="100%" />
         </div>
       </ons-col>

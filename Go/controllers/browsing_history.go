@@ -134,16 +134,16 @@ func (c *BrowsingHistoryController) GetAll() {
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *BrowsingHistoryController) Put() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.ParseInt(idStr, 0, 64)
-	v := models.BrowsingHistory{Id: id}
-	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
-	if err := models.UpdateBrowsingHistoryById(&v); err == nil {
-		c.Data["json"] = "OK"
-	} else {
-		c.Data["json"] = err.Error()
-	}
-	c.ServeJSON()
+	// idStr := c.Ctx.Input.Param(":id")
+	// id, _ := strconv.ParseInt(idStr, 0, 64)
+	// v := models.BrowsingHistory{Id: id}
+	// json.Unmarshal(c.Ctx.Input.RequestBody, &v)
+	// if err := models.UpdateBrowsingHistoryById(&v); err == nil {
+	// 	c.Data["json"] = "OK"
+	// } else {
+	// 	c.Data["json"] = err.Error()
+	// }
+	// c.ServeJSON()
 }
 
 // Delete ...
@@ -154,12 +154,12 @@ func (c *BrowsingHistoryController) Put() {
 // @Failure 403 id is empty
 // @router /:id [delete]
 func (c *BrowsingHistoryController) Delete() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.ParseInt(idStr, 0, 64)
-	if err := models.DeleteBrowsingHistory(id); err == nil {
-		c.Data["json"] = "OK"
-	} else {
-		c.Data["json"] = err.Error()
-	}
-	c.ServeJSON()
+	// idStr := c.Ctx.Input.Param(":id")
+	// id, _ := strconv.ParseInt(idStr, 0, 64)
+	// if err := models.DeleteBrowsingHistory(id); err == nil {
+	// 	c.Data["json"] = "OK"
+	// } else {
+	// 	c.Data["json"] = err.Error()
+	// }
+	// c.ServeJSON()
 }

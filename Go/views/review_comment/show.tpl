@@ -38,9 +38,13 @@
           </ons-list>
         </ons-carousel-item>
         <ons-carousel-item>
-          <div class="area-center">
-            <p>詳細情報や分析結果を表示</p>
-            <p>工事中<i class="fas fa-truck-pickup"></i></p>
+          <div style="height: 200px; padding: 1px 0 0 0;">
+            <div class="card">
+              <h2 class="card__title">工事中<i class="fas fa-wrench"></i></h2>
+              <div class="card__content">
+                ログの解析結果を表示.
+              </div>
+            </div>
           </div>
         </ons-carousel-item>
       </ons-carousel>

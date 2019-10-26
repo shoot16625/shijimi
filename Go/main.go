@@ -1,6 +1,7 @@
 package main
 
 import (
+	"app/db"
 	_ "app/routers"
 
 	"fmt"
@@ -71,10 +72,10 @@ func init() {
 	// db.ExecTestSQL()
 	// db.GetTvProgramInformationByURL("https://ja.wikipedia.org/wiki/G線上のあなたと私")
 	// db.AddRecentTvInfo()
-	// db.GetWikiDoramas("https://ja.wikipedia.org/wiki/日本のテレビドラマ一覧_(2010年代)")
-	// db.GetWikiDoramas("https://ja.wikipedia.org/wiki/日本のテレビドラマ一覧_(2000年代)")
-	// db.UpdateTvProgramsInformation()
-	// db.GetMovieWalkers()
+	db.GetWikiDoramas("https://ja.wikipedia.org/wiki/日本のテレビドラマ一覧_(2010年代)")
+	db.GetWikiDoramas("https://ja.wikipedia.org/wiki/日本のテレビドラマ一覧_(2000年代)")
+	db.UpdateTvProgramsInformation()
+	db.GetMovieWalkers()
 }
 
 // func execInitSQL() {

@@ -335,7 +335,7 @@ func SearchTvProgram(query map[string][]string, fields []string, sortby []string
 	return nil, err
 }
 
-func GetOnairSeason() (season string) {
+func GetOnAirSeason() (season string) {
 	seasonName := [4]string{"春", "夏", "秋", "冬"}
 	var tmp int = 365
 	t := time.Now()
@@ -353,4 +353,11 @@ func GetOnairSeason() (season string) {
 		}
 	}
 	return season
+}
+
+// The number of TvPrograms.
+func GetTvProgramCount() (cnt int64) {
+	o := orm.NewOrm()
+	cnt, _ = o.QueryTable(new(TvProgram)).Count()
+	return cnt
 }

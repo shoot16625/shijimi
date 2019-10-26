@@ -511,6 +511,13 @@ func (c *UserController) Logout() {
 		fmt.Println(userID, ":logout")
 	}
 	c.Data["Status"] = "ログアウトしました"
+	var Info struct {
+		CntUsers      int64
+		CntTvPrograms int64
+	}
+	Info.CntUsers = models.GetUserCount()
+	Info.CntTvPrograms = models.GetTvProgramCount()
+	c.Data["Info"] = Info
 	c.TplName = "user/logout.tpl"
 }
 
