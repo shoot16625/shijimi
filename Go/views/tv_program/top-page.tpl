@@ -336,32 +336,32 @@
           </ons-carousel>
         </div>
         <ons-row>
-            <ons-col class="area-right">
+          <ons-col class="area-right">
+            <a
+              href="https://twitter.com/share"
+              class="twitter-share-button"
+              data-url="https://www.yahoo.co.jp"
+              data-text="AIがあなたにおすすめなドラマ・映画を選定！！"
+              data-hashtags="shijimi"
+              >Tweet</a
+            >
+          </ons-col>
+          <ons-col>
+            <div
+              class="fb-share-button"
+              data-href="https://developers.facebook.com/docs/plugins/"
+              data-layout="button_count"
+              data-size="small"
+            >
               <a
-                href="https://twitter.com/share"
-                class="twitter-share-button"
-                data-url="https://www.yahoo.co.jp"
-                data-text="AIがあなたにおすすめなドラマ・映画を選定！！"
-                data-hashtags="shijimi"
-                >Tweet</a
+                target="_blank"
+                href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse"
+                class="fb-xfbml-parse-ignore"
+                >シェア</a
               >
-            </ons-col>
-            <ons-col>
-              <div
-                class="fb-share-button"
-                data-href="https://developers.facebook.com/docs/plugins/"
-                data-layout="button_count"
-                data-size="small"
-              >
-                <a
-                  target="_blank"
-                  href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse"
-                  class="fb-xfbml-parse-ignore"
-                  >シェア</a
-                >
-              </div>
-            </ons-col>
-          </ons-row>
+            </div>
+          </ons-col>
+        </ons-row>
       </div>
     </ons-page>
 

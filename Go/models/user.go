@@ -16,13 +16,14 @@ type User struct {
 	Username       string `orm:"size(30);unique"`
 	Password       string `orm:"size(500)" json:"-"`
 	Age            int
-	Gender         string    `orm:"size(20)"`
-	Address        string    `orm:"size(20)"`
-	Job            string    `orm:"size(20)"`
+	Gender         string    `orm:"size(20)";null`
+	Address        string    `orm:"size(20)";null`
+	Job            string    `orm:"size(20)";null`
 	SecondPassword string    `orm:"size(500)" json:"-"`
 	IconURL        string    `orm:"size(255);null"`
 	Marital        string    `orm:"size(20);null"`
 	BloodType      string    `orm:"size(20);null"`
+	MoneyPoint     int       `orm:"default(0)`
 	Created        time.Time `orm:"auto_now_add;type(datetime)"`
 	Updated        time.Time `orm:"auto_now;type(datetime)"`
 }

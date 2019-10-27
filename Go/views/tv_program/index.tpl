@@ -262,7 +262,6 @@
         </script>
         <script type="text/javascript">
           if ({{.SearchWords}} != null){
-            // console.log({{.SearchWords}});
             setMultipleSelection("year", {{.SearchWords.Year}});
             setMultipleSelection("week", {{.SearchWords.Week}});
             setMultipleSelection("hour", {{.SearchWords.Hour}});
@@ -325,14 +324,18 @@
                   time += ":00";
                 }
               }
+              let seasonName = "";
+              if (tvPrograms[i].Season != null) {
+                seasonName = tvPrograms[i].Season.Name;
+              }
               let headerColor;
-              if (tvPrograms[i].Season.Name === "春") {
+              if (seasonName === "春") {
                 headerColor = "lavenderblush";
-              } else if (tvPrograms[i].Season.Name === "夏") {
+              } else if (seasonName === "夏") {
                 headerColor = "aliceblue";
-              } else if (tvPrograms[i].Season.Name === "秋") {
+              } else if (seasonName === "秋") {
                 headerColor = "khaki";
-              } else if (tvPrograms[i].Season.Name === "冬") {
+              } else if (seasonName === "冬") {
                 headerColor = "thistle";
               } else {
                 headerColor = "ghostwhite";
@@ -341,19 +344,19 @@
               casts = casts.split("、").slice(0, 5).join("、");
               let referenceSite = tvPrograms[i].ImageURL;
               if (referenceSite.includes("walkerplus")){
-                referenceSite = "By MovieWalker"
+                referenceSite = "By MovieWalker";
               } else if (referenceSite.includes("ntv")){
-                referenceSite = "By 日テレ"
+                referenceSite = "By 日テレ";
               } else if (referenceSite.includes("fujitv")){
-                referenceSite = "By フジテレビ"
+                referenceSite = "By フジテレビ";
               } else if (referenceSite.includes("tbs")){
-                referenceSite = "By TBS"
+                referenceSite = "By TBS";
               } else if (referenceSite.includes("tv-asahi")){
-                referenceSite = "By テレビ朝日"
+                referenceSite = "By テレビ朝日";
               } else if (referenceSite.includes("tv-tokyo")){
-                referenceSite = "By テレビ東京"
+                referenceSite = "By テレビ東京";
               } else {
-                referenceSite = ""
+                referenceSite = "";
               }
               let supervisors = tvPrograms[i].Supervisor;
               supervisors = supervisors.split("、").slice(0, 3).join("、");
@@ -365,7 +368,12 @@
               for (let j = categories.length - 1; j >= 0; j--) {
                 category += "<span style='padding:3px;'>#"+categories[j]+"</span>";
               }
-              return ons.createElement('<div id="' + tvPrograms[i].Id + '"><ons-list-header style="background-color:'+ headerColor +';"><div class="area-left">' + tvPrograms[i].Year + '年 ' + tvPrograms[i].Season.Name + '（' + tvPrograms[i].Week.Name + time + '）</div><div class="area-right list-margin">閲覧数：' + tvPrograms[i].CountClicked + '</div></ons-list-header><ons-list-item><div class="tv-program-list-title-font">' + tvPrograms[i].Title + '</div></ons-list-item><ons-list-item><ons-row><ons-col><ons-row class="list-margin-bottom"><ons-col width="20%">出演：</ons-col><ons-col>' + casts + '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">歌：</ons-col><ons-col>' + tvPrograms[i].Themesong+ '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">監督：</ons-col><ons-col>' + supervisors + '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col class="category-area">' + category + '</ons-col></ons-row><ons-row></ons-list-item><div class="area-center" style="margin:5px;">' + moviePosition + '<div class="reference">'+referenceSite+'</div></div><ons-list-item expandable>あらすじ・見どころ<div class="expandable-content">' + tvPrograms[i].Content + '</div></ons-list-item><ons-list-item modifier="nodivider"><i class="'+ setLikeBold(watchStatus[i].Watched) +' fa-laugh-beam" id="check-watched-' + i + '" onclick="clickWatchStatus(this)" style="color:' + setLikeStatus(watchStatus[i].Watched, 'deeppink') + ';"></i><div id="check-watched-' + i + '-text" class="tv-program-watch" style="margin-right: 8px;">見た：' + tvPrograms[i].CountWatched + '</div><i class="'+ setLikeBold(watchStatus[i].WantToWatch) +' fa-bookmark" id="check-wan2wat-' + i + '" onclick="clickWatchStatus(this)" style="color:' + setLikeStatus(watchStatus[i].WantToWatch, 'lightseagreen') + ';"></i><div id="check-wan2wat-' + i + '-text" class="tv-program-watch">また今度：' + tvPrograms[i].CountWantToWatch + '</div></ons-list-item><ons-list-item><div class="right list-item__right"><a href="/tv/tv_program/comment/' + tvPrograms[i].Id + '" style="text-decoration: none;">コメントを見る</a></div></ons-list-item></div>');
+              let weekName = "";
+              if (tvPrograms[i].Week != null) {
+                weekName = tvPrograms[i].Week.Name;
+              }
+
+              return ons.createElement('<div id="' + tvPrograms[i].Id + '"><ons-list-header style="background-color:'+ headerColor +';"><div class="area-left">' + tvPrograms[i].Year + '年 ' + seasonName + '（' + weekName + time + '）</div><div class="area-right list-margin">閲覧数：' + tvPrograms[i].CountClicked + '</div></ons-list-header><ons-list-item><div class="tv-program-list-title-font">' + tvPrograms[i].Title + '</div></ons-list-item><ons-list-item><ons-row><ons-col><ons-row class="list-margin-bottom"><ons-col width="20%">出演：</ons-col><ons-col>' + casts + '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">歌：</ons-col><ons-col>' + tvPrograms[i].Themesong+ '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">監督：</ons-col><ons-col>' + supervisors + '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col class="category-area">' + category + '</ons-col></ons-row><ons-row></ons-list-item><div class="area-center" style="margin:5px;">' + moviePosition + '<div class="reference">'+referenceSite+'</div></div><ons-list-item expandable>あらすじ・見どころ<div class="expandable-content">' + tvPrograms[i].Content + '</div></ons-list-item><ons-list-item modifier="nodivider"><i class="'+ setLikeBold(watchStatus[i].Watched) +' fa-laugh-beam" id="check-watched-' + i + '" onclick="clickWatchStatus(this)" style="color:' + setLikeStatus(watchStatus[i].Watched, 'deeppink') + ';"></i><div id="check-watched-' + i + '-text" class="tv-program-watch" style="margin-right: 8px;">見た：' + tvPrograms[i].CountWatched + '</div><i class="'+ setLikeBold(watchStatus[i].WantToWatch) +' fa-bookmark" id="check-wan2wat-' + i + '" onclick="clickWatchStatus(this)" style="color:' + setLikeStatus(watchStatus[i].WantToWatch, 'lightseagreen') + ';"></i><div id="check-wan2wat-' + i + '-text" class="tv-program-watch">また今度：' + tvPrograms[i].CountWantToWatch + '</div></ons-list-item><ons-list-item><div class="right list-item__right"><a href="/tv/tv_program/comment/' + tvPrograms[i].Id + '" style="text-decoration: none;">コメントを見る</a></div></ons-list-item></div>');
             },
             countItems: function() {
               return tvPrograms.length;

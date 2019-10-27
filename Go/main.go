@@ -69,11 +69,8 @@ func init() {
 
 	// 初期データの投入
 	db.ExecInitSQL()
-	db.ExecTestSQL()
-	// db.GetTvProgramInformationByURL("https://ja.wikipedia.org/wiki/G線上のあなたと私")
+	// db.ExecTestSQL()
 	db.AddRecentTvInfo()
-	// db.GetWikiDoramas("https://ja.wikipedia.org/wiki/日本のテレビドラマ一覧_(2010年代)")
-	// db.GetWikiDoramas("https://ja.wikipedia.org/wiki/日本のテレビドラマ一覧_(2000年代)")
-	db.UpdateTvProgramsInformation()
+	db.AddTvProgramsInformation()
 	// db.GetMovieWalkers()
 }
