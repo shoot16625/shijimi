@@ -362,6 +362,7 @@
             </div>
           </ons-col>
         </ons-row>
+          <div class="area-right" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;margin: 10px;">&copy; 2019 ShiJimi</div>
       </div>
     </ons-page>
 

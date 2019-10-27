@@ -3,6 +3,7 @@ package db
 import (
 	"app/models"
 	"fmt"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -261,8 +262,9 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 						doramaFlag = false
 					}
 				case "放送期間":
+					re := regexp.MustCompile("(\\d{4})")
 					contents := strings.Split(content, "年")
-					year, _ := strconv.Atoi(contents[0])
+					year, _ := strconv.Atoi(re.FindStringSubmatch(contents[0])[0])
 					newTvProgram.Year = year
 					contents = strings.Split(contents[1], "月")
 					month, _ := strconv.Atoi(contents[0])
@@ -515,8 +517,9 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (newTvProgram models.
 							doramaFlag = false
 						}
 					case "放送期間":
+						re := regexp.MustCompile("(\\d{4})")
 						contents := strings.Split(content, "年")
-						year, _ := strconv.Atoi(contents[0])
+						year, _ := strconv.Atoi(re.FindStringSubmatch(contents[0])[0])
 						newTvProgram.Year = year
 						contents = strings.Split(contents[1], "月")
 						month, _ := strconv.Atoi(contents[0])
@@ -681,8 +684,9 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 						doramaFlag = false
 					}
 				case "放送期間":
+					re := regexp.MustCompile("(\\d{4})")
 					contents := strings.Split(content, "年")
-					year, _ := strconv.Atoi(contents[0])
+					year, _ := strconv.Atoi(re.FindStringSubmatch(contents[0])[0])
 					newTvProgram.Year = year
 					contents = strings.Split(contents[1], "月")
 					month, _ := strconv.Atoi(contents[0])
@@ -753,7 +757,7 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 
 // サーバ側でデータ投入
 func AddRecentTvInfo() {
-	wikiTitles := []string{"4分間のマリーゴールド", "モトカレマニア", "G線上のあなたと私", "同期のサクラ", "時効警察はじめました", "俺の話は長い", "グランメゾン東京", "ニッポンノワール-刑事Yの反乱-", "チート〜詐欺師の皆さん、ご注意ください〜", "リカ (小説)", "スカーレット (テレビドラマ)", "ブラック校則 (2019年の映画)", "左ききのエレン", "結婚できない男"}
+	wikiTitles := []string{"4分間のマリーゴールド", "モトカレマニア", "G線上のあなたと私", "同期のサクラ", "時効警察はじめました", "俺の話は長い", "グランメゾン東京", "ニッポンノワール-刑事Yの反乱-", "チート〜詐欺師の皆さん、ご注意ください〜", "リカ (小説)", "スカーレット (テレビドラマ)", "ブラック校則 (2019年の映画)", "左ききのエレン", "結婚できない男", "シャーロック_(テレビドラマ)"}
 	for _, v := range wikiTitles {
 		url := "https://ja.wikipedia.org/wiki/" + v
 		GetTvProgramInformationByURLOnGo(url)

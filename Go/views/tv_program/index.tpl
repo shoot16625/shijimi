@@ -8,6 +8,7 @@
     <ons-page>
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
+      <ons-pull-hook id="pull-hook"> </ons-pull-hook>
       <ons-speed-dial
         id="speed-dial"
         position="bottom right"
@@ -444,6 +445,25 @@
       var dial = document.getElementById('speed-dial');
       dial.innerHTML =
         "<ons-fab><ons-icon icon='md-share'></ons-icon></ons-fab><ons-speed-dial-item><ons-icon icon='md-search' onclick='dialogBoxEveryone(\"search-dialog\")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-chart' onclick='goAnotherCarousel(1)'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-home' onclick='goTop()'></ons-icon></ons-speed-dial-item>";
+    </script>
+    <script>
+      $(function() {
+        let pos = 0;
+        $('.page__content').on('scroll', function() {
+          //
+          if ($(this).scrollTop() < pos) {
+            //上スクロール時の処理を記述
+            // document.querySelector('ons-toolbar').show();
+            $('ons-toolbar').fadeIn();
+          } else {
+            //下スクロール時の処理を記述
+            // document.querySelector('ons-toolbar').hide();
+            $('ons-toolbar').fadeOut();
+          }
+          //スクロールが停止した位置を保持
+          pos = $(this).scrollTop();
+        });
+      });
     </script>
   </body>
 </html>

@@ -120,6 +120,7 @@
               <option>金</option>
               <option>土</option>
               <option>日</option>
+              <option>平日</option>
               <option>スペシャル</option>
               <option>映画</option>
             </select>

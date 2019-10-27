@@ -96,5 +96,19 @@
         request.send(json);
       };
     </script>
+    <script>
+      $(function() {
+        let pos = 0;
+        $('.page__content').on('scroll', function() {
+          //
+          if ($(this).scrollTop() < pos) {
+            $('ons-toolbar').fadeIn();
+          } else {
+            $('ons-toolbar').fadeOut();
+          }
+          pos = $(this).scrollTop();
+        });
+      });
+    </script>
   </body>
 </html>

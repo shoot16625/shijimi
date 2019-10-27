@@ -42,17 +42,12 @@ func (c *WatchingStatusController) Post() {
 		c.Data["json"] = err.Error()
 	}
 	c.ServeJSON()
-	// fmt.Println(v.TvProgramId)
 	w, _ := models.GetTvProgramById(v.TvProgramId)
 	if v.Watched {
 		w.CountWatched++
-	} else if v.WantToWatch {
-		w.CountWantToWatch++
 	} else {
-		fmt.Println("WatchingStatus：ありえない分岐に到達")
+		w.CountWantToWatch++
 	}
-	// fmt.Println(v.Watched)
-	// fmt.Println(v.WantToWatch)
 	if err := models.UpdateTvProgramById(w); err != nil {
 		fmt.Println(err.Error())
 	}

@@ -318,9 +318,7 @@
           target.innerHTML = text;
         </script>
         <script type="text/javascript">
-          console.log({{.SearchWords}});
           if ({{.SearchWords}} != null){
-            // console.log({{.SearchWords}});
             setMultipleSelection("favorite-point", {{.SearchWords.Category}});
             setMultipleSelection("spoiler", {{.SearchWords.Spoiler}});
             setMultipleSelection("star", {{.SearchWords.Star}});
@@ -460,7 +458,6 @@
         request.onload = function () {
           var x = JSON.parse(request.responseText);
           if (request.readyState == 4 && request.status == "200") {
-            console.table(x);
           } else {
             globalWatchStatus.Id = x.Id;
           }
@@ -474,7 +471,7 @@
       function postComment() {
         const text_length = document.getElementById("tweet-dialog-content").value.length;
         if (text_length < 5){
-          return dialogBox('alert-min-length');
+          return dialogBox('alert-min-length', {{.User.Id}});
         }
         let url = URL+"/tv/review_comment/";
         let data = {};
@@ -493,7 +490,6 @@
         }
         data.FavoritePoint = fps.join("、");
         data.Star = Number(document.getElementById("star-point").value);
-        // console.log(data);
         var json = JSON.stringify(data);
         var request = new XMLHttpRequest();
         request.open('POST', url, true);
@@ -507,7 +503,6 @@
           }
         }
         request.send(json);
-        // PostRatingTvProgram();
         hideAlertDialog('tweet-dialog')
         setTimeout(window.location.reload(false), 500);
       };
@@ -557,6 +552,25 @@
         category += "<span style='padding:3px;'>#"+categories[j]+"</span>";
       }
       document.getElementById("category-area").innerHTML = category;
+    </script>
+    <script>
+      $(function() {
+        let pos = 0;
+        $('.page__content').on('scroll', function() {
+          //
+          if ($(this).scrollTop() < pos) {
+            //上スクロール時の処理を記述
+            // document.querySelector('ons-toolbar').show();
+            $('ons-toolbar').fadeIn();
+          } else {
+            //下スクロール時の処理を記述
+            // document.querySelector('ons-toolbar').hide();
+            $('ons-toolbar').fadeOut();
+          }
+          //スクロールが停止した位置を保持
+          pos = $(this).scrollTop();
+        });
+      });
     </script>
   </body>
 </html>

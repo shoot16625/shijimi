@@ -32,6 +32,23 @@ function autoScroll(varName, len) {
 //   scroll_position = scrollTop;
 // });
 // });
+// $(function() {
+//   var pos = 0;
+//   $('.page__content').on('scroll', function() {
+//     //
+//     if ($(this).scrollTop() < pos) {
+//       //上スクロール時の処理を記述
+//       // document.querySelector('ons-toolbar').show();
+//       $('ons-toolbar').fadeIn();
+//     } else {
+//       //下スクロール時の処理を記述
+//       // document.querySelector('ons-toolbar').hide();
+//       $('ons-toolbar').fadeOut();
+//     }
+//     //スクロールが停止した位置を保持
+//     pos = $(this).scrollTop();
+//   });
+// });
 
 // パスワードを表示するチェックボックス
 $(function() {

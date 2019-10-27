@@ -255,10 +255,8 @@
           url = url+data.Id;
         }
         data.Like = checkFlag;
-        // console.log("flag",globalCommentLikeStatus[elem.id], checkFlag);
         globalCommentLikeStatus[elem.id].Like = data.Like;
 
-        // console.log("last", globalCommentLikeStatus[elem.id]);
         var json = JSON.stringify(data);
         var request = new XMLHttpRequest();
         request.open(method, url, true);
@@ -266,7 +264,6 @@
         request.onload = function () {
           var x = JSON.parse(request.responseText);
           if (request.readyState == 4 && request.status == "200") {
-            console.table(x);
           } else {
             globalCommentLikeStatus[elem.id].Id = x.Id;
           }
@@ -310,7 +307,6 @@
         request.onload = function () {
           var x = JSON.parse(request.responseText);
           if (request.readyState == 4 && request.status == "200") {
-            console.table(x);
           } else {
             globalWatchStatus.Id = x.Id;
           }
@@ -323,9 +319,8 @@
     <script type="text/javascript">
       function postComment() {
         const text_length = document.getElementById("tweet-dialog-content").value.length;
-        // console.log(text_length);
         if (text_length < 5){
-          return dialogBox('alert-min-length');
+          return dialogBox('alert-min-length', {{.User.Id}});
         }
         let url = URL+"/tv/comment/";
         let data = {};
@@ -397,6 +392,25 @@
         category += "<span style='padding:3px;'>#"+categories[j]+"</span>";
       }
       document.getElementById("category-area").innerHTML = category;
+    </script>
+    <script>
+      $(function() {
+        let pos = 0;
+        $('.page__content').on('scroll', function() {
+          //
+          if ($(this).scrollTop() < pos) {
+            //上スクロール時の処理を記述
+            // document.querySelector('ons-toolbar').show();
+            $('ons-toolbar').fadeIn();
+          } else {
+            //下スクロール時の処理を記述
+            // document.querySelector('ons-toolbar').hide();
+            $('ons-toolbar').fadeOut();
+          }
+          //スクロールが停止した位置を保持
+          pos = $(this).scrollTop();
+        });
+      });
     </script>
   </body>
 </html>

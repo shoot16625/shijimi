@@ -370,9 +370,7 @@ func (c *TvProgramController) Search() {
 
 		var ratings []models.WatchingStatus
 		for _, tvProgram := range l {
-			// fmt.Println(tvProgram)
 			r, err := models.GetWatchingStatusByUserAndTvProgram(userID, tvProgram.Id)
-			// fmt.Println(r, err)
 			if err != nil {
 				ratings = append(ratings, *new(models.WatchingStatus))
 			} else {

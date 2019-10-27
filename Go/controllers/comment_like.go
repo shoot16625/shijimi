@@ -39,16 +39,14 @@ func (c *CommentLikeController) Post() {
 		c.Ctx.Output.SetStatus(201)
 		c.Data["json"] = v
 	}
-	// c.ServeJSON()
-	// fmt.Println(v.CommentId)
+	// いるらしい
+	c.ServeJSON()
 	w, _ := models.GetCommentById(v.CommentId)
-	// fmt.Println(v.Like)
 	if v.Like {
 		w.CountLike++
 	} else {
 		w.CountLike--
 	}
-	// fmt.Println("new count like:", w.CountLike)
 	if err := models.UpdateCommentById(w); err != nil {
 		fmt.Println(err.Error())
 	}
@@ -152,21 +150,18 @@ func (c *CommentLikeController) Put() {
 	if err := models.UpdateCommentLikeById(&v); err == nil {
 		c.Data["json"] = "OK"
 	}
-	// c.ServeJSON()
-	// fmt.Println(v.CommentId)
 	w, _ := models.GetCommentById(v.CommentId)
-	// fmt.Println(v.Like)
 	if v.Like {
 		w.CountLike++
 	} else {
 		w.CountLike--
 	}
-	// fmt.Println("new count like:", w.CountLike)
 	if err := models.UpdateCommentById(w); err == nil {
 		c.Data["json"] = "OK"
 	} else {
 		c.Data["json"] = err.Error()
 	}
+	c.ServeJSON()
 }
 
 // Delete ...

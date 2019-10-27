@@ -25,7 +25,7 @@ type TvProgram struct {
 	Supervisor         string    `orm:"size(128);null"`
 	Director           string    `orm:"size(128);null"`
 	Production         string    `orm:"size(32);null"`
-	Year               int       `orm:"null"`
+	Year               int       `orm:"default(2000)"`
 	Season             *Season   `orm:"rel(fk);null"`
 	Week               *Week     `orm:"rel(fk);null"`
 	Hour               float32   `orm:"default(100)`
