@@ -170,3 +170,18 @@ func GetCommentByUserId(id int64) (v []Comment, err error) {
 	}
 	return nil, err
 }
+
+func GetAllCommentByUserId(id int64) (v []Comment, err error) {
+	o := orm.NewOrm()
+	if _, err = o.QueryTable(new(Comment)).Filter("UserId", id).All(&v); err == nil {
+		return v, nil
+	}
+	return nil, err
+}
+
+func DeleteCommentsByUserId(id int64) {
+	l, _ := GetAllCommentByUserId(id)
+	for _, v := range l {
+		_ = DeleteComment(v.Id)
+	}
+}

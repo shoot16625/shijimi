@@ -230,12 +230,28 @@ func (c *UserController) Delete() {
 	id := session.Get("UserId").(int64)
 	if err := models.DeleteUser(id); err == nil {
 		c.Data["Status"] = "ユーザを削除しました"
+		// 過去の投稿データを削除
+		models.DeleteCommentsByUserId(id)
+		models.DeleteReviewCommentsByUserId(id)
+		session.Delete("UserId")
+		session.Delete("Username")
+		var Info struct {
+			CntUsers      int64
+			CntTvPrograms int64
+		}
+		Info.CntUsers = models.GetUserCount()
+		Info.CntTvPrograms = models.GetTvProgramCount()
+		c.Data["Info"] = Info
 	} else {
 		c.Data["Status"] = "退会に失敗しました"
+		var Info struct {
+			CntUsers      int64
+			CntTvPrograms int64
+		}
+		Info.CntUsers = models.GetUserCount()
+		Info.CntTvPrograms = models.GetTvProgramCount()
+		c.Data["Info"] = Info
 	}
-	session.Delete("UserId")
-	session.Delete("Username")
-	// 過去の履歴・データを削除する機能が必要
 	c.TplName = "user/logout.tpl"
 }
 
@@ -481,6 +497,13 @@ func (c *UserController) Login() {
 	if v == nil {
 		fmt.Println("not user")
 		c.Data["Status"] = "ログインに失敗しました"
+		var Info struct {
+			CntUsers      int64
+			CntTvPrograms int64
+		}
+		Info.CntUsers = models.GetUserCount()
+		Info.CntTvPrograms = models.GetTvProgramCount()
+		c.Data["Info"] = Info
 		c.TplName = "user/logout.tpl"
 	} else {
 		if models.UserPassMach(v.Password, c.GetString("password")) {
@@ -497,6 +520,13 @@ func (c *UserController) Login() {
 		} else {
 			fmt.Println("bad password")
 			c.Data["Status"] = "ログインに失敗しました"
+			var Info struct {
+				CntUsers      int64
+				CntTvPrograms int64
+			}
+			Info.CntUsers = models.GetUserCount()
+			Info.CntTvPrograms = models.GetTvProgramCount()
+			c.Data["Info"] = Info
 			c.TplName = "user/logout.tpl"
 		}
 	}

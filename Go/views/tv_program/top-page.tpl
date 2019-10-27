@@ -335,6 +335,33 @@
             {{ end }}
           </ons-carousel>
         </div>
+        <ons-row>
+            <ons-col class="area-right">
+              <a
+                href="https://twitter.com/share"
+                class="twitter-share-button"
+                data-url="https://www.yahoo.co.jp"
+                data-text="AIがあなたにおすすめなドラマ・映画を選定！！"
+                data-hashtags="shijimi"
+                >Tweet</a
+              >
+            </ons-col>
+            <ons-col>
+              <div
+                class="fb-share-button"
+                data-href="https://developers.facebook.com/docs/plugins/"
+                data-layout="button_count"
+                data-size="small"
+              >
+                <a
+                  target="_blank"
+                  href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse"
+                  class="fb-xfbml-parse-ignore"
+                  >シェア</a
+                >
+              </div>
+            </ons-col>
+          </ons-row>
       </div>
     </ons-page>
 
@@ -436,5 +463,25 @@
         autoScroll(carousel07, {{.TvProgramSun}}.length);
       }
     </script>
+    <script>
+      !(function(d, s, id) {
+        var js,
+          fjs = d.getElementsByTagName(s)[0],
+          p = /^http:/.test(d.location) ? 'http' : 'https';
+        if (!d.getElementById(id)) {
+          js = d.createElement(s);
+          js.id = id;
+          js.src = p + '://platform.twitter.com/widgets.js';
+          fjs.parentNode.insertBefore(js, fjs);
+        }
+      })(document, 'script', 'twitter-wjs');
+    </script>
+    <div id="fb-root"></div>
+    <script
+      async
+      defer
+      crossorigin="anonymous"
+      src="https://connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v4.0"
+    ></script>
   </body>
 </html>

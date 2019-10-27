@@ -45,15 +45,16 @@ $(function() {
 });
 
 // アラートを閉じる
-var hideAlertDialog = function(elem) {
-  document.getElementById(elem).hide();
+var hideAlertDialog = function(elemID) {
+  document.getElementById(elemID).hide();
 };
 
 // ツイートボックス
 var dialogBox = function(elemID, userID) {
   ons.ready(function() {
     var dialog = document.getElementById(elemID);
-    if (userID === null) {
+    // ==でないとダメ
+    if (userID == null) {
       return dialogBoxEveryone('alert-only-user-dialog');
     }
     if (dialog) {

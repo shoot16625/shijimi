@@ -285,3 +285,18 @@ func SearchReviewComment(query map[string][]string, fields []string, sortby []st
 	}
 	return nil, err
 }
+
+func GetAllReviewCommentByUserId(id int64) (v []ReviewComment, err error) {
+	o := orm.NewOrm()
+	if _, err = o.QueryTable(new(ReviewComment)).Filter("UserId", id).All(&v); err == nil {
+		return v, nil
+	}
+	return nil, err
+}
+
+func DeleteReviewCommentsByUserId(id int64) {
+	l, _ := GetAllReviewCommentByUserId(id)
+	for _, v := range l {
+		_ = DeleteReviewComment(v.Id)
+	}
+}

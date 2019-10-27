@@ -61,7 +61,7 @@
   <ons-alert-dialog id="unsubscribe-dialog" modifier="rowfooter">
     <div class="alert-dialog-title">Alert</div>
     <div class="alert-dialog-content">
-      本当に退会しますか？<br />あなたの全ての投稿データ・履歴が削除されます。
+      本当に退会しますか？<br />あなたの全ての投稿データが削除されます。
     </div>
     <div class="alert-dialog-footer">
       <ons-alert-dialog-button onclick="hideAlertDialog('unsubscribe-dialog')"
@@ -70,7 +70,9 @@
       <ons-alert-dialog-button>
         <form id="delete-user" action="/tv/user/{{.User.Id}}" method="post">
           <input type="hidden" name="_method" value="DELETE" />
-          <button class="button--quiet" type="submit">OK</button>
+          <button class="button--quiet" type="submit">
+            OK
+          </button>
         </form>
       </ons-alert-dialog-button>
     </div>

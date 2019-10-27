@@ -128,14 +128,14 @@ func GetWikiDoramas(referencePath string) {
 				if len(hourBlock) == 2 {
 					startTime := strings.TrimSpace(hourBlock[1])
 					hourStart := strings.Split(startTime, ":")
-					hours, _ := strconv.Atoi(hourStart[0])
+					hour, _ := strconv.Atoi(hourStart[0])
 					mins, _ := strconv.Atoi(hourStart[1])
 					if 15 > mins && mins >= 0 {
-						floatHour = float32(hours) + 0.0
+						floatHour = float32(hour) + 0.0
 					} else if 45 > mins && mins >= 15 {
-						floatHour = float32(hours) + 0.5
+						floatHour = float32(hour) + 0.5
 					} else if 60 > mins && mins >= 45 {
-						floatHour = float32(hours) + 1.0
+						floatHour = float32(hour) + 1.0
 					}
 					// 無記入のとき
 					if startTime == ":00" {
@@ -208,7 +208,9 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 						if newTvProgram.Themesong == "" {
 							newTvProgram.Themesong = content
 						} else {
-							newTvProgram.Themesong += "、" + content
+							if !strings.Contains(tvProgram.Themesong, content) {
+								newTvProgram.Themesong += "、" + content
+							}
 						}
 					}
 				case "放送国・地域":
@@ -251,14 +253,14 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 						contents = strings.Split(content, ":")
 						var floatHour float32 = 100
 						if len(contents) == 2 {
-							hours, _ := strconv.Atoi(contents[0])
+							hour, _ := strconv.Atoi(contents[0])
 							mins, _ := strconv.Atoi(contents[1])
 							if 15 > mins && mins >= 0 {
-								floatHour = float32(hours) + 0.0
+								floatHour = float32(hour) + 0.0
 							} else if 45 > mins && mins >= 15 {
-								floatHour = float32(hours) + 0.5
+								floatHour = float32(hour) + 0.5
 							} else if 60 > mins && mins >= 45 {
-								floatHour = float32(hours) + 1.0
+								floatHour = float32(hour) + 1.0
 							}
 							newTvProgram.Hour = floatHour
 						}
@@ -426,10 +428,13 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (tvProgram models.TvP
 					tvProgram.Themesong = content
 				case "エンディング":
 					if strings.TrimSpace(t.Find("td").Text()) != "同上" {
+						content = strings.Replace(content, "、「", "「", -1)
 						if tvProgram.Themesong == "" {
 							tvProgram.Themesong = content
 						} else {
-							tvProgram.Themesong += "、" + content
+							if !strings.Contains(tvProgram.Themesong, content) {
+								tvProgram.Themesong += "、" + content
+							}
 						}
 					}
 				case "放送国・地域":
@@ -457,35 +462,43 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (tvProgram models.TvP
 					tvProgram.Season = &seasonStruct
 				case "放送時間":
 					contents := strings.Split(content, "曜")
-					weekStruct := *new(models.Week)
-					weekStruct.Name = contents[0]
-					tvProgram.Week = &weekStruct
-					contents = strings.Split(contents[1], "-")
+					if len(contents) == 2 {
+						weekStruct := *new(models.Week)
+						weekStruct.Name = contents[0]
+						tvProgram.Week = &weekStruct
+						contents = strings.Split(contents[1], "-")
+					} else {
+						contents = strings.Split(contents[0], "-")
+					}
 					content = strings.TrimSpace(contents[0])
 					contents = strings.Split(content, ":")
 					var floatHour float32 = 100
 					if len(contents) == 2 {
-						hours, _ := strconv.Atoi(contents[0])
+						hour, _ := strconv.Atoi(contents[0])
 						mins, _ := strconv.Atoi(contents[1])
 						if 15 > mins && mins >= 0 {
-							floatHour = float32(hours) + 0.0
+							floatHour = float32(hour) + 0.0
 						} else if 45 > mins && mins >= 15 {
-							floatHour = float32(hours) + 0.5
+							floatHour = float32(hour) + 0.5
 						} else if 60 > mins && mins >= 45 {
-							floatHour = float32(hours) + 1.0
+							floatHour = float32(hour) + 1.0
 						}
 						tvProgram.Hour = floatHour
+					} else {
+						contents = strings.Split(content, "時")
+						hour, _ := strconv.Atoi(contents[0])
+						tvProgram.Hour = float32(hour)
 					}
 				}
 			}
 		})
 
 		if doramaFlag {
-			fmt.Println(tvProgram.Title, tvProgram.Season.Name, tvProgram.Week.Name, tvProgram.Year, tvProgram.Hour, tvProgram.Production, tvProgram.Category, tvProgram.Themesong)
 			return
 		}
 	})
 	if doramaFlag {
+		fmt.Println(tvProgram)
 		return tvProgram
 	} else {
 		tvProgram = *new(models.TvProgram)
@@ -494,11 +507,10 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (tvProgram models.TvP
 }
 
 func AddRecentTvInfo() {
-	wikiTitles := []string{"4分間のマリーゴールド", "モトカレマニア", "G線上のあなたと私", "同期のサクラ", "時効警察はじめました", "俺の話は長い", "グランメゾン東京", "ニッポンノワール-刑事Yの反乱-"}
+	wikiTitles := []string{"4分間のマリーゴールド", "モトカレマニア", "G線上のあなたと私", "同期のサクラ", "時効警察はじめました", "俺の話は長い", "グランメゾン東京", "ニッポンノワール-刑事Yの反乱-", "チート〜詐欺師の皆さん、ご注意ください〜", "リカ (小説)", "スカーレット (テレビドラマ)", "ブラック校則 (2019年の映画)", "左ききのエレン"}
 	for _, v := range wikiTitles {
-		v = "https://ja.wikipedia.org/wiki/" + v
-		tvProgram := GetTvProgramInformationByURL(v)
-		fmt.Println(tvProgram)
+		url := "https://ja.wikipedia.org/wiki/" + v
+		tvProgram := GetTvProgramInformationByURL(url)
 		if _, err := models.AddTvProgram(&tvProgram); err != nil {
 			fmt.Println(err)
 		}

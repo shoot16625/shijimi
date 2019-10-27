@@ -47,13 +47,13 @@ img {
 .dialog {
   width: 100%;
   height: 100%;
-  max-width: 400px;
-  max-height: 400px;
+  max-width: 600px;
+  max-height: 800px;
 }
 
 .textarea-tweet {
   width: 100%;
-  font-size: 15px;
+  font-size: 16px;
   background-color: white;
 }
 
