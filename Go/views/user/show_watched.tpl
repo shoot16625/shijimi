@@ -129,13 +129,14 @@
       $(function() {
         let pos = 0;
         $('.page__content').on('scroll', function() {
-          //
-          if ($(this).scrollTop() < pos) {
-            $('ons-toolbar').fadeIn();
-          } else {
-            $('ons-toolbar').fadeOut();
+          if ($(this).scrollTop() > 30) {
+            if ($(this).scrollTop() < pos) {
+              $('ons-toolbar').fadeIn();
+            } else {
+              $('ons-toolbar').fadeOut();
+            }
+            pos = $(this).scrollTop();
           }
-          pos = $(this).scrollTop();
         });
       });
     </script>

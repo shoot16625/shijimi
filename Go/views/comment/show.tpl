@@ -397,18 +397,14 @@
       $(function() {
         let pos = 0;
         $('.page__content').on('scroll', function() {
-          //
-          if ($(this).scrollTop() < pos) {
-            //上スクロール時の処理を記述
-            // document.querySelector('ons-toolbar').show();
-            $('ons-toolbar').fadeIn();
-          } else {
-            //下スクロール時の処理を記述
-            // document.querySelector('ons-toolbar').hide();
-            $('ons-toolbar').fadeOut();
+          if ($(this).scrollTop() > 30) {
+            if ($(this).scrollTop() < pos) {
+              $('ons-toolbar').fadeIn();
+            } else {
+              $('ons-toolbar').fadeOut();
+            }
+            pos = $(this).scrollTop();
           }
-          //スクロールが停止した位置を保持
-          pos = $(this).scrollTop();
         });
       });
     </script>

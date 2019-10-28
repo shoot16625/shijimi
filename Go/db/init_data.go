@@ -51,6 +51,17 @@ func ExecTestSQL() {
 	}
 }
 
+func ExecDemoSQL() {
+	UserSQL("ユーザA", "password", 22, "男性", "愛知県", "学生", "乃木", "http://flat-icon-design.com/f/f_object_161/s512_f_object_161_0bg.png", "未婚", "A型")
+	UserSQL("Bさん", "password", 22, "男性", "愛知県", "学生", "乃木", "http://flat-icon-design.com/f/f_object_105/s512_f_object_105_0bg.png", "未婚", "A型")
+	for j := 1; j < 20; j++ {
+		CommentSQL("コメントを投稿（250字まで）\r\nコメントを投稿（250字まで）\r\n"+strconv.Itoa(j), 3, 19, int32(j))
+		CommentSQL("桑野さん最高すぎる！\r\n"+strconv.Itoa(j), 4, 19, int32(j*3))
+	}
+	ReviewCommentSQL("レビューを投稿（450字まで）\nネタバレありです\nレビューは一人一回まで\n評価は10段階\nおすすめポイントタグ", 3, 19, 3, true, "神曲、ゆる～い", int32(6))
+	ReviewCommentSQL("再放送4回みた。ELTは熱いよね！！\nネタバレはありません\n", 4, 19, 20, false, "泣きっぱなし、演技すごい", int32(8))
+}
+
 func TvProgramSQL(title string, content string, imageURL string, imageURLreference string, movieURL string, movieURLreference string, cast string, category string, dramatist string, supervisor string, director string, production string, year int, season string, themesong string, week string, hour float32, star float32, countstar int32, countWatched int32, countWantToWatch int32) {
 	o := orm.NewOrm()
 	o.Using("default")

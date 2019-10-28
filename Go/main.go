@@ -1,7 +1,6 @@
 package main
 
 import (
-	"app/db"
 	_ "app/routers"
 
 	"fmt"
@@ -37,9 +36,9 @@ func init() {
 	orm.RegisterDriver(beego.AppConfig.String("driver"), orm.DRMySQL)
 	orm.RegisterDataBase("default", beego.AppConfig.String("driver"), beego.AppConfig.String("sqlconn")+"?charset=utf8mb4&loc=Asia%2FTokyo")
 	// データを初期化して起動
-	err := orm.RunSyncdb("default", true, false)
+	// err := orm.RunSyncdb("default", true, false)
 	// データの変更点を追加して起動
-	// err := orm.RunSyncdb("default", false, false)
+	err := orm.RunSyncdb("default", false, false)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -68,9 +67,10 @@ func init() {
 	go beego.GlobalSessions.GC()
 
 	// 初期データの投入
-	db.ExecInitSQL()
-	db.ExecTestSQL()
-	db.AddRecentTvInfo()
+	// db.ExecInitSQL()
+	// db.ExecTestSQL()
+	// db.AddRecentTvInfo()
 	// db.AddTvProgramsInformation()
 	// db.GetMovieWalkers()
+	// db.ExecDemoSQL()
 }

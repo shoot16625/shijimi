@@ -34,7 +34,7 @@
               <ons-button
                 modifier="quiet"
                 onclick="location.href='tv/tv_program/index'"
-                >すべてのドラマ</ons-button
+                >あなたにおすすめ</ons-button
               >
             </p>
             <p>

@@ -215,7 +215,7 @@ func (c *CommentController) Show() {
 				UserId:      userID,
 				TvProgramId: tvProgramID,
 			}
-			_, err = models.AddBrowsingHistory(&b)
+			_, _ = models.AddBrowsingHistory(&b)
 			// if err == nil {
 			// 	fmt.Println("browsing_history", b)
 			// }
