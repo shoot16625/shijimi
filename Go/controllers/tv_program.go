@@ -33,7 +33,6 @@ func (c *TvProgramController) URLMapping() {
 	c.Mapping("EditPage", c.EditPage)
 	c.Mapping("Search", c.Search)
 	c.Mapping("SearchTvProgram", c.SearchTvProgram)
-	// c.Mapping("Create", c.Create)
 	c.Mapping("CreatePage", c.CreatePage)
 	c.Mapping("GetWikiInfo", c.GetWikiInfo)
 }
@@ -48,8 +47,7 @@ func (c *TvProgramController) URLMapping() {
 func (c *TvProgramController) Post() {
 	session := c.StartSession()
 	if session.Get("UserId") == nil {
-		fmt.Println("you are not user, so permission denyed.")
-		// c.Redirect("/tv/tv_program/index", 302)
+		fmt.Println("You are not logined, so permission denyed.")
 	} else {
 		year, _ := c.GetInt("year")
 		rep := regexp.MustCompile(`\(.+\)`)
@@ -68,31 +66,42 @@ func (c *TvProgramController) Post() {
 		if !strings.Contains(movieURL, "embed") {
 			movieURL = strings.Replace(movieURL, "watch?v=", "embed/", -1)
 		}
+		const sampleImage string = "http://hankodeasobu.com/wp-content/uploads/animals_02.png"
 		imageURL := c.GetString("ImageURL")
 		if imageURL == "" {
-			imageURL = "http://hankodeasobu.com/wp-content/uploads/animals_02.png"
+			imageURL = sampleImage
+		}
+		imageURLReference := ""
+		if imageURL != sampleImage {
+			if strings.Contains(imageURL, "walkerplus") {
+				imageURLReference = "MovieWalker"
+			} else {
+				imageURLs := strings.Split(imageURL, "/")
+				imageURLReference = imageURLs[2]
+				imageURLReference = strings.Replace(imageURLReference, "www.", "", 1)
+			}
 		}
 		var v models.TvProgram
 		v = models.TvProgram{
 			Title:             c.GetString("title"),
 			Content:           c.GetString("content"),
 			ImageURL:          imageURL,
-			ImageURLReference: c.GetString("ImageURLReference"),
+			ImageURLReference: imageURLReference,
 			MovieURL:          movieURL,
-			MovieURLReference: c.GetString("MovieURLReference"),
-			WikiReference:     c.GetString("WikiReference"),
-			Cast:              strings.Replace(c.GetString("cast"), "　", "", -1),
-			Category:          strings.Join(c.GetStrings("category"), "、"),
-			Dramatist:         strings.Replace(c.GetString("dramatist"), "　", "", -1),
-			Supervisor:        strings.Replace(c.GetString("supervisor"), "　", "", -1),
-			Director:          strings.Replace(c.GetString("director"), "　", "", -1),
-			Production:        c.GetString("production"),
-			Year:              year,
-			Season:            &season,
-			Week:              &week,
-			Hour:              float32(hour),
-			Themesong:         c.GetString("themesong"),
-			CreateUserId:      session.Get("UserId").(int64),
+			// MovieURLReference: c.GetString("MovieURLReference"),
+			WikiReference: c.GetString("WikiReference"),
+			Cast:          strings.Replace(c.GetString("cast"), "　", "", -1),
+			Category:      strings.Join(c.GetStrings("category"), "、"),
+			Dramatist:     strings.Replace(c.GetString("dramatist"), "　", "", -1),
+			Supervisor:    strings.Replace(c.GetString("supervisor"), "　", "", -1),
+			Director:      strings.Replace(c.GetString("director"), "　", "", -1),
+			Production:    c.GetString("production"),
+			Year:          year,
+			Season:        &season,
+			Week:          &week,
+			Hour:          float32(hour),
+			Themesong:     c.GetString("themesong"),
+			CreateUserId:  session.Get("UserId").(int64),
 		}
 
 		if _, err := models.AddTvProgram(&v); err == nil {
@@ -199,8 +208,6 @@ func (c *TvProgramController) Put() {
 	session := c.StartSession()
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
-	// fmt.Println(id)
-	// v := models.TvProgram{Id: id}
 	year, _ := c.GetInt("year")
 	rep := regexp.MustCompile(`\(.+\)`)
 	season := *new(models.Season)
@@ -218,20 +225,29 @@ func (c *TvProgramController) Put() {
 	if !strings.Contains(movieURL, "embed") {
 		movieURL = strings.Replace(movieURL, "watch?v=", "embed/", -1)
 	}
+	const sampleImage string = "http://hankodeasobu.com/wp-content/uploads/animals_02.png"
 	imageURL := c.GetString("ImageURL")
 	if imageURL == "" {
-		imageURL = "http://hankodeasobu.com/wp-content/uploads/animals_02.png"
+		imageURL = sampleImage
 	}
-	// var v models.TvProgram
+	imageURLReference := ""
+	if imageURL != sampleImage {
+		if strings.Contains(imageURL, "walkerplus") {
+			imageURLReference = "MovieWalker"
+		} else {
+			imageURLs := strings.Split(imageURL, "/")
+			imageURLReference = imageURLs[2]
+			imageURLReference = strings.Replace(imageURLReference, "www.", "", 1)
+		}
+	}
 	oldTvInfo, _ := models.GetTvProgramById(id)
 	v := *oldTvInfo
 	// fmt.Println(v)
 	v.Title = c.GetString("title")
 	v.Content = c.GetString("content")
 	v.ImageURL = imageURL
-	v.ImageURLReference = c.GetString("ImageURLReference")
+	v.ImageURLReference = imageURLReference
 	v.MovieURL = movieURL
-	v.MovieURLReference = c.GetString("MovieURLReference")
 	v.WikiReference = c.GetString("WikiReference")
 	v.Cast = strings.Replace(c.GetString("cast"), "　", "", -1)
 	v.Category = strings.Join(c.GetStrings("category"), "、")
@@ -573,6 +589,9 @@ func (c *TvProgramController) CreatePage() {
 
 func (c *TvProgramController) GetWikiInfo() {
 	wikiReference := c.GetString("wikiReference")
+	if !strings.Contains(wikiReference, "wikipedia") {
+		wikiReference = "https://ja.wikipedia.org/wiki/" + wikiReference
+	}
 	tvProgram := db.GetTvProgramInformationByURL(wikiReference)
 	c.Data["TvProgram"] = tvProgram
 	c.Data["GetWikiInfo"] = true

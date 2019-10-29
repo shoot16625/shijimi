@@ -2,7 +2,8 @@
   <ons-list-header style="background-color:ghostwhite;">
     <div class="area-left">
       <span id="tv-program-week">
-        {{.TvProgram.Year}}年 {{.TvProgram.Season.Name}}（{{.TvProgram.Week.Name}}
+        {{.TvProgram.Year}}年
+        {{.TvProgram.Season.Name}}（{{.TvProgram.Week.Name}}
       </span>
       <span id="tv-program-hour"></span>）
     </div>
@@ -41,11 +42,7 @@
               <ons-col>{{.TvProgram.Production}}</ons-col>
             </ons-row>
             <ons-row class="list-margin-bottom">
-              <ons-col
-                class="category-area"
-                id="category-area"
-              >
-              </ons-col>
+              <ons-col class="category-area" id="category-area"> </ons-col>
             </ons-row>
           </div>
         </ons-col>
@@ -58,6 +55,13 @@
           onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
         />
       </div>
+      {{if .TvProgram.ImageURLReference}}
+      <div class="reference">
+        <a href="{{.TvProgram.ImageURL}}" target="_blank">
+          From:{{.TvProgram.ImageURLReference}}
+        </a>
+      </div>
+      {{ end }}
       <ons-list-item expandable>
         あらすじ・見どころ
         <div class="right"></div>

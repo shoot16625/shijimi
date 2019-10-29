@@ -4,6 +4,9 @@ const URL = 'http://192.168.2.174:8080';
 // const URL = "http://www.cmplx.cse.nagoya-u.ac.jp";
 //const URL = "localhost:8080";
 
+// 一度のみでいい
+// ons.bootstrap();
+
 // 自動スクロール
 function autoScroll(varName, len) {
   let indexState = -1;
@@ -19,6 +22,45 @@ function autoScroll(varName, len) {
   }, 2000);
 }
 
+// toolbarを隠す
+// var scroll_position = 0;
+// ons.ready(function() {
+// $('.page__content').on('scroll', function(){
+//   var scrollTop = $(this).scrollTop();
+//   if (scrollTop - scroll_position > 0){
+//     document.querySelector('ons-toolbar').hide();
+//   } else {
+//     document.querySelector('ons-toolbar').show();
+//   }
+//   scroll_position = scrollTop;
+// });
+// });
+$(function() {
+  let pos = 0;
+  let diff = 0;
+  const heightThreshold = 700;
+  const topThreshold = 30;
+  const scrollSpeedThreshold = 300;
+  const pageHeight = $('.page__content').height();
+  $('.page__content').on('scroll', function() {
+    diff = pos - $(this).scrollTop();
+    if (diff > scrollSpeedThreshold) {
+    } else {
+      if (
+        $(this).scrollTop() > topThreshold ||
+        pageHeight < heightThreshold
+      ) {
+        if ($(this).scrollTop() < pos) {
+          $('ons-toolbar').fadeIn();
+        } else {
+          $('ons-toolbar').fadeOut();
+        }
+        pos = $(this).scrollTop();
+      }
+    }
+  });
+});
+
 // パスワードを表示するチェックボックス
 $(function() {
   $('#password-check').change(function() {
@@ -31,16 +73,15 @@ $(function() {
 });
 
 // アラートを閉じる
-var hideAlertDialog = function(elemID) {
-  document.getElementById(elemID).hide();
+var hideAlertDialog = function(elem) {
+  document.getElementById(elem).hide();
 };
 
 // ツイートボックス
 var dialogBox = function(elemID, userID) {
   ons.ready(function() {
     var dialog = document.getElementById(elemID);
-    // ==でないとダメ
-    if (userID == null) {
+    if (userID === null) {
       return dialogBoxEveryone('alert-only-user-dialog');
     }
     if (dialog) {
@@ -229,11 +270,8 @@ function goAnotherCarousel(index) {
 }
 
 // pathのページへ移動
-function goOtherPage(user, path) {
-  // let URL = path.split('/');
-  if (user === null) {
-    return dialogBoxEveryone('alert-only-user-dialog');
-  } else if (path.split('/')[4] === '1' && user.Id != 1) {
+function goOtherPage(userID, path) {
+  if (userID === null) {
     return dialogBoxEveryone('alert-only-user-dialog');
   } else {
     window.location.href = path;

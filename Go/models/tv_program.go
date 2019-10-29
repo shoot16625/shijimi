@@ -77,12 +77,6 @@ func AddWeek(m *Week) (id int64, err error) {
 	return
 }
 
-// func AddTimezone(m *Timezone) (id int64, err error) {
-// 	o := orm.NewOrm()
-// 	id, err = o.Insert(m)
-// 	return
-// }
-
 // GetTvProgramById retrieves TvProgram by Id. Returns error if
 // Id doesn't exist
 func GetTvProgramById(id int64) (v *TvProgram, err error) {

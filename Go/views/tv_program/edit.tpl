@@ -175,7 +175,7 @@
               name="MovieURL"
               modifier="underbar"
               value="{{.TvProgram.MovieURL}}"
-              placeholder="youtube動画URL"
+              placeholder="youtube動画URL 公式チャンネルonly"
               maxlength="400"
               float
             ></ons-input>

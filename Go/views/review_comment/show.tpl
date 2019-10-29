@@ -553,20 +553,5 @@
       }
       document.getElementById("category-area").innerHTML = category;
     </script>
-    <script>
-      $(function() {
-        let pos = 0;
-        $('.page__content').on('scroll', function() {
-          if ($(this).scrollTop() > 30) {
-            if ($(this).scrollTop() < pos) {
-              $('ons-toolbar').fadeIn();
-            } else {
-              $('ons-toolbar').fadeOut();
-            }
-            pos = $(this).scrollTop();
-          }
-        });
-      });
-    </script>
   </body>
 </html>
