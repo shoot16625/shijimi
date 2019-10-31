@@ -4,9 +4,6 @@ const URL = 'http://192.168.2.174:8080';
 // const URL = "http://www.cmplx.cse.nagoya-u.ac.jp";
 //const URL = "localhost:8080";
 
-// 一度のみでいい
-// ons.bootstrap();
-
 // 自動スクロール
 function autoScroll(varName, len) {
   let indexState = -1;
@@ -26,22 +23,23 @@ function autoScroll(varName, len) {
 $(function() {
   let pos = 0;
   let diff = 0;
-  const topThreshold = 30;
-  const scrollSpeedThreshold = 300;
+  const topThreshold = 100;
+  const scrollSpeedTop = 100;
+  const scrollSpeedBottom = 12;
   $('.page__content').on('scroll', function() {
     diff = pos - $(this).scrollTop();
-    if (diff < scrollSpeedThreshold) {
+    if (-scrollSpeedTop < diff && diff < scrollSpeedTop) {
       if ($(this).scrollTop() < topThreshold) {
         $('ons-toolbar').show();
       } else {
-        if ($(this).scrollTop() < pos) {
+        if (scrollSpeedBottom < diff) {
           $('ons-toolbar').fadeIn();
-        } else {
+        } else if (-scrollSpeedBottom > diff) {
           $('ons-toolbar').fadeOut();
         }
-        pos = $(this).scrollTop();
       }
     }
+    pos = $(this).scrollTop();
   });
 });
 
@@ -65,7 +63,9 @@ var hideAlertDialog = function(elem) {
 var dialogBox = function(elemID, userID) {
   ons.ready(function() {
     var dialog = document.getElementById(elemID);
-    if (userID === null) {
+    console.log(userID);
+    // == でないとダメ
+    if (userID == null) {
       return dialogBoxEveryone('alert-only-user-dialog');
     }
     if (dialog) {
@@ -255,7 +255,7 @@ function goAnotherCarousel(index) {
 
 // pathのページへ移動
 function goOtherPage(userID, path) {
-  if (userID === null) {
+  if (userID == null) {
     return dialogBoxEveryone('alert-only-user-dialog');
   } else {
     window.location.href = path;

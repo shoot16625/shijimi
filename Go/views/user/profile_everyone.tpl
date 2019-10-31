@@ -1,4 +1,4 @@
-<ons-pull-hook id="pull-hook"> </ons-pull-hook>
+<ons-pull-hook id="pull-hook"></ons-pull-hook>
 <ons-list>
   <ons-list-header>
     <div class="area-left">作成日：{{.User.Created|dateformatJst}}</div>
