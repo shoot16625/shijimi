@@ -24,10 +24,10 @@ func ExecInitSQL() {
 		o.Insert(v)
 	}
 	// 管理者用 ID：1
-	UserSQL("doramaba-admin", "doramaba-password", 24, "男性", "愛知県", "学生", "doramaba-password", "/static/img/shijimi-transparence.png", "未婚", "A型")
+	UserSQL("doramaba-admin", "doramaba-password", 199505, "男性", "愛知県", "学生", "doramaba-password", "/static/img/shijimi-transparence.png", "未婚", "A型")
 
 	// uchida用 ID：2
-	UserSQL("ちゃお倉木", "password", 24, "男性", "愛知県", "学生", "乃木小学校", "https://img.cinematoday.jp/a/N0077397/_size_640x/_v_1445346612/1.jpg", "未婚", "A型")
+	UserSQL("ちゃお倉木", "password", 199505, "男性", "愛知県", "学生", "乃木小学校", "https://img.cinematoday.jp/a/N0077397/_size_640x/_v_1445346612/1.jpg", "未婚", "A型")
 
 	// お問い合わせ用 ID：1
 	TvProgramSQL("お問い合わせ専用", "サービス改善のため、忌憚のないご意見・ご感想をお待ちしております。3回に1回くらい褒めていただけると幸いです。", "/static/img/shijimi-transparence.png", "", "", "", "大学院生", "コメディ・パロディ", "松江育ち", "単独開発Help!!", "日記感覚で", "shijimi", 2019, "秋", "milet", "日", 100, 2.5, 0, 0, 0)
@@ -35,11 +35,11 @@ func ExecInitSQL() {
 
 func ExecTestSQL() {
 	for i := 1; i < 3; i++ {
-		UserSQL("test-user-"+strconv.Itoa(i), "password", 22, "男性", "愛知県", "学生", "乃木", "http://blog-imgs-34.fc2.com/m/i/n/minamijima/Mx1mTAr153j4wz96j8npWxBF_500.jpg", "未婚", "A型")
+		UserSQL("test-user-"+strconv.Itoa(i), "password", 199001, "男性", "愛知県", "学生", "乃木", "http://blog-imgs-34.fc2.com/m/i/n/minamijima/Mx1mTAr153j4wz96j8npWxBF_500.jpg", "未婚", "A型")
 	}
 
 	for i := 1; i < 5; i++ {
-		TvProgramSQL("TestTest:"+strconv.Itoa(i), "hogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehoge", "https://1.bp.blogspot.com/-dkBk4bYQrTk/XVKfloSYxiI/AAAAAAABUC8/j6K3SGQG0WMxKFn71LzznPz0SPgI5ufGQCLcBGAs/s1600/bird_sekisei_inko_blue.png", "イラストや", "https://www.youtube.com/embed/AIMjbleH394", "milet「us」MUSIC VIDEO（日本テレビ系水曜ドラマ『偽装不倫』主題歌）", "TestA、TestB、TestC、TestD、TestE、TestF", "恋愛、不倫、コメディ・パロディ", "TestG、TestH", "TestI、TestJ", "TestK、TestL", "日テレ", 2019, "秋", "milet 「us」", "月", float32(i+18), 2.5, 0, 0, 0)
+		TvProgramSQL("TestTest:"+strconv.Itoa(i), "hogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehogehoge", "https://1.bp.blogspot.com/-dkBk4bYQrTk/XVKfloSYxiI/AAAAAAABUC8/j6K3SGQG0WMxKFn71LzznPz0SPgI5ufGQCLcBGAs/s1600/bird_sekisei_inko_blue.png", "いらすとや", "https://www.youtube.com/embed/AIMjbleH394", "milet「us」MUSIC VIDEO（日本テレビ系水曜ドラマ『偽装不倫』主題歌）", "TestA、TestB、TestC、TestD、TestE、TestF", "恋愛、不倫、コメディ・パロディ", "TestG、TestH", "TestI、TestJ", "TestK、TestL", "日テレ", 2019, "秋", "milet 「us」", "月", float32(i+18), 2.5, 0, 0, 0)
 
 		for j := 1; j < 10; j++ {
 			CommentSQL("hogehoge\r\nfugafuga\r\n"+strconv.Itoa(i), 3, int64(i+1), 0)
@@ -49,6 +49,17 @@ func ExecTestSQL() {
 		ReviewCommentSQL("レビューネタバレなしコメント\n", 4, int64(i+1), 0, false, "泣きっぱなし、演技すごい", int32(4))
 		fmt.Println("update:", i)
 	}
+}
+
+func ExecDemoSQL() {
+	UserSQL("ユーザA", "password", 199001, "男性", "愛知県", "学生", "乃木", "http://flat-icon-design.com/f/f_object_161/s512_f_object_161_0bg.png", "未婚", "A型")
+	UserSQL("Bさん", "password", 199001, "男性", "愛知県", "学生", "乃木", "http://flat-icon-design.com/f/f_object_105/s512_f_object_105_0bg.png", "未婚", "A型")
+	for j := 1; j < 20; j++ {
+		CommentSQL("コメントを投稿（250字まで）\r\nコメントを投稿（250字まで）\r\n"+strconv.Itoa(j), 3, 19, int32(j))
+		CommentSQL("桑野さん最高すぎる！\r\n"+strconv.Itoa(j), 4, 19, int32(j*3))
+	}
+	ReviewCommentSQL("レビューを投稿（450字まで）\nネタバレありです\nレビューは一人一回まで\n評価は10段階\nおすすめポイントタグ", 3, 19, 3, true, "神曲、ゆる～い", int32(6))
+	ReviewCommentSQL("再放送4回みた。ELTは熱いよね！！\nネタバレはありません\n", 4, 19, 20, false, "泣きっぱなし、演技すごい", int32(8))
 }
 
 func TvProgramSQL(title string, content string, imageURL string, imageURLreference string, movieURL string, movieURLreference string, cast string, category string, dramatist string, supervisor string, director string, production string, year int, season string, themesong string, week string, hour float32, star float32, countstar int32, countWatched int32, countWantToWatch int32) {

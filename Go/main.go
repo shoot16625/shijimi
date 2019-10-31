@@ -5,6 +5,7 @@ import (
 	_ "app/routers"
 
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
@@ -37,16 +38,29 @@ func init() {
 	orm.RegisterDriver(beego.AppConfig.String("driver"), orm.DRMySQL)
 	orm.RegisterDataBase("default", beego.AppConfig.String("driver"), beego.AppConfig.String("sqlconn")+"?charset=utf8mb4&loc=Asia%2FTokyo")
 	// データを初期化して起動
-	err := orm.RunSyncdb("default", true, false)
+	// err := orm.RunSyncdb("default", true, false)
 	// データの変更点を追加して起動
-	// err := orm.RunSyncdb("default", false, false)
+	err := orm.RunSyncdb("default", false, false)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// tpl内で使える関数
+	// 時刻表記
 	beego.AddFuncMap("dateformatJst", func(in time.Time) string {
 		return in.Format("2006-01-02 15:04:05")
+	})
+	// 年齢計算
+	beego.AddFuncMap("Birthday2Age", func(birthday int) (age string) {
+		t := time.Now()
+		year := birthday / 100
+		month := (birthday - year*100)
+		ageInt := t.Year() - int(year)
+		if b := int(t.Month()) - month; b < 0 {
+			ageInt -= 1
+		}
+		age = strconv.Itoa(ageInt)
+		return age
 	})
 
 	// formからDELETE・PUTをPOSTとできるようにする
@@ -69,8 +83,9 @@ func init() {
 
 	// 初期データの投入
 	db.ExecInitSQL()
-	db.ExecTestSQL()
-	db.AddRecentTvInfo()
+	// db.ExecTestSQL()
+	// db.AddRecentTvInfo()
 	// db.AddTvProgramsInformation()
 	// db.GetMovieWalkers()
+	// db.ExecDemoSQL()
 }

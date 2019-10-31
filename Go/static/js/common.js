@@ -4,6 +4,9 @@ const URL = 'http://192.168.2.174:8080';
 // const URL = "http://www.cmplx.cse.nagoya-u.ac.jp";
 //const URL = "localhost:8080";
 
+// 一度のみでいい
+// ons.bootstrap();
+
 // 自動スクロール
 function autoScroll(varName, len) {
   let indexState = -1;
@@ -20,35 +23,27 @@ function autoScroll(varName, len) {
 }
 
 // toolbarを隠す
-// var scroll_position = 0;
-// ons.ready(function() {
-// $('.page__content').on('scroll', function(){
-//   var scrollTop = $(this).scrollTop();
-//   if (scrollTop - scroll_position > 0){
-//     document.querySelector('ons-toolbar').hide();
-//   } else {
-//     document.querySelector('ons-toolbar').show();
-//   }
-//   scroll_position = scrollTop;
-// });
-// });
-// $(function() {
-//   var pos = 0;
-//   $('.page__content').on('scroll', function() {
-//     //
-//     if ($(this).scrollTop() < pos) {
-//       //上スクロール時の処理を記述
-//       // document.querySelector('ons-toolbar').show();
-//       $('ons-toolbar').fadeIn();
-//     } else {
-//       //下スクロール時の処理を記述
-//       // document.querySelector('ons-toolbar').hide();
-//       $('ons-toolbar').fadeOut();
-//     }
-//     //スクロールが停止した位置を保持
-//     pos = $(this).scrollTop();
-//   });
-// });
+$(function() {
+  let pos = 0;
+  let diff = 0;
+  const topThreshold = 30;
+  const scrollSpeedThreshold = 300;
+  $('.page__content').on('scroll', function() {
+    diff = pos - $(this).scrollTop();
+    if (diff < scrollSpeedThreshold) {
+      if ($(this).scrollTop() < topThreshold) {
+        $('ons-toolbar').show();
+      } else {
+        if ($(this).scrollTop() < pos) {
+          $('ons-toolbar').fadeIn();
+        } else {
+          $('ons-toolbar').fadeOut();
+        }
+        pos = $(this).scrollTop();
+      }
+    }
+  });
+});
 
 // パスワードを表示するチェックボックス
 $(function() {
@@ -62,16 +57,15 @@ $(function() {
 });
 
 // アラートを閉じる
-var hideAlertDialog = function(elemID) {
-  document.getElementById(elemID).hide();
+var hideAlertDialog = function(elem) {
+  document.getElementById(elem).hide();
 };
 
 // ツイートボックス
 var dialogBox = function(elemID, userID) {
   ons.ready(function() {
     var dialog = document.getElementById(elemID);
-    // ==でないとダメ
-    if (userID == null) {
+    if (userID === null) {
       return dialogBoxEveryone('alert-only-user-dialog');
     }
     if (dialog) {
@@ -260,11 +254,8 @@ function goAnotherCarousel(index) {
 }
 
 // pathのページへ移動
-function goOtherPage(user, path) {
-  // let URL = path.split('/');
-  if (user === null) {
-    return dialogBoxEveryone('alert-only-user-dialog');
-  } else if (path.split('/')[4] === '1' && user.Id != 1) {
+function goOtherPage(userID, path) {
+  if (userID === null) {
     return dialogBoxEveryone('alert-only-user-dialog');
   } else {
     window.location.href = path;

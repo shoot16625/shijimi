@@ -34,7 +34,7 @@
               <ons-button
                 modifier="quiet"
                 onclick="location.href='tv/tv_program/index'"
-                >すべてのドラマ</ons-button
+                >あなたにおすすめ</ons-button
               >
             </p>
             <p>
@@ -113,6 +113,9 @@
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
+                {{if .ImageURLReference}}
+                  <div class="reference">From:{{.ImageURLReference}}</div>
+                {{end}}
                 <div>{{.Title}}</div>
               </div>
             </ons-carousel-item>
@@ -149,6 +152,9 @@
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
+                {{if .ImageURLReference}}
+                  <div class="reference">From:{{.ImageURLReference}}</div>
+                {{end}}
                 <div>{{.Title}}</div>
               </div>
             </ons-carousel-item>
@@ -185,6 +191,9 @@
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
+                {{if .ImageURLReference}}
+                  <div class="reference">From:{{.ImageURLReference}}</div>
+                {{end}}
                 <div>{{.Title}}</div>
               </div>
             </ons-carousel-item>
@@ -221,6 +230,9 @@
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
+                {{if .ImageURLReference}}
+                  <div class="reference">From:{{.ImageURLReference}}</div>
+                {{end}}
                 <div>{{.Title}}</div>
               </div>
             </ons-carousel-item>
@@ -257,6 +269,9 @@
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
+                {{if .ImageURLReference}}
+                  <div class="reference">From:{{.ImageURLReference}}</div>
+                {{end}}
                 <div>{{.Title}}</div>
               </div>
             </ons-carousel-item>
@@ -293,6 +308,9 @@
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
+                {{if .ImageURLReference}}
+                  <div class="reference">From:{{.ImageURLReference}}</div>
+                {{end}}
                 <div>{{.Title}}</div>
               </div>
             </ons-carousel-item>
@@ -329,6 +347,9 @@
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
+                {{if .ImageURLReference}}
+                  <div class="reference">From:{{.ImageURLReference}}</div>
+                {{end}}
                 <div>{{.Title}}</div>
               </div>
             </ons-carousel-item>
