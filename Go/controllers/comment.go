@@ -4,7 +4,6 @@ import (
 	"app/models"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -207,7 +206,6 @@ func (c *CommentController) Show() {
 	session := c.StartSession()
 	// 閲覧数カウント
 	if session.Get(tvProgramID) == nil {
-		// fmt.Println("first tv click")
 		if session.Get("UserId") != nil {
 			userID := session.Get("UserId").(int64)
 			var b models.BrowsingHistory
@@ -216,9 +214,6 @@ func (c *CommentController) Show() {
 				TvProgramId: tvProgramID,
 			}
 			_, _ = models.AddBrowsingHistory(&b)
-			// if err == nil {
-			// 	fmt.Println("browsing_history", b)
-			// }
 		}
 		v.CountClicked++
 		_ = models.UpdateTvProgramById(v)
@@ -226,8 +221,6 @@ func (c *CommentController) Show() {
 	}
 
 	if session.Get("UserId") != nil {
-		// 	fmt.Println("you are not user, so your tv_Like break.")
-		// } else {
 		userID := session.Get("UserId").(int64)
 		w, err := models.GetWatchingStatusByUserAndTvProgram(userID, tvProgramID)
 		if err != nil {
@@ -339,7 +332,6 @@ func (c *CommentController) SearchComment() {
 	// session := c.StartSession()
 	// 閲覧数カウント
 	if session.Get(tvProgramID) == nil {
-		// fmt.Println("first tv click")
 		if session.Get("UserId") != nil {
 			userID := session.Get("UserId").(int64)
 			var b models.BrowsingHistory
@@ -347,10 +339,7 @@ func (c *CommentController) SearchComment() {
 				UserId:      userID,
 				TvProgramId: tvProgramID,
 			}
-			_, err = models.AddBrowsingHistory(&b)
-			if err == nil {
-				fmt.Println("browsing_history", b)
-			}
+			_, _ = models.AddBrowsingHistory(&b)
 		}
 		v.CountClicked++
 		_ = models.UpdateTvProgramById(v)
@@ -358,8 +347,6 @@ func (c *CommentController) SearchComment() {
 	}
 
 	if session.Get("UserId") != nil {
-		// 	fmt.Println("you are not user, so your tv_Like break.")
-		// } else {
 		userID := session.Get("UserId").(int64)
 		w, err := models.GetWatchingStatusByUserAndTvProgram(userID, tvProgramID)
 		if err != nil {

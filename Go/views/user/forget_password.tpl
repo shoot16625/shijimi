@@ -21,6 +21,18 @@
             ></ons-input>
           </p>
           <p>
+            <ons-input
+              type="number"
+              name="age"
+              modifier="underbar"
+              placeholder="生年月日(ex.1990年10月 → 199010)"
+              min="192001"
+              max="205012"
+              float
+              required
+            ></ons-input>
+          </p>
+          <p>
             <label for="SecondPassword" style="margin: 0 30px 0 30px;"
               >＜第2パスワード＞</label
             >
@@ -56,8 +68,7 @@
     </ons-page>
     <script type="text/javascript" src="/static/js/common.js"></script>
     <script type="text/javascript">
-      const name = {{.User}};
-      if (name != null){
+      if ({{.User}} != null){
         dialogBoxEveryone('alert-username-not-found');
       }
     </script>

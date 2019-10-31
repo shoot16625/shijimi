@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	// "reflect"
-	"fmt"
+
 	"time"
 
 	"github.com/astaxie/beego"
@@ -46,9 +46,7 @@ func (c *TvProgramController) URLMapping() {
 // @router / [post]
 func (c *TvProgramController) Post() {
 	session := c.StartSession()
-	if session.Get("UserId") == nil {
-		fmt.Println("You are not logined, so permission denyed.")
-	} else {
+	if session.Get("UserId") != nil {
 		year, _ := c.GetInt("year")
 		rep := regexp.MustCompile(`\(.+\)`)
 		season := *new(models.Season)
@@ -319,9 +317,7 @@ func (c *TvProgramController) Index() {
 	c.Data["TvProgram"] = l
 
 	session := c.StartSession()
-	if session.Get("UserId") == nil {
-		fmt.Println("you are not user, so your tv_Like break.")
-	} else {
+	if session.Get("UserId") != nil {
 		userID := session.Get("UserId").(int64)
 		var ratings []models.WatchingStatus
 		for _, tvProgram := range l {
@@ -564,8 +560,6 @@ func (c *TvProgramController) SearchTvProgram() {
 	c.Data["TvProgram"] = l
 	// session := c.StartSession()
 	if session.Get("UserId") != nil {
-		// 	fmt.Println("you are not user, so your tv_Like break.")
-		// } else {
 		userID := session.Get("UserId").(int64)
 		var ratings []models.WatchingStatus
 		for _, tvProgram := range l {
@@ -586,7 +580,6 @@ func (c *TvProgramController) SearchTvProgram() {
 func (c *TvProgramController) CreatePage() {
 	session := c.StartSession()
 	if session.Get("UserId") == nil {
-		fmt.Println("you are not user, so your permission denyed.")
 		c.Redirect("/", 302)
 	} else {
 		c.TplName = "tv_program/create.tpl"

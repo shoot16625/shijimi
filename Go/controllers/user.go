@@ -5,7 +5,6 @@ import (
 	// "app/sessions"
 	// "encoding/json"
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -71,24 +70,17 @@ func (c *UserController) Post() {
 		Marital:        c.GetString("marital"),
 		BloodType:      c.GetString("bloodType"),
 	}
-
-	// fmt.Println(v)
 	if _, err := models.AddUser(&v); err == nil {
-		fmt.Println("user create and login!!")
 		session := c.StartSession()
 		session.Set("username", c.GetString("username"))
 		session.Set("UserId", v.Id)
-		// c.Redirect("/tv/tv_program/index", 302)
 		c.Redirect("/tv/user/show", 302)
 	} else {
-		// c.Data["json"] = err.Error()
 		v.Password = c.GetString("password")
 		v.SecondPassword = c.GetString("SecondPassword")
 		c.Data["User"] = v
 		c.TplName = "user/create.tpl"
-		// c.Redirect("/tv/user/create", 302)
 	}
-	// c.ServeJSON()
 }
 
 // GetOne ...
@@ -182,7 +174,6 @@ func (c *UserController) GetAll() {
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *UserController) Put() {
-	fmt.Println("update user profile")
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	age, _ := c.GetInt("age")
@@ -193,7 +184,6 @@ func (c *UserController) Put() {
 		hashPass = u.Password
 		hashSecondpass = u.SecondPassword
 	}
-	// var v models.User
 	v := models.User{
 		Id:             id,
 		Username:       c.GetString("username"),
@@ -207,7 +197,6 @@ func (c *UserController) Put() {
 		Marital:        c.GetString("marital"),
 		BloodType:      c.GetString("bloodType"),
 	}
-	// fmt.Println(v)
 	if err := models.UpdateUserById(&v); err == nil {
 		c.Data["json"] = "OK"
 		c.Redirect("show", 302)
@@ -267,7 +256,6 @@ func (c *UserController) Show() {
 	session := c.StartSession()
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
-	// fmt.Println(id)
 	// コメント欄からプロフィール遷移してきた場合
 	if id != 0 {
 		v, _ := models.GetUserById(id)
@@ -347,7 +335,6 @@ func (c *UserController) ShowReview() {
 	session := c.StartSession()
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
-	// fmt.Println(id)
 	if id != 0 {
 		v, _ := models.GetUserById(id)
 		c.Data["User"] = v
@@ -450,7 +437,6 @@ func (c *UserController) ShowWatchedTv() {
 }
 
 func (c *UserController) ShowWtwTv() {
-	fmt.Println("ShowWtwTvShowWtwTvShowWtwTvShowWtwTvShowWtwTvShowWtwTv")
 	var fields []string
 	var sortby []string
 	var order []string
@@ -495,7 +481,6 @@ func (c *UserController) Login() {
 	session := c.StartSession()
 	v, _ := models.GetUserByUsername(c.GetString("username"))
 	if v == nil {
-		fmt.Println("not user")
 		c.Data["Status"] = "ログインに失敗しました"
 		var Info struct {
 			CntUsers      int64
@@ -507,18 +492,14 @@ func (c *UserController) Login() {
 		c.TplName = "user/logout.tpl"
 	} else {
 		if models.UserPassMach(v.Password, c.GetString("password")) {
-			fmt.Println("good password")
 			session.Set("username", c.GetString("username"))
 			session.Set("UserId", v.Id)
 			v := models.LoginHistory{
 				UserId: v.Id,
 			}
-			if _, err := models.AddLoginHistory(&v); err == nil {
-				fmt.Println(v)
-			}
+			_, _ = models.AddLoginHistory(&v)
 			c.Redirect("/tv/user/show", 302)
 		} else {
-			fmt.Println("bad password")
 			c.Data["Status"] = "ログインに失敗しました"
 			var Info struct {
 				CntUsers      int64
@@ -538,7 +519,6 @@ func (c *UserController) Logout() {
 	if userID != nil {
 		session.Delete("UserId")
 		session.Delete("Username")
-		fmt.Println(userID, ":logout")
 	}
 	c.Data["Status"] = "ログアウトしました"
 	var Info struct {
@@ -562,7 +542,6 @@ func (c *UserController) ForgetPasswordPage() {
 func (c *UserController) ForgetUsername() {
 	v, _ := models.GetUserByPasswords(c.GetString("password"), c.GetString("SecondPassword"))
 	if v == nil {
-		fmt.Println("can`t find user")
 		c.Data["User"] = new(models.User)
 	} else {
 		c.Data["User"] = v
@@ -571,10 +550,9 @@ func (c *UserController) ForgetUsername() {
 }
 
 func (c *UserController) ForgetPassword() {
-	fmt.Println(c.GetString("username"), c.GetString("SecondPassword"))
-	v, _ := models.GetUserByUsernameAndPassword(c.GetString("username"), c.GetString("SecondPassword"))
+	age, _ := c.GetInt("age")
+	v, _ := models.GetUserByUsernameAndPassword(c.GetString("username"), age, c.GetString("SecondPassword"))
 	if v == nil {
-		fmt.Println("can`t find password")
 		c.Data["User"] = new(models.User)
 		c.TplName = "user/forget_password.tpl"
 	} else {

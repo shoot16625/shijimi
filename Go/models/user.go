@@ -187,16 +187,19 @@ func GetUserByPasswords(password string, SecondPassword string) (v *User, err er
 }
 
 // ユーザー名と第2パスワードを使ってパスワードの再設定
-func GetUserByUsernameAndPassword(username string, SecondPassword string) (v *User, err error) {
+func GetUserByUsernameAndPassword(username string, age int, SecondPassword string) (v *User, err error) {
 	v, err = GetUserByUsername(username)
 	if err != nil {
 		return nil, err
 	}
 	if UserPassMach(v.SecondPassword, SecondPassword) {
-		return v, nil
+		if age == v.Age {
+			return v, nil
+		}
 	} else {
 		return nil, err
 	}
+	return nil, err
 }
 
 // パスワードのハッシュ化

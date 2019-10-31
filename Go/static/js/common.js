@@ -1,7 +1,7 @@
 // 定数
-const URL = 'http://192.168.2.174:8080';
+// const URL = 'http://192.168.2.174:8080';
 //const URL = "http://192.168.2.174:8081";
-// const URL = "http://www.cmplx.cse.nagoya-u.ac.jp";
+const URL = 'http://www.cmplx.cse.nagoya-u.ac.jp';
 //const URL = "localhost:8080";
 
 // 自動スクロール
@@ -63,7 +63,6 @@ var hideAlertDialog = function(elem) {
 var dialogBox = function(elemID, userID) {
   ons.ready(function() {
     var dialog = document.getElementById(elemID);
-    console.log(userID);
     // == でないとダメ
     if (userID == null) {
       return dialogBoxEveryone('alert-only-user-dialog');
@@ -254,8 +253,10 @@ function goAnotherCarousel(index) {
 }
 
 // pathのページへ移動
-function goOtherPage(userID, path) {
+function goOtherPage(userID, tvProgramID, path) {
   if (userID == null) {
+    return dialogBoxEveryone('alert-only-user-dialog');
+  } else if (userID != 1 && tvProgramID === 1) {
     return dialogBoxEveryone('alert-only-user-dialog');
   } else {
     window.location.href = path;

@@ -170,8 +170,6 @@ func (c *WatchingStatusController) Put() {
 			w.CountWantToWatch--
 		}
 	}
-	// fmt.Println(v.Watched)
-	// fmt.Println(v.WantToWatch)
 	if err := models.UpdateTvProgramById(w); err != nil {
 		fmt.Println(err.Error())
 	}

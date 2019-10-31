@@ -40,7 +40,7 @@
             <p>
               <ons-button
                 modifier="quiet"
-                onclick="goOtherPage({{.UserId}}, 'tv/tv_program/create_page')"
+                onclick="goOtherPage({{.UserId}},0, 'tv/tv_program/create_page')"
                 >ドラマ・映画をつくる</ons-button
               >
             </p>

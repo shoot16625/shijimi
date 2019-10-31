@@ -40,7 +40,6 @@ func (c *ReviewCommentController) Post() {
 		json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 		_, err := models.GetReviewCommentByUserIdAndTvProgramId(v.UserId, v.TvProgramId)
 		if err != nil {
-			// fmt.Println("first review!!")
 			if _, err := models.AddReviewComment(&v); err == nil {
 				c.Ctx.Output.SetStatus(201)
 				c.Data["json"] = v
@@ -49,7 +48,6 @@ func (c *ReviewCommentController) Post() {
 			}
 		}
 	}
-	// c.ServeJSON()
 }
 
 // GetOne ...
@@ -206,8 +204,6 @@ func (c *ReviewCommentController) Show() {
 
 	session := c.StartSession()
 	if session.Get("UserId") != nil {
-		// 	fmt.Println("you are not user, so your tv_Like break.")
-		// } else {
 		userID := session.Get("UserId").(int64)
 		w, err := models.GetWatchingStatusByUserAndTvProgram(userID, tvProgramID)
 		if err != nil {
@@ -335,7 +331,6 @@ func (c *ReviewCommentController) SearchComment() {
 	c.Data["Users"] = users
 	// 閲覧数カウント
 	if session.Get(tvProgramID) == nil {
-		// fmt.Println("first tv click")
 		if session.Get("UserId") != nil {
 			userID := session.Get("UserId").(int64)
 			b := models.BrowsingHistory{
@@ -343,9 +338,6 @@ func (c *ReviewCommentController) SearchComment() {
 				TvProgramId: tvProgramID,
 			}
 			_, err = models.AddBrowsingHistory(&b)
-			// if err == nil {
-			// 	fmt.Println("browsing_history", b)
-			// }
 		}
 		v.CountClicked++
 		_ = models.UpdateTvProgramById(v)
@@ -353,8 +345,6 @@ func (c *ReviewCommentController) SearchComment() {
 	}
 
 	if session.Get("UserId") != nil {
-		// 	fmt.Println("You are not user, so your tv_Like break.")
-		// } else {
 		userID := session.Get("UserId").(int64)
 		w, err := models.GetWatchingStatusByUserAndTvProgram(userID, tvProgramID)
 		if err != nil {

@@ -93,7 +93,7 @@
           <div id="edit-tv-program">
             <ons-button
               modifier="quiet"
-              onclick="goOtherPage({{.User}},'/tv/tv_program/edit/{{.TvProgram.Id}}')"
+              onclick="goOtherPage({{.User.Id}},{{.TvProgram.Id}},'/tv/tv_program/edit/{{.TvProgram.Id}}')"
               >編集</ons-button
             >
           </div>
