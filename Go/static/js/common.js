@@ -23,33 +23,17 @@ function autoScroll(varName, len) {
 }
 
 // toolbarを隠す
-// var scroll_position = 0;
-// ons.ready(function() {
-// $('.page__content').on('scroll', function(){
-//   var scrollTop = $(this).scrollTop();
-//   if (scrollTop - scroll_position > 0){
-//     document.querySelector('ons-toolbar').hide();
-//   } else {
-//     document.querySelector('ons-toolbar').show();
-//   }
-//   scroll_position = scrollTop;
-// });
-// });
 $(function() {
   let pos = 0;
   let diff = 0;
-  const heightThreshold = 700;
   const topThreshold = 30;
   const scrollSpeedThreshold = 300;
-  const pageHeight = $('.page__content').height();
   $('.page__content').on('scroll', function() {
     diff = pos - $(this).scrollTop();
-    if (diff > scrollSpeedThreshold) {
-    } else {
-      if (
-        $(this).scrollTop() > topThreshold ||
-        pageHeight < heightThreshold
-      ) {
+    if (diff < scrollSpeedThreshold) {
+      if ($(this).scrollTop() < topThreshold) {
+        $('ons-toolbar').show();
+      } else {
         if ($(this).scrollTop() < pos) {
           $('ons-toolbar').fadeIn();
         } else {

@@ -288,10 +288,8 @@
 
     <script>
       let tvPrograms = {{.TvProgram}};
-      if (tvPrograms.length === 0) {
-        tvPrograms = null;
-      } else {
-      console.log("表示数：", tvPrograms.length);
+      if (tvPrograms != null) {
+        console.log("表示数：", tvPrograms.length);
       }
       let watchStatus;
       if ({{.WatchStatus}} === null && tvPrograms != null){
@@ -310,7 +308,7 @@
             createItemContent: function(i) {
               let moviePosition;
               if (tvPrograms[i].MovieURL===""){
-                moviePosition = '<img class="image" id="image-' + tvPrograms[i].Id + '" src="'+tvPrograms[i].ImageURL+'" alt="' + tvPrograms[i].Title + '" width="80%" onerror="this.src=\'http://hankodeasobu.com/wp-content/uploads/animals_02.png\'">';
+                moviePosition = '<img class="image" id="image-' + tvPrograms[i].Id + '" src="'+tvPrograms[i].ImageURL+'" alt="' + tvPrograms[i].Title + '" width="80%" onerror="this.src=\'/static/img/animals_02.png\'">';
               } else {
                 moviePosition = '<iframe id="movie-' + tvPrograms[i].Id + '" class="movie" src="'+tvPrograms[i].MovieURL+'?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="' + tvPrograms[i].Title + '" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
               }

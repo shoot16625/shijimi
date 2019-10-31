@@ -105,7 +105,7 @@ func GetWikiDoramas(referencePath string) {
 				tvProgram.Category = CategoryReshape(category)
 				tvProgram.Production = data[2]
 				tvProgram.Cast = data[4]
-				tvProgram.ImageURL = "http://hankodeasobu.com/wp-content/uploads/animals_02.png"
+				tvProgram.ImageURL = "/static/img/animals_02.png"
 				tvProgram.WikiReference = "https://ja.wikipedia.org" + wikiURL
 				weekStruct := *new(models.Week)
 				data[3] = strings.Replace(data[3], "平日", "平曜", -1)
@@ -178,7 +178,7 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 		}
 		newTvProgram.Title = doc.Find("h1").Text()
 		newTvProgram.WikiReference = tvProgram.WikiReference
-		newTvProgram.ImageURL = "http://hankodeasobu.com/wp-content/uploads/animals_02.png"
+		newTvProgram.ImageURL = "/static/img/animals_02.png"
 		u.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
 			c, _ := t.Find("td").Attr("class")
 			if c == "category" {
@@ -610,7 +610,7 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 		}
 		newTvProgram.Title = doc.Find("h1").Text()
 		newTvProgram.WikiReference = wikiReferenceURL
-		newTvProgram.ImageURL = "http://hankodeasobu.com/wp-content/uploads/animals_02.png"
+		newTvProgram.ImageURL = "/static/img/animals_02.png"
 		u.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
 			c, _ := t.Find("td").Attr("class")
 			if c == "category" {

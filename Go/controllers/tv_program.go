@@ -66,7 +66,7 @@ func (c *TvProgramController) Post() {
 		if !strings.Contains(movieURL, "embed") {
 			movieURL = strings.Replace(movieURL, "watch?v=", "embed/", -1)
 		}
-		const sampleImage string = "http://hankodeasobu.com/wp-content/uploads/animals_02.png"
+		const sampleImage string = "/static/img/animals_02.png"
 		imageURL := c.GetString("ImageURL")
 		if imageURL == "" {
 			imageURL = sampleImage
@@ -75,6 +75,10 @@ func (c *TvProgramController) Post() {
 		if imageURL != sampleImage {
 			if strings.Contains(imageURL, "walkerplus") {
 				imageURLReference = "MovieWalker"
+			} else if strings.Contains(imageURL, "1.bp.blogspot.com") {
+				imageURLReference = "いらすとや"
+			} else if imageURL == "/static/img/animals_02.png" {
+				imageURLReference = ""
 			} else {
 				imageURLs := strings.Split(imageURL, "/")
 				imageURLReference = imageURLs[2]
@@ -88,20 +92,19 @@ func (c *TvProgramController) Post() {
 			ImageURL:          imageURL,
 			ImageURLReference: imageURLReference,
 			MovieURL:          movieURL,
-			// MovieURLReference: c.GetString("MovieURLReference"),
-			WikiReference: c.GetString("WikiReference"),
-			Cast:          strings.Replace(c.GetString("cast"), "　", "", -1),
-			Category:      strings.Join(c.GetStrings("category"), "、"),
-			Dramatist:     strings.Replace(c.GetString("dramatist"), "　", "", -1),
-			Supervisor:    strings.Replace(c.GetString("supervisor"), "　", "", -1),
-			Director:      strings.Replace(c.GetString("director"), "　", "", -1),
-			Production:    c.GetString("production"),
-			Year:          year,
-			Season:        &season,
-			Week:          &week,
-			Hour:          float32(hour),
-			Themesong:     c.GetString("themesong"),
-			CreateUserId:  session.Get("UserId").(int64),
+			WikiReference:     c.GetString("WikiReference"),
+			Cast:              strings.Replace(c.GetString("cast"), "　", "", -1),
+			Category:          strings.Join(c.GetStrings("category"), "、"),
+			Dramatist:         strings.Replace(c.GetString("dramatist"), "　", "", -1),
+			Supervisor:        strings.Replace(c.GetString("supervisor"), "　", "", -1),
+			Director:          strings.Replace(c.GetString("director"), "　", "", -1),
+			Production:        c.GetString("production"),
+			Year:              year,
+			Season:            &season,
+			Week:              &week,
+			Hour:              float32(hour),
+			Themesong:         c.GetString("themesong"),
+			CreateUserId:      session.Get("UserId").(int64),
 		}
 
 		if _, err := models.AddTvProgram(&v); err == nil {
@@ -225,7 +228,7 @@ func (c *TvProgramController) Put() {
 	if !strings.Contains(movieURL, "embed") {
 		movieURL = strings.Replace(movieURL, "watch?v=", "embed/", -1)
 	}
-	const sampleImage string = "http://hankodeasobu.com/wp-content/uploads/animals_02.png"
+	const sampleImage string = "/static/img/animals_02.png"
 	imageURL := c.GetString("ImageURL")
 	if imageURL == "" {
 		imageURL = sampleImage
@@ -234,6 +237,10 @@ func (c *TvProgramController) Put() {
 	if imageURL != sampleImage {
 		if strings.Contains(imageURL, "walkerplus") {
 			imageURLReference = "MovieWalker"
+		} else if strings.Contains(imageURL, "1.bp.blogspot.com") {
+			imageURLReference = "いらすとや"
+		} else if imageURL == "/static/img/animals_02.png" {
+			imageURLReference = ""
 		} else {
 			imageURLs := strings.Split(imageURL, "/")
 			imageURLReference = imageURLs[2]
@@ -242,7 +249,6 @@ func (c *TvProgramController) Put() {
 	}
 	oldTvInfo, _ := models.GetTvProgramById(id)
 	v := *oldTvInfo
-	// fmt.Println(v)
 	v.Title = c.GetString("title")
 	v.Content = c.GetString("content")
 	v.ImageURL = imageURL
