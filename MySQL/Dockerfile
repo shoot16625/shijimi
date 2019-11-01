@@ -1,4 +1,3 @@
 FROM mysql:5.7
 
-RUN chown -R mysql /var/lib/mysql && \
-    chgrp -R mysql /var/lib/mysql
+RUN chmod 777 -R /var/lib/mysql

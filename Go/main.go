@@ -5,6 +5,7 @@ import (
 	_ "app/routers"
 
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -19,10 +20,14 @@ import (
 const location = "Asia/Tokyo"
 
 func main() {
-
 	if beego.BConfig.RunMode == "dev" {
 		beego.BConfig.WebConfig.DirectoryIndex = true
 		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
+	}
+	if beego.BConfig.RunMode == "prod" {
+		port, _ := strconv.Atoi(os.Getenv("PORT"))
+		beego.BConfig.Listen.HTTPPort = port
+		beego.BConfig.Listen.HTTPSPort = port
 	}
 	beego.Run()
 }
