@@ -68,9 +68,14 @@
         >Cancel</ons-alert-dialog-button
       >
       <ons-alert-dialog-button>
-        <form id="delete-user" action="/tv/user/{{.User.Id}}" method="post">
+        <form
+          id="delete-user"
+          action="/tv/user/{{.User.Id}}"
+          method="post"
+          onSubmit="showLoading();"
+        >
           <input type="hidden" name="_method" value="DELETE" />
-          <button class="button--quiet" type="submit">
+          <button id="delete-user-button" class="button--quiet" type="submit">
             OK
           </button>
         </form>

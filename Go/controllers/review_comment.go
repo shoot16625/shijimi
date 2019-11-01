@@ -331,14 +331,15 @@ func (c *ReviewCommentController) SearchComment() {
 	c.Data["Users"] = users
 	// 閲覧数カウント
 	if session.Get(tvProgramID) == nil {
-		if session.Get("UserId") != nil {
-			userID := session.Get("UserId").(int64)
-			b := models.BrowsingHistory{
-				UserId:      userID,
-				TvProgramId: tvProgramID,
-			}
-			_, err = models.AddBrowsingHistory(&b)
-		}
+		// BrowsingHistory_logの停止
+		// if session.Get("UserId") != nil {
+		// 	userID := session.Get("UserId").(int64)
+		// 	b := models.BrowsingHistory{
+		// 		UserId:      userID,
+		// 		TvProgramId: tvProgramID,
+		// 	}
+		// 	_, err = models.AddBrowsingHistory(&b)
+		// }
 		v.CountClicked++
 		_ = models.UpdateTvProgramById(v)
 		session.Set(tvProgramID, true)

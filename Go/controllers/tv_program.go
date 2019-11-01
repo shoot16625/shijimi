@@ -367,7 +367,7 @@ func (c *TvProgramController) Get() {
 			c.Data["TvProgram"+weekName[i]] = w
 		}
 	}
-	c.TplName = "tv_program/top-page.tpl"
+	c.TplName = "tv_program/top_page.tpl"
 }
 
 func (c *TvProgramController) Search() {

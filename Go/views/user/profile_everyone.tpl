@@ -20,5 +20,8 @@
         </div>
       </ons-col>
     </ons-row>
+    <ons-row>
+      <span id="badges"></span>
+    </ons-row>
   </ons-list-item>
 </ons-list>

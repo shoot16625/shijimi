@@ -139,6 +139,11 @@ a {
   text-align: right;
 }
 
+.area-right-float {
+  text-align: right;
+  float: right;
+}
+
 /* margin */
 .list-margin {
   margin: 0px 5px 0px 3px;

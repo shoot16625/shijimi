@@ -202,15 +202,111 @@
               required
             ></ons-input>
           </p>
+          <p>
+            <ons-checkbox
+              value="consent"
+              id="consent-checkbox"
+              style="vertical-align: middle;"
+              required
+            ></ons-checkbox>
+            <ons-button
+              modifier="quiet"
+              id="consent-button"
+              onclick="dialogBoxEveryone('terms-of-service')"
+              >利用規約に同意</ons-button
+            >
+          </p>
+          <p>
+            <ons-checkbox
+              value="privacy"
+              id="privacy-checkbox"
+              style="vertical-align: middle;"
+              required
+            ></ons-checkbox>
+            <ons-button
+              modifier="quiet"
+              id="privacy-button"
+              onclick="dialogBoxEveryone('privacy-policy')"
+              >プライバシーポリシーに同意</ons-button
+            >
+          </p>
           <p class="create-top-margin">
             <button class="button button--outline">作成する</button>
           </p>
         </div>
       </form>
     </ons-page>
-
+    <template id="terms-of-service.html">
+      <ons-dialog id="terms-of-service" modifier="large" cancelable fullscreen>
+        <ons-page>
+          <ons-toolbar>
+            <div class="left"></div>
+            <div class="center">利用規約</div>
+          </ons-toolbar>
+          {{ template "/common/terms_of_service.tpl" . }}
+          <p class="area-center">
+            <ons-button
+              id="ok-button"
+              onclick="hideAlertDialog('terms-of-service')"
+            >
+              OK
+            </ons-button>
+          </p>
+        </ons-page>
+      </ons-dialog>
+    </template>
+    <template id="privacy-policy.html">
+      <ons-dialog id="privacy-policy" modifier="large" cancelable fullscreen>
+        <ons-page>
+          <ons-toolbar>
+            <div class="left"></div>
+            <div class="center">プライバシーポリシー</div>
+          </ons-toolbar>
+          {{ template "/common/privacy_policy.tpl" . }}
+          <p class="area-center">
+            <ons-button
+              id="ok-button"
+              onclick="hideAlertDialog('privacy-policy')"
+            >
+              OK
+            </ons-button>
+          </p>
+        </ons-page>
+      </ons-dialog>
+    </template>
     <script type="text/javascript" src="/static/js/common.js"></script>
-
+    <script type="text/javascript">
+      let consentFlag = false;
+      $(function() {
+        $('#consent-button').click(function() {
+          consentFlag = true;
+        });
+      });
+      $(function() {
+        $('#consent-checkbox').change(function() {
+          if (consentFlag) {
+          } else {
+            $('#consent-checkbox').prop('checked', false);
+          }
+        });
+      });
+    </script>
+    <script type="text/javascript">
+      let privacyFlag = false;
+      $(function() {
+        $('#privacy-button').click(function() {
+          privacyFlag = true;
+        });
+      });
+      $(function() {
+        $('#privacy-checkbox').change(function() {
+          if (privacyFlag) {
+          } else {
+            $('#privacy-checkbox').prop('checked', false);
+          }
+        });
+      });
+    </script>
     <script type="text/javascript">
       const name = {{.User.Username}};
       if (name != null) {

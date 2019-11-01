@@ -293,11 +293,12 @@ func (c *UserController) Show() {
 			}
 			c.Data["CommentLike"] = commentLikes
 			c.Data["TvProgram"] = tvPrograms
-			z := models.FootPrintToUser{
-				UserId:   myUserID,
-				ToUserId: id,
-			}
-			_, _ = models.AddFootPrintToUser(&z)
+			// foot_print_logの停止
+			// z := models.FootPrintToUser {
+			// 	UserId:   myUserID,
+			// 	ToUserId: id,
+			// }
+			// _, _ = models.AddFootPrintToUser(&z)
 		}
 		c.TplName = "user/user_comment.tpl"
 	} else {

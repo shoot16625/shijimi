@@ -263,3 +263,25 @@ function goOtherPage(userID, tvProgramID, path) {
     window.location.href = path;
   }
 }
+
+// ローディングマークの表示
+function showLoading() {
+  $('.page__content').html(
+    '<ons-progress-bar indeterminate></ons-progress-bar>'
+  );
+}
+
+// バッジの整形
+function reshapeBadges(badge) {
+  let badgeText = '';
+  if (badge != '') {
+    let badges = badge.split(',');
+    for (let index = 0; index < badges.length; index++) {
+      if (badges[index] == 'thanks') {
+        badgeText +=
+          "<span style='margin-right:7px;'><i class='fas fa-user-astronaut' style ='color:deepskyblue; font-size:30px;'></i><span style='font-size:10px;'>献金</span></span>";
+      }
+    }
+    document.getElementById('badges').innerHTML = badgeText;
+  }
+}

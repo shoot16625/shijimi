@@ -86,5 +86,8 @@
         request.send(json);
       }
     </script>
+    <script>
+      reshapeBadges({{.User.Badge}});
+    </script>
   </body>
 </html>
