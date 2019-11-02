@@ -20,6 +20,7 @@ services:
   app:
     build:
       context: ./Go
+      dockerfile: Dockerfile.dev
     volumes:
       - "./Go:/go/src/app"
     container_name: go_app

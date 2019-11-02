@@ -15,7 +15,7 @@
         </div>
       </ons-col>
       <ons-col width="50%">
-        <div class="image" style="max-height: 190px;">
+        <div class="profile-image">
           <img src="{{.User.IconURL}}" alt="{{.Username}}" width="100%" />
         </div>
       </ons-col>
