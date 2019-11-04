@@ -4,7 +4,7 @@ services:
     build:
       context: ./MySQL
     env_file:
-      - .env
+      - ./MySQL/mysql.env
     container_name: go_db
     ports:
       - "3306:3306"
@@ -20,6 +20,8 @@ services:
     volumes:
       - "./Go:/go/src/app"
     container_name: go_app
+    env_file:
+      - ./Go/conf/go.env
     ports:
       - "8080:8080"
     tty: true

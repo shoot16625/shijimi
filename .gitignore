@@ -1,9 +1,8 @@
 # shijimi
 /Go/swagger/
 /Go/app
-/Go/sftp-config.json
-/Go/.vscode/
-.vscode/
-/Go/.travis.yml
+/Go/conf/go.env
+/.vscode/
 /MySQL/mysql_data/
-.env
+/MySQL/init_data/
+/MySQL/mysql.env

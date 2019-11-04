@@ -39,9 +39,12 @@ func init() {
 		loc = time.FixedZone(location, 9*60*60)
 	}
 	time.Local = loc
-
 	orm.RegisterDriver(beego.AppConfig.String("driver"), orm.DRMySQL)
-	orm.RegisterDataBase("default", beego.AppConfig.String("driver"), beego.AppConfig.String("sqlconn")+"?charset=utf8mb4&loc=Asia%2FTokyo")
+	user := os.Getenv("MYSQL_USER")
+	pass := os.Getenv("MYSQL_PASSWORD")
+	dbName := os.Getenv("MYSQL_DATABASE")
+	sqlconn := user + ":" + pass + "@tcp(db:3306)/" + dbName
+	orm.RegisterDataBase("default", beego.AppConfig.String("driver"), sqlconn+"?charset=utf8mb4&loc=Asia%2FTokyo")
 	// データを初期化して起動
 	// err := orm.RunSyncdb("default", true, false)
 	// データの変更点を追加して起動
@@ -62,7 +65,7 @@ func init() {
 		month := (birthday - year*100)
 		ageInt := t.Year() - int(year)
 		if b := int(t.Month()) - month; b < 0 {
-			ageInt -= 1
+			ageInt--
 		}
 		age = strconv.Itoa(ageInt)
 		return age
