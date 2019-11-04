@@ -4,6 +4,7 @@ import (
 	"app/models"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -38,11 +39,25 @@ func (c *ReviewCommentController) Post() {
 	session := c.StartSession()
 	if session.Get("UserId") != nil {
 		json.Unmarshal(c.Ctx.Input.RequestBody, &v)
+		// 初投稿の場合のみ許可
 		_, err := models.GetReviewCommentByUserIdAndTvProgramId(v.UserId, v.TvProgramId)
 		if err != nil {
 			if _, err := models.AddReviewComment(&v); err == nil {
 				c.Ctx.Output.SetStatus(201)
 				c.Data["json"] = v
+				if x, err := models.GetTvProgramById(v.TvProgramId); err == nil {
+					if y, err := models.GetReviewCommentByTvProgramId(v.TvProgramId); err == nil {
+						x.CountStar = int32(len(y))
+						var n int32 = 0
+						for _, z := range y {
+							n += z.Star
+						}
+						x.Star = float32(n / x.CountStar)
+						if err := models.UpdateTvProgramById(x); err != nil {
+							fmt.Println(err)
+						}
+					}
+				}
 			} else {
 				c.Data["json"] = err.Error()
 			}

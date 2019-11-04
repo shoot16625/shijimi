@@ -58,7 +58,7 @@
       {{if .TvProgram.ImageURLReference}}
       <div class="reference">
         <a href="{{.TvProgram.ImageURL}}" target="_blank">
-          From:{{.TvProgram.ImageURLReference}}
+          出典:{{.TvProgram.ImageURLReference}}
         </a>
       </div>
       {{ end }}

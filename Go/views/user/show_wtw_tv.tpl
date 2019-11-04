@@ -58,7 +58,7 @@
               }
               let referenceSite = "";
               if (tvPrograms[i].ImageURLReference != "" && tvPrograms[i].MovieURL == "") {
-                referenceSite = "From:" + tvPrograms[i].ImageURLReference;
+                referenceSite = "出典:" + tvPrograms[i].ImageURLReference;
               }
               let categories = tvPrograms[i].Category.split('、');
               if (tvPrograms[i].Category === ""){

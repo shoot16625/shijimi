@@ -98,7 +98,7 @@ func GetAllReviewComment(query map[string]string, fields []string, sortby []stri
 	}
 
 	var l []ReviewComment
-	var maxLimit int64 = 2000
+	var maxLimit int64 = 1000
 	if maxLimit < limit {
 		limit = maxLimit
 	}
@@ -295,8 +295,7 @@ func GetAllReviewCommentByUserId(id int64) (v []ReviewComment, err error) {
 }
 
 func DeleteReviewCommentsByUserId(id int64) {
-	l, _ := GetAllReviewCommentByUserId(id)
-	for _, v := range l {
-		_ = DeleteReviewComment(v.Id)
-	}
+	o := orm.NewOrm()
+	num, _ := o.QueryTable(new(ReviewComment)).Filter("UserId", id).Delete()
+	fmt.Println("delete review comment", num)
 }

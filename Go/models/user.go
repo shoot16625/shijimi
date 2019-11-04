@@ -24,7 +24,7 @@ type User struct {
 	Marital        string    `orm:"size(20)" json:"-"; null"`
 	BloodType      string    `orm:"size(20)" json:"-"; null"`
 	MoneyPoint     int       `orm:"default(0)" json:"-"`
-	Badge          string    `orm:"size(200)"; null"`
+	Badge          string    `orm:"size(300)"; null"`
 	Created        time.Time `orm:"auto_now_add;type(datetime)"`
 	Updated        time.Time `orm:"auto_now;type(datetime)"`
 }
@@ -222,4 +222,14 @@ func GetUserCount() (cnt int64) {
 	o := orm.NewOrm()
 	cnt, _ = o.QueryTable(new(User)).Count()
 	return cnt
+}
+
+func AddLoginPoint(userID int64) {
+	flag := GetLoginHistoryByUserId(userID)
+	if flag {
+		v, _ := GetUserById(userID)
+		v.MoneyPoint += 1
+		_ = UpdateUserById(v)
+		fmt.Println("today new login !!")
+	}
 }

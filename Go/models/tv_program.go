@@ -304,7 +304,7 @@ func SearchTvProgram(query map[string][]string, fields []string, sortby []string
 
 	var l []TvProgram
 	qs = qs.OrderBy(sortFields...).RelatedSel()
-	var maxLimit int64 = 2000
+	var maxLimit int64 = 500
 	if maxLimit < limit {
 		limit = maxLimit
 	}

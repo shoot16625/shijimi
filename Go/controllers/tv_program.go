@@ -9,9 +9,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-
-	// "reflect"
-
 	"time"
 
 	"github.com/astaxie/beego"
@@ -151,7 +148,7 @@ func (c *TvProgramController) GetAll() {
 	var sortby []string
 	var order []string
 	var query = make(map[string]string)
-	var limit int64
+	var limit int64 = 10
 	var offset int64
 
 	// fields: col1,col2,entity.col3

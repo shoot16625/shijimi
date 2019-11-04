@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"strconv"
 	"strings"
 	"time"
 
@@ -11,8 +12,8 @@ import (
 )
 
 type LoginHistory struct {
-	Id     int64 `orm:"auto"`
-	UserId int64
+	Id      int64 `orm:"auto"`
+	UserId  int64
 	Created time.Time `orm:"auto_now_add;type(datetime)"`
 }
 
@@ -141,4 +142,21 @@ func DeleteLoginHistory(id int64) (err error) {
 		}
 	}
 	return
+}
+
+func GetLoginHistoryByUserId(userID int64) (flag bool) {
+	t := time.Now()
+	year := strconv.Itoa(t.Year())
+	month := strconv.Itoa(int(t.Month()))
+	date := year + "-" + month
+	o := orm.NewOrm()
+	var l []LoginHistory
+	if _, err := o.QueryTable(new(LoginHistory)).Filter("Created__icontains", date).Filter("UserId", userID).All(&l); err == nil {
+		for _, v := range l {
+			if v.Created.Day() == t.Day() {
+				return false
+			}
+		}
+	}
+	return true
 }

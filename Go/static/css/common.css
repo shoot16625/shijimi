@@ -186,6 +186,7 @@ a {
   max-width: 500px;
 }
 
+/* color */
 .flag-color {
   color: rgb(213, 236, 6);
 }
@@ -194,3 +195,4 @@ a {
   font-size: 14px;
   text-align: right;
 }
+

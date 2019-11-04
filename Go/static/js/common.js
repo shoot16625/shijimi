@@ -279,7 +279,7 @@ function reshapeBadges(badge) {
     for (let index = 0; index < badges.length; index++) {
       if (badges[index] == 'thanks') {
         badgeText +=
-          "<span style='margin-right:7px;'><i class='fas fa-user-astronaut' style ='color:deepskyblue; font-size:30px;'></i><span style='font-size:10px;'>献金</span></span>";
+          "<span style='margin-right:7px;'><i class='fab fa-angellist' style ='color:cornflowerblue; font-size:30px;'></i><span style='font-size:10px;'>寄付</span></span>";
       }
     }
     document.getElementById('badges').innerHTML = badgeText;
