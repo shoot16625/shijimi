@@ -11,34 +11,34 @@ import (
 )
 
 type TvProgram struct {
-	Id                 int64     `orm:"auto"`
-	Title              string    `orm:"size(128);unique"`
-	Content            string    `orm:"size(500);null"`
-	ImageURL           string    `orm:"size(500);null"`
-	ImageURLReference  string    `orm:"size(200);null"`
-	MovieURL           string    `orm:"size(500);null"`
-	MovieURLReference  string    `orm:"size(200);null"`
-	WikiReference      string    `orm:"size(500);null"`
-	Cast               string    `orm:"size(256);null"`
-	Category           string    `orm:"size(32);null"`
-	Dramatist          string    `orm:"size(128);null"`
-	Supervisor         string    `orm:"size(128);null"`
-	Director           string    `orm:"size(128);null"`
-	Production         string    `orm:"size(32);null"`
-	Year               int       `orm:"default(2000)"`
-	Season             *Season   `orm:"rel(fk);null"`
-	Week               *Week     `orm:"rel(fk);null"`
-	Hour               float32   `orm:"default(100)`
-	Themesong          string    `orm:"size(256);null"`
-	CreateUserId       int64     `orm:"default(0)"`
-	Star               float32   `orm:"default(5)"`
-	CountStar          int32     `orm:"default(0)"`
-	CountWatched       int32     `orm:"default(0)"`
-	CountWantToWatch   int32     `orm:"default(0)"`
-	CountClicked       int32     `orm:"default(0)"`
-	CountAuthorization int32     `orm:"default(0)"`
-	Created            time.Time `orm:"auto_now_add;type(datetime)"`
-	Updated            time.Time `orm:"auto_now;type(datetime)"`
+	Id                int64  `orm:"auto"`
+	Title             string `orm:"size(128);unique"`
+	Content           string `orm:"size(500);null"`
+	ImageURL          string `orm:"size(500);null"`
+	ImageURLReference string `orm:"size(200);null"`
+	MovieURL          string `orm:"size(500);null"`
+	// MovieURLReference  string    `orm:"size(200);null"`
+	WikiReference    string  `orm:"size(500);null"`
+	Cast             string  `orm:"size(256);null"`
+	Category         string  `orm:"size(32);null"`
+	Dramatist        string  `orm:"size(128);null"`
+	Supervisor       string  `orm:"size(128);null"`
+	Director         string  `orm:"size(128);null"`
+	Production       string  `orm:"size(32);null"`
+	Year             int     `orm:"default(2000)"`
+	Season           *Season `orm:"rel(fk);null"`
+	Week             *Week   `orm:"rel(fk);null"`
+	Hour             float32 `orm:"default(100)`
+	Themesong        string  `orm:"size(256);null"`
+	CreateUserId     int64   `orm:"default(0)"`
+	Star             float32 `orm:"default(5)"`
+	CountStar        int32   `orm:"default(0)"`
+	CountWatched     int32   `orm:"default(0)"`
+	CountWantToWatch int32   `orm:"default(0)"`
+	CountClicked     int32   `orm:"default(0)"`
+	// CountAuthorization int32     `orm:"default(0)"`
+	Created time.Time `orm:"auto_now_add;type(datetime)"`
+	Updated time.Time `orm:"auto_now;type(datetime)"`
 }
 
 type Season struct {
@@ -304,7 +304,7 @@ func SearchTvProgram(query map[string][]string, fields []string, sortby []string
 
 	var l []TvProgram
 	qs = qs.OrderBy(sortFields...).RelatedSel()
-	var maxLimit int64 = 2000
+	var maxLimit int64 = 500
 	if maxLimit < limit {
 		limit = maxLimit
 	}

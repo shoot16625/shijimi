@@ -63,7 +63,6 @@
       function commentLikeStatus(elem, checkFlag) {
         let url = URL+"/tv/review_comment_like/";
         let data = globalCommentLikeStatus[elem.id];
-        // console.log("here1;",data);
         let method;
         if (data.Id === 0){
           method = 'POST';
@@ -76,11 +75,8 @@
           url = url+data.Id;
         }
         data.Like = checkFlag;
-        // console.log("flag",globalCommentLikeStatus[elem.id], checkFlag);
-        // console.log("data",data);
         globalCommentLikeStatus[elem.id].Like = data.Like;
 
-        // console.log("last", globalCommentLikeStatus[elem.id]);
         var json = JSON.stringify(data);
         var request = new XMLHttpRequest();
         request.open(method, url, true);
@@ -95,6 +91,9 @@
         }
         request.send(json);
       };
+    </script>
+    <script>
+      reshapeBadges({{.User.Badge}});
     </script>
   </body>
 </html>

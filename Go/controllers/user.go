@@ -119,7 +119,7 @@ func (c *UserController) GetAll() {
 	var sortby []string
 	var order []string
 	var query = make(map[string]string)
-	var limit int64 = 100
+	var limit int64 = 10
 	var offset int64
 
 	// fields: col1,col2,entity.col3
@@ -293,11 +293,12 @@ func (c *UserController) Show() {
 			}
 			c.Data["CommentLike"] = commentLikes
 			c.Data["TvProgram"] = tvPrograms
-			z := models.FootPrintToUser{
-				UserId:   myUserID,
-				ToUserId: id,
-			}
-			_, _ = models.AddFootPrintToUser(&z)
+			// foot_print_logの停止
+			// z := models.FootPrintToUser {
+			// 	UserId:   myUserID,
+			// 	ToUserId: id,
+			// }
+			// _, _ = models.AddFootPrintToUser(&z)
 		}
 		c.TplName = "user/user_comment.tpl"
 	} else {
@@ -494,10 +495,11 @@ func (c *UserController) Login() {
 		if models.UserPassMach(v.Password, c.GetString("password")) {
 			session.Set("username", c.GetString("username"))
 			session.Set("UserId", v.Id)
-			v := models.LoginHistory{
+			models.AddLoginPoint(v.Id)
+			w := models.LoginHistory{
 				UserId: v.Id,
 			}
-			_, _ = models.AddLoginHistory(&v)
+			_, _ = models.AddLoginHistory(&w)
 			c.Redirect("/tv/user/show", 302)
 		} else {
 			c.Data["Status"] = "ログインに失敗しました"

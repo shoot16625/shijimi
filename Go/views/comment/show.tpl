@@ -36,7 +36,7 @@
         </ons-carousel-item>
         <ons-carousel-item>
           <div style="height: 200px; padding: 1px 0 0 0;">
-            <div class="card">
+            <div class="card" style="background-color: rgb(249, 252, 255);">
               <h2 class="card__title">工事中<i class="fas fa-wrench"></i></h2>
               <div class="card__content">
                 ログの解析結果を表示.
@@ -347,18 +347,7 @@
       };
     </script>
     <script>
-      let time = String({{.TvProgram.Hour}});
-      str = ".5";
-      if (time === "100"){
-        time = "";
-      } else {
-        if (time.indexOf(str) > -1){
-          time = time.replace(str, ":30")
-        } else {
-          time += ":00";
-        }
-      }
-      document.getElementById('tv-program-hour').innerHTML = time;
+      document.getElementById('tv-program-hour').innerHTML = reshapeHour(String({{.TvProgram.Hour}}));
     </script>
 
     <script type="text/javascript">
@@ -380,7 +369,7 @@
     <script>
       var dial = document.getElementById('speed-dial');
       dial.innerHTML =
-        "<ons-fab><ons-icon icon='md-share'></ons-icon></ons-fab><ons-speed-dial-item><ons-icon icon='md-comment-dots' onclick='dialogBox(\"tweet-dialog\", {{.User.Id}})'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-search' onclick='dialogBoxEveryone(\"search-dialog\")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-chart' onclick='goAnotherCarousel(1)'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-home' onclick='goTop()'></ons-icon></ons-speed-dial-item>";
+        "<ons-fab><ons-icon icon='md-share'></ons-icon></ons-fab><ons-speed-dial-item><ons-icon icon='md-comment-dots' onclick='dialogBox(\"tweet-dialog\", {{.User.Id}})'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-search' onclick='dialogBoxEveryone(\"search-dialog\")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-chart' onclick='goAnotherCarousel(1)'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><i class='fas fa-arrow-up' onclick='goTop()'></i></ons-speed-dial-item>";
     </script>
     <script>
       let categories = {{.TvProgram.Category}}.split('、');

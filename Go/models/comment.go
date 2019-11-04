@@ -99,7 +99,7 @@ func GetAllComment(query map[string]string, fields []string, sortby []string, or
 
 	var l []Comment
 	qs = qs.OrderBy(sortFields...).RelatedSel()
-	var maxLimit int64 = 2000
+	var maxLimit int64 = 1000
 	if maxLimit < limit {
 		limit = maxLimit
 	}
@@ -180,8 +180,7 @@ func GetAllCommentByUserId(id int64) (v []Comment, err error) {
 }
 
 func DeleteCommentsByUserId(id int64) {
-	l, _ := GetAllCommentByUserId(id)
-	for _, v := range l {
-		_ = DeleteComment(v.Id)
-	}
+	o := orm.NewOrm()
+	num, _ := o.QueryTable(new(Comment)).Filter("UserId", id).Delete()
+	fmt.Println("delete comment", num)
 }

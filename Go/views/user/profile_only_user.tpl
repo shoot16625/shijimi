@@ -12,18 +12,25 @@
         <div class="content">
           <p>年齢　：{{.User.Age|Birthday2Age}}</p>
           <p>居住地：{{.User.Address}}</p>
+          <p>ポイント：{{.User.MoneyPoint}}</p>
+          <a href="/tv/user/edit">
+            <button
+              class="button button--light"
+              style="line-height: 12px; margin-bottom: 12px;"
+            >
+              編集
+            </button>
+          </a>
         </div>
       </ons-col>
       <ons-col width="50%">
-        <div class="image" style="max-height: 170px;">
+        <div class="profile-image">
           <img src="{{.User.IconURL}}" alt="{{.Username}}" width="100%" />
         </div>
       </ons-col>
     </ons-row>
-    <a href="/tv/user/edit">
-      <button class="button button--light" style="line-height: 12px;">
-        編集
-      </button>
-    </a>
+    <ons-row>
+      <span id="badges"></span>
+    </ons-row>
   </ons-list-item>
 </ons-list>

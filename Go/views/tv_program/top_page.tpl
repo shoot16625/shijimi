@@ -12,6 +12,7 @@
   <body>
     <ons-page id="top-page">
       {{ template "/common/toolbar.tpl" . }}
+      <ons-pull-hook id="pull-hook"></ons-pull-hook>
       {{ template "/common/alert.tpl" . }}
       <div class="list-margin">
         <ons-card
@@ -114,8 +115,8 @@
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
                 {{if .ImageURLReference}}
-                  <div class="reference">From:{{.ImageURLReference}}</div>
-                {{end}}
+                <div class="reference">出典:{{.ImageURLReference}}</div>
+                {{ end }}
                 <div>{{.Title}}</div>
               </div>
             </ons-carousel-item>
@@ -153,8 +154,8 @@
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
                 {{if .ImageURLReference}}
-                  <div class="reference">From:{{.ImageURLReference}}</div>
-                {{end}}
+                <div class="reference">From:{{.ImageURLReference}}</div>
+                {{ end }}
                 <div>{{.Title}}</div>
               </div>
             </ons-carousel-item>
@@ -192,8 +193,8 @@
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
                 {{if .ImageURLReference}}
-                  <div class="reference">From:{{.ImageURLReference}}</div>
-                {{end}}
+                <div class="reference">From:{{.ImageURLReference}}</div>
+                {{ end }}
                 <div>{{.Title}}</div>
               </div>
             </ons-carousel-item>
@@ -231,8 +232,8 @@
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
                 {{if .ImageURLReference}}
-                  <div class="reference">From:{{.ImageURLReference}}</div>
-                {{end}}
+                <div class="reference">From:{{.ImageURLReference}}</div>
+                {{ end }}
                 <div>{{.Title}}</div>
               </div>
             </ons-carousel-item>
@@ -270,8 +271,8 @@
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
                 {{if .ImageURLReference}}
-                  <div class="reference">From:{{.ImageURLReference}}</div>
-                {{end}}
+                <div class="reference">From:{{.ImageURLReference}}</div>
+                {{ end }}
                 <div>{{.Title}}</div>
               </div>
             </ons-carousel-item>
@@ -309,8 +310,8 @@
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
                 {{if .ImageURLReference}}
-                  <div class="reference">From:{{.ImageURLReference}}</div>
-                {{end}}
+                <div class="reference">From:{{.ImageURLReference}}</div>
+                {{ end }}
                 <div>{{.Title}}</div>
               </div>
             </ons-carousel-item>
@@ -348,8 +349,8 @@
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
                 {{if .ImageURLReference}}
-                  <div class="reference">From:{{.ImageURLReference}}</div>
-                {{end}}
+                <div class="reference">From:{{.ImageURLReference}}</div>
+                {{ end }}
                 <div>{{.Title}}</div>
               </div>
             </ons-carousel-item>
@@ -383,10 +384,68 @@
             </div>
           </ons-col>
         </ons-row>
-          <div class="area-right" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;margin: 10px;">&copy; 2019 ShiJimi</div>
+        <div class="area-right">
+          <ons-button
+            modifier="quiet"
+            id="consent-button"
+            style="line-height: 10px;"
+            onclick="dialogBoxEveryone('terms-of-service')"
+            >利用規約</ons-button
+          >
+        </div>
+        <div class="area-right">
+          <ons-button
+            modifier="quiet"
+            id="privacy-button"
+            style="line-height: 14px;"
+            onclick="dialogBoxEveryone('privacy-policy')"
+            >プライバシーポリシー</ons-button
+          >
+        </div>
+        <div
+          class="area-right"
+          style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;margin: 10px;"
+        >
+          &copy; 2019 ShiJimi
+        </div>
       </div>
     </ons-page>
-
+    <template id="terms-of-service.html">
+      <ons-dialog id="terms-of-service" modifier="large" cancelable fullscreen>
+        <ons-page>
+          <ons-toolbar>
+            <div class="left">
+              <ons-button
+                id="cancel-button"
+                onclick="hideAlertDialog('terms-of-service')"
+              >
+                <i class="fas fa-window-close"></i>
+              </ons-button>
+            </div>
+            <div class="center">利用規約</div>
+          </ons-toolbar>
+          {{ template "/common/terms_of_service.tpl" . }}
+        </ons-page>
+      </ons-dialog>
+    </template>
+    <template id="privacy-policy.html">
+      <ons-dialog id="privacy-policy" modifier="large" cancelable fullscreen>
+        <ons-page>
+          <ons-toolbar>
+            <div class="left">
+              <ons-button
+                id="cancel-button"
+                onclick="hideAlertDialog('privacy-policy')"
+              >
+                <i class="fas fa-window-close"></i>
+              </ons-button>
+            </div>
+            <div class="center">プライバシーポリシー</div>
+          </ons-toolbar>
+          {{ template "/common/privacy_policy.tpl" . }}
+        </ons-page>
+      </ons-dialog>
+    </template>
     <template id="login-dialog.html">
       <ons-dialog id="login-dialog" modifier="large" cancelable fullscreen>
         <ons-page>

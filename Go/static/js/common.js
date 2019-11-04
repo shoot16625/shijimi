@@ -263,3 +263,57 @@ function goOtherPage(userID, tvProgramID, path) {
     window.location.href = path;
   }
 }
+
+// ローディングマークの表示
+function showLoading() {
+  $('.page__content').html(
+    '<ons-progress-bar indeterminate></ons-progress-bar>'
+  );
+}
+
+// バッジの整形
+function reshapeBadges(badge) {
+  let badgeText = '';
+  if (badge != '') {
+    let badges = badge.split(',');
+    for (let index = 0; index < badges.length; index++) {
+      if (badges[index] == 'thanks') {
+        badgeText +=
+          "<span style='margin-right:7px;'><i class='fab fa-angellist' style ='color:cornflowerblue; font-size:30px;'></i><span style='font-size:10px;'>寄付</span></span>";
+      }
+    }
+    document.getElementById('badges').innerHTML = badgeText;
+  }
+}
+
+// 放送時間の整形
+function reshapeHour(time) {
+  let str = '.5';
+  if (time === '100') {
+    time = '';
+  } else {
+    if (time.indexOf(str) > -1) {
+      time = time.replace(str, ':30');
+    } else {
+      time += ':00';
+    }
+  }
+  return time;
+}
+
+// 季節ごとのヘッダーカラー
+function seasonHeaderColor(seasonName) {
+  let headerColor;
+  if (seasonName === '春') {
+    headerColor = 'lavenderblush';
+  } else if (seasonName === '夏') {
+    headerColor = 'aliceblue';
+  } else if (seasonName === '秋') {
+    headerColor = 'khaki';
+  } else if (seasonName === '冬') {
+    headerColor = 'thistle';
+  } else {
+    headerColor = 'ghostwhite';
+  }
+  return headerColor;
+}
