@@ -312,33 +312,13 @@
               } else {
                 moviePosition = '<iframe id="movie-' + tvPrograms[i].Id + '" class="movie" src="'+tvPrograms[i].MovieURL+'?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="' + tvPrograms[i].Title + '" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
               }
-              let time = String(tvPrograms[i].Hour);
-              str = ".5";
-              if (time === "100"){
-                time = "";
-              } else {
-                if (time.indexOf(str) > -1){
-                  time = time.replace(str, ":30");
-                } else {
-                  time += ":00";
-                }
-              }
+              let time = reshapeHour(String(tvPrograms[i].Hour));
+
               let seasonName = "";
               if (tvPrograms[i].Season != null) {
                 seasonName = tvPrograms[i].Season.Name;
               }
-              let headerColor;
-              if (seasonName === "春") {
-                headerColor = "lavenderblush";
-              } else if (seasonName === "夏") {
-                headerColor = "aliceblue";
-              } else if (seasonName === "秋") {
-                headerColor = "khaki";
-              } else if (seasonName === "冬") {
-                headerColor = "thistle";
-              } else {
-                headerColor = "ghostwhite";
-              }
+              let headerColor = seasonHeaderColor(seasonName);
               let casts = tvPrograms[i].Cast;
               casts = casts.split("、").slice(0, 5).join("、");
               let referenceSite = "";

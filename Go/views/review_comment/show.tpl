@@ -508,18 +508,7 @@
       };
     </script>
     <script>
-      let time = String({{.TvProgram.Hour}});
-      str = ".5";
-      if (time === "100"){
-        time = "";
-      } else {
-        if (time.indexOf(str) > -1){
-          time = time.replace(str, ":30")
-        } else {
-          time += ":00";
-        }
-      }
-      document.getElementById('tv-program-hour').innerHTML = time;
+      document.getElementById('tv-program-hour').innerHTML = reshapeHour(String({{.TvProgram.Hour}}));
     </script>
     <script type="text/javascript">
       document

@@ -6,3 +6,4 @@
 .vscode/
 /Go/.travis.yml
 /MySQL/mysql_data/
+.env

@@ -115,7 +115,7 @@
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
                 {{if .ImageURLReference}}
-                <div class="reference">From:{{.ImageURLReference}}</div>
+                <div class="reference">出典:{{.ImageURLReference}}</div>
                 {{ end }}
                 <div>{{.Title}}</div>
               </div>

@@ -3,9 +3,8 @@
     <div class="area-left">
       <span id="tv-program-week">
         {{.TvProgram.Year}}年
-        {{.TvProgram.Season.Name}}（{{.TvProgram.Week.Name}}
-      </span>
-      <span id="tv-program-hour"></span>）
+        {{.TvProgram.Season.Name}}（{{.TvProgram.Week.Name}}</span
+      ><span id="tv-program-hour"></span>）
     </div>
     <div class="area-right list-margin">
       閲覧数：{{.TvProgram.CountClicked}}

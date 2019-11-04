@@ -285,3 +285,35 @@ function reshapeBadges(badge) {
     document.getElementById('badges').innerHTML = badgeText;
   }
 }
+
+// 放送時間の整形
+function reshapeHour(time) {
+  let str = '.5';
+  if (time === '100') {
+    time = '';
+  } else {
+    if (time.indexOf(str) > -1) {
+      time = time.replace(str, ':30');
+    } else {
+      time += ':00';
+    }
+  }
+  return time;
+}
+
+// 季節ごとのヘッダーカラー
+function seasonHeaderColor(seasonName) {
+  let headerColor;
+  if (seasonName === '春') {
+    headerColor = 'lavenderblush';
+  } else if (seasonName === '夏') {
+    headerColor = 'aliceblue';
+  } else if (seasonName === '秋') {
+    headerColor = 'khaki';
+  } else if (seasonName === '冬') {
+    headerColor = 'thistle';
+  } else {
+    headerColor = 'ghostwhite';
+  }
+  return headerColor;
+}
