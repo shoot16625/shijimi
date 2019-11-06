@@ -30,7 +30,7 @@ func ExecInitSQL() {
 	UserSQL("ちゃお倉木", "password", 199506, "男性", "愛知県", "学生", "乃木小学校", "https://img.cinematoday.jp/a/N0077397/_size_640x/_v_1445346612/1.jpg", "未婚", "A型", 500, "thanks")
 
 	// お問い合わせ用 ID：1
-	TvProgramSQL("お問い合わせ専用", "サービス改善のため、忌憚のないご意見・ご感想をお待ちしております。3回に1回くらい褒めていただけると幸いです。", "/static/img/shijimi-transparence.png", "", "", "", "大学院生", "コメディ・パロディ", "松江育ち", "単独開発Help!!", "日記感覚で", "shijimi", 2019, "秋", "milet", "日", 100, 5, 0, 0, 0)
+	TvProgramSQL("お問い合わせ専用", "サービス改善のため、忌憚のないご意見・ご感想をお待ちしております。3回に1回くらい褒めていただけると幸いです。", "/static/img/shijimi-transparence.png", "", "", "", "こんにちは", "コメディ・パロディ", "松江育ち", "単独開発", "日記感覚で", "Shiny & Jiminy", 2019, "夏", "miletがすき", "日", 100, 5, 0, 0, 0)
 }
 
 func ExecTestSQL() {
@@ -45,8 +45,8 @@ func ExecTestSQL() {
 			CommentSQL("hogehoge\r\nfugafuga\r\n"+strconv.Itoa(i), 3, int64(i+1), 0)
 			CommentSQL("hogehogefugafugahogehogefugafugahogehogefugafuga\r\n"+strconv.Itoa(i), 4, int64(i+1), 0)
 		}
-		ReviewCommentSQL("レビューネタバレありコメント\nレビューは一人一回\n", 3, int64(i+1), 0, true, "神曲", int32(6))
-		ReviewCommentSQL("レビューネタバレなしコメント\n", 4, int64(i+1), 0, false, "泣きっぱなし、演技すごい", int32(4))
+		ReviewCommentSQL("レビューネタバレありコメント\nレビューは一人一回\n", 3, int64(i+1), 0, true, "神曲", 6)
+		ReviewCommentSQL("レビューネタバレなしコメント\n", 4, int64(i+1), 0, false, "泣きっぱなし、演技すごい", 4)
 		fmt.Println("update:", i)
 	}
 }
@@ -55,23 +55,23 @@ func ExecDemoSQL() {
 	UserSQL("ユーザA", "password", 199001, "男性", "愛知県", "学生", "乃木", "http://flat-icon-design.com/f/f_object_161/s512_f_object_161_0bg.png", "未婚", "A型", 500, "thanks")
 	UserSQL("Bさん", "password", 199001, "男性", "愛知県", "学生", "乃木", "http://flat-icon-design.com/f/f_object_105/s512_f_object_105_0bg.png", "未婚", "A型", 500, "thanks")
 	for j := 1; j < 20; j++ {
-		CommentSQL("コメントを投稿（250字まで）\r\nコメントを投稿（250字まで）\r\n"+strconv.Itoa(j), 3, 19, int32(j))
-		CommentSQL("桑野さん最高すぎる！\r\n"+strconv.Itoa(j), 4, 19, int32(j*3))
+		CommentSQL("コメントを投稿（250字まで）\r\nコメントを投稿（250字まで）\r\n"+strconv.Itoa(j), 3, 19, int(j))
+		CommentSQL("桑野さん最高すぎる！\r\n"+strconv.Itoa(j), 4, 19, int(j*3))
 	}
-	ReviewCommentSQL("レビューを投稿（450字まで）\nネタバレありです\nレビューは一人一回まで\n評価は10段階\nおすすめポイントタグ", 3, 19, 3, true, "神曲、ゆる～い", int32(6))
-	ReviewCommentSQL("再放送4回みた。ELTは熱いよね！！\nネタバレはありません\n", 4, 19, 20, false, "泣きっぱなし、演技すごい", int32(8))
+	ReviewCommentSQL("レビューを投稿（450字まで）\nネタバレありです\nレビューは一人一回まで\n評価は10段階\nおすすめポイントタグ", 3, 19, 3, true, "神曲、ゆる～い", int(6))
+	ReviewCommentSQL("再放送4回みた。ELTは熱いよね！！\nネタバレはありません\n", 4, 19, 20, false, "泣きっぱなし、演技すごい", int(8))
 }
 
-func TvProgramSQL(title string, content string, imageURL string, imageURLreference string, movieURL string, movieURLreference string, cast string, category string, dramatist string, supervisor string, director string, production string, year int, season string, themesong string, week string, hour float32, star float32, countstar int32, countWatched int32, countWantToWatch int32) {
+func TvProgramSQL(title string, content string, imageURL string, imageURLreference string, movieURL string, movieURLreference string, cast string, category string, dramatist string, supervisor string, director string, production string, year int, season string, themesong string, week string, hour float32, star float32, countstar int, countWatched int, countWantToWatch int) {
 	o := orm.NewOrm()
 	o.Using("default")
 	v := new(models.TvProgram)
 	v.Title = title
 	v.Content = content
-	v.ImageURL = imageURL
-	v.ImageURLReference = imageURLreference
-	v.MovieURL = movieURL
-	// v.MovieURLReference = movieURLreference
+	v.ImageUrl = imageURL
+	v.ImageUrlReference = imageURLreference
+	v.MovieUrl = movieURL
+	// v.MovieUrlReference = movieURLreference
 	v.Cast = cast
 	v.Category = category
 	v.Dramatist = dramatist
@@ -94,7 +94,7 @@ func TvProgramSQL(title string, content string, imageURL string, imageURLreferen
 	o.Insert(v)
 }
 
-func CommentSQL(content string, userID int64, tvProgramID int64, countlike int32) {
+func CommentSQL(content string, userID int64, tvProgramID int64, countlike int) {
 	o := orm.NewOrm()
 	o.Using("default")
 	v := new(models.Comment)
@@ -115,7 +115,7 @@ func CommentLikeSQL(userID int64, commentID int64, like bool) {
 	o.Insert(v)
 }
 
-func ReviewCommentSQL(content string, userID int64, tvProgramID int64, countlike int32, spoiler bool, FavoritePoint string, star int32) {
+func ReviewCommentSQL(content string, userID int64, tvProgramID int64, countlike int, spoiler bool, FavoritePoint string, star int) {
 	o := orm.NewOrm()
 	o.Using("default")
 	v := new(models.ReviewComment)
@@ -152,7 +152,7 @@ func UserSQL(username string, password string, age int, gender string, address s
 	v.Job = job
 	hashSecondpass, _ := models.PasswordHash(secondPassword)
 	v.SecondPassword = hashSecondpass
-	v.IconURL = IconURL
+	v.IconUrl = IconURL
 	v.Marital = marital
 	v.BloodType = bloodType
 	v.MoneyPoint = MoneyPoint

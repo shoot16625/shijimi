@@ -146,17 +146,14 @@ func DeleteLoginHistory(id int64) (err error) {
 
 func GetLoginHistoryByUserId(userID int64) (flag bool) {
 	t := time.Now()
-	year := strconv.Itoa(t.Year())
-	month := strconv.Itoa(int(t.Month()))
-	date := year + "-" + month
+	u := time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, time.Local)
+	d := u.Format("2006-01-02 15:04:05")
+	sql := "select * from login_history where user_id = " + strconv.FormatInt(userID, 10) + " AND Created > '" + d + "'LIMIT 1"
 	o := orm.NewOrm()
-	var l []LoginHistory
-	if _, err := o.QueryTable(new(LoginHistory)).Filter("Created__icontains", date).Filter("UserId", userID).All(&l); err == nil {
-		for _, v := range l {
-			if v.Created.Day() == t.Day() {
-				return false
-			}
-		}
+	var l []orm.Params
+	if _, err := o.Raw(sql).Values(&l); err == nil {
+		fmt.Println("本日ログイン済み", l)
+		return false
 	}
 	return true
 }

@@ -107,15 +107,15 @@
               <div class="area-center" style="padding: 3px;">
                 <div class="thumbnail">
                   <img
-                    src="{{.ImageURL}}"
+                    src="{{.ImageUrl}}"
                     alt="{{.Title}}"
                     class="image-carousel"
-                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
+                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/tv_img/hanko_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
-                {{if .ImageURLReference}}
-                <div class="reference">出典:{{.ImageURLReference}}</div>
+                {{if .ImageUrlReference}}
+                <div class="reference">出典:{{.ImageUrlReference}}</div>
                 {{ end }}
                 <div>{{.Title}}</div>
               </div>
@@ -146,15 +146,15 @@
               <div class="area-center" style="padding: 3px;">
                 <div class="thumbnail">
                   <img
-                    src="{{.ImageURL}}"
+                    src="{{.ImageUrl}}"
                     alt="{{.Title}}"
                     class="image-carousel"
-                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
+                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/tv_img/hanko_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
-                {{if .ImageURLReference}}
-                <div class="reference">From:{{.ImageURLReference}}</div>
+                {{if .ImageUrlReference}}
+                <div class="reference">From:{{.ImageUrlReference}}</div>
                 {{ end }}
                 <div>{{.Title}}</div>
               </div>
@@ -185,15 +185,15 @@
               <div class="area-center" style="padding: 3px;">
                 <div class="thumbnail">
                   <img
-                    src="{{.ImageURL}}"
+                    src="{{.ImageUrl}}"
                     alt="{{.Title}}"
                     class="image-carousel"
-                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
+                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/tv_img/hanko_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
-                {{if .ImageURLReference}}
-                <div class="reference">From:{{.ImageURLReference}}</div>
+                {{if .ImageUrlReference}}
+                <div class="reference">From:{{.ImageUrlReference}}</div>
                 {{ end }}
                 <div>{{.Title}}</div>
               </div>
@@ -224,15 +224,15 @@
               <div class="area-center" style="padding: 3px;">
                 <div class="thumbnail">
                   <img
-                    src="{{.ImageURL}}"
+                    src="{{.ImageUrl}}"
                     alt="{{.Title}}"
                     class="image-carousel"
-                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
+                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/tv_img/hanko_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
-                {{if .ImageURLReference}}
-                <div class="reference">From:{{.ImageURLReference}}</div>
+                {{if .ImageUrlReference}}
+                <div class="reference">From:{{.ImageUrlReference}}</div>
                 {{ end }}
                 <div>{{.Title}}</div>
               </div>
@@ -263,15 +263,15 @@
               <div class="area-center" style="padding: 3px;">
                 <div class="thumbnail">
                   <img
-                    src="{{.ImageURL}}"
+                    src="{{.ImageUrl}}"
                     alt="{{.Title}}"
                     class="image-carousel"
-                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
+                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/tv_img/hanko_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
-                {{if .ImageURLReference}}
-                <div class="reference">From:{{.ImageURLReference}}</div>
+                {{if .ImageUrlReference}}
+                <div class="reference">From:{{.ImageUrlReference}}</div>
                 {{ end }}
                 <div>{{.Title}}</div>
               </div>
@@ -302,15 +302,15 @@
               <div class="area-center" style="padding: 3px;">
                 <div class="thumbnail">
                   <img
-                    src="{{.ImageURL}}"
+                    src="{{.ImageUrl}}"
                     alt="{{.Title}}"
                     class="image-carousel"
-                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
+                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/tv_img/hanko_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
-                {{if .ImageURLReference}}
-                <div class="reference">From:{{.ImageURLReference}}</div>
+                {{if .ImageUrlReference}}
+                <div class="reference">From:{{.ImageUrlReference}}</div>
                 {{ end }}
                 <div>{{.Title}}</div>
               </div>
@@ -341,15 +341,15 @@
               <div class="area-center" style="padding: 3px;">
                 <div class="thumbnail">
                   <img
-                    src="{{.ImageURL}}"
+                    src="{{.ImageUrl}}"
                     alt="{{.Title}}"
                     class="image-carousel"
-                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
+                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/tv_img/hanko_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
-                {{if .ImageURLReference}}
-                <div class="reference">From:{{.ImageURLReference}}</div>
+                {{if .ImageUrlReference}}
+                <div class="reference">From:{{.ImageUrlReference}}</div>
                 {{ end }}
                 <div>{{.Title}}</div>
               </div>

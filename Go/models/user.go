@@ -12,21 +12,24 @@ import (
 )
 
 type User struct {
-	Id             int64  `orm:"auto"`
-	Username       string `orm:"size(30);unique"`
-	Password       string `orm:"size(300)" json:"-"`
-	Age            int
-	Gender         string    `orm:"size(20)" json:"-"; null`
-	Address        string    `orm:"size(20)"; null`
-	Job            string    `orm:"size(20)" json:"-"; null`
-	SecondPassword string    `orm:"size(300)" json:"-"`
-	IconURL        string    `orm:"size(255);null"`
-	Marital        string    `orm:"size(20)" json:"-"; null"`
-	BloodType      string    `orm:"size(20)" json:"-"; null"`
-	MoneyPoint     int       `orm:"default(0)" json:"-"`
-	Badge          string    `orm:"size(300)"; null"`
-	Created        time.Time `orm:"auto_now_add;type(datetime)"`
-	Updated        time.Time `orm:"auto_now;type(datetime)"`
+	Id                 int64  `orm:"auto"`
+	Username           string `orm:"size(30);unique"`
+	Password           string `orm:"size(300)" json:"-"`
+	Age                int
+	Gender             string `orm:"size(20)" json:"-"; null`
+	Address            string `orm:"size(20)"; null`
+	Job                string `orm:"size(20)" json:"-"; null`
+	SecondPassword     string `orm:"size(300)" json:"-"`
+	IconUrl            string `orm:"size(255);null"`
+	Marital            string `orm:"size(20)" json:"-"; null"`
+	BloodType          string `orm:"size(20)" json:"-"; null"`
+	MoneyPoint         int    `orm:"default(0)" json:"-"`
+	Badge              string `orm:"size(300)"; null"`
+	CountEditTvProgram int
+	CountComment       int
+	CountReviewComment int
+	Created            time.Time `orm:"auto_now_add;type(datetime)"`
+	Updated            time.Time `orm:"auto_now;type(datetime)"`
 }
 
 func init() {

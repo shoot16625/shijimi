@@ -13,18 +13,17 @@
         style="background-color: rgb(186, 236, 243);"
       >
         <form id="get-tv-info" action="/tv/tv_program/get_info" method="post">
-          <ons-input
-            name="wikiReference"
-            modifier="underbar"
-            value="{{.TvProgram.WikiReference}}"
-            placeholder="URL @Wikipedia"
-            float
-          ></ons-input>
-          <button
-            class="button button--cta"
-            style="font-size: 14px; margin:10px 0 10px 0;"
-          >
-            データ取得(ドラマのみ対応中)
+          <p>
+            <ons-input
+              name="wikiReference"
+              modifier="underbar"
+              value="{{.TvProgram.WikiReference}}"
+              placeholder="URL @Wikipedia"
+              float
+            ></ons-input>
+          </p>
+          <button class="button button--cta" style="font-size: 14px;">
+            データ取得(ドラマのみ)
           </button>
         </form>
       </div>
@@ -172,7 +171,7 @@
             <ons-input
               name="ImageURL"
               modifier="underbar"
-              value="{{.TvProgram.ImageURL}}"
+              value="{{.TvProgram.ImageUrl}}"
               placeholder="イメージ画像URL"
               maxlength="400"
               float
@@ -182,7 +181,7 @@
             <ons-input
               name="MovieURL"
               modifier="underbar"
-              value="{{.TvProgram.MovieURL}}"
+              value="{{.TvProgram.MovieUrl}}"
               placeholder="youtube動画URL 公式チャンネルonly"
               maxlength="400"
               float
@@ -352,10 +351,9 @@
     <script type="text/javascript" src="/static/js/common.js"></script>
 
     <script>
-      let target = document.getElementById('hour');
       let text = '<option>指定なし</option>';
       let t;
-      for (let i = 0; i <= 48; i++) {
+      for (let i = 40; i <= 48; i++) {
         if (i % 2 == 0) {
           t = String(i / 2) + ':00';
           text += '<option>' + t + '</option>';
@@ -363,8 +361,17 @@
           t = String((i - 1) / 2) + ':30';
           text += '<option>' + t + '</option>';
         }
-        target.innerHTML = text;
       }
+      for (let i = 1; i <= 39; i++) {
+        if (i % 2 == 0) {
+          t = String(i / 2) + ':00';
+          text += '<option>' + t + '</option>';
+        } else {
+          t = String((i - 1) / 2) + ':30';
+          text += '<option>' + t + '</option>';
+        }
+      }
+      document.getElementById('hour').innerHTML = text;
     </script>
 
     <script type="text/javascript">
@@ -418,13 +425,12 @@
             ).innerHTML = document.getElementsByName('director')[0].value;
             let imageURL = document.getElementsByName('ImageURL')[0].value;
             if (imageURL === '') {
-              imageURL =
-                '/static/img/animals_02.png';
+              imageURL = '/static/img/tv_img/hanko_02.png';
             }
             document.getElementById('preview-img').innerHTML =
               '<img src="' +
               imageURL +
-              '" alt="イメージ" width="80%" onerror="this.src=\'/static/img/animals_02.png\'">';
+              '" alt="イメージ" width="80%" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'">';
             let movieURL = document.getElementsByName('MovieURL')[0].value;
             if (movieURL != '') {
               movieURL = movieURL.replace('watch?v=', 'embed/');
@@ -496,13 +502,12 @@
                 ).innerHTML = document.getElementsByName('director')[0].value;
                 let imageURL = document.getElementsByName('ImageURL')[0].value;
                 if (imageURL === '') {
-                  imageURL =
-                    '/static/img/animals_02.png';
+                  imageURL = '/static/img/tv_img/hanko_02.png';
                 }
                 document.getElementById('preview-img').innerHTML =
                   '<img src="' +
                   imageURL +
-                  '" alt="イメージ" width="80%" onerror="this.src=\'/static/img/animals_02.png\'">';
+                  '" alt="イメージ" width="80%" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'">';
                 var movieURL = document.getElementsByName('MovieURL')[0].value;
                 if (movieURL != '') {
                   movieURL = movieURL.replace('watch?v=', 'embed/');

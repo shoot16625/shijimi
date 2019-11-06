@@ -15,7 +15,7 @@ type Comment struct {
 	Content     string `orm:"type(longtext)"`
 	TvProgramId int64
 	UserId      int64
-	CountLike   int32     `orm:"default(0)"`
+	CountLike   int     `orm:"default(0)"`
 	Created     time.Time `orm:"auto_now_add;type(datetime)"`
 	Updated     time.Time `orm:"auto_now;type(datetime)"`
 }

@@ -22,6 +22,11 @@
     opacity:0.7;
     zoom:1;/*IE*/
 }
+
+a {
+  text-decoration: none;
+}
+
 img {
     max-width: 260px;
     /* height: auto; */
@@ -48,7 +53,11 @@ img {
   margin: 0 auto;
   width: 200px;
 }
-
+.reference {
+  text-align: right;
+  font-size: 8px;
+  color: rgb(156, 149, 149);
+}
 /* dialog box */
 .dialog {
   width: 100%;
@@ -61,6 +70,13 @@ img {
   width: 100%;
   font-size: 16px;
   background-color: white;
+}
+
+.list-item__subtitle{
+  word-break: break-word;
+}
+.list-item__expandable-content{
+  word-break: break-word;
 }
 
 ons-input {
@@ -80,29 +96,6 @@ label {
   -ms-overflow-style: none;
   -ms-scroll-snap-type: mandatory;
 }
-
-#cancel-button {
-    background: left;
-    color: grey;
-}
-.doramas-on-air{
-  margin-bottom: 10px;
-}
-.reference {
-  text-align: right;
-  font-size: 8px;
-  color: rgb(156, 149, 149);
-}
-a {
-    text-decoration: none;
-}
-
-.list-item__subtitle{
-    word-break: break-word;
-  }
-.list-item__expandable-content{
-    word-break: break-word;
-  }
 
 .input-range {
   display: none;
@@ -131,6 +124,10 @@ a {
   margin-top: 30px;
 }
 
+#cancel-button {
+  background: left;
+  color: grey;
+}
 /* text-area */
 .area-center {
   text-align: center;
@@ -150,6 +147,11 @@ a {
   float: right;
 }
 
+.tv-program-watch {
+  text-align: left;
+  margin-left: 5px;
+}
+
 /* margin */
 .list-margin {
   margin: 0px 5px 0px 3px;
@@ -161,6 +163,14 @@ a {
 .create-top-margin {
   margin-top:20px;
   margin-bottom:20px;
+}
+
+.select-search-table {
+  width: 80%;
+  max-width: 500px;
+}
+.doramas-on-air{
+  margin-bottom: 10px;
 }
 /* font-size */
 .comment-list-header-font {
@@ -176,15 +186,6 @@ a {
   font-size: 20px;
 }
 
-.tv-program-watch {
-  text-align: left;
-  margin-left: 5px;
-}
-
-.select-search-table {
-  width: 80%;
-  max-width: 500px;
-}
 
 /* color */
 .flag-color {
@@ -196,3 +197,13 @@ a {
   text-align: right;
 }
 
+/* animation */
+@keyframes bounce_animation{
+  0% {transform: translateY(0px);}
+  50% {transform: translateY(-6px);}
+  100% {transform: translateY(0px);}
+}
+
+.bounce-animation {
+  animation: bounce_animation 0.3s;
+}

@@ -20,7 +20,7 @@
         <input type="hidden" name="job" value="{{.User.Job}}"></input>
         <input type="hidden" name="gender" value="{{.User.Gender}}"></input>
         <input type="hidden" name="address" value="{{.User.Address}}"></input>
-        <input type="hidden" name="IconURL" value="{{.User.IconURL}}"></input>
+        <input type="hidden" name="IconURL" value="{{.User.IconUrl}}"></input>
         <input type="hidden" name="marital" value="{{.User.Marital}}"></input>
         <input type="hidden" name="SecondPassword" value="{{.User.SecondPassword}}"></input>
         <p>

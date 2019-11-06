@@ -3,6 +3,7 @@ package db
 import (
 	"app/models"
 	"fmt"
+	"math/rand"
 	"regexp"
 	"strconv"
 	"strings"
@@ -101,11 +102,12 @@ func GetWikiDoramas(referencePath string) {
 			if len(data) == 5 {
 				title, _ := t.Find("a").Attr("title")
 				tvProgram.Title = title
+				tvProgram.Star = 5
 				category := strings.Replace(data[1], "ドラマ", "", -1)
 				tvProgram.Category = CategoryReshape(category)
 				tvProgram.Production = data[2]
 				tvProgram.Cast = data[4]
-				tvProgram.ImageURL = "/static/img/animals_02.png"
+				tvProgram.ImageUrl = SetRandomImageURL()
 				tvProgram.WikiReference = "https://ja.wikipedia.org" + wikiURL
 				weekStruct := *new(models.Week)
 				data[3] = strings.Replace(data[3], "平日", "平曜", -1)
@@ -177,8 +179,9 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 			newTvProgram = *new(models.TvProgram)
 		}
 		newTvProgram.Title = doc.Find("h1").Text()
+		newTvProgram.Star = 5
 		newTvProgram.WikiReference = tvProgram.WikiReference
-		newTvProgram.ImageURL = "/static/img/animals_02.png"
+		newTvProgram.ImageUrl = SetRandomImageURL()
 		u.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
 			c, _ := t.Find("td").Attr("class")
 			if c == "category" {
@@ -202,6 +205,7 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 				newTvProgram.Id = 0
 				newTvProgram.Themesong = ""
 				newTvProgram.Cast = topCast
+				newTvProgram.Star = 5
 				newTvProgram.Title = doc.Find("h1").Text()
 				if strings.Contains(th, newTvProgram.Title) {
 					newTvProgram.Title = th
@@ -414,7 +418,7 @@ func GetMovieWalker(year string, month string) {
 		id, _ := m.Find("h3 > a").Attr("href")
 		id = strings.Replace(id, "/", "", -1)
 		id = strings.Replace(id, "mv", "", -1)
-		tvProgram.ImageURL = "https://movie.walkerplus.com/api/resizeimage/content/" + id + "?w=300"
+		tvProgram.ImageUrl = "https://movie.walkerplus.com/api/resizeimage/content/" + id + "?w=300"
 		tvProgram.Content = m.Find(".info > p").Text()
 		director := strings.TrimSpace(m.Find(".info > .directorList > dd").Text())
 		director = strings.Replace(director, " ", "", -1)
@@ -424,6 +428,7 @@ func GetMovieWalker(year string, month string) {
 		cast = strings.Replace(cast, " ", "", -1)
 		cast = strings.Replace(cast, "\n\n\n\n", "、", -1)
 		tvProgram.Cast = cast
+		tvProgram.Star = 5
 		if _, err := models.AddTvProgram(&tvProgram); err != nil {
 			fmt.Println(err)
 		}
@@ -472,6 +477,7 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (newTvProgram models.
 			newTvProgram = *new(models.TvProgram)
 			newTvProgram.Title = doc.Find("h1").Text()
 			newTvProgram.WikiReference = wikiReferenceURL
+			newTvProgram.ImageUrl = SetRandomImageURL()
 			u.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
 				c, _ := t.Find("td").Attr("class")
 				if c == "category" {
@@ -589,6 +595,17 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (newTvProgram models.
 	}
 }
 
+// イメージ画像をランダムに選ぶ
+func SetRandomImageURL() (url string) {
+	rand.Seed(time.Now().UnixNano())
+	r := strconv.Itoa(rand.Intn(10) + 1)
+	if len(r) == 1 {
+		r = "0" + r
+	}
+	url = "/static/img/tv_img/hanko_" + r + ".png"
+	return url
+}
+
 // Scraping TvProgram Information in main.go.
 func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 	newTvProgram := *new(models.TvProgram)
@@ -609,8 +626,9 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 			newTvProgram = *new(models.TvProgram)
 		}
 		newTvProgram.Title = doc.Find("h1").Text()
+		newTvProgram.Star = 5
 		newTvProgram.WikiReference = wikiReferenceURL
-		newTvProgram.ImageURL = "/static/img/animals_02.png"
+		newTvProgram.ImageUrl = SetRandomImageURL()
 		u.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
 			c, _ := t.Find("td").Attr("class")
 			if c == "category" {
@@ -632,6 +650,7 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 				newTvProgram.Id = 0
 				newTvProgram.Themesong = ""
 				newTvProgram.Cast = topCast
+				newTvProgram.Star = 5
 				newTvProgram.Title = doc.Find("h1").Text()
 				if strings.Contains(th, newTvProgram.Title) {
 					newTvProgram.Title = th

@@ -32,15 +32,31 @@
           </ons-list>
         </ons-carousel-item>
         <ons-carousel-item>
-          <div style="height: 200px; padding: 1px 0 0 0;">
-            <div class="card" style="background-color: rgb(249, 252, 255);">
-              <h2 class="card__title">工事中<i class="fas fa-wrench"></i></h2>
-              <div class="card__content">
-                ログの解析結果を表示.
+          <ons-list expandable>
+          <ons-list-item expandable>
+              閲覧ランキング（24時間以内）
+              <div class="expandable-content">
+              <ons-list modifier="inset" id="browsing-ranking-24">
+              <!-- {{ range.ViewTvProgramIn24 }}
+              <ons-list-header>{{.Num}}</ons-list-header>
+              <ons-list-item modifier="longdivider">
+                  <div class="left">1</div>
+                  <div class="center">{{.title}}</div>
+                </ons-list-item>
+              {{ end }} -->
+              </ons-list>
               </div>
-            </div>
-          </div>
-        </ons-carousel-item>
+            </ons-list-item>
+          </ons-list>
+          <p>レビューランキング（放送中）</p>
+          
+          <ons-list modifier="inset">
+              {{ range.goodStarTvProgramOnAir }}
+              <ons-list-header>{{.Star}}</ons-list-header>
+              <ons-list-item>{{.Title}}</ons-list-item>
+              {{ end }}
+            </ons-list>
+        </ons-list>
       </ons-carousel>
     </ons-page>
     <template id="search-dialog.html">
@@ -237,10 +253,9 @@
           </div>
         </ons-page>
         <script>
-          var target = document.getElementById('hour');
           let text = '';
           let t;
-          for (let i = 0; i <= 48; i++) {
+          for (let i = 40; i <= 48; i++) {
             if (i % 2 == 0) {
               t = String(i / 2) + ':00';
               text += '<option>' + t + '</option>';
@@ -249,17 +264,25 @@
               text += '<option>' + t + '</option>';
             }
           }
-          target.innerHTML = text;
+          for (let i = 1; i <= 39; i++) {
+            if (i % 2 == 0) {
+              t = String(i / 2) + ':00';
+              text += '<option>' + t + '</option>';
+            } else {
+              t = String((i - 1) / 2) + ':30';
+              text += '<option>' + t + '</option>';
+            }
+          }
+          document.getElementById('hour').innerHTML = text;
         </script>
         <script>
           const today = new Date();
           const year = today.getFullYear() + 2;
-          var target = document.getElementById('year');
           text = '';
           for (let i = year; i >= 1970; i--) {
             text += '<option>' + i + '</option>';
           }
-          target.innerHTML = text;
+          document.getElementById('year').innerHTML = text;
         </script>
         <script type="text/javascript">
           if ({{.SearchWords}} != null){
@@ -307,10 +330,10 @@
           infiniteList.delegate = {
             createItemContent: function(i) {
               let moviePosition;
-              if (tvPrograms[i].MovieURL===""){
-                moviePosition = '<img class="image" id="image-' + tvPrograms[i].Id + '" src="'+tvPrograms[i].ImageURL+'" alt="' + tvPrograms[i].Title + '" width="80%" onerror="this.src=\'/static/img/animals_02.png\'">';
+              if (tvPrograms[i].MovieUrl===""){
+                moviePosition = '<img class="image" id="image-' + tvPrograms[i].Id + '" src="'+tvPrograms[i].ImageUrl+'" alt="' + tvPrograms[i].Title + '" width="80%" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'">';
               } else {
-                moviePosition = '<iframe id="movie-' + tvPrograms[i].Id + '" class="movie" src="'+tvPrograms[i].MovieURL+'?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="' + tvPrograms[i].Title + '" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+                moviePosition = '<iframe id="movie-' + tvPrograms[i].Id + '" class="movie" src="'+tvPrograms[i].MovieUrl+'?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="' + tvPrograms[i].Title + '" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
               }
               let time = reshapeHour(String(tvPrograms[i].Hour));
 
@@ -322,10 +345,10 @@
               let casts = tvPrograms[i].Cast;
               casts = casts.split("、").slice(0, 5).join("、");
               let referenceSite = "";
-              if (tvPrograms[i].ImageURLReference != "" && tvPrograms[i].MovieURL == "") {
-                referenceSite = "<a href="+tvPrograms[i].ImageURL+" target='_blank'>出典:" + tvPrograms[i].ImageURLReference+"</a>";
-              } else if (tvPrograms[i].MovieURL != "") {
-                referenceSite = "<a href="+tvPrograms[i].MovieURL+" target='_blank'>出典:Youtube</a>";
+              if (tvPrograms[i].ImageUrlReference != "" && tvPrograms[i].MovieUrl == "") {
+                referenceSite = "<a href="+tvPrograms[i].ImageUrl+" target='_blank'>出典:" + tvPrograms[i].ImageUrlReference+"</a>";
+              } else if (tvPrograms[i].MovieUrl != "") {
+                referenceSite = "<a href="+tvPrograms[i].MovieUrl+" target='_blank'>出典:Youtube</a>";
               }
               let supervisors = tvPrograms[i].Supervisor;
               supervisors = supervisors.split("、").slice(0, 3).join("、");
@@ -400,6 +423,28 @@
       };
     </script>
 
+    <script>
+      let browsingCount = {{ .ViewTvProgramIn24 }};
+      if (browsingCount === null) {
+        browsingCount = ""
+      }
+      let text = "";
+      const headerColor = ["blue","white","silver","gleen","red"];
+      for (let i = 0; i < browsingCount.length; i++) {
+        let weekName = "";
+        if (browsingCount[i].week != null) {
+                weekName = browsingCount[i].week.name;
+              }
+        let time = reshapeHour(String(browsingCount[i].hour));
+
+        let seasonName = "";
+        if (browsingCount[i].season != null) {
+          seasonName = browsingCount[i].season.name;
+        }
+        text += '<ons-list-header style="background-color:'+ headerColor[i] +';"><div class="area-left">' + browsingCount[i].year + '年 ' + seasonName + '（' + weekName + time + '）</div><div class="area-right list-margin">閲覧数：' + browsingCount[i].count_clicked + '</div></ons-list-header><ons-list-item><div class="left">'+(i+1)+'．</div><div class="center tv-program-list-title-font">' + browsingCount[i].title + '</div></ons-list-item>';
+      }
+      document.getElementById("browsing-ranking-24").innerHTML = text;
+    </script>
     <script type="text/javascript">
       document
         .querySelector('ons-carousel')

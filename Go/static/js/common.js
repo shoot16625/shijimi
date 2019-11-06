@@ -171,12 +171,14 @@ function clickLike(elem) {
   if (elem.style['color'] != newColor) {
     elem.classList.remove('far');
     elem.classList.add('fas');
+    elem.classList.add('bounce-animation');
     $('#' + elem.id).css({ color: newColor });
     checkFlag = true;
     newCount = parseInt(count.textContent.slice(1), 10) + 1;
   } else {
     elem.classList.remove('fas');
     elem.classList.add('far');
+    elem.classList.remove('bounce-animation');
     $('#' + elem.id).css({ color: 'black' });
     checkFlag = false;
     newCount = parseInt(count.textContent.slice(1), 10) - 1;
@@ -202,6 +204,7 @@ function clickWatchStatus(elem) {
     $('#' + elem.id).css({ color: newColor });
     elem.classList.remove('far');
     elem.classList.add('fas');
+    elem.classList.add('bounce-animation');
     checkFlag = true;
     if (elem.id.indexOf(str) === 0) {
       newCount = parseInt(rawText.slice(3), 10) + 1;
@@ -212,6 +215,7 @@ function clickWatchStatus(elem) {
     $('#' + elem.id).css({ color: 'black' });
     elem.classList.remove('fas');
     elem.classList.add('far');
+    elem.classList.remove('bounce-animation');
     checkFlag = false;
     if (elem.id.indexOf(str) === 0) {
       newCount = parseInt(rawText.slice(3), 10) - 1;

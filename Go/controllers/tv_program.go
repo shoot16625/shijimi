@@ -6,6 +6,7 @@ import (
 
 	// "encoding/json"
 	"errors"
+	"math/rand"
 	"regexp"
 	"strconv"
 	"strings"
@@ -61,18 +62,24 @@ func (c *TvProgramController) Post() {
 		if !strings.Contains(movieURL, "embed") {
 			movieURL = strings.Replace(movieURL, "watch?v=", "embed/", -1)
 		}
-		const sampleImage string = "/static/img/animals_02.png"
+		sampleImage := ""
 		imageURL := c.GetString("ImageURL")
 		if imageURL == "" {
+			rand.Seed(time.Now().UnixNano())
+			r := strconv.Itoa(rand.Intn(10) + 1)
+			if len(r) == 1 {
+				r = "0" + r
+			}
+			sampleImage = "/static/img/tv_img/hanko_" + r + ".png"
 			imageURL = sampleImage
 		}
 		imageURLReference := ""
-		if imageURL != sampleImage {
+		if imageURL != "" {
 			if strings.Contains(imageURL, "walkerplus") {
 				imageURLReference = "MovieWalker"
 			} else if strings.Contains(imageURL, "1.bp.blogspot.com") {
 				imageURLReference = "いらすとや"
-			} else if imageURL == "/static/img/animals_02.png" {
+			} else if strings.Contains(imageURL, "/static/img/tv_img/hanko") {
 				imageURLReference = ""
 			} else {
 				imageURLs := strings.Split(imageURL, "/")
@@ -84,9 +91,9 @@ func (c *TvProgramController) Post() {
 		v = models.TvProgram{
 			Title:             c.GetString("title"),
 			Content:           c.GetString("content"),
-			ImageURL:          imageURL,
-			ImageURLReference: imageURLReference,
-			MovieURL:          movieURL,
+			ImageUrl:          imageURL,
+			ImageUrlReference: imageURLReference,
+			MovieUrl:          movieURL,
 			WikiReference:     c.GetString("WikiReference"),
 			Cast:              strings.Replace(c.GetString("cast"), "　", "", -1),
 			Category:          strings.Join(c.GetStrings("category"), "、"),
@@ -95,6 +102,7 @@ func (c *TvProgramController) Post() {
 			Director:          strings.Replace(c.GetString("director"), "　", "", -1),
 			Production:        c.GetString("production"),
 			Year:              year,
+			Star:              5,
 			Season:            &season,
 			Week:              &week,
 			Hour:              float32(hour),
@@ -103,6 +111,9 @@ func (c *TvProgramController) Post() {
 		}
 
 		if _, err := models.AddTvProgram(&v); err == nil {
+			w, _ := models.GetUserById(v.CreateUserId)
+			w.CountEditTvProgram++
+			_ = models.UpdateUserById(w)
 			c.Redirect("/tv/tv_program/comment/"+strconv.FormatInt(v.Id, 10), 302)
 		} else {
 			c.Data["TvProgram"] = v
@@ -223,7 +234,7 @@ func (c *TvProgramController) Put() {
 	if !strings.Contains(movieURL, "embed") {
 		movieURL = strings.Replace(movieURL, "watch?v=", "embed/", -1)
 	}
-	const sampleImage string = "/static/img/animals_02.png"
+	const sampleImage string = "/static/img/tv_img/hanko_02.png"
 	imageURL := c.GetString("ImageURL")
 	if imageURL == "" {
 		imageURL = sampleImage
@@ -234,7 +245,7 @@ func (c *TvProgramController) Put() {
 			imageURLReference = "MovieWalker"
 		} else if strings.Contains(imageURL, "1.bp.blogspot.com") {
 			imageURLReference = "いらすとや"
-		} else if imageURL == "/static/img/animals_02.png" {
+		} else if imageURL == "/static/img/tv_img/hanko_02.png" {
 			imageURLReference = ""
 		} else {
 			imageURLs := strings.Split(imageURL, "/")
@@ -246,9 +257,9 @@ func (c *TvProgramController) Put() {
 	v := *oldTvInfo
 	v.Title = c.GetString("title")
 	v.Content = c.GetString("content")
-	v.ImageURL = imageURL
-	v.ImageURLReference = imageURLReference
-	v.MovieURL = movieURL
+	v.ImageUrl = imageURL
+	v.ImageUrlReference = imageURLReference
+	v.MovieUrl = movieURL
 	v.WikiReference = c.GetString("WikiReference")
 	v.Cast = strings.Replace(c.GetString("cast"), "　", "", -1)
 	v.Category = strings.Join(c.GetStrings("category"), "、")
@@ -261,6 +272,7 @@ func (c *TvProgramController) Put() {
 	v.Year = year
 	v.Hour = float32(hour)
 	v.Themesong = c.GetString("themesong")
+	v.CountUpdated++
 
 	if err := models.UpdateTvProgramById(&v); err == nil {
 		w := models.TvProgramUpdateHistory{
@@ -268,6 +280,9 @@ func (c *TvProgramController) Put() {
 			TvProgramId: id,
 		}
 		_, _ = models.AddTvProgramUpdateHistory(&w)
+		z, _ := models.GetUserById(v.CreateUserId)
+		z.CountEditTvProgram++
+		_ = models.UpdateUserById(z)
 		c.Redirect("/tv/tv_program/comment/"+idStr, 302)
 	} else {
 		c.Data["json"] = err.Error()
@@ -329,6 +344,15 @@ func (c *TvProgramController) Index() {
 		v, _ := models.GetUserById(userID)
 		c.Data["User"] = v
 	}
+	t := time.Now()
+	yesterday := t.Add(-24 * time.Hour)
+	if browsingLog, err := models.GetTopBrowsingHistory(yesterday.Format("2006-01-02 15:04:05")); err == nil {
+		c.Data["ViewTvProgramIn24"] = browsingLog
+	}
+	if goodStarTvProgram, err := models.GetTopStarPoint(); err == nil {
+		c.Data["goodStarTvProgramOnAir"] = goodStarTvProgram
+	}
+
 	c.TplName = "tv_program/index.tpl"
 }
 
@@ -511,6 +535,15 @@ func (c *TvProgramController) SearchTvProgram() {
 			order = append(order, "desc")
 		} else if sortElem == "見たい人が多い順" {
 			sortby = append(sortby, "CountWantToWatch")
+			order = append(order, "desc")
+		} else if sortElem == "評価が高い順" {
+			sortby = append(sortby, "Star")
+			order = append(order, "desc")
+		} else if sortElem == "ツイートが多い順" {
+			sortby = append(sortby, "CountComment")
+			order = append(order, "desc")
+		} else if sortElem == "レビューが多い順" {
+			sortby = append(sortby, "CountReviewComment")
 			order = append(order, "desc")
 		}
 	}

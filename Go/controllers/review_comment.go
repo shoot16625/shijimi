@@ -43,19 +43,22 @@ func (c *ReviewCommentController) Post() {
 		_, err := models.GetReviewCommentByUserIdAndTvProgramId(v.UserId, v.TvProgramId)
 		if err != nil {
 			if _, err := models.AddReviewComment(&v); err == nil {
-				c.Ctx.Output.SetStatus(201)
 				c.Data["json"] = v
-				if x, err := models.GetTvProgramById(v.TvProgramId); err == nil {
+				if w, err := models.GetTvProgramById(v.TvProgramId); err == nil {
 					if y, err := models.GetReviewCommentByTvProgramId(v.TvProgramId); err == nil {
-						x.CountStar = int32(len(y))
-						var n int32 = 0
+						w.CountStar = len(y)
+						var n int = 0
 						for _, z := range y {
 							n += z.Star
 						}
-						x.Star = float32(n / x.CountStar)
-						if err := models.UpdateTvProgramById(x); err != nil {
+						w.Star = float32(n / w.CountStar)
+						w.CountReviewComment++
+						if err := models.UpdateTvProgramById(w); err != nil {
 							fmt.Println(err)
 						}
+						w, _ := models.GetUserById(v.UserId)
+						w.CountReviewComment++
+						_ = models.UpdateUserById(w)
 					}
 				}
 			} else {
@@ -346,15 +349,14 @@ func (c *ReviewCommentController) SearchComment() {
 	c.Data["Users"] = users
 	// 閲覧数カウント
 	if session.Get(tvProgramID) == nil {
-		// BrowsingHistory_logの停止
-		// if session.Get("UserId") != nil {
-		// 	userID := session.Get("UserId").(int64)
-		// 	b := models.BrowsingHistory{
-		// 		UserId:      userID,
-		// 		TvProgramId: tvProgramID,
-		// 	}
-		// 	_, err = models.AddBrowsingHistory(&b)
-		// }
+		if session.Get("UserId") != nil {
+			userID := session.Get("UserId").(int64)
+			b := models.BrowsingHistory{
+				UserId:      userID,
+				TvProgramId: tvProgramID,
+			}
+			_, err = models.AddBrowsingHistory(&b)
+		}
 		v.CountClicked++
 		_ = models.UpdateTvProgramById(v)
 		session.Set(tvProgramID, true)

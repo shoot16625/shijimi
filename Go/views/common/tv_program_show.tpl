@@ -48,16 +48,16 @@
       </ons-row>
       <div class="area-center">
         <img
-          src="{{.TvProgram.ImageURL}}"
+          src="{{.TvProgram.ImageUrl}}"
           alt="{{.Title}}"
           class="image"
-          onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/animals_02.png'"
+          onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/tv_img/hanko_02.png'"
         />
       </div>
-      {{if .TvProgram.ImageURLReference}}
+      {{if .TvProgram.ImageUrlReference}}
       <div class="reference">
-        <a href="{{.TvProgram.ImageURL}}" target="_blank">
-          出典:{{.TvProgram.ImageURLReference}}
+        <a href="{{.TvProgram.ImageUrl}}" target="_blank">
+          出典:{{.TvProgram.ImageUrlReference}}
         </a>
       </div>
       {{ end }}

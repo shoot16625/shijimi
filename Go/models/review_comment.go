@@ -15,9 +15,9 @@ type ReviewComment struct {
 	UserId        int64
 	TvProgramId   int64
 	Content       string `orm:"size(500)"`
-	CountLike     int32  `orm:"default(0)"`
+	CountLike     int  `orm:"default(0)"`
 	Spoiler       bool
-	Star          int32     `orm:"default(5)"`
+	Star          int     `orm:"default(5)"`
 	FavoritePoint string    `orm:"size(100)";null"`
 	Created       time.Time `orm:"auto_now_add;type(datetime)"`
 	Updated       time.Time `orm:"auto_now;type(datetime)"`

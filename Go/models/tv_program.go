@@ -14,29 +14,32 @@ type TvProgram struct {
 	Id                int64  `orm:"auto"`
 	Title             string `orm:"size(128);unique"`
 	Content           string `orm:"size(500);null"`
-	ImageURL          string `orm:"size(500);null"`
-	ImageURLReference string `orm:"size(200);null"`
-	MovieURL          string `orm:"size(500);null"`
-	// MovieURLReference  string    `orm:"size(200);null"`
-	WikiReference    string  `orm:"size(500);null"`
-	Cast             string  `orm:"size(256);null"`
-	Category         string  `orm:"size(32);null"`
-	Dramatist        string  `orm:"size(128);null"`
-	Supervisor       string  `orm:"size(128);null"`
-	Director         string  `orm:"size(128);null"`
-	Production       string  `orm:"size(32);null"`
-	Year             int     `orm:"default(2000)"`
-	Season           *Season `orm:"rel(fk);null"`
-	Week             *Week   `orm:"rel(fk);null"`
-	Hour             float32 `orm:"default(100)`
-	Themesong        string  `orm:"size(256);null"`
-	CreateUserId     int64   `orm:"default(0)"`
-	Star             float32 `orm:"default(5)"`
-	CountStar        int32   `orm:"default(0)"`
-	CountWatched     int32   `orm:"default(0)"`
-	CountWantToWatch int32   `orm:"default(0)"`
-	CountClicked     int32   `orm:"default(0)"`
-	// CountAuthorization int32     `orm:"default(0)"`
+	ImageUrl          string `orm:"size(500);null"`
+	ImageUrlReference string `orm:"size(200);null"`
+	MovieUrl          string `orm:"size(500);null"`
+	// MovieUrlReference  string    `orm:"size(200);null"`
+	WikiReference      string  `orm:"size(500);null"`
+	Cast               string  `orm:"size(256);null"`
+	Category           string  `orm:"size(32);null"`
+	Dramatist          string  `orm:"size(128);null"`
+	Supervisor         string  `orm:"size(128);null"`
+	Director           string  `orm:"size(128);null"`
+	Production         string  `orm:"size(32);null"`
+	Year               int     `orm:"default(2000)"`
+	Season             *Season `orm:"rel(fk);null"`
+	Week               *Week   `orm:"rel(fk);null"`
+	Hour               float32 `orm:"default(100)`
+	Themesong          string  `orm:"size(256);null"`
+	CreateUserId       int64   `orm:"default(0)"`
+	Star               float32 `orm:"default(5)"`
+	CountStar          int
+	CountWatched       int
+	CountWantToWatch   int
+	CountClicked       int
+	CountUpdated       int
+	CountComment       int
+	CountReviewComment int
+	// CountAuthorization int
 	Created time.Time `orm:"auto_now_add;type(datetime)"`
 	Updated time.Time `orm:"auto_now;type(datetime)"`
 }
@@ -354,4 +357,15 @@ func GetTvProgramCount() (cnt int64) {
 	o := orm.NewOrm()
 	cnt, _ = o.QueryTable(new(TvProgram)).Count()
 	return cnt
+}
+
+// 現在放送中の番組で評価の高い番組を取得
+func GetTopStarPoint() (l []TvProgram, err error) {
+	t := time.Now()
+	season := GetOnAirSeason()
+	o := orm.NewOrm()
+	if _, err = o.QueryTable(new(TvProgram)).Filter("Year", t.Year()).Filter("Season__Name", season).OrderBy("-Star").Limit(5).All(&l); err == nil {
+		return l, err
+	}
+	return nil, err
 }

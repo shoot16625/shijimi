@@ -2,16 +2,13 @@ package controllers
 
 import (
 	"app/models"
-	// "app/sessions"
-	// "encoding/json"
 	"errors"
+	"math/rand"
 	"strconv"
 	"strings"
-
-	// "net/http"
+	"time"
 
 	"github.com/astaxie/beego"
-	// "github.com/astaxie/beego/session"
 )
 
 //  UserController operations for User
@@ -55,7 +52,12 @@ func (c *UserController) Post() {
 	hashSecondpass, _ := models.PasswordHash(c.GetString("SecondPassword"))
 	IconURL := c.GetString("IconURL")
 	if IconURL == "" {
-		IconURL = "http://flat-icon-design.com/f/f_object_174/s512_f_object_174_0bg.png"
+		rand.Seed(time.Now().UnixNano())
+		r := strconv.Itoa(rand.Intn(13) + 1)
+		if len(r) == 1 {
+			r = "0" + r
+		}
+		IconURL = "/static/img/user_img/s256_f_" + r + ".png"
 	}
 	// json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 	v := models.User{
@@ -66,7 +68,7 @@ func (c *UserController) Post() {
 		Address:        c.GetString("address"),
 		Gender:         c.GetString("gender"),
 		Job:            c.GetString("job"),
-		IconURL:        IconURL,
+		IconUrl:        IconURL,
 		Marital:        c.GetString("marital"),
 		BloodType:      c.GetString("bloodType"),
 	}
@@ -193,7 +195,7 @@ func (c *UserController) Put() {
 		Address:        c.GetString("address"),
 		Gender:         c.GetString("gender"),
 		Job:            c.GetString("job"),
-		IconURL:        c.GetString("IconURL"),
+		IconUrl:        c.GetString("IconURL"),
 		Marital:        c.GetString("marital"),
 		BloodType:      c.GetString("bloodType"),
 	}

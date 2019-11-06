@@ -162,7 +162,7 @@
             <ons-input
               name="IconURL"
               id="IconURL"
-              value="{{.User.IconURL}}"
+              value="{{.User.IconUrl}}"
               modifier="underbar"
               placeholder="必須ではない"
               maxlength="200"

@@ -38,13 +38,16 @@ func (c *CommentController) URLMapping() {
 func (c *CommentController) Post() {
 	session := c.StartSession()
 	if session.Get("UserId") != nil {
-		// 	c.Redirect("/tv/tv_program/comment/"+c.GetString("TvProgramId"), 302)
-		// } else {
 		var v models.Comment
 		json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 		if _, err := models.AddComment(&v); err == nil {
-			c.Ctx.Output.SetStatus(201)
 			c.Data["json"] = v
+			w, _ := models.GetTvProgramById(v.TvProgramId)
+			w.CountComment++
+			_ = models.UpdateTvProgramById(w)
+			z, _ := models.GetUserById(v.UserId)
+			z.CountComment++
+			_ = models.UpdateUserById(z)
 		} else {
 			c.Data["json"] = err.Error()
 		}
@@ -329,23 +332,6 @@ func (c *CommentController) SearchComment() {
 		users = append(users, *u)
 	}
 	c.Data["Users"] = users
-	// session := c.StartSession()
-	// 閲覧数カウント
-	if session.Get(tvProgramID) == nil {
-		// BrowsingHistory_logの停止
-		// if session.Get("UserId") != nil {
-		// 	userID := session.Get("UserId").(int64)
-		// 	var b models.BrowsingHistory
-		// 	b = models.BrowsingHistory{
-		// 		UserId:      userID,
-		// 		TvProgramId: tvProgramID,
-		// 	}
-		// 	_, _ = models.AddBrowsingHistory(&b)
-		// }
-		v.CountClicked++
-		_ = models.UpdateTvProgramById(v)
-		session.Set(tvProgramID, true)
-	}
 
 	if session.Get("UserId") != nil {
 		userID := session.Get("UserId").(int64)
