@@ -191,6 +191,9 @@ label {
 .flag-color {
   color: rgb(213, 236, 6);
 }
+.fa-star {
+  color: gold;
+}
 .category-area {
   color: blue;
   font-size: 14px;

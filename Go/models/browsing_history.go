@@ -147,7 +147,7 @@ func DeleteBrowsingHistory(id int64) (err error) {
 // n時間の間で閲覧数の多かった番組を取得
 func GetTopBrowsingHistory(t string) (l []orm.Params, err error) {
 	o := orm.NewOrm()
-	sql := "SELECT tp.*, COUNT(bh.tv_program_id) AS Num FROM browsing_history AS bh JOIN tv_program AS tp ON tp.id = bh.tv_program_id WHERE bh.Created > '" + t + "' GROUP BY bh.tv_program_id ORDER BY Num DESC LIMIT 5"
+	sql := "SELECT tp.*, COUNT(bh.tv_program_id) AS Num FROM browsing_history AS bh JOIN tv_program AS tp ON tp.id = bh.tv_program_id WHERE bh.Created > '" + t + "' GROUP BY bh.tv_program_id ORDER BY Num DESC LIMIT 3"
 	if _, err := o.Raw(sql).Values(&l); err == nil {
 		return l, err
 	} else {

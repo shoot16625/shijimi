@@ -364,7 +364,7 @@ func GetTopStarPoint() (l []TvProgram, err error) {
 	t := time.Now()
 	season := GetOnAirSeason()
 	o := orm.NewOrm()
-	if _, err = o.QueryTable(new(TvProgram)).Filter("Year", t.Year()).Filter("Season__Name", season).OrderBy("-Star").Limit(5).All(&l); err == nil {
+	if _, err = o.QueryTable(new(TvProgram)).Filter("Year", t.Year()).Filter("Season__Name", season).OrderBy("-Star").Limit(3).All(&l); err == nil {
 		return l, err
 	}
 	return nil, err

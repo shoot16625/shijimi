@@ -32,31 +32,23 @@
           </ons-list>
         </ons-carousel-item>
         <ons-carousel-item>
-          <ons-list expandable>
-          <ons-list-item expandable>
+          <ons-list>
+            <ons-list-item id="browsing-ranking-24-expandable" expandable>
               閲覧ランキング（24時間以内）
               <div class="expandable-content">
-              <ons-list modifier="inset" id="browsing-ranking-24">
-              <!-- {{ range.ViewTvProgramIn24 }}
-              <ons-list-header>{{.Num}}</ons-list-header>
-              <ons-list-item modifier="longdivider">
-                  <div class="left">1</div>
-                  <div class="center">{{.title}}</div>
-                </ons-list-item>
-              {{ end }} -->
-              </ons-list>
+                <ons-list modifier="inset" id="browsing-ranking-24"> </ons-list>
               </div>
             </ons-list-item>
           </ons-list>
-          <p>レビューランキング（放送中）</p>
-          
-          <ons-list modifier="inset">
-              {{ range.goodStarTvProgramOnAir }}
-              <ons-list-header>{{.Star}}</ons-list-header>
-              <ons-list-item>{{.Title}}</ons-list-item>
-              {{ end }}
-            </ons-list>
-        </ons-list>
+          <ons-list>
+            <ons-list-item id="star-ranking-on-air-expandable" expandable>
+              レビューランキング（放送中）
+              <div class="expandable-content">
+                <ons-list modifier="inset" id="star-ranking-on-air"> </ons-list>
+              </div>
+            </ons-list-item>
+          </ons-list>
+        </ons-carousel-item>
       </ons-carousel>
     </ons-page>
     <template id="search-dialog.html">
@@ -341,6 +333,10 @@
               if (tvPrograms[i].Season != null) {
                 seasonName = tvPrograms[i].Season.Name;
               }
+              let weekName = "";
+              if (tvPrograms[i].Week != null) {
+                weekName = tvPrograms[i].Week.Name;
+              }
               let headerColor = seasonHeaderColor(seasonName);
               let casts = tvPrograms[i].Cast;
               casts = casts.split("、").slice(0, 5).join("、");
@@ -360,12 +356,8 @@
               for (let j = categories.length - 1; j >= 0; j--) {
                 category += "<span style='padding:3px;'>#"+categories[j]+"</span>";
               }
-              let weekName = "";
-              if (tvPrograms[i].Week != null) {
-                weekName = tvPrograms[i].Week.Name;
-              }
 
-              return ons.createElement('<div id="' + tvPrograms[i].Id + '"><ons-list-header style="background-color:'+ headerColor +';"><div class="area-left">' + tvPrograms[i].Year + '年 ' + seasonName + '（' + weekName + time + '）</div><div class="area-right list-margin">閲覧数：' + tvPrograms[i].CountClicked + '</div></ons-list-header><ons-list-item><div class="tv-program-list-title-font">' + tvPrograms[i].Title + '</div></ons-list-item><ons-list-item><ons-row><ons-col><ons-row class="list-margin-bottom"><ons-col width="20%">出演：</ons-col><ons-col>' + casts + '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">歌：</ons-col><ons-col>' + tvPrograms[i].Themesong+ '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">監督：</ons-col><ons-col>' + supervisors + '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col class="category-area">' + category + '</ons-col></ons-row><ons-row></ons-list-item><div class="area-center" style="margin:5px;">' + moviePosition + '<div class="reference">'+referenceSite+'</div></div><ons-list-item expandable>あらすじ・見どころ<div class="expandable-content">' + tvPrograms[i].Content + '</div></ons-list-item><ons-list-item modifier="nodivider"><i class="'+ setLikeBold(watchStatus[i].Watched) +' fa-laugh-beam" id="check-watched-' + i + '" onclick="clickWatchStatus(this)" style="color:' + setLikeStatus(watchStatus[i].Watched, 'deeppink') + ';"></i><div id="check-watched-' + i + '-text" class="tv-program-watch" style="margin-right: 8px;">見た：' + tvPrograms[i].CountWatched + '</div><i class="'+ setLikeBold(watchStatus[i].WantToWatch) +' fa-bookmark" id="check-wan2wat-' + i + '" onclick="clickWatchStatus(this)" style="color:' + setLikeStatus(watchStatus[i].WantToWatch, 'lightseagreen') + ';"></i><div id="check-wan2wat-' + i + '-text" class="tv-program-watch">また今度：' + tvPrograms[i].CountWantToWatch + '</div></ons-list-item><ons-list-item><div class="right list-item__right"><a href="/tv/tv_program/comment/' + tvPrograms[i].Id + '" style="text-decoration: none;">コメントを見る</a></div></ons-list-item></div>');
+              return ons.createElement('<div id="' + tvPrograms[i].Id + '"><ons-list-header style="background-color:'+ headerColor +';"><div class="area-left">' + tvPrograms[i].Year + '年 ' + seasonName + '（' + weekName + time + '）</div><div class="area-right list-margin">閲覧数：' + tvPrograms[i].CountClicked + '</div></ons-list-header><ons-list-item><div class="tv-program-list-title-font">' + tvPrograms[i].Title + '</div></ons-list-item><ons-list-item><ons-row><ons-col><ons-row class="list-margin-bottom"><ons-col width="20%">出演：</ons-col><ons-col>' + casts + '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">歌：</ons-col><ons-col>' + tvPrograms[i].Themesong+ '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="20%">監督：</ons-col><ons-col>' + supervisors + '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col class="category-area">' + category + '</ons-col></ons-row><ons-row></ons-list-item><div class="area-center" style="margin:5px;">' + moviePosition + '<div class="reference">'+referenceSite+'</div></div><ons-list-item expandable>あらすじ・見どころ<div class="expandable-content">' + tvPrograms[i].Content + '</div></ons-list-item><ons-list-item modifier="nodivider"><i class="'+ setLikeBold(watchStatus[i].Watched) +' fa-laugh-beam" id="check-watched-' + i + '" onclick="clickWatchStatus(this)" style="color:' + setLikeStatus(watchStatus[i].Watched, 'deeppink') + ';"></i><div id="check-watched-' + i + '-text" class="tv-program-watch" style="margin-right: 8px;">見た：' + tvPrograms[i].CountWatched + '</div><i class="'+ setLikeBold(watchStatus[i].WantToWatch) +' fa-bookmark" id="check-wan2wat-' + i + '" onclick="clickWatchStatus(this)" style="color:' + setLikeStatus(watchStatus[i].WantToWatch, 'lightseagreen') + ';"></i><div id="check-wan2wat-' + i + '-text" class="tv-program-watch">また今度：' + tvPrograms[i].CountWantToWatch + '</div></ons-list-item><ons-list-item><div class="right list-item__right"><a href="/tv/tv_program/comment/' + tvPrograms[i].Id + '">コメントを見る</a></div></ons-list-item></div>');
             },
             countItems: function() {
               return tvPrograms.length;
@@ -429,22 +421,38 @@
         browsingCount = ""
       }
       let text = "";
-      const headerColor = ["blue","white","silver","gleen","red"];
+      let headerColor = ["lightpink","seashell","lavenderblush","antiquewhite","azure"];
       for (let i = 0; i < browsingCount.length; i++) {
-        let weekName = "";
-        if (browsingCount[i].week != null) {
-                weekName = browsingCount[i].week.name;
-              }
         let time = reshapeHour(String(browsingCount[i].hour));
-
-        let seasonName = "";
-        if (browsingCount[i].season != null) {
-          seasonName = browsingCount[i].season.name;
-        }
-        text += '<ons-list-header style="background-color:'+ headerColor[i] +';"><div class="area-left">' + browsingCount[i].year + '年 ' + seasonName + '（' + weekName + time + '）</div><div class="area-right list-margin">閲覧数：' + browsingCount[i].count_clicked + '</div></ons-list-header><ons-list-item><div class="left">'+(i+1)+'．</div><div class="center tv-program-list-title-font">' + browsingCount[i].title + '</div></ons-list-item>';
+        text += '<ons-list-header style="background-color:'+ headerColor[i] +';"><div class="area-left">' + browsingCount[i].year + '年 ' + browsingCount[i].season_id + '（' + browsingCount[i].week_id + time + '）</div><div class="area-right list-margin">閲覧数：' + browsingCount[i].Num + '</div></ons-list-header><ons-list-item><div class="left">'+(i+1)+'</div><div class="center tv-program-list-content-font"><a href="/tv/tv_program/comment/' + browsingCount[i].id + '">' + browsingCount[i].title + '</a></div></ons-list-item>';
       }
-      document.getElementById("browsing-ranking-24").innerHTML = text;
+      document.querySelector('#browsing-ranking-24').innerHTML = text;
+      document.querySelector('#browsing-ranking-24-expandable').showExpansion();
     </script>
+    <script>
+      let starCount = {{ .goodStarTvProgramOnAir }};
+      if (starCount === null) {
+        starCount = ""
+      }
+      text = "";
+      headerColor = ["lightpink","seashell","lavenderblush","antiquewhite","azure"];
+      for (let i = 0; i < starCount.length; i++) {
+        let seasonName = "";
+        if (starCount[i].Season != null) {
+          seasonName = starCount[i].Season.Name;
+        }
+        let weekName = "";
+        if (starCount[i].Week != null) {
+          weekName = starCount[i].Week.Name;
+        }
+        console.log(starCount[i])
+        let time = reshapeHour(String(starCount[i].Hour));
+        text += '<ons-list-header style="background-color:'+ headerColor[i] +';"><div class="area-left">' + starCount[i].Year + '年 ' + seasonName + '（' + weekName + time + '）</div><div class="area-right list-margin">閲覧数：' + starCount[i].CountClicked + '</div></ons-list-header><ons-list-item><div class="left"><i class="fas fa-star"></i>'+starCount[i].Star+'</div><div class="center tv-program-list-content-font"><a href="/tv/tv_program/comment/' + starCount[i].Id + '">' + starCount[i].Title + '</a></div></ons-list-item>';
+      }
+      document.querySelector('#star-ranking-on-air').innerHTML = text;
+      document.querySelector('#star-ranking-on-air-expandable').showExpansion();
+    </script>
+
     <script type="text/javascript">
       document
         .querySelector('ons-carousel')
