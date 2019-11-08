@@ -58,7 +58,7 @@
               name="cast"
               modifier="underbar"
               value="{{.TvProgram.Cast}}"
-              placeholder="キャスト(ex.小栗旬、石原さとみ)"
+              placeholder="キャスト(ex.小栗旬 石原さとみ)"
               maxlength="100"
               float
               required
@@ -83,7 +83,7 @@
               name="themesong"
               value="{{.TvProgram.Themesong}}"
               modifier="underbar"
-              placeholder="主題歌(ex.miwa 「ヒカリへ」、複数可)"
+              placeholder="主題歌(ex.miwa「ヒカリへ」)"
               maxlength="100"
               float
             ></ons-input>
@@ -351,27 +351,8 @@
     <script type="text/javascript" src="/static/js/common.js"></script>
 
     <script>
-      let text = '<option>指定なし</option>';
-      let t;
-      for (let i = 40; i <= 48; i++) {
-        if (i % 2 == 0) {
-          t = String(i / 2) + ':00';
-          text += '<option>' + t + '</option>';
-        } else {
-          t = String((i - 1) / 2) + ':30';
-          text += '<option>' + t + '</option>';
-        }
-      }
-      for (let i = 1; i <= 39; i++) {
-        if (i % 2 == 0) {
-          t = String(i / 2) + ':00';
-          text += '<option>' + t + '</option>';
-        } else {
-          t = String((i - 1) / 2) + ':30';
-          text += '<option>' + t + '</option>';
-        }
-      }
-      document.getElementById('hour').innerHTML = text;
+      let textTop = '<option>指定なし</option>';
+      document.getElementById('hour').innerHTML = getSelectHour(textTop);
     </script>
 
     <script type="text/javascript">

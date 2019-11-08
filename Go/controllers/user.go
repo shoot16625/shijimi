@@ -51,7 +51,7 @@ func (c *UserController) Post() {
 	hashPass, _ := models.PasswordHash(c.GetString("password"))
 	hashSecondpass, _ := models.PasswordHash(c.GetString("SecondPassword"))
 	IconURL := c.GetString("IconURL")
-	if IconURL == "" {
+	if !strings.Contains(IconURL, "http") {
 		rand.Seed(time.Now().UnixNano())
 		r := strconv.Itoa(rand.Intn(13) + 1)
 		if len(r) == 1 {
@@ -186,6 +186,15 @@ func (c *UserController) Put() {
 		hashPass = u.Password
 		hashSecondpass = u.SecondPassword
 	}
+	IconURL := c.GetString("IconURL")
+	if !strings.Contains(IconURL, "http") {
+		rand.Seed(time.Now().UnixNano())
+		r := strconv.Itoa(rand.Intn(13) + 1)
+		if len(r) == 1 {
+			r = "0" + r
+		}
+		IconURL = "/static/img/user_img/s256_f_" + r + ".png"
+	}
 	v := models.User{
 		Id:             id,
 		Username:       c.GetString("username"),
@@ -195,7 +204,7 @@ func (c *UserController) Put() {
 		Address:        c.GetString("address"),
 		Gender:         c.GetString("gender"),
 		Job:            c.GetString("job"),
-		IconUrl:        c.GetString("IconURL"),
+		IconUrl:        IconURL,
 		Marital:        c.GetString("marital"),
 		BloodType:      c.GetString("bloodType"),
 	}

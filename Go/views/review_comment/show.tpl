@@ -340,7 +340,7 @@
 
     <script>
         let comments = {{.Comment}};
-        if (comments.length === 0) {
+        if (comments === null || comments.length === 0) {
           comments = null;
         }
         const users = {{.Users}};
@@ -358,7 +358,7 @@
           if (comments != null) {
             infiniteList.delegate = {
               createItemContent: function(i) {
-              const fps = comments[i].FavoritePoint.split('、');
+              const fps = comments[i].FavoritePoint.split(' ');
               let fpText = "";
               for (let j = fps.length - 1; j >= 0; j--) {
                 fpText += "<span style='padding:3px;color:blue;'>#"+fps[j]+"</span>";
@@ -488,7 +488,7 @@
             fps.push(fp[i].value);
           }
         }
-        data.FavoritePoint = fps.join("、");
+        data.FavoritePoint = fps.join(" ");
         data.Star = Number(document.getElementById("star-point").value);
         var json = JSON.stringify(data);
         var request = new XMLHttpRequest();
@@ -532,7 +532,7 @@
         "<ons-fab><ons-icon icon='md-share'></ons-icon></ons-fab><ons-speed-dial-item><ons-icon icon='md-comment-dots' onclick='dialogBox(\"tweet-dialog\", {{.User.Id}})'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-search' onclick='dialogBoxEveryone(\"search-dialog\")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-chart' onclick='goAnotherCarousel(1)'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><i class='fas fa-arrow-up' onclick='goTop()'></i></ons-speed-dial-item>";
     </script>
     <script>
-      let categories = {{.TvProgram.Category}}.split('、');
+      let categories = {{.TvProgram.Category}}.split(' ');
       if ({{.TvProgram.Category}} === ""){
         categories = [];
       }

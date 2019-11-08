@@ -34,7 +34,7 @@
         if (comments != null) {
           infiniteList.delegate = {
             createItemContent: function(i) {
-              const fps = comments[i].FavoritePoint.split('、');
+              const fps = comments[i].FavoritePoint.split(' ');
               let fpText = "";
               for (let j = fps.length - 1; j >= 0; j--) {
                 fpText += "<span style='padding:3px;color:blue;'>#"+fps[j]+"</span>";

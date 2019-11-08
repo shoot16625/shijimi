@@ -245,27 +245,8 @@
           </div>
         </ons-page>
         <script>
-          let text = '';
-          let t;
-          for (let i = 40; i <= 48; i++) {
-            if (i % 2 == 0) {
-              t = String(i / 2) + ':00';
-              text += '<option>' + t + '</option>';
-            } else {
-              t = String((i - 1) / 2) + ':30';
-              text += '<option>' + t + '</option>';
-            }
-          }
-          for (let i = 1; i <= 39; i++) {
-            if (i % 2 == 0) {
-              t = String(i / 2) + ':00';
-              text += '<option>' + t + '</option>';
-            } else {
-              t = String((i - 1) / 2) + ':30';
-              text += '<option>' + t + '</option>';
-            }
-          }
-          document.getElementById('hour').innerHTML = text;
+          let textTop = '';
+          document.getElementById('hour').innerHTML = getSelectHour(textTop);
         </script>
         <script>
           const today = new Date();
@@ -303,8 +284,10 @@
 
     <script>
       let tvPrograms = {{.TvProgram}};
-      if (tvPrograms != null) {
+      if (tvPrograms != null && tvPrograms.length != 0) {
         console.log("表示数：", tvPrograms.length);
+      } else {
+        tvPrograms = null;
       }
       let watchStatus;
       if ({{.WatchStatus}} === null && tvPrograms != null){
@@ -339,7 +322,7 @@
               }
               let headerColor = seasonHeaderColor(seasonName);
               let casts = tvPrograms[i].Cast;
-              casts = casts.split("、").slice(0, 5).join("、");
+              casts = casts.split(" ").slice(0, 5).join(" ");
               let referenceSite = "";
               if (tvPrograms[i].ImageUrlReference != "" && tvPrograms[i].MovieUrl == "") {
                 referenceSite = "<a href="+tvPrograms[i].ImageUrl+" target='_blank'>出典:" + tvPrograms[i].ImageUrlReference+"</a>";
@@ -347,8 +330,8 @@
                 referenceSite = "<a href="+tvPrograms[i].MovieUrl+" target='_blank'>出典:Youtube</a>";
               }
               let supervisors = tvPrograms[i].Supervisor;
-              supervisors = supervisors.split("、").slice(0, 3).join("、");
-              let categories = tvPrograms[i].Category.split('、');
+              supervisors = supervisors.split(" ").slice(0, 3).join(" ");
+              let categories = tvPrograms[i].Category.split(' ');
               if (tvPrograms[i].Category === ""){
                 categories = [];
               }

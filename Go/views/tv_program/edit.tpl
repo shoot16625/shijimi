@@ -50,7 +50,7 @@
               name="cast"
               modifier="underbar"
               value="{{.TvProgram.Cast}}"
-              placeholder="キャスト(ex.小栗旬、石原さとみ)"
+              placeholder="キャスト(ex.小栗旬 石原さとみ)"
               maxlength="100"
               float
               required
@@ -75,7 +75,7 @@
               name="themesong"
               value="{{.TvProgram.Themesong}}"
               modifier="underbar"
-              placeholder="主題歌(ex.miwa 「ヒカリへ」、複数可)"
+              placeholder="主題歌(ex.miwa「ヒカリへ」)"
               maxlength="100"
               float
             ></ons-input>

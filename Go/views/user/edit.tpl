@@ -148,7 +148,7 @@
               id="age"
               value="{{.User.Age}}"
               modifier="underbar"
-              placeholder="生年月日(ex.1990年10月 → 199010)"
+              placeholder="生年月(ex.1990年10月 → 199010)"
               min="192001"
               max="205012"
               float

@@ -24,10 +24,10 @@ func ExecInitSQL() {
 		o.Insert(v)
 	}
 	// 管理者用 ID：1
-	UserSQL("doramaba-admin", "doramaba-password", 199506, "男性", "愛知県", "学生", "doramaba-password", "/static/img/shijimi-transparence.png", "未婚", "A型", 500, "thanks")
+	UserSQL("doramaba-admin", "doramaba-password", 199505, "男性", "愛知県", "学生", "doramaba-password", "/static/img/shijimi-transparence.png", "未婚", "A型", 500, "thanks")
 
 	// uchida用 ID：2
-	UserSQL("ちゃお倉木", "password", 199506, "男性", "愛知県", "学生", "乃木小学校", "https://img.cinematoday.jp/a/N0077397/_size_640x/_v_1445346612/1.jpg", "未婚", "A型", 500, "thanks")
+	UserSQL("ちゃお倉木", "password", 199505, "男性", "愛知県", "学生", "乃木小学校", "https://img.cinematoday.jp/a/N0077397/_size_640x/_v_1445346612/1.jpg", "未婚", "A型", 500, "thanks")
 
 	// お問い合わせ用 ID：1
 	TvProgramSQL("お問い合わせ専用", "サービス改善のため、忌憚のないご意見・ご感想をお待ちしております。3回に1回くらい褒めていただけると幸いです。", "/static/img/shijimi-transparence.png", "", "", "", "こんにちは", "コメディ・パロディ", "松江育ち", "単独開発", "日記感覚で", "Shiny & Jiminy", 2019, "夏", "miletがすき", "日", 100, 5, 0, 0, 0)

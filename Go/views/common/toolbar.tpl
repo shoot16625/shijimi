@@ -9,12 +9,15 @@
     ></ons-toolbar-button>
   </div>
   <div class="center" id="image-toolbar">
-    <img
-      src="/static/img/shijimi-transparence.png"
-      alt="shijimi"
-      height="42px;"
-      onclick="location.href='/'"
-    />
+    <!-- androidだとtext-aline:leftのため -->
+    <div class="area-center">
+      <img
+        src="/static/img/shijimi-transparence.png"
+        alt="shijimi"
+        height="42px;"
+        onclick="location.href='/'"
+      />
+    </div>
   </div>
   <div class="right">
     <ons-toolbar-button
@@ -32,7 +35,6 @@
           <ons-button
             id="cancel-button"
             onclick="hideAlertDialog('search-toolbar')"
-            style="background:left;color: grey;"
             ><i class="fas fa-window-close"></i
           ></ons-button>
         </div>
@@ -41,7 +43,7 @@
         </div>
       </ons-toolbar>
       <form id="search_tv_program" action="/tv/tv_program/search" method="post">
-        <div class="area-center create-tv-margin">
+        <div class="area-center create-top-margin">
           <p>
             <ons-search-input
               name="search-word"

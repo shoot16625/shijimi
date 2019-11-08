@@ -73,7 +73,7 @@
         <ons-alert-dialog id="confirm-username-dialog" modifier="rowfooter">
           <div class="alert-dialog-title">Alert</div>
           <div class="alert-dialog-content">
-            あなたのユーザー名は，<br />「{{.User.Username}}」です
+            あなたのユーザー名は、<br />「{{.User.Username}}」です
           </div>
           <div class="alert-dialog-footer">
             <ons-alert-dialog-button

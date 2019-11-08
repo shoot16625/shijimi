@@ -388,7 +388,6 @@
           <ons-button
             modifier="quiet"
             id="consent-button"
-            style="line-height: 10px;"
             onclick="dialogBoxEveryone('terms-of-service')"
             >利用規約</ons-button
           >
@@ -397,7 +396,6 @@
           <ons-button
             modifier="quiet"
             id="privacy-button"
-            style="line-height: 14px;"
             onclick="dialogBoxEveryone('privacy-policy')"
             >プライバシーポリシー</ons-button
           >
@@ -424,7 +422,9 @@
             </div>
             <div class="center">利用規約</div>
           </ons-toolbar>
+          <div class="scroller list-margin">
           {{ template "/common/terms_of_service.tpl" . }}
+        </div>
         </ons-page>
       </ons-dialog>
     </template>
@@ -442,7 +442,9 @@
             </div>
             <div class="center">プライバシーポリシー</div>
           </ons-toolbar>
+          <div class="scroller list-margin">
           {{ template "/common/privacy_policy.tpl" . }}
+        </div>
         </ons-page>
       </ons-dialog>
     </template>
@@ -462,7 +464,7 @@
           </ons-toolbar>
           <form id="login-user" action="/tv/user/login" method="post">
             <div class="input-table">
-              <p>
+              <p class="margin-bottom-20">
                 <ons-input
                   name="username"
                   minlength="2"

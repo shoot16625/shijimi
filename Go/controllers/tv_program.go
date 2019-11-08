@@ -3,6 +3,7 @@ package controllers
 import (
 	"app/db"
 	"app/models"
+	"fmt"
 
 	// "encoding/json"
 	"errors"
@@ -59,12 +60,18 @@ func (c *TvProgramController) Post() {
 			hour, _ = strconv.ParseFloat(hourString, 32)
 		}
 		movieURL := c.GetString("MovieURL")
-		if !strings.Contains(movieURL, "embed") {
+		if !strings.Contains(movieURL, "https") {
+			movieURL = ""
+		} else if strings.Contains(movieURL, "https://www.youtube.com/watch?v=") {
 			movieURL = strings.Replace(movieURL, "watch?v=", "embed/", -1)
+		} else if strings.Contains(movieURL, "https://youtu.be/") {
+			movieURL = strings.Replace(movieURL, "youtu.be/", "www.youtube.com/embed/", -1)
+		} else {
+			movieURL = ""
 		}
 		sampleImage := ""
 		imageURL := c.GetString("ImageURL")
-		if imageURL == "" {
+		if !strings.Contains(imageURL, "http") {
 			rand.Seed(time.Now().UnixNano())
 			r := strconv.Itoa(rand.Intn(10) + 1)
 			if len(r) == 1 {
@@ -79,7 +86,7 @@ func (c *TvProgramController) Post() {
 				imageURLReference = "MovieWalker"
 			} else if strings.Contains(imageURL, "1.bp.blogspot.com") {
 				imageURLReference = "いらすとや"
-			} else if strings.Contains(imageURL, "/static/img/tv_img/hanko") {
+			} else if strings.Contains(imageURL, "/static/img") {
 				imageURLReference = ""
 			} else {
 				imageURLs := strings.Split(imageURL, "/")
@@ -96,7 +103,7 @@ func (c *TvProgramController) Post() {
 			MovieUrl:          movieURL,
 			WikiReference:     c.GetString("WikiReference"),
 			Cast:              strings.Replace(c.GetString("cast"), "　", "", -1),
-			Category:          strings.Join(c.GetStrings("category"), "、"),
+			Category:          strings.Join(c.GetStrings("category"), " "),
 			Dramatist:         strings.Replace(c.GetString("dramatist"), "　", "", -1),
 			Supervisor:        strings.Replace(c.GetString("supervisor"), "　", "", -1),
 			Director:          strings.Replace(c.GetString("director"), "　", "", -1),
@@ -231,27 +238,37 @@ func (c *TvProgramController) Put() {
 		hour, _ = strconv.ParseFloat(hourString, 32)
 	}
 	movieURL := c.GetString("MovieURL")
-	if !strings.Contains(movieURL, "embed") {
+	if !strings.Contains(movieURL, "https") {
+		movieURL = ""
+	} else if strings.Contains(movieURL, "https://www.youtube.com/watch?v=") {
 		movieURL = strings.Replace(movieURL, "watch?v=", "embed/", -1)
+	} else if strings.Contains(movieURL, "https://youtu.be/") {
+		movieURL = strings.Replace(movieURL, "youtu.be/", "www.youtube.com/embed/", -1)
+	} else {
+		movieURL = ""
 	}
-	const sampleImage string = "/static/img/tv_img/hanko_02.png"
+	sampleImage := ""
 	imageURL := c.GetString("ImageURL")
-	if imageURL == "" {
+	if !strings.Contains(imageURL, "http") {
+		rand.Seed(time.Now().UnixNano())
+		r := strconv.Itoa(rand.Intn(10) + 1)
+		if len(r) == 1 {
+			r = "0" + r
+		}
+		sampleImage = "/static/img/tv_img/hanko_" + r + ".png"
 		imageURL = sampleImage
 	}
 	imageURLReference := ""
-	if imageURL != sampleImage {
-		if strings.Contains(imageURL, "walkerplus") {
-			imageURLReference = "MovieWalker"
-		} else if strings.Contains(imageURL, "1.bp.blogspot.com") {
-			imageURLReference = "いらすとや"
-		} else if imageURL == "/static/img/tv_img/hanko_02.png" {
-			imageURLReference = ""
-		} else {
-			imageURLs := strings.Split(imageURL, "/")
-			imageURLReference = imageURLs[2]
-			imageURLReference = strings.Replace(imageURLReference, "www.", "", 1)
-		}
+	if strings.Contains(imageURL, "walkerplus") {
+		imageURLReference = "MovieWalker"
+	} else if strings.Contains(imageURL, "1.bp.blogspot.com") {
+		imageURLReference = "いらすとや"
+	} else if imageURL == "/static/img" {
+		imageURLReference = ""
+	} else {
+		imageURLs := strings.Split(imageURL, "/")
+		imageURLReference = imageURLs[2]
+		imageURLReference = strings.Replace(imageURLReference, "www.", "", 1)
 	}
 	oldTvInfo, _ := models.GetTvProgramById(id)
 	v := *oldTvInfo
@@ -262,7 +279,7 @@ func (c *TvProgramController) Put() {
 	v.MovieUrl = movieURL
 	v.WikiReference = c.GetString("WikiReference")
 	v.Cast = strings.Replace(c.GetString("cast"), "　", "", -1)
-	v.Category = strings.Join(c.GetStrings("category"), "、")
+	v.Category = strings.Join(c.GetStrings("category"), " ")
 	v.Dramatist = strings.Replace(c.GetString("dramatist"), "　", "", -1)
 	v.Supervisor = strings.Replace(c.GetString("supervisor"), "　", "", -1)
 	v.Director = strings.Replace(c.GetString("director"), "　", "", -1)
@@ -275,12 +292,13 @@ func (c *TvProgramController) Put() {
 	v.CountUpdated++
 
 	if err := models.UpdateTvProgramById(&v); err == nil {
+		userID := session.Get("UserId").(int64)
 		w := models.TvProgramUpdateHistory{
-			UserId:      session.Get("UserId").(int64),
+			UserId:      userID,
 			TvProgramId: id,
 		}
 		_, _ = models.AddTvProgramUpdateHistory(&w)
-		z, _ := models.GetUserById(v.CreateUserId)
+		z, _ := models.GetUserById(userID)
 		z.CountEditTvProgram++
 		_ = models.UpdateUserById(z)
 		c.Redirect("/tv/tv_program/comment/"+idStr, 302)
@@ -310,25 +328,34 @@ func (c *TvProgramController) Delete() {
 }
 
 func (c *TvProgramController) Index() {
-	var fields []string
-	var sortby []string
-	var order []string
-	var query = make(map[string]string)
-	var limit int64 = 100
-	var offset int64
+	var l []interface{}
+	session := c.StartSession()
+	if session.Get("UserId") != nil {
+		userID := session.Get("UserId").(int64)
+		l = models.GetRecommendTvProgramsByUser(userID)
+	}
+	fmt.Println(l)
+	if l == nil {
 
-	sortby = append(sortby, "Year")
-	sortby = append(sortby, "Season__Id")
-	sortby = append(sortby, "Week__Id")
-	sortby = append(sortby, "Hour")
-	order = append(order, "desc")
-	order = append(order, "desc")
-	order = append(order, "asc")
-	order = append(order, "asc")
-	l, _ := models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
+		var fields []string
+		var sortby []string
+		var order []string
+		var query = make(map[string]string)
+		var limit int64 = 100
+		var offset int64
+
+		sortby = append(sortby, "Year")
+		sortby = append(sortby, "Season__Id")
+		sortby = append(sortby, "Week__Id")
+		sortby = append(sortby, "Hour")
+		order = append(order, "desc")
+		order = append(order, "desc")
+		order = append(order, "asc")
+		order = append(order, "asc")
+		l, _ = models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
+	}
 	c.Data["TvProgram"] = l
 
-	session := c.StartSession()
 	if session.Get("UserId") != nil {
 		userID := session.Get("UserId").(int64)
 		var ratings []models.WatchingStatus
@@ -343,6 +370,7 @@ func (c *TvProgramController) Index() {
 		c.Data["WatchStatus"] = ratings
 		v, _ := models.GetUserById(userID)
 		c.Data["User"] = v
+		models.GetRecommendTvProgramsByUser(userID)
 	}
 	t := time.Now()
 	yesterday := t.Add(-24 * time.Hour)
@@ -352,7 +380,6 @@ func (c *TvProgramController) Index() {
 	if goodStarTvProgram, err := models.GetTopStarPoint(); err == nil {
 		c.Data["goodStarTvProgramOnAir"] = goodStarTvProgram
 	}
-
 	c.TplName = "tv_program/index.tpl"
 }
 
@@ -402,7 +429,8 @@ func (c *TvProgramController) Search() {
 		str = strings.Replace(str, "　", " ", -1)
 		u = models.SearchHistory{
 			UserId: userID,
-			Word:   strings.Replace(str, " ", "、", -1),
+			Word:   str,
+			Limit:  100,
 			Item:   "tv",
 		}
 		_, _ = models.AddSearchHistory(&u)
@@ -555,14 +583,14 @@ func (c *TvProgramController) SearchTvProgram() {
 	var s SearchWords
 
 	s = SearchWords{
-		Title:     strings.Join(title, "、"),
-		Staff:     strings.Join(staff, "、"),
-		Themesong: strings.Join(themesong, "、"),
-		Year:      strings.Join(c.GetStrings("year"), "、"),
-		Week:      strings.Join(c.GetStrings("week"), "、"),
-		Hour:      strings.Join(c.GetStrings("hour"), "、"),
-		Season:    strings.Join(c.GetStrings("season"), "、"),
-		Category:  strings.Join(c.GetStrings("category"), "、"),
+		Title:     strings.Join(title, " "),
+		Staff:     strings.Join(staff, " "),
+		Themesong: strings.Join(themesong, " "),
+		Year:      strings.Join(c.GetStrings("year"), " "),
+		Week:      strings.Join(c.GetStrings("week"), " "),
+		Hour:      strings.Join(c.GetStrings("hour"), " "),
+		Season:    strings.Join(c.GetStrings("season"), " "),
+		Category:  strings.Join(c.GetStrings("category"), " "),
 		Limit:     limit,
 		Sortby:    c.GetString("sortby"),
 	}
@@ -572,7 +600,7 @@ func (c *TvProgramController) SearchTvProgram() {
 		var u models.SearchHistory
 		u = models.SearchHistory{
 			UserId:   session.Get("UserId").(int64),
-			Word:     s.Title + "、" + s.Staff + "、" + s.Themesong,
+			Word:     s.Title + " " + s.Staff + " " + s.Themesong,
 			Year:     s.Year,
 			Season:   s.Season,
 			Week:     s.Week,
@@ -622,6 +650,7 @@ func (c *TvProgramController) GetWikiInfo() {
 		wikiReference = "https://ja.wikipedia.org/wiki/" + wikiReference
 	}
 	tvProgram := db.GetTvProgramInformationByURL(wikiReference)
+	tvProgram.ImageUrl = ""
 	c.Data["TvProgram"] = tvProgram
 	c.Data["GetWikiInfo"] = true
 	c.TplName = "tv_program/create.tpl"

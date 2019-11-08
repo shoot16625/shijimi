@@ -315,9 +315,9 @@ func (c *ReviewCommentController) SearchComment() {
 	// var s SearchWords
 	s := SearchWords{
 		Word:     c.GetString("word"),
-		Category: strings.Join(c.GetStrings("favorite-point"), "、"),
-		Spoiler:  strings.Join(c.GetStrings("spoiler"), "、"),
-		Star:     strings.Join(c.GetStrings("star"), "、"),
+		Category: strings.Join(c.GetStrings("favorite-point"), " "),
+		Spoiler:  strings.Join(c.GetStrings("spoiler"), " "),
+		Star:     strings.Join(c.GetStrings("star"), " "),
 		Limit:    limit,
 		Sortby:   c.GetString("sortby"),
 	}
@@ -328,7 +328,7 @@ func (c *ReviewCommentController) SearchComment() {
 		var u models.SearchHistory
 		u = models.SearchHistory{
 			UserId:   session.Get("UserId").(int64),
-			Word:     strings.Join(word, "、"),
+			Word:     strings.Join(word, " "),
 			Category: s.Category,
 			Spoiler:  s.Spoiler,
 			Star:     s.Star,

@@ -209,15 +209,17 @@ func (c *CommentController) Show() {
 	session := c.StartSession()
 	// 閲覧数カウント
 	if session.Get(tvProgramID) == nil {
+		var userID int64 = 0
 		if session.Get("UserId") != nil {
-			userID := session.Get("UserId").(int64)
-			var b models.BrowsingHistory
-			b = models.BrowsingHistory{
-				UserId:      userID,
-				TvProgramId: tvProgramID,
-			}
-			_, _ = models.AddBrowsingHistory(&b)
+			userID = session.Get("UserId").(int64)
 		}
+		var b models.BrowsingHistory
+		b = models.BrowsingHistory{
+			UserId:      userID,
+			TvProgramId: tvProgramID,
+		}
+		_, _ = models.AddBrowsingHistory(&b)
+
 		v.CountClicked++
 		_ = models.UpdateTvProgramById(v)
 		session.Set(tvProgramID, true)
@@ -280,7 +282,6 @@ func (c *CommentController) SearchComment() {
 	if v := c.GetString("word"); v != "" {
 		query["Content__icontains"] = v
 		word = strings.Replace(v, "　", " ", -1)
-		word = strings.Replace(word, " ", "、", -1)
 	}
 
 	query["TvProgramId"] = strconv.FormatInt(tvProgramID, 10)

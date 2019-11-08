@@ -167,7 +167,7 @@
               name="age"
               value="{{.User.Age}}"
               modifier="underbar"
-              placeholder="生年月日(ex.1990年10月 → 199010)"
+              placeholder="生年月(ex.1990年10月 → 199010)"
               min="192001"
               max="205012"
               float
@@ -243,8 +243,10 @@
             <div class="left"></div>
             <div class="center">利用規約</div>
           </ons-toolbar>
-          {{ template "/common/terms_of_service.tpl" . }}
-          <p class="area-center">
+          <div class="scroller list-margin" style="height:85%;">
+            {{ template "/common/terms_of_service.tpl" . }}
+          </div>
+          <p class="area-center create-top-margin-5">
             <ons-button
               id="ok-button"
               onclick="hideAlertDialog('terms-of-service')"
@@ -262,8 +264,10 @@
             <div class="left"></div>
             <div class="center">プライバシーポリシー</div>
           </ons-toolbar>
-          {{ template "/common/privacy_policy.tpl" . }}
-          <p class="area-center">
+          <div class="scroller list-margin" style="height:85%;">
+            {{ template "/common/privacy_policy.tpl" . }}
+          </div>
+          <p class="area-center create-top-margin-5">
             <ons-button
               id="ok-button"
               onclick="hideAlertDialog('privacy-policy')"

@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"sort"
+	"strconv"
 	"strings"
 	"time"
 
@@ -368,4 +370,66 @@ func GetTopStarPoint() (l []TvProgram, err error) {
 		return l, err
 	}
 	return nil, err
+}
+
+type RecommendPoint struct {
+	Index int64
+	Point int
+}
+
+// get recommending TvPrograms.
+func GetRecommendTvProgramsByUser(userID int64) (ml []interface{}) {
+	var fields []string
+	var sortby []string
+	var order []string
+	var query = make(map[string]string)
+	var limit int64
+	var offset int64
+	w, _ := GetAllTvProgram(query, fields, sortby, order, offset, limit)
+	limit = 10
+	sortby = append(sortby, "Updated")
+	order = append(order, "desc")
+	query["Watched"] = "1"
+	query["UserId"] = strconv.FormatInt(userID, 10)
+	v, _ := GetAllWatchingStatus(query, fields, sortby, order, offset, limit)
+	if len(v) == 0 {
+		return nil
+	}
+	var Points []RecommendPoint
+	for _, tvProgram := range w {
+		x := RecommendPoint{
+			Index: tvProgram.(TvProgram).Id,
+			Point: 0,
+		}
+		Points = append(Points, x)
+	}
+
+	for _, watched := range v {
+		if r, err := GetTvProgramById(watched.(WatchingStatus).TvProgramId); err == nil {
+			casts := strings.Split(r.Cast, " ")
+			// 「見た」番組に出演しているキャストの他の作品
+			for _, cast := range casts {
+				for index, tvProgram := range w {
+					if strings.Contains(tvProgram.(TvProgram).Cast, cast) {
+						if r.Id != tvProgram.(TvProgram).Id {
+							Points[index].Point++
+						}
+					}
+				}
+			}
+		}
+	}
+
+	sort.Slice(Points, func(i, j int) bool {
+		return Points[i].Point > Points[j].Point
+	})
+	var displayNum int = 100
+	if len(Points) < displayNum {
+		displayNum = len(Points)
+	}
+	for _, recommendPoint := range Points[:displayNum] {
+		r, _ := GetTvProgramById(recommendPoint.Index)
+		ml = append(ml, *r)
+	}
+	return ml
 }

@@ -128,7 +128,13 @@ label {
   background: left;
   color: grey;
 }
+
+.new-line {
+  display: inline-block;
+}
+
 /* text-area */
+
 .area-center {
   text-align: center;
 }
@@ -159,10 +165,17 @@ label {
 .list-margin-bottom {
   margin-bottom: 5px;
 }
+.margin-bottom-20 {
+  margin-bottom: 20px;
+}
 
 .create-top-margin {
   margin-top:20px;
   margin-bottom:20px;
+}
+
+.create-top-margin-5 {
+  margin-top:5px;
 }
 
 .select-search-table {

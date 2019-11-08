@@ -94,8 +94,8 @@ func GetWikiDoramas(referencePath string) {
 			var data []string
 			t.Find("td").Each(func(_ int, u *goquery.Selection) {
 				html, _ := u.Html()
-				content := strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
-				content = strings.Replace(content, "\n", "、", -1)
+				content := strings.Replace(p.Sanitize(html), "<br/>", " ", -1)
+				content = strings.Replace(content, "\n", " ", -1)
 				data = append(data, content)
 			})
 			wikiURL, _ := t.Find("a").Attr("href")
@@ -108,6 +108,7 @@ func GetWikiDoramas(referencePath string) {
 				tvProgram.Production = data[2]
 				tvProgram.Cast = data[4]
 				tvProgram.ImageUrl = SetRandomImageURL()
+				tvProgram.ImageUrlReference = ""
 				tvProgram.WikiReference = "https://ja.wikipedia.org" + wikiURL
 				weekStruct := *new(models.Week)
 				data[3] = strings.Replace(data[3], "平日", "平曜", -1)
@@ -194,7 +195,9 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 			th := t.Find("th").Text()
 			// 同一テーブルに複数のシーズンが表記されている場合
 			if strings.Contains(color, "background-color: #FDEBD0") {
-				seasonNum += 1
+				if !strings.Contains(th, "話から") {
+					seasonNum += 1
+				}
 				if seasonNum != 1 {
 					// fmt.Println("there\n", newTvProgram)
 					dataAddFlag = true
@@ -216,7 +219,7 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 			}
 			if doramaFlag {
 				html, _ := t.Find("td").Html()
-				content := strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
+				content := strings.Replace(p.Sanitize(html), "<br/>", " ", -1)
 				content = strings.Replace(content, "\n", "", -1)
 				switch th {
 				case "ジャンル":
@@ -237,7 +240,7 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 						topCast = content
 					}
 					if seasonNum != 0 && newTvProgram.Cast != "" {
-						newTvProgram.Cast += "、" + content
+						newTvProgram.Cast += " " + content
 					} else {
 						newTvProgram.Cast = content
 					}
@@ -249,15 +252,17 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 					}
 				case "オープニング":
 					content = strings.Replace(content, "、「", "「", -1)
+					content = strings.Replace(content, " 「", "「", -1)
 					newTvProgram.Themesong = content
 				case "エンディング":
 					if strings.TrimSpace(t.Find("td").Text()) != "同上" {
 						content = strings.Replace(content, "、「", "「", -1)
+						content = strings.Replace(content, " 「", "「", -1)
 						if newTvProgram.Themesong == "" {
 							newTvProgram.Themesong = content
 						} else {
 							if !strings.Contains(newTvProgram.Themesong, content) {
-								newTvProgram.Themesong += "、" + content
+								newTvProgram.Themesong += " " + content
 							}
 						}
 					}
@@ -422,11 +427,11 @@ func GetMovieWalker(year string, month string) {
 		tvProgram.Content = m.Find(".info > p").Text()
 		director := strings.TrimSpace(m.Find(".info > .directorList > dd").Text())
 		director = strings.Replace(director, " ", "", -1)
-		director = strings.Replace(director, "\n\n\n\n", "、", -1)
+		director = strings.Replace(director, "\n\n\n\n", " ", -1)
 		tvProgram.Director = director
 		cast := strings.TrimSpace(m.Find(".info > .roleList > dd").Text())
 		cast = strings.Replace(cast, " ", "", -1)
-		cast = strings.Replace(cast, "\n\n\n\n", "、", -1)
+		cast = strings.Replace(cast, "\n\n\n\n", " ", -1)
 		tvProgram.Cast = cast
 		tvProgram.Star = 5
 		if _, err := models.AddTvProgram(&tvProgram); err != nil {
@@ -488,7 +493,7 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (newTvProgram models.
 				if doramaFlag {
 					th := t.Find("th").Text()
 					html, _ := t.Find("td").Html()
-					content := strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
+					content := strings.Replace(p.Sanitize(html), "<br/>", " ", -1)
 					content = strings.Replace(content, "\n", "", -1)
 					switch th {
 					case "ジャンル":
@@ -506,15 +511,17 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (newTvProgram models.
 						newTvProgram.Production = content
 					case "オープニング":
 						content = strings.Replace(content, "、「", "「", -1)
+						content = strings.Replace(content, " 「", "「", -1)
 						newTvProgram.Themesong = content
 					case "エンディング":
 						if strings.TrimSpace(t.Find("td").Text()) != "同上" {
 							content = strings.Replace(content, "、「", "「", -1)
+							content = strings.Replace(content, " 「", "「", -1)
 							if newTvProgram.Themesong == "" {
 								newTvProgram.Themesong = content
 							} else {
 								if !strings.Contains(newTvProgram.Themesong, content) {
-									newTvProgram.Themesong += "、" + content
+									newTvProgram.Themesong += " " + content
 								}
 							}
 						}
@@ -629,6 +636,7 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 		newTvProgram.Star = 5
 		newTvProgram.WikiReference = wikiReferenceURL
 		newTvProgram.ImageUrl = SetRandomImageURL()
+		newTvProgram.ImageUrlReference = ""
 		u.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
 			c, _ := t.Find("td").Attr("class")
 			if c == "category" {
@@ -661,7 +669,7 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 			}
 			if doramaFlag {
 				html, _ := t.Find("td").Html()
-				content := strings.Replace(p.Sanitize(html), "<br/>", "、", -1)
+				content := strings.Replace(p.Sanitize(html), "<br/>", " ", -1)
 				content = strings.Replace(content, "\n", "", -1)
 				switch th {
 				case "ジャンル":
@@ -678,7 +686,7 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 						topCast = content
 					}
 					if seasonNum != 0 && newTvProgram.Cast != "" {
-						newTvProgram.Cast += "、" + content
+						newTvProgram.Cast += " " + content
 					} else {
 						newTvProgram.Cast = content
 					}
@@ -686,15 +694,17 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 					newTvProgram.Production = content
 				case "オープニング":
 					content = strings.Replace(content, "、「", "「", -1)
+					content = strings.Replace(content, " 「", "「", -1)
 					newTvProgram.Themesong = content
 				case "エンディング":
 					if strings.TrimSpace(t.Find("td").Text()) != "同上" {
 						content = strings.Replace(content, "、「", "「", -1)
+						content = strings.Replace(content, " 「", "「", -1)
 						if newTvProgram.Themesong == "" {
 							newTvProgram.Themesong = content
 						} else {
 							if !strings.Contains(newTvProgram.Themesong, content) {
-								newTvProgram.Themesong += "、" + content
+								newTvProgram.Themesong += " " + content
 							}
 						}
 					}

@@ -233,7 +233,7 @@ function clickWatchStatus(elem) {
 
 // セレクタが複数設定されていた時の再描画処理
 function setMultipleSelection(elem, data) {
-  const d = data.split('、');
+  const d = data.split(' ');
   for (let i = d.length - 1; i >= 0; i--) {
     var target = document.getElementById(elem);
     for (let j = target.length - 1; j >= 0; j--) {
@@ -320,4 +320,29 @@ function seasonHeaderColor(seasonName) {
     headerColor = 'ghostwhite';
   }
   return headerColor;
+}
+
+// 時間帯選択用
+function getSelectHour(textTop) {
+  let textHour = textTop;
+  let t;
+  for (let i = 40; i <= 48; i++) {
+    if (i % 2 == 0) {
+      t = String(i / 2) + ':00';
+      textHour += '<option>' + t + '</option>';
+    } else {
+      t = String((i - 1) / 2) + ':30';
+      textHour += '<option>' + t + '</option>';
+    }
+  }
+  for (let i = 1; i <= 39; i++) {
+    if (i % 2 == 0) {
+      t = String(i / 2) + ':00';
+      textHour += '<option>' + t + '</option>';
+    } else {
+      t = String((i - 1) / 2) + ':30';
+      textHour += '<option>' + t + '</option>';
+    }
+  }
+  return textHour;
 }
