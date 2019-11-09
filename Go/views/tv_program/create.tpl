@@ -359,144 +359,16 @@
       var previewTvProgram = function(elemID) {
         ons.ready(function() {
           var dialog = document.getElementById(elemID);
+          // 同じページで2度目以降のプレビュークリック時発動
           if (dialog) {
-            document.getElementById('preview-on-air-info').innerHTML =
-              document.getElementsByName('year')[0].value +
-              '年 ' +
-              document
-                .getElementsByName('season')[0]
-                .value.replace(/\(.+\)/, '') +
-              '（' +
-              document.getElementsByName('week')[0].value +
-              document.getElementsByName('hour')[0].value +
-              '）';
-            document.getElementById(
-              'preview-title'
-            ).innerHTML = document.getElementsByName('title')[0].value;
-            document.getElementById(
-              'preview-content'
-            ).innerHTML = document.getElementsByName('content')[0].value;
-            document.getElementById(
-              'preview-cast'
-            ).innerHTML = document.getElementsByName('cast')[0].value;
-            document.getElementById(
-              'preview-themesong'
-            ).innerHTML = document.getElementsByName('themesong')[0].value;
-            let categories = document.getElementById('category');
-            let category = '';
-            let tag;
-            for (let index = 0; index < categories.length; index++) {
-              tag = categories[index];
-              if (tag.selected) {
-                category += tag.value + ' ';
-              }
-            }
-            document.getElementById('preview-category').innerHTML = category;
-            document.getElementById(
-              'preview-production'
-            ).innerHTML = document.getElementsByName('production')[0].value;
-            document.getElementById(
-              'preview-dramatist'
-            ).innerHTML = document.getElementsByName('dramatist')[0].value;
-            document.getElementById(
-              'preview-supervisor'
-            ).innerHTML = document.getElementsByName('supervisor')[0].value;
-            document.getElementById(
-              'preview-director'
-            ).innerHTML = document.getElementsByName('director')[0].value;
-            let imageURL = document.getElementsByName('ImageURL')[0].value;
-            if (imageURL === '') {
-              imageURL = '/static/img/tv_img/hanko_02.png';
-            }
-            document.getElementById('preview-img').innerHTML =
-              '<img src="' +
-              imageURL +
-              '" alt="イメージ" width="80%" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'">';
-            let movieURL = document.getElementsByName('MovieURL')[0].value;
-            if (movieURL != '') {
-              movieURL = movieURL.replace('watch?v=', 'embed/');
-              document.getElementById('preview-movie').innerHTML =
-                '<iframe src="' +
-                movieURL +
-                '?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="ムービー" width="200" height="112.5" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
-            }
-
+            inputPreviewData();
             document.querySelector('#expandable-list-item').showExpansion();
             dialog.show();
           } else {
             ons
               .createElement(elemID + '.html', { append: true })
               .then(function(dialog) {
-                let hour;
-                if (
-                  document.getElementsByName('hour')[0].value === '指定なし'
-                ) {
-                  hour = '';
-                } else {
-                  hour = document.getElementsByName('hour')[0].value;
-                }
-                document.getElementById('preview-on-air-info').innerHTML =
-                  document.getElementsByName('year')[0].value +
-                  '年 ' +
-                  document
-                    .getElementsByName('season')[0]
-                    .value.replace(/\(.+\)/, '') +
-                  '（' +
-                  document.getElementsByName('week')[0].value +
-                  hour +
-                  '）';
-                document.getElementById(
-                  'preview-title'
-                ).innerHTML = document.getElementsByName('title')[0].value;
-                document.getElementById(
-                  'preview-content'
-                ).innerHTML = document.getElementsByName('content')[0].value;
-                document.getElementById(
-                  'preview-cast'
-                ).innerHTML = document.getElementsByName('cast')[0].value;
-                document.getElementById(
-                  'preview-themesong'
-                ).innerHTML = document.getElementsByName('themesong')[0].value;
-                let categories = document.getElementById('category');
-                let category = '';
-                let tag;
-                for (let index = 0; index < categories.length; index++) {
-                  tag = categories[index];
-                  if (tag.selected) {
-                    category += tag.value + ' ';
-                  }
-                }
-                document.getElementById(
-                  'preview-category'
-                ).innerHTML = category;
-                document.getElementById(
-                  'preview-production'
-                ).innerHTML = document.getElementsByName('production')[0].value;
-                document.getElementById(
-                  'preview-dramatist'
-                ).innerHTML = document.getElementsByName('dramatist')[0].value;
-                document.getElementById(
-                  'preview-supervisor'
-                ).innerHTML = document.getElementsByName('supervisor')[0].value;
-                document.getElementById(
-                  'preview-director'
-                ).innerHTML = document.getElementsByName('director')[0].value;
-                let imageURL = document.getElementsByName('ImageURL')[0].value;
-                if (imageURL === '') {
-                  imageURL = '/static/img/tv_img/hanko_02.png';
-                }
-                document.getElementById('preview-img').innerHTML =
-                  '<img src="' +
-                  imageURL +
-                  '" alt="イメージ" width="80%" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'">';
-                var movieURL = document.getElementsByName('MovieURL')[0].value;
-                if (movieURL != '') {
-                  movieURL = movieURL.replace('watch?v=', 'embed/');
-                  document.getElementById('preview-movie').innerHTML =
-                    '<iframe src="' +
-                    movieURL +
-                    '?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="ムービー" width="200" height="112.5" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
-                }
+                inputPreviewData();
                 document.querySelector('#expandable-list-item').showExpansion();
                 dialog.show();
               });

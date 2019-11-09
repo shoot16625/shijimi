@@ -244,6 +244,19 @@
         </div>
       </form>
     </ons-page>
+    <template id="alert-tv-title.html">
+      <ons-alert-dialog id="alert-tv-title" modifier="rowfooter">
+        <div class="alert-dialog-title">Alert</div>
+        <div class="alert-dialog-content">
+          「{{.TvProgram.Title}}」はすでに存在しています。
+        </div>
+        <div class="alert-dialog-footer">
+          <ons-alert-dialog-button onclick="hideAlertDialog('alert-tv-title')"
+            >OK</ons-alert-dialog-button
+          >
+        </div>
+      </ons-alert-dialog>
+    </template>
 
     <template id="preview-dialog.html">
       <ons-dialog id="preview-dialog" modifier="large" cancelable fullscreen>
@@ -332,19 +345,8 @@
     {{ template "/common/js.tpl" . }}
 
     <script>
-      var target = document.getElementById('hour');
-      let text = '<option>指定なし</option>';
-      let t;
-      for (let i = 0; i <= 48; i++) {
-        if (i % 2 === 0) {
-          t = String(i / 2) + ':00';
-          text += '<option>' + t + '</option>';
-        } else {
-          t = String((i - 1) / 2) + ':30';
-          text += '<option>' + t + '</option>';
-        }
-        target.innerHTML = text;
-      }
+      let textTop = '<option>指定なし</option>';
+      document.getElementById('hour').innerHTML = getSelectHour(textTop);
     </script>
 
     <script type="text/javascript">
@@ -352,133 +354,14 @@
         ons.ready(function() {
           var dialog = document.getElementById(elemID);
           if (dialog) {
-            document.getElementById('preview-on-air-info').innerHTML =
-              document.getElementsByName('year')[0].value +
-              '年 ' +
-              document
-                .getElementsByName('season')[0]
-                .value.replace(/\(.+\)/, '') +
-              '（' +
-              document.getElementsByName('week')[0].value +
-              document.getElementsByName('hour')[0].value +
-              '）';
-            document.getElementById(
-              'preview-title'
-            ).innerHTML = document.getElementsByName('title')[0].value;
-            document.getElementById(
-              'preview-content'
-            ).innerHTML = document.getElementsByName('content')[0].value;
-            document.getElementById(
-              'preview-cast'
-            ).innerHTML = document.getElementsByName('cast')[0].value;
-            document.getElementById(
-              'preview-themesong'
-            ).innerHTML = document.getElementsByName('themesong')[0].value;
-            let categories = document.getElementById('category');
-            let category = '';
-            let tag;
-            for (let index = 0; index < categories.length; index++) {
-              tag = categories[index];
-              if (tag.selected) {
-                category += tag.value + ' ';
-              }
-            }
-            document.getElementById('preview-category').innerHTML = category;
-            document.getElementById(
-              'preview-production'
-            ).innerHTML = document.getElementsByName('production')[0].value;
-            document.getElementById(
-              'preview-dramatist'
-            ).innerHTML = document.getElementsByName('dramatist')[0].value;
-            document.getElementById(
-              'preview-supervisor'
-            ).innerHTML = document.getElementsByName('supervisor')[0].value;
-            document.getElementById(
-              'preview-director'
-            ).innerHTML = document.getElementsByName('director')[0].value;
-            document.getElementById('preview-img').innerHTML =
-              '<img src="' +
-              document.getElementsByName('ImageURL')[0].value +
-              '" alt="イメージ" width="80%" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'">';
-            var movieURL = document.getElementsByName('MovieURL')[0].value;
-            if (movieURL != '') {
-              movieURL = movieURL.replace('watch?v=', 'embed/');
-              document.getElementById('preview-movie').innerHTML =
-                '<iframe src="' +
-                movieURL +
-                '?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="ムービー" width="200" height="112.5" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
-            }
-
+            inputPreviewData();
             document.querySelector('#expandable-list-item').showExpansion();
             dialog.show();
           } else {
             ons
               .createElement(elemID + '.html', { append: true })
               .then(function(dialog) {
-                let hour;
-                if (document.getElementsByName('hour')[0].value == '指定なし') {
-                  hour = '';
-                } else {
-                  hour = document.getElementsByName('hour')[0].value;
-                }
-                document.getElementById('preview-on-air-info').innerHTML =
-                  document.getElementsByName('year')[0].value +
-                  '年 ' +
-                  document
-                    .getElementsByName('season')[0]
-                    .value.replace(/\(.+\)/, '') +
-                  '（' +
-                  document.getElementsByName('week')[0].value +
-                  hour +
-                  '）';
-                document.getElementById(
-                  'preview-title'
-                ).innerHTML = document.getElementsByName('title')[0].value;
-                document.getElementById(
-                  'preview-content'
-                ).innerHTML = document.getElementsByName('content')[0].value;
-                document.getElementById(
-                  'preview-cast'
-                ).innerHTML = document.getElementsByName('cast')[0].value;
-                document.getElementById(
-                  'preview-themesong'
-                ).innerHTML = document.getElementsByName('themesong')[0].value;
-                let categories = document.getElementById('category');
-                let category = '';
-                let tag;
-                for (let index = 0; index < categories.length; index++) {
-                  tag = categories[index];
-                  if (tag.selected) {
-                    category += tag.value + ' ';
-                  }
-                }
-                document.getElementById(
-                  'preview-category'
-                ).innerHTML = category;
-                document.getElementById(
-                  'preview-production'
-                ).innerHTML = document.getElementsByName('production')[0].value;
-                document.getElementById(
-                  'preview-dramatist'
-                ).innerHTML = document.getElementsByName('dramatist')[0].value;
-                document.getElementById(
-                  'preview-supervisor'
-                ).innerHTML = document.getElementsByName('supervisor')[0].value;
-                document.getElementById(
-                  'preview-director'
-                ).innerHTML = document.getElementsByName('director')[0].value;
-                document.getElementById('preview-img').innerHTML =
-                  '<img src="' +
-                  document.getElementsByName('ImageURL')[0].value +
-                  '" alt="イメージ" width="80%" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'">';
-                var movieURL = document.getElementsByName('MovieURL')[0].value;
-                if (movieURL != '') {
-                  movieURL = movieURL.replace('watch?v=', 'embed/');
-                  document.getElementById('preview-movie').innerHTML =
-                    '<iframe src="' +
-                    movieURL +
-                    '?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="ムービー" width="200" height="112.5" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
-                }
+                inputPreviewData();
                 document.querySelector('#expandable-list-item').showExpansion();
                 dialog.show();
               });
@@ -489,7 +372,6 @@
 
     <script type="text/javascript">
       const tvProgram = {{.TvProgram}};
-      if (tvProgram.Id != 0) {
         const seasonName = tvProgram.Season.Name;
         if (seasonName === "春"){
           document.getElementById('season').value = seasonName+"(4~6)";
@@ -520,6 +402,7 @@
         setMultipleSelection("category", tvProgram.Category);
         document.getElementById('content').value = tvProgram.Content;
         document.getElementById('week').value = tvProgram.Week.Name;
+        if ({{.TitleDuplicate}} === 1) {
         dialogBoxEveryone("alert-tv-title");
       };
     </script>

@@ -469,6 +469,8 @@ func ReshapeImageURL(str string) (res string) {
 			r = "0" + r
 		}
 		res = "/static/img/tv_img/hanko_" + r + ".png"
+	} else {
+		res = str
 	}
 	return res
 }

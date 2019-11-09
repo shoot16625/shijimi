@@ -3,7 +3,6 @@ package controllers
 import (
 	"app/db"
 	"app/models"
-	"fmt"
 
 	// "encoding/json"
 	"errors"
@@ -45,7 +44,6 @@ func (c *TvProgramController) Post() {
 	session := c.StartSession()
 	if session.Get("UserId") != nil {
 		year, _ := c.GetInt("year")
-		// rep := regexp.MustCompile(`\(.+\)`)
 		season := *new(models.Season)
 		season.Name = models.RegexpWords(c.GetString("season"), `\(.+\)`, "")
 		week := *new(models.Week)
@@ -57,42 +55,10 @@ func (c *TvProgramController) Post() {
 			hourString = strings.Replace(hourString, ":30", ".5", -1)
 			hour, _ = strconv.ParseFloat(hourString, 32)
 		}
-		// movieURL := c.GetString("MovieURL")
-		// if !strings.Contains(movieURL, "https") {
-		// 	movieURL = ""
-		// } else if strings.Contains(movieURL, "https://www.youtube.com/watch?v=") {
-		// 	movieURL = strings.Replace(movieURL, "watch?v=", "embed/", -1)
-		// } else if strings.Contains(movieURL, "https://youtu.be/") {
-		// 	movieURL = strings.Replace(movieURL, "youtu.be/", "www.youtube.com/embed/", -1)
-		// } else {
-		// 	movieURL = ""
-		// }
 		movieURL := models.ReshapeMovieURL(c.GetString("MovieURL"))
-		// sampleImage := ""
 		imageURL := models.ReshapeImageURL(c.GetString("ImageURL"))
-		// if !strings.Contains(imageURL, "http") {
-		// 	rand.Seed(time.Now().UnixNano())
-		// 	r := strconv.Itoa(rand.Intn(10) + 1)
-		// 	if len(r) == 1 {
-		// 		r = "0" + r
-		// 	}
-		// 	sampleImage = "/static/img/tv_img/hanko_" + r + ".png"
-		// 	imageURL = sampleImage
-		// }
 		imageURLReference := models.ReshapeImageURLReference(imageURL)
-		// if imageURL != "" {
-		// 	if strings.Contains(imageURL, "walkerplus") {
-		// 		imageURLReference = "MovieWalker"
-		// 	} else if strings.Contains(imageURL, "1.bp.blogspot.com") {
-		// 		imageURLReference = "いらすとや"
-		// 	} else if strings.Contains(imageURL, "/static/img") {
-		// 		imageURLReference = ""
-		// 	} else {
-		// 		imageURLs := strings.Split(imageURL, "/")
-		// 		imageURLReference = imageURLs[2]
-		// 		imageURLReference = strings.Replace(imageURLReference, "www.", "", 1)
-		// 	}
-		// }
+
 		var v models.TvProgram
 		v = models.TvProgram{
 			Title:             c.GetString("title"),
@@ -224,7 +190,6 @@ func (c *TvProgramController) Put() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	year, _ := c.GetInt("year")
-	// rep := regexp.MustCompile(`\(.+\)`)
 	season := *new(models.Season)
 	season.Name = models.RegexpWords(c.GetString("season"), `\(.+\)`, "")
 	week := *new(models.Week)
@@ -236,42 +201,9 @@ func (c *TvProgramController) Put() {
 		hourString = strings.Replace(hourString, ":30", ".5", -1)
 		hour, _ = strconv.ParseFloat(hourString, 32)
 	}
-	// movieURL := c.GetString("MovieURL")
 	movieURL := models.ReshapeMovieURL(c.GetString("MovieURL"))
-	// if !strings.Contains(movieURL, "https") {
-	// 	movieURL = ""
-	// } else if strings.Contains(movieURL, "https://www.youtube.com/watch?v=") {
-	// 	movieURL = strings.Replace(movieURL, "watch?v=", "embed/", -1)
-	// } else if strings.Contains(movieURL, "https://youtu.be/") {
-	// 	movieURL = strings.Replace(movieURL, "youtu.be/", "www.youtube.com/embed/", -1)
-	// } else {
-	// 	movieURL = ""
-	// }
 	imageURL := models.ReshapeImageURL(c.GetString("ImageURL"))
-	// sampleImage := ""
-	// imageURL := c.GetString("ImageURL")
-	// if !strings.Contains(imageURL, "http") {
-	// 	rand.Seed(time.Now().UnixNano())
-	// 	r := strconv.Itoa(rand.Intn(10) + 1)
-	// 	if len(r) == 1 {
-	// 		r = "0" + r
-	// 	}
-	// 	sampleImage = "/static/img/tv_img/hanko_" + r + ".png"
-	// 	imageURL = sampleImage
-	// }
 	imageURLReference := models.ReshapeImageURLReference(imageURL)
-	// imageURLReference := ""
-	// if strings.Contains(imageURL, "walkerplus") {
-	// 	imageURLReference = "MovieWalker"
-	// } else if strings.Contains(imageURL, "1.bp.blogspot.com") {
-	// 	imageURLReference = "いらすとや"
-	// } else if imageURL == "/static/img" {
-	// 	imageURLReference = ""
-	// } else {
-	// 	imageURLs := strings.Split(imageURL, "/")
-	// 	imageURLReference = imageURLs[2]
-	// 	imageURLReference = strings.Replace(imageURLReference, "www.", "", 1)
-	// }
 	oldTvInfo, _ := models.GetTvProgramById(id)
 	v := *oldTvInfo
 	v.Title = c.GetString("title")
@@ -303,9 +235,13 @@ func (c *TvProgramController) Put() {
 		z, _ := models.GetUserById(userID)
 		z.CountEditTvProgram++
 		_ = models.UpdateUserById(z)
+		// fmt.Println(v)
 		c.Redirect("/tv/tv_program/comment/"+idStr, 302)
 	} else {
+		// タイトルがかぶってもerr==nilみたい
 		c.Data["json"] = err.Error()
+		c.Data["TvProgram"] = v
+		c.Data["TitleDuplicate"] = 1
 		c.Redirect("/tv/tv_program/edit/"+idStr, 302)
 	}
 }
@@ -336,7 +272,7 @@ func (c *TvProgramController) Index() {
 		userID := session.Get("UserId").(int64)
 		l = models.GetRecommendTvProgramsByUser(userID)
 	}
-	fmt.Println(l)
+	// fmt.Println(l)
 	if l == nil {
 
 		var fields []string

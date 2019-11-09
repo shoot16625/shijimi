@@ -51,7 +51,7 @@
           src="{{.TvProgram.ImageUrl}}"
           alt="{{.Title}}"
           class="image"
-          onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/tv_img/hanko_02.png'"
+          onerror="this.src='/static/img/tv_img/hanko_02.png'"
         />
       </div>
       {{if .TvProgram.ImageUrlReference}}
