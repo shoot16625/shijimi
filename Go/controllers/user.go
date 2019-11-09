@@ -505,12 +505,38 @@ func (c *UserController) Login() {
 		if models.UserPassMach(v.Password, c.GetString("password")) {
 			session.Set("username", c.GetString("username"))
 			session.Set("UserId", v.Id)
-			models.AddLoginPoint(v.Id)
-			w := models.LoginHistory{
+			firstLoginToday := models.AddLoginPoint(v.Id)
+			if firstLoginToday {
+				c.Data["LoginPoint"] = 1
+			}
+			z := models.LoginHistory{
 				UserId: v.Id,
 			}
-			_, _ = models.AddLoginHistory(&w)
-			c.Redirect("/tv/user/show", 302)
+			_, _ = models.AddLoginHistory(&z)
+
+			UserID := v.Id
+			v, _ := models.GetUserById(UserID)
+			c.Data["User"] = v
+			w, _ := models.GetCommentByUserId(UserID)
+			c.Data["Comment"] = w
+
+			var commentLikes []models.CommentLike
+			var tvPrograms []models.TvProgram
+			for _, comment := range w {
+				u, err := models.GetCommentLikeByCommentAndUser(comment.Id, UserID)
+				if err != nil {
+					u = new(models.CommentLike)
+				}
+				commentLikes = append(commentLikes, *u)
+				v, err := models.GetTvProgramById(comment.TvProgramId)
+				if err != nil {
+					v = new(models.TvProgram)
+				}
+				tvPrograms = append(tvPrograms, *v)
+			}
+			c.Data["CommentLike"] = commentLikes
+			c.Data["TvProgram"] = tvPrograms
+			c.TplName = "user/show_comment.tpl"
 		} else {
 			c.Data["Status"] = "ログインに失敗しました"
 			var Info struct {

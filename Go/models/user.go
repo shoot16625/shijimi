@@ -227,12 +227,14 @@ func GetUserCount() (cnt int64) {
 	return cnt
 }
 
-func AddLoginPoint(userID int64) {
+func AddLoginPoint(userID int64) bool {
 	flag := GetLoginHistoryByUserId(userID)
 	if flag {
 		v, _ := GetUserById(userID)
 		v.MoneyPoint += 1
 		_ = UpdateUserById(v)
-		fmt.Println("today new login !!")
+		fmt.Println("first login today!!")
+		return true
 	}
+	return false
 }

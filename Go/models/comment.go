@@ -140,6 +140,17 @@ func SearchComment(query map[string]string, fields []string, sortby []string, or
 				}
 			} else if k == "TvProgramId" {
 				condOnly = condOnly.And("TvProgramId", value)
+			} else if k == "BeforeTime" {
+				fmt.Println(value)
+				t, _ := time.Parse("2006-01-02 15:04", value)
+				t = t.Local()
+				t = t.Add(-9 * time.Hour)
+				condOnly = condOnly.And("created__gte", t)
+			} else if k == "AfterTime" {
+				t, _ := time.Parse("2006-01-02 15:04", value)
+				t = t.Local()
+				t = t.Add(-9 * time.Hour)
+				condOnly = condOnly.And("created__lte", t)
 			}
 		}
 		condAll = condAll.AndCond(condOnly)

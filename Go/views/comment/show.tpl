@@ -161,6 +161,45 @@
                   ></ons-input>
                 </p>
                 <p>
+                  時間帯
+                  <ons-row>
+                    <ons-col width="47%">
+                      <ons-input
+                        type="date"
+                        name="before-date"
+                        id="before-date"
+                        value="{{.SearchWords.BeforeDate}}"
+                        modifier="underbar"
+                        float
+                      ></ons-input>
+                      <ons-input
+                        type="time"
+                        name="before-time"
+                        id="before-time"
+                        value="{{.SearchWords.BeforeTime}}"
+                        modifier="underbar"
+                      ></ons-input>
+                    </ons-col>
+                    <ons-col width="6%">～</ons-col>
+                    <ons-col>
+                      <ons-input
+                        type="date"
+                        name="after-date"
+                        id="after-date"
+                        value="{{.SearchWords.AfterDate}}"
+                        modifier="underbar"
+                      ></ons-input>
+                      <ons-input
+                        type="time"
+                        name="after-time"
+                        id="after-time"
+                        value="{{.SearchWords.AfterTime}}"
+                        modifier="underbar"
+                      ></ons-input>
+                    </ons-col>
+                  </ons-row>
+                </p>
+                <p>
                   <select
                     name="sortby"
                     id="sortby"
@@ -192,6 +231,29 @@
         <script type="text/javascript">
           if ({{.SearchWords.Sortby}} != null){
             document.getElementById('sortby').value = {{.SearchWords.Sortby}};
+          }
+        </script>
+        <script>
+          var today = new Date();
+          today.setDate(today.getDate());
+          var yyyy = today.getFullYear();
+          var mm = ('0' + (today.getMonth() + 1)).slice(-2);
+          var dd = ('0' + today.getDate()).slice(-2);
+          var h = ('0' + today.getHours()).slice(-2);
+          var min = ('0' + today.getMinutes()).slice(-2);
+          var date = yyyy + '-' + mm + '-' + dd;
+          var time = h + ':' + min;
+          if({{.SearchWords.BeforeDate}}===null||{{.SearchWords.BeforeDate}}===""){
+            document.getElementById('before-date').value = date;
+          }
+          // if({{.SearchWords.BeforeTime}}===null||{{.SearchWords.BeforeTime}}===""){
+          //   document.getElementById('before-time').value = time;
+          // }
+          if({{.SearchWords.AfterDate}}===null||{{.SearchWords.AfterDate}}===""){
+            document.getElementById('after-date').value = date;
+          }
+          if({{.SearchWords.AfterTime}}===null||{{.SearchWords.AfterTime}}===""){
+            document.getElementById('after-time').value = time;
           }
         </script>
       </ons-dialog>
@@ -374,6 +436,10 @@
         document.search_comment.reset();
         document.getElementById('word').value = '';
         document.getElementById('username').value = '';
+        document.getElementById('before-date').value = '';
+        document.getElementById('before-time').value = '';
+        document.getElementById('after-date').value = '';
+        document.getElementById('after-time').value = '';
         document.getElementById('limit').value = '';
       }
     </script>

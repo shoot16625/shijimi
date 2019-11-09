@@ -99,7 +99,7 @@ func GetWikiDoramas(referencePath string) {
 				content = strings.Replace(content, ",（", "（", -1)
 				content = models.RegexpWords(content, ", | ,", ",")
 				content = models.RegexpWords(content, `[\(|（](P*S.[0-9|\-| |、]+)+[\)|）]`, "")
-				content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|特別出演|（第[1-9]部）|（主演として.+）`, "")
+				content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|（.*特別出演.*）|（第[1-9]部）|（主演として.+）|\[注 *[1-9]\]`, "")
 				content = strings.TrimSpace(content)
 				data = append(data, content)
 			})
@@ -229,7 +229,7 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 				content = strings.Replace(content, ",（", "（", -1)
 				content = models.RegexpWords(content, ", | ,", ",")
 				content = models.RegexpWords(content, `[\(|（](P*S.[0-9|\-| |、]+)+[\)|）]`, "")
-				content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|特別出演|（第[1-9]部）|（主演として.+）`, "")
+				content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|（.*特別出演.*）|（第[1-9]部）|（主演として.+）|\[注 *[1-9]\]`, "")
 				content = strings.TrimSpace(content)
 				switch th {
 				case "ジャンル":
@@ -519,9 +519,8 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (newTvProgram models.
 					content = strings.Replace(content, ",（", "（", -1)
 					content = models.RegexpWords(content, ", | ,", ",")
 					content = models.RegexpWords(content, `[\(|（](P*S.[0-9|\-| |、]+)+[\)|）]`, "")
-					content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|特別出演|（第[1-9]部）|（主演として.+）`, "")
+					content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|（.*特別出演.*）|（第[1-9]部）|（主演として.+）|\[注 *[1-9]\]`, "")
 					content = strings.TrimSpace(content)
-
 					switch th {
 					case "ジャンル":
 						content = strings.Replace(content, "ドラマ", "", -1)
@@ -716,7 +715,7 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 				content = strings.Replace(content, ",（", "（", -1)
 				content = models.RegexpWords(content, ", | ,", ",")
 				content = models.RegexpWords(content, `[\(|（](P*S.[0-9|\-| |、]+)+[\)|）]`, "")
-				content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|特別出演|（第[1-9]部）|（主演として.+）`, "")
+				content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|（.*特別出演.*）|（第[1-9]部）|（主演として.+）|\[注 *[1-9]\]`, "")
 				content = strings.TrimSpace(content)
 
 				switch th {

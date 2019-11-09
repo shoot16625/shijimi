@@ -271,10 +271,14 @@ func (c *CommentController) SearchComment() {
 	var word string
 	var userName string
 	type SearchWords struct {
-		Word     string
-		Username string
-		Limit    int64
-		Sortby   string
+		Word       string
+		Username   string
+		BeforeDate string
+		BeforeTime string
+		AfterDate  string
+		AfterTime  string
+		Limit      int64
+		Sortby     string
 	}
 
 	if v, err := c.GetInt64("limit"); err == nil {
@@ -289,6 +293,17 @@ func (c *CommentController) SearchComment() {
 		v = models.ReshapeWordsA(v)
 		query["Username"] = v
 		userName = v
+	}
+
+	if v := c.GetString("before-date"); v != "" {
+		if v := c.GetString("before-time"); v != "" {
+			query["BeforeTime"] = c.GetString("before-date") + " " + c.GetString("before-time")
+		}
+	}
+	if v := c.GetString("after-date"); v != "" {
+		if v := c.GetString("after-time"); v != "" {
+			query["AfterTime"] = c.GetString("after-date") + " " + c.GetString("after-time")
+		}
 	}
 
 	query["TvProgramId"] = strconv.FormatInt(tvProgramID, 10)
@@ -309,10 +324,14 @@ func (c *CommentController) SearchComment() {
 
 	var s SearchWords
 	s = SearchWords{
-		Word:     c.GetString("word"),
-		Username: c.GetString("username"),
-		Limit:    limit,
-		Sortby:   c.GetString("sortby"),
+		Word:       c.GetString("word"),
+		Username:   c.GetString("username"),
+		BeforeDate: c.GetString("before-date"),
+		BeforeTime: c.GetString("before-time"),
+		AfterDate:  c.GetString("after-date"),
+		AfterTime:  c.GetString("after-time"),
+		Limit:      limit,
+		Sortby:     c.GetString("sortby"),
 	}
 	c.Data["SearchWords"] = s
 	session := c.StartSession()

@@ -144,7 +144,8 @@ func DeleteLoginHistory(id int64) (err error) {
 	return
 }
 
-func GetLoginHistoryByUserId(userID int64) (flag bool) {
+// 本日初めてのログインかどうかチェック
+func GetLoginHistoryByUserId(userID int64) bool {
 	t := time.Now()
 	u := time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, time.Local)
 	d := u.Format("2006-01-02 15:04:05")
@@ -152,8 +153,10 @@ func GetLoginHistoryByUserId(userID int64) (flag bool) {
 	o := orm.NewOrm()
 	var l []orm.Params
 	if _, err := o.Raw(sql).Values(&l); err == nil {
-		fmt.Println("本日ログイン済み", l)
-		return false
+		if len(l) != 0 {
+			fmt.Println("本日ログイン済み", l)
+			return false
+		}
 	}
 	return true
 }

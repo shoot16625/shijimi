@@ -13,6 +13,13 @@
       <ons-list class="list-margin">
         <ons-lazy-repeat id="comments"></ons-lazy-repeat>
       </ons-list>
+      <ons-toast id="mypageToast" animation="ascend"
+        >{{.LoginPoint}}ポイント獲得しました!!<button
+          onclick="mypageToast.hide()"
+        >
+          ok
+        </button></ons-toast
+      >
     </ons-page>
     {{ template "/common/js.tpl" . }}
     <script>
@@ -88,6 +95,11 @@
     </script>
     <script>
       reshapeBadges({{.User.Badge}});
+    </script>
+    <script>
+      if ({{.LoginPoint}}) {
+        document.querySelector('ons-toast').show();
+      }
     </script>
   </body>
 </html>
