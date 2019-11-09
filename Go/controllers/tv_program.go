@@ -4,7 +4,6 @@ import (
 	"app/db"
 	"app/models"
 
-	// "encoding/json"
 	"errors"
 	"strconv"
 	"strings"
@@ -42,6 +41,7 @@ func (c *TvProgramController) URLMapping() {
 // @router / [post]
 func (c *TvProgramController) Post() {
 	session := c.StartSession()
+	// ログインユーザのみ作成（html側でも縛りあり）
 	if session.Get("UserId") != nil {
 		year, _ := c.GetInt("year")
 		season := *new(models.Season)
@@ -238,10 +238,9 @@ func (c *TvProgramController) Put() {
 		// fmt.Println(v)
 		c.Redirect("/tv/tv_program/comment/"+idStr, 302)
 	} else {
-		// タイトルがかぶってもerr==nilみたい
 		c.Data["json"] = err.Error()
 		c.Data["TvProgram"] = v
-		c.Data["TitleDuplicate"] = 1
+		c.Data["TitleFlag"] = true
 		c.Redirect("/tv/tv_program/edit/"+idStr, 302)
 	}
 }
@@ -268,11 +267,13 @@ func (c *TvProgramController) Delete() {
 func (c *TvProgramController) Index() {
 	var l []interface{}
 	session := c.StartSession()
+	// おすすめTV取得
 	if session.Get("UserId") != nil {
 		userID := session.Get("UserId").(int64)
 		l = models.GetRecommendTvProgramsByUser(userID)
 	}
 	// fmt.Println(l)
+	// おすすめTV取得できなかったら，最新順
 	if l == nil {
 
 		var fields []string
@@ -310,6 +311,7 @@ func (c *TvProgramController) Index() {
 		c.Data["User"] = v
 		models.GetRecommendTvProgramsByUser(userID)
 	}
+	// 分析部分
 	t := time.Now()
 	yesterday := t.Add(-24 * time.Hour)
 	if browsingLog, err := models.GetTopBrowsingHistory(yesterday.Format("2006-01-02 15:04:05")); err == nil {
@@ -318,6 +320,7 @@ func (c *TvProgramController) Index() {
 	if goodStarTvProgram, err := models.GetTopStarPoint(); err == nil {
 		c.Data["goodStarTvProgramOnAir"] = goodStarTvProgram
 	}
+
 	c.TplName = "tv_program/index.tpl"
 }
 
@@ -329,6 +332,7 @@ func (c *TvProgramController) EditPage() {
 	c.TplName = "tv_program/edit.tpl"
 }
 
+// トップページの処理
 func (c *TvProgramController) Get() {
 	session := c.StartSession()
 	c.Data["UserId"] = session.Get("UserId")
@@ -356,6 +360,7 @@ func (c *TvProgramController) Get() {
 	c.TplName = "tv_program/top_page.tpl"
 }
 
+// ツールバーの検索機能
 func (c *TvProgramController) Search() {
 	str := c.GetString("search-word")
 	l, _ := models.SearchTvProgramAll(str)
@@ -387,6 +392,16 @@ func (c *TvProgramController) Search() {
 			c.Data["User"] = v
 		}
 	}
+	// 分析部分
+	t := time.Now()
+	yesterday := t.Add(-24 * time.Hour)
+	if browsingLog, err := models.GetTopBrowsingHistory(yesterday.Format("2006-01-02 15:04:05")); err == nil {
+		c.Data["ViewTvProgramIn24"] = browsingLog
+	}
+	if goodStarTvProgram, err := models.GetTopStarPoint(); err == nil {
+		c.Data["goodStarTvProgramOnAir"] = goodStarTvProgram
+	}
+
 	c.TplName = "tv_program/index.tpl"
 }
 
@@ -443,7 +458,6 @@ func (c *TvProgramController) SearchTvProgram() {
 		}
 	}
 	if v := c.GetStrings("season"); v != nil {
-		// rep := regexp.MustCompile(`\(.+\)`)
 		for _, value := range v {
 			value = models.RegexpWords(value, `\(.+\)`, "")
 			query["Season"] = append(query["Season"], value)
@@ -575,6 +589,16 @@ func (c *TvProgramController) SearchTvProgram() {
 			c.Data["User"] = v
 		}
 	}
+	// 分析部分
+	t := time.Now()
+	yesterday := t.Add(-24 * time.Hour)
+	if browsingLog, err := models.GetTopBrowsingHistory(yesterday.Format("2006-01-02 15:04:05")); err == nil {
+		c.Data["ViewTvProgramIn24"] = browsingLog
+	}
+	if goodStarTvProgram, err := models.GetTopStarPoint(); err == nil {
+		c.Data["goodStarTvProgramOnAir"] = goodStarTvProgram
+	}
+
 	c.TplName = "tv_program/index.tpl"
 }
 

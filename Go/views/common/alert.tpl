@@ -84,3 +84,19 @@
     </div>
   </ons-alert-dialog>
 </template>
+<template id="alert-review-twice.html">
+  <ons-alert-dialog id="alert-review-twice" modifier="rowfooter">
+    <div class="alert-dialog-title">Alert</div>
+    <div class="alert-dialog-content">
+      <span>既にレビューが行われています。</span
+      ><span class="new-line">変更したい場合は</span
+      ><span class="new-line">マイページから削除後、</span
+      ><span class="new-line">お願いします。</span>
+    </div>
+    <div class="alert-dialog-footer">
+      <ons-alert-dialog-button onclick="hideAlertDialog('alert-review-twice')"
+        >OK</ons-alert-dialog-button
+      >
+    </div>
+  </ons-alert-dialog>
+</template>

@@ -15,9 +15,9 @@ type ReviewComment struct {
 	UserId        int64
 	TvProgramId   int64
 	Content       string `orm:"size(500)"`
-	CountLike     int  `orm:"default(0)"`
+	CountLike     int    `orm:"default(0)"`
 	Spoiler       bool
-	Star          int     `orm:"default(5)"`
+	Star          int       `orm:"default(5)"`
 	FavoritePoint string    `orm:"size(100)";null"`
 	Created       time.Time `orm:"auto_now_add;type(datetime)"`
 	Updated       time.Time `orm:"auto_now;type(datetime)"`
@@ -163,7 +163,7 @@ func GetReviewCommentByTvProgramId(id int64) (v []ReviewComment, err error) {
 }
 
 func GetReviewCommentByUserId(id int64) (v []ReviewComment, err error) {
-	var limit int64 = 5000
+	var limit int64 = 1000
 	o := orm.NewOrm()
 	if _, err = o.QueryTable(new(ReviewComment)).Filter("UserId", id).Limit(limit).OrderBy("-Created").All(&v); err == nil {
 		return v, nil

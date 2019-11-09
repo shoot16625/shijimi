@@ -269,20 +269,26 @@ func (c *CommentController) SearchComment() {
 	var limit int64 = 100
 	var offset int64
 	var word string
+	var userName string
 	type SearchWords struct {
-		Word   string
-		Limit  int64
-		Sortby string
+		Word     string
+		Username string
+		Limit    int64
+		Sortby   string
 	}
 
 	if v, err := c.GetInt64("limit"); err == nil {
 		limit = v
 	}
-
 	if v := c.GetString("word"); v != "" {
-		query["Content__icontains"] = v
-		word = strings.Replace(v, "　", ",", -1)
-		word = strings.Replace(v, " ", ",", -1)
+		v = models.ReshapeWordsA(v)
+		query["Content"] = v
+		word = v
+	}
+	if v := c.GetString("username"); v != "" {
+		v = models.ReshapeWordsA(v)
+		query["Username"] = v
+		userName = v
 	}
 
 	query["TvProgramId"] = strconv.FormatInt(tvProgramID, 10)
@@ -303,17 +309,22 @@ func (c *CommentController) SearchComment() {
 
 	var s SearchWords
 	s = SearchWords{
-		Word:   c.GetString("word"),
-		Limit:  limit,
-		Sortby: c.GetString("sortby"),
+		Word:     c.GetString("word"),
+		Username: c.GetString("username"),
+		Limit:    limit,
+		Sortby:   c.GetString("sortby"),
 	}
 	c.Data["SearchWords"] = s
 	session := c.StartSession()
 	if session.Get("UserId") != nil {
 		var u models.SearchHistory
+		searchWords := []string{word, userName}
+		searchWord := strings.Join(searchWords, ",")
+		searchWord = strings.Trim(searchWord, ",")
+		searchWord = strings.Replace(searchWord, ",,", ",", 1)
 		u = models.SearchHistory{
 			UserId: session.Get("UserId").(int64),
-			Word:   word,
+			Word:   searchWord,
 			Limit:  s.Limit,
 			Sortby: s.Sortby,
 			Item:   "comment",
@@ -321,13 +332,12 @@ func (c *CommentController) SearchComment() {
 		_, _ = models.AddSearchHistory(&u)
 	}
 
-	l, err := models.GetAllComment(query, fields, sortby, order, offset, limit)
+	l, err := models.SearchComment(query, fields, sortby, order, offset, limit)
 	if err != nil {
 		c.Data["Comment"] = nil
 	} else {
 		c.Data["Comment"] = l
 	}
-	// fmt.Println(l[0].(models.Comment).Id)
 	var users []models.User
 	for _, comment := range l {
 		u, _ := models.GetUserById(comment.(models.Comment).UserId)

@@ -372,37 +372,38 @@
 
     <script type="text/javascript">
       const tvProgram = {{.TvProgram}};
-        const seasonName = tvProgram.Season.Name;
-        if (seasonName === "春"){
-          document.getElementById('season').value = seasonName+"(4~6)";
-        }
-        else if (seasonName === "夏"){
-          document.getElementById('season').value = seasonName+"(7~9)";
-        }
-        else if (seasonName === "秋"){
-          document.getElementById('season').value = seasonName+"(10~12)";
-        }
-        else if (seasonName === "冬"){
-          document.getElementById('season').value = seasonName+"(1~3)";
+      const seasonName = tvProgram.Season.Name;
+      if (seasonName === "春"){
+        document.getElementById('season').value = seasonName+"(4~6)";
+      }
+      else if (seasonName === "夏"){
+        document.getElementById('season').value = seasonName+"(7~9)";
+      }
+      else if (seasonName === "秋"){
+        document.getElementById('season').value = seasonName+"(10~12)";
+      }
+      else if (seasonName === "冬"){
+        document.getElementById('season').value = seasonName+"(1~3)";
+      } else {
+        document.getElementById('season').value = seasonName;
+      }
+      let time = String(tvProgram.Hour);
+      str = ".5";
+      if (time === "100"){
+        time = "指定なし";
+      } else {
+        if (time.indexOf(str) > -1){
+            time = time.replace(str, ":30")
         } else {
-          document.getElementById('season').value = seasonName;
+          time += ":00";
         }
-        let time = String(tvProgram.Hour);
-        str = ".5";
-        if (time === "100"){
-          time = "指定なし";
-        } else {
-          if (time.indexOf(str) > -1){
-              time = time.replace(str, ":30")
-          } else {
-            time += ":00";
-          }
-        }
-        document.getElementById('hour').value = time;
-        setMultipleSelection("category", tvProgram.Category);
-        document.getElementById('content').value = tvProgram.Content;
-        document.getElementById('week').value = tvProgram.Week.Name;
-        if ({{.TitleDuplicate}} === 1) {
+      }
+      document.getElementById('hour').value = time;
+      setMultipleSelection("category", tvProgram.Category);
+      document.getElementById('content').value = tvProgram.Content;
+      document.getElementById('week').value = tvProgram.Week.Name;
+      console.log({{.TitleFlag}});
+      if ({{.TitleFlag}}) {
         dialogBoxEveryone("alert-tv-title");
       };
     </script>

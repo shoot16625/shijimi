@@ -67,6 +67,8 @@ var dialogBox = function(elemID, userID) {
     // == でないとダメ
     if (userID == null) {
       return dialogBoxEveryone('alert-only-user-dialog');
+    } else if (userID === -1) {
+      return dialogBoxEveryone('alert-review-twice');
     }
     if (dialog) {
       dialog.show();

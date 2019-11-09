@@ -358,7 +358,7 @@
           if (comments != null) {
             infiniteList.delegate = {
               createItemContent: function(i) {
-              const fps = comments[i].FavoritePoint.split(' ');
+              const fps = comments[i].FavoritePoint.split(',');
               let fpText = "";
               for (let j = fps.length - 1; j >= 0; j--) {
                 fpText += "<span style='padding:3px;color:blue;'>#"+fps[j]+"</span>";
@@ -528,8 +528,14 @@
     </script>
     <script>
       var dial = document.getElementById('speed-dial');
+      let userID = {{.User.Id}};
+      for (let index = 0; index < comments.length; index++) {
+        if (comments[index].UserId === userID) {
+          userID = -1
+        }
+      }
       dial.innerHTML =
-        "<ons-fab><ons-icon icon='md-share'></ons-icon></ons-fab><ons-speed-dial-item><ons-icon icon='md-comment-dots' onclick='dialogBox(\"tweet-dialog\", {{.User.Id}})'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-search' onclick='dialogBoxEveryone(\"search-dialog\")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-chart' onclick='goAnotherCarousel(1)'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><i class='fas fa-arrow-up' onclick='goTop()'></i></ons-speed-dial-item>";
+        "<ons-fab><ons-icon icon='md-share'></ons-icon></ons-fab><ons-speed-dial-item><ons-icon icon='md-comment-dots' onclick='dialogBox(\"tweet-dialog\", "+userID+")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-search' onclick='dialogBoxEveryone(\"search-dialog\")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-chart' onclick='goAnotherCarousel(1)'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><i class='fas fa-arrow-up' onclick='goTop()'></i></ons-speed-dial-item>";
     </script>
     <script>
       document.getElementById("tv-cast").innerHTML = reshapeContent({{.TvProgram.Cast}});

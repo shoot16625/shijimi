@@ -182,11 +182,10 @@ func UpdateTvProgramById(m *TvProgram) (err error) {
 	v := TvProgram{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
-		_, _ = o.Update(m)
-		// var num int64
-		// if num, err = o.Update(m); err == nil {
-		// 	fmt.Println("Number of records updated in database:", num)
-		// }
+		var num int64
+		if num, err = o.Update(m); err == nil {
+			fmt.Println("Number of records updated in database:", num)
+		}
 	}
 	return
 }
@@ -311,7 +310,7 @@ func SearchTvProgram(query map[string][]string, fields []string, sortby []string
 
 	var l []TvProgram
 	qs = qs.OrderBy(sortFields...).RelatedSel()
-	var maxLimit int64 = 500
+	var maxLimit int64 = 100
 	if maxLimit < limit {
 		limit = maxLimit
 	}

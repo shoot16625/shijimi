@@ -3,6 +3,7 @@ package controllers
 import (
 	"app/models"
 	"errors"
+	"fmt"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -179,15 +180,9 @@ func (c *UserController) Put() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	age, _ := c.GetInt("age")
-	hashPass, _ := models.PasswordHash(c.GetString("password"))
-	hashSecondpass, _ := models.PasswordHash(c.GetString("SecondPassword"))
-	if c.GetString("password") == "" {
-		u, _ := models.GetUserById(id)
-		hashPass = u.Password
-		hashSecondpass = u.SecondPassword
-	}
+
 	IconURL := c.GetString("IconURL")
-	if !strings.Contains(IconURL, "http") {
+	if !strings.Contains(IconURL, "http") && !strings.Contains(IconURL, "/static/img") {
 		rand.Seed(time.Now().UnixNano())
 		r := strconv.Itoa(rand.Intn(13) + 1)
 		if len(r) == 1 {
@@ -195,19 +190,23 @@ func (c *UserController) Put() {
 		}
 		IconURL = "/static/img/user_img/s256_f_" + r + ".png"
 	}
-	v := models.User{
-		Id:             id,
-		Username:       c.GetString("username"),
-		Password:       hashPass,
-		SecondPassword: hashSecondpass,
-		Age:            age,
-		Address:        c.GetString("address"),
-		Gender:         c.GetString("gender"),
-		Job:            c.GetString("job"),
-		IconUrl:        IconURL,
-		Marital:        c.GetString("marital"),
-		BloodType:      c.GetString("bloodType"),
+	oldUserInfo, _ := models.GetUserById(id)
+	v := *oldUserInfo
+	hashPass := v.Password
+	if c.GetString("password") != "" {
+		hashPass, _ = models.PasswordHash(c.GetString("password"))
 	}
+	v.Username = c.GetString("username")
+	v.Password = hashPass
+	v.Age = age
+	v.Address = c.GetString("address")
+	v.Gender = c.GetString("gender")
+	v.Job = c.GetString("job")
+	v.IconUrl = IconURL
+	v.Marital = c.GetString("marital")
+	v.BloodType = c.GetString("bloodType")
+
+	fmt.Println(v)
 	if err := models.UpdateUserById(&v); err == nil {
 		c.Data["json"] = "OK"
 		c.Redirect("show", 302)
@@ -304,7 +303,7 @@ func (c *UserController) Show() {
 			}
 			c.Data["CommentLike"] = commentLikes
 			c.Data["TvProgram"] = tvPrograms
-			// foot_print_logの停止
+			// foot_print_log：停止中
 			// z := models.FootPrintToUser {
 			// 	UserId:   myUserID,
 			// 	ToUserId: id,
@@ -420,7 +419,7 @@ func (c *UserController) ShowWatchedTv() {
 	var sortby []string
 	var order []string
 	var query = make(map[string]string)
-	var limit int64 = 5000
+	var limit int64 = 1000
 	var offset int64
 
 	session := c.StartSession()
@@ -453,7 +452,7 @@ func (c *UserController) ShowWtwTv() {
 	var sortby []string
 	var order []string
 	var query = make(map[string]string)
-	var limit int64 = 5000
+	var limit int64 = 1000
 	var offset int64
 
 	session := c.StartSession()

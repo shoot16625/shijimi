@@ -150,6 +150,17 @@
                   ></ons-input>
                 </p>
                 <p>
+                  <ons-input
+                    type="text"
+                    name="username"
+                    id="username"
+                    value="{{.SearchWords.Username}}"
+                    modifier="underbar"
+                    placeholder="ユーザー"
+                    float
+                  ></ons-input>
+                </p>
+                <p>
                   <select
                     name="sortby"
                     id="sortby"
@@ -362,6 +373,7 @@
       function resetSelect() {
         document.search_comment.reset();
         document.getElementById('word').value = '';
+        document.getElementById('username').value = '';
         document.getElementById('limit').value = '';
       }
     </script>
