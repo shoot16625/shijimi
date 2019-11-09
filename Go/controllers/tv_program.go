@@ -7,8 +7,6 @@ import (
 
 	// "encoding/json"
 	"errors"
-	"math/rand"
-	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -47,9 +45,9 @@ func (c *TvProgramController) Post() {
 	session := c.StartSession()
 	if session.Get("UserId") != nil {
 		year, _ := c.GetInt("year")
-		rep := regexp.MustCompile(`\(.+\)`)
+		// rep := regexp.MustCompile(`\(.+\)`)
 		season := *new(models.Season)
-		season.Name = rep.ReplaceAllString(c.GetString("season"), "")
+		season.Name = models.RegexpWords(c.GetString("season"), `\(.+\)`, "")
 		week := *new(models.Week)
 		week.Name = c.GetString("week")
 		var hour float64 = 100
@@ -59,41 +57,42 @@ func (c *TvProgramController) Post() {
 			hourString = strings.Replace(hourString, ":30", ".5", -1)
 			hour, _ = strconv.ParseFloat(hourString, 32)
 		}
-		movieURL := c.GetString("MovieURL")
-		if !strings.Contains(movieURL, "https") {
-			movieURL = ""
-		} else if strings.Contains(movieURL, "https://www.youtube.com/watch?v=") {
-			movieURL = strings.Replace(movieURL, "watch?v=", "embed/", -1)
-		} else if strings.Contains(movieURL, "https://youtu.be/") {
-			movieURL = strings.Replace(movieURL, "youtu.be/", "www.youtube.com/embed/", -1)
-		} else {
-			movieURL = ""
-		}
-		sampleImage := ""
-		imageURL := c.GetString("ImageURL")
-		if !strings.Contains(imageURL, "http") {
-			rand.Seed(time.Now().UnixNano())
-			r := strconv.Itoa(rand.Intn(10) + 1)
-			if len(r) == 1 {
-				r = "0" + r
-			}
-			sampleImage = "/static/img/tv_img/hanko_" + r + ".png"
-			imageURL = sampleImage
-		}
-		imageURLReference := ""
-		if imageURL != "" {
-			if strings.Contains(imageURL, "walkerplus") {
-				imageURLReference = "MovieWalker"
-			} else if strings.Contains(imageURL, "1.bp.blogspot.com") {
-				imageURLReference = "いらすとや"
-			} else if strings.Contains(imageURL, "/static/img") {
-				imageURLReference = ""
-			} else {
-				imageURLs := strings.Split(imageURL, "/")
-				imageURLReference = imageURLs[2]
-				imageURLReference = strings.Replace(imageURLReference, "www.", "", 1)
-			}
-		}
+		// movieURL := c.GetString("MovieURL")
+		// if !strings.Contains(movieURL, "https") {
+		// 	movieURL = ""
+		// } else if strings.Contains(movieURL, "https://www.youtube.com/watch?v=") {
+		// 	movieURL = strings.Replace(movieURL, "watch?v=", "embed/", -1)
+		// } else if strings.Contains(movieURL, "https://youtu.be/") {
+		// 	movieURL = strings.Replace(movieURL, "youtu.be/", "www.youtube.com/embed/", -1)
+		// } else {
+		// 	movieURL = ""
+		// }
+		movieURL := models.ReshapeMovieURL(c.GetString("MovieURL"))
+		// sampleImage := ""
+		imageURL := models.ReshapeImageURL(c.GetString("ImageURL"))
+		// if !strings.Contains(imageURL, "http") {
+		// 	rand.Seed(time.Now().UnixNano())
+		// 	r := strconv.Itoa(rand.Intn(10) + 1)
+		// 	if len(r) == 1 {
+		// 		r = "0" + r
+		// 	}
+		// 	sampleImage = "/static/img/tv_img/hanko_" + r + ".png"
+		// 	imageURL = sampleImage
+		// }
+		imageURLReference := models.ReshapeImageURLReference(imageURL)
+		// if imageURL != "" {
+		// 	if strings.Contains(imageURL, "walkerplus") {
+		// 		imageURLReference = "MovieWalker"
+		// 	} else if strings.Contains(imageURL, "1.bp.blogspot.com") {
+		// 		imageURLReference = "いらすとや"
+		// 	} else if strings.Contains(imageURL, "/static/img") {
+		// 		imageURLReference = ""
+		// 	} else {
+		// 		imageURLs := strings.Split(imageURL, "/")
+		// 		imageURLReference = imageURLs[2]
+		// 		imageURLReference = strings.Replace(imageURLReference, "www.", "", 1)
+		// 	}
+		// }
 		var v models.TvProgram
 		v = models.TvProgram{
 			Title:             c.GetString("title"),
@@ -102,18 +101,18 @@ func (c *TvProgramController) Post() {
 			ImageUrlReference: imageURLReference,
 			MovieUrl:          movieURL,
 			WikiReference:     c.GetString("WikiReference"),
-			Cast:              strings.Replace(c.GetString("cast"), "　", "", -1),
-			Category:          strings.Join(c.GetStrings("category"), " "),
-			Dramatist:         strings.Replace(c.GetString("dramatist"), "　", "", -1),
-			Supervisor:        strings.Replace(c.GetString("supervisor"), "　", "", -1),
-			Director:          strings.Replace(c.GetString("director"), "　", "", -1),
-			Production:        c.GetString("production"),
+			Cast:              models.RegexpWords(c.GetString("cast"), "、|，|　", ","),
+			Category:          strings.Join(c.GetStrings("category"), ","),
+			Dramatist:         models.RegexpWords(c.GetString("dramatist"), "、|，|　", ","),
+			Supervisor:        models.RegexpWords(c.GetString("supervisor"), "、|，|　", ","),
+			Director:          models.RegexpWords(c.GetString("director"), "、|，|　", ","),
+			Production:        models.RegexpWords(c.GetString("production"), "、|，|　| ", ","),
 			Year:              year,
 			Star:              5,
 			Season:            &season,
 			Week:              &week,
 			Hour:              float32(hour),
-			Themesong:         c.GetString("themesong"),
+			Themesong:         models.RegexpWords(c.GetString("themesong"), "、|，|　", ","),
 			CreateUserId:      session.Get("UserId").(int64),
 		}
 
@@ -225,9 +224,9 @@ func (c *TvProgramController) Put() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	year, _ := c.GetInt("year")
-	rep := regexp.MustCompile(`\(.+\)`)
+	// rep := regexp.MustCompile(`\(.+\)`)
 	season := *new(models.Season)
-	season.Name = rep.ReplaceAllString(c.GetString("season"), "")
+	season.Name = models.RegexpWords(c.GetString("season"), `\(.+\)`, "")
 	week := *new(models.Week)
 	week.Name = c.GetString("week")
 	var hour float64 = 100
@@ -237,39 +236,42 @@ func (c *TvProgramController) Put() {
 		hourString = strings.Replace(hourString, ":30", ".5", -1)
 		hour, _ = strconv.ParseFloat(hourString, 32)
 	}
-	movieURL := c.GetString("MovieURL")
-	if !strings.Contains(movieURL, "https") {
-		movieURL = ""
-	} else if strings.Contains(movieURL, "https://www.youtube.com/watch?v=") {
-		movieURL = strings.Replace(movieURL, "watch?v=", "embed/", -1)
-	} else if strings.Contains(movieURL, "https://youtu.be/") {
-		movieURL = strings.Replace(movieURL, "youtu.be/", "www.youtube.com/embed/", -1)
-	} else {
-		movieURL = ""
-	}
-	sampleImage := ""
-	imageURL := c.GetString("ImageURL")
-	if !strings.Contains(imageURL, "http") {
-		rand.Seed(time.Now().UnixNano())
-		r := strconv.Itoa(rand.Intn(10) + 1)
-		if len(r) == 1 {
-			r = "0" + r
-		}
-		sampleImage = "/static/img/tv_img/hanko_" + r + ".png"
-		imageURL = sampleImage
-	}
-	imageURLReference := ""
-	if strings.Contains(imageURL, "walkerplus") {
-		imageURLReference = "MovieWalker"
-	} else if strings.Contains(imageURL, "1.bp.blogspot.com") {
-		imageURLReference = "いらすとや"
-	} else if imageURL == "/static/img" {
-		imageURLReference = ""
-	} else {
-		imageURLs := strings.Split(imageURL, "/")
-		imageURLReference = imageURLs[2]
-		imageURLReference = strings.Replace(imageURLReference, "www.", "", 1)
-	}
+	// movieURL := c.GetString("MovieURL")
+	movieURL := models.ReshapeMovieURL(c.GetString("MovieURL"))
+	// if !strings.Contains(movieURL, "https") {
+	// 	movieURL = ""
+	// } else if strings.Contains(movieURL, "https://www.youtube.com/watch?v=") {
+	// 	movieURL = strings.Replace(movieURL, "watch?v=", "embed/", -1)
+	// } else if strings.Contains(movieURL, "https://youtu.be/") {
+	// 	movieURL = strings.Replace(movieURL, "youtu.be/", "www.youtube.com/embed/", -1)
+	// } else {
+	// 	movieURL = ""
+	// }
+	imageURL := models.ReshapeImageURL(c.GetString("ImageURL"))
+	// sampleImage := ""
+	// imageURL := c.GetString("ImageURL")
+	// if !strings.Contains(imageURL, "http") {
+	// 	rand.Seed(time.Now().UnixNano())
+	// 	r := strconv.Itoa(rand.Intn(10) + 1)
+	// 	if len(r) == 1 {
+	// 		r = "0" + r
+	// 	}
+	// 	sampleImage = "/static/img/tv_img/hanko_" + r + ".png"
+	// 	imageURL = sampleImage
+	// }
+	imageURLReference := models.ReshapeImageURLReference(imageURL)
+	// imageURLReference := ""
+	// if strings.Contains(imageURL, "walkerplus") {
+	// 	imageURLReference = "MovieWalker"
+	// } else if strings.Contains(imageURL, "1.bp.blogspot.com") {
+	// 	imageURLReference = "いらすとや"
+	// } else if imageURL == "/static/img" {
+	// 	imageURLReference = ""
+	// } else {
+	// 	imageURLs := strings.Split(imageURL, "/")
+	// 	imageURLReference = imageURLs[2]
+	// 	imageURLReference = strings.Replace(imageURLReference, "www.", "", 1)
+	// }
 	oldTvInfo, _ := models.GetTvProgramById(id)
 	v := *oldTvInfo
 	v.Title = c.GetString("title")
@@ -278,11 +280,11 @@ func (c *TvProgramController) Put() {
 	v.ImageUrlReference = imageURLReference
 	v.MovieUrl = movieURL
 	v.WikiReference = c.GetString("WikiReference")
-	v.Cast = strings.Replace(c.GetString("cast"), "　", "", -1)
-	v.Category = strings.Join(c.GetStrings("category"), " ")
-	v.Dramatist = strings.Replace(c.GetString("dramatist"), "　", "", -1)
-	v.Supervisor = strings.Replace(c.GetString("supervisor"), "　", "", -1)
-	v.Director = strings.Replace(c.GetString("director"), "　", "", -1)
+	v.Cast = c.GetString("cast")
+	v.Category = strings.Join(c.GetStrings("category"), ",")
+	v.Dramatist = c.GetString("dramatist")
+	v.Supervisor = c.GetString("supervisor")
+	v.Director = c.GetString("director")
 	v.Production = c.GetString("production")
 	v.Season = &season
 	v.Week = &week
@@ -426,7 +428,8 @@ func (c *TvProgramController) Search() {
 	if session.Get("UserId") != nil {
 		userID := session.Get("UserId").(int64)
 		var u models.SearchHistory
-		str = strings.Replace(str, "　", " ", -1)
+		str = strings.Replace(str, "　", ",", -1)
+		str = strings.Replace(str, " ", ",", -1)
 		u = models.SearchHistory{
 			UserId: userID,
 			Word:   str,
@@ -476,18 +479,18 @@ func (c *TvProgramController) SearchTvProgram() {
 	}
 
 	if v := c.GetString("title"); v != "" {
-		v = strings.Replace(v, "　", " ", -1)
-		title = strings.Split(v, " ")
+		v = models.ReshapeWordsA(v)
+		title = strings.Split(v, ",")
 		query["Title"] = title
 	}
 	if v := c.GetString("staff"); v != "" {
-		v = strings.Replace(v, "　", " ", -1)
-		staff = strings.Split(v, " ")
+		v = models.ReshapeWordsA(v)
+		staff = strings.Split(v, ",")
 		query["Staff"] = staff
 	}
 	if v := c.GetString("themesong"); v != "" {
-		v = strings.Replace(v, "　", "", -1)
-		themesong = strings.Split(v, " ")
+		v = models.ReshapeWordsA(v)
+		themesong = strings.Split(v, ",")
 		query["Themesong"] = themesong
 	}
 	if v := c.GetStrings("year"); v != nil {
@@ -504,9 +507,9 @@ func (c *TvProgramController) SearchTvProgram() {
 		}
 	}
 	if v := c.GetStrings("season"); v != nil {
-		rep := regexp.MustCompile(`\(.+\)`)
+		// rep := regexp.MustCompile(`\(.+\)`)
 		for _, value := range v {
-			value = rep.ReplaceAllString(value, "")
+			value = models.RegexpWords(value, `\(.+\)`, "")
 			query["Season"] = append(query["Season"], value)
 		}
 	}
@@ -583,14 +586,14 @@ func (c *TvProgramController) SearchTvProgram() {
 	var s SearchWords
 
 	s = SearchWords{
-		Title:     strings.Join(title, " "),
-		Staff:     strings.Join(staff, " "),
-		Themesong: strings.Join(themesong, " "),
-		Year:      strings.Join(c.GetStrings("year"), " "),
-		Week:      strings.Join(c.GetStrings("week"), " "),
-		Hour:      strings.Join(c.GetStrings("hour"), " "),
-		Season:    strings.Join(c.GetStrings("season"), " "),
-		Category:  strings.Join(c.GetStrings("category"), " "),
+		Title:     strings.Join(title, ","),
+		Staff:     strings.Join(staff, ","),
+		Themesong: strings.Join(themesong, ","),
+		Year:      strings.Join(c.GetStrings("year"), ","),
+		Week:      strings.Join(c.GetStrings("week"), ","),
+		Hour:      strings.Join(c.GetStrings("hour"), ","),
+		Season:    strings.Join(c.GetStrings("season"), ","),
+		Category:  strings.Join(c.GetStrings("category"), ","),
 		Limit:     limit,
 		Sortby:    c.GetString("sortby"),
 	}
@@ -598,9 +601,13 @@ func (c *TvProgramController) SearchTvProgram() {
 	session := c.StartSession()
 	if session.Get("UserId") != nil {
 		var u models.SearchHistory
+		searchWords := []string{s.Title, s.Staff, s.Themesong}
+		searchWord := strings.Join(searchWords, ",")
+		searchWord = strings.Trim(searchWord, ",")
+		searchWord = strings.Replace(searchWord, ",,", ",", 1)
 		u = models.SearchHistory{
 			UserId:   session.Get("UserId").(int64),
-			Word:     s.Title + " " + s.Staff + " " + s.Themesong,
+			Word:     searchWord,
 			Year:     s.Year,
 			Season:   s.Season,
 			Week:     s.Week,

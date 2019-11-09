@@ -187,7 +187,7 @@
       </form>
     </ons-page>
 
-    <script type="text/javascript" src="/static/js/common.js"></script>
+    {{ template "/common/js.tpl" . }}
     <script type="text/javascript">
       const nameFlag = {{.NameFlag}};
       if (nameFlag === true) {

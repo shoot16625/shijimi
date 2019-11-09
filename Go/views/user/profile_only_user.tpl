@@ -10,7 +10,7 @@
           {{.User.Username}}
         </div>
         <div class="content">
-          <p>年齢　：{{.User.Age|Birthday2Age}}</p>
+          <p>年齢　：{{.User.Age|birthday2Age}}</p>
           <p>居住地：{{.User.Address}}</p>
           <p>ポイント：{{.User.MoneyPoint}}</p>
           <a href="/tv/user/edit">

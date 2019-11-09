@@ -23,6 +23,7 @@
     zoom:1;/*IE*/
 }
 
+
 a {
   text-decoration: none;
 }
@@ -185,6 +186,18 @@ label {
 .doramas-on-air{
   margin-bottom: 10px;
 }
+
+/* padding */
+.list-header--material {
+  padding: 5px;
+}
+
+
+.list-header--material:not(:first-of-type){
+  padding-top: 0px;
+}
+
+
 /* font-size */
 .comment-list-header-font {
   font-size: 16px;

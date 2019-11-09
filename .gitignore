@@ -1,8 +1,8 @@
 # shijimi
 /Go/swagger/
 /Go/app
-/Go/conf/go.env
 /.vscode/
 /MySQL/mysql_data/
 /MySQL/init_data/
-/MySQL/mysql.env
+/prod.env
+/phpmyadmin/

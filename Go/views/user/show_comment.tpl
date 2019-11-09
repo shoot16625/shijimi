@@ -14,7 +14,7 @@
         <ons-lazy-repeat id="comments"></ons-lazy-repeat>
       </ons-list>
     </ons-page>
-    <script type="text/javascript" src="/static/js/common.js"></script>
+    {{ template "/common/js.tpl" . }}
     <script>
       let comments = {{.Comment}};
       if (comments.length === 0) {

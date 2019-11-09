@@ -281,7 +281,8 @@ func (c *CommentController) SearchComment() {
 
 	if v := c.GetString("word"); v != "" {
 		query["Content__icontains"] = v
-		word = strings.Replace(v, "　", " ", -1)
+		word = strings.Replace(v, "　", ",", -1)
+		word = strings.Replace(v, " ", ",", -1)
 	}
 
 	query["TvProgramId"] = strconv.FormatInt(tvProgramID, 10)

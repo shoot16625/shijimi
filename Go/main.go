@@ -43,12 +43,13 @@ func init() {
 	user := os.Getenv("MYSQL_USER")
 	pass := os.Getenv("MYSQL_PASSWORD")
 	dbName := os.Getenv("MYSQL_DATABASE")
+	fmt.Println(user)
 	sqlconn := user + ":" + pass + "@tcp(db:3306)/" + dbName
 	orm.RegisterDataBase("default", beego.AppConfig.String("driver"), sqlconn+"?charset=utf8mb4&loc=Asia%2FTokyo")
 	// データを初期化して起動
-	err := orm.RunSyncdb("default", true, false)
+	// err := orm.RunSyncdb("default", true, false)
 	// データの変更点を追加して起動
-	// err := orm.RunSyncdb("default", false, false)
+	err := orm.RunSyncdb("default", false, false)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -59,7 +60,7 @@ func init() {
 		return in.Format("2006-01-02 15:04:05")
 	})
 	// 年齢計算
-	beego.AddFuncMap("Birthday2Age", func(birthday int) (age string) {
+	beego.AddFuncMap("birthday2Age", func(birthday int) (age string) {
 		t := time.Now()
 		year := birthday / 100
 		month := (birthday - year*100)
@@ -95,5 +96,5 @@ func init() {
 	db.AddRecentTvInfo()
 	// db.AddTvProgramsInformation()
 	// db.GetMovieWalkers()
-	db.ExecDemoSQL()
+	// db.ExecDemoSQL()
 }

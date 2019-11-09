@@ -233,7 +233,7 @@ function clickWatchStatus(elem) {
 
 // セレクタが複数設定されていた時の再描画処理
 function setMultipleSelection(elem, data) {
-  const d = data.split(' ');
+  const d = data.split(',');
   for (let i = d.length - 1; i >= 0; i--) {
     var target = document.getElementById(elem);
     for (let j = target.length - 1; j >= 0; j--) {
@@ -283,7 +283,7 @@ function reshapeBadges(badge) {
     for (let index = 0; index < badges.length; index++) {
       if (badges[index] == 'thanks') {
         badgeText +=
-          "<span style='margin-right:7px;'><i class='fab fa-angellist' style ='color:cornflowerblue; font-size:30px;'></i><span style='font-size:10px;'>寄付</span></span>";
+          "<span class='badge-icon' style='margin-right:7px;'><i class='fab fa-angellist' style ='color:cornflowerblue; font-size:30px;'></i><span style='font-size:10px;'>寄付</span></span>";
       }
     }
     document.getElementById('badges').innerHTML = badgeText;
@@ -345,4 +345,62 @@ function getSelectHour(textTop) {
     }
   }
   return textHour;
+}
+
+// コンテンツの整形用
+function reshapeContents(elements) {
+  let text = '';
+  for (let index = 0; index < elements.length; index++) {
+    text += "<span class='new-line'>" + elements[index] + '&nbsp;</span>';
+  }
+  return text;
+}
+// コンテンツの整形用
+function reshapeContent(element) {
+  let text = '';
+  let elements = element.split(',');
+  for (let index = 0; index < elements.length; index++) {
+    text += "<span class='new-line'>" + elements[index] + '&nbsp;</span>';
+  }
+  return text;
+}
+
+// 動画・画像の埋め込み変換
+function reshapeMovieCode(tvPrograms) {
+  let moviePosition;
+  if (tvPrograms.MovieUrl === '') {
+    moviePosition =
+      '<img class="image" id="image-' +
+      tvPrograms.Id +
+      '" src="' +
+      tvPrograms.ImageUrl +
+      '" alt="' +
+      tvPrograms.Title +
+      '" width="80%" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'">';
+  } else {
+    moviePosition =
+      '<iframe id="movie-' +
+      tvPrograms.Id +
+      '" class="movie" src="' +
+      tvPrograms.MovieUrl +
+      '?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="' +
+      tvPrograms.Title +
+      '" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+  }
+  return moviePosition;
+}
+function reshapeReferenceSite(tvPrograms) {
+  let referenceSite = '';
+  if (tvPrograms.ImageUrlReference != '' && tvPrograms.MovieUrl == '') {
+    referenceSite =
+      '<a href=' +
+      tvPrograms.ImageUrl +
+      " target='_blank'>出典:" +
+      tvPrograms.ImageUrlReference +
+      '</a>';
+  } else if (tvPrograms.MovieUrl != '') {
+    referenceSite =
+      '<a href=' + tvPrograms.MovieUrl + " target='_blank'>出典:Youtube</a>";
+  }
+  return referenceSite;
 }

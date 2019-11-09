@@ -186,7 +186,7 @@
       </ons-dialog>
     </template>
 
-    <script type="text/javascript" src="/static/js/common.js"></script>
+    {{ template "/common/js.tpl" . }}
     <script>
       ons.ready(function() {
         pullHook();
@@ -371,7 +371,13 @@
         "<ons-fab><ons-icon icon='md-share'></ons-icon></ons-fab><ons-speed-dial-item><ons-icon icon='md-comment-dots' onclick='dialogBox(\"tweet-dialog\", {{.User.Id}})'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-search' onclick='dialogBoxEveryone(\"search-dialog\")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-chart' onclick='goAnotherCarousel(1)'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><i class='fas fa-arrow-up' onclick='goTop()'></i></ons-speed-dial-item>";
     </script>
     <script>
-      let categories = {{.TvProgram.Category}}.split(' ');
+      document.getElementById("tv-cast").innerHTML = reshapeContent({{.TvProgram.Cast}});
+      document.getElementById("tv-themesong").innerHTML = reshapeContent({{.TvProgram.Themesong}});
+      document.getElementById("tv-supervisor").innerHTML = reshapeContent({{.TvProgram.Supervisor}});
+      document.getElementById("tv-dramatist").innerHTML = reshapeContent({{.TvProgram.Dramatist}});
+      document.getElementById("tv-director").innerHTML = reshapeContent({{.TvProgram.Director}});
+      document.getElementById("tv-production").innerHTML = reshapeContent({{.TvProgram.Production}});
+      let categories = {{.TvProgram.Category}}.split(',');
       if ({{.TvProgram.Category}} === ""){
         categories = [];
       }
@@ -379,7 +385,7 @@
       for (let j = categories.length - 1; j >= 0; j--) {
         category += "<span style='padding:3px;'>#"+categories[j]+"</span>";
       }
-      document.getElementById("category-area").innerHTML = category;
+      document.getElementById("tv-category").innerHTML = category;
     </script>
   </body>
 </html>

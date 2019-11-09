@@ -3,7 +3,9 @@ package models
 import (
 	"errors"
 	"fmt"
+	"math/rand"
 	"reflect"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -406,7 +408,7 @@ func GetRecommendTvProgramsByUser(userID int64) (ml []interface{}) {
 
 	for _, watched := range v {
 		if r, err := GetTvProgramById(watched.(WatchingStatus).TvProgramId); err == nil {
-			casts := strings.Split(r.Cast, " ")
+			casts := strings.Split(r.Cast, ",")
 			// 「見た」番組に出演しているキャストの他の作品
 			for _, cast := range casts {
 				for index, tvProgram := range w {
@@ -432,4 +434,58 @@ func GetRecommendTvProgramsByUser(userID int64) (ml []interface{}) {
 		ml = append(ml, *r)
 	}
 	return ml
+}
+
+// 正規表現で置換
+func RegexpWords(str string, word string, repWord string) (res string) {
+	rep := regexp.MustCompile(word)
+	res = rep.ReplaceAllString(str, repWord)
+	return res
+}
+func ReshapeWordsA(str string) (res string) {
+	str = strings.Replace(str, "　", ",", -1)
+	res = strings.Replace(str, " ", ",", -1)
+	return res
+}
+
+// 入力されたMovieURLのチェック
+func ReshapeMovieURL(str string) (res string) {
+	if !strings.Contains(str, "https") {
+		res = ""
+	} else if strings.Contains(str, "https://www.youtube.com/watch?v=") {
+		res = strings.Replace(str, "watch?v=", "embed/", -1)
+	} else if strings.Contains(str, "https://youtu.be/") {
+		res = strings.Replace(str, "youtu.be/", "www.youtube.com/embed/", -1)
+	} else {
+		res = ""
+	}
+	return res
+}
+func ReshapeImageURL(str string) (res string) {
+	if !strings.Contains(str, "http") {
+		rand.Seed(time.Now().UnixNano())
+		r := strconv.Itoa(rand.Intn(10) + 1)
+		if len(r) == 1 {
+			r = "0" + r
+		}
+		res = "/static/img/tv_img/hanko_" + r + ".png"
+	}
+	return res
+}
+func ReshapeImageURLReference(str string) (res string) {
+	res = ""
+	if str != "" {
+		if strings.Contains(str, "walkerplus") {
+			res = "MovieWalker"
+		} else if strings.Contains(str, "1.bp.blogspot.com") {
+			res = "いらすとや"
+		} else if strings.Contains(str, "/static/img") {
+			res = ""
+		} else {
+			imageURLs := strings.Split(str, "/")
+			res = imageURLs[2]
+			res = strings.Replace(res, "www.", "", 1)
+		}
+	}
+	return res
 }

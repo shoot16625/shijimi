@@ -94,8 +94,13 @@ func GetWikiDoramas(referencePath string) {
 			var data []string
 			t.Find("td").Each(func(_ int, u *goquery.Selection) {
 				html, _ := u.Html()
-				content := strings.Replace(p.Sanitize(html), "<br/>", " ", -1)
-				content = strings.Replace(content, "\n", " ", -1)
+				content := strings.Replace(p.Sanitize(html), "<br/>", ",", -1)
+				content = strings.Replace(content, "\n", ",", -1)
+				content = strings.Replace(content, ",（", "（", -1)
+				content = models.RegexpWords(content, ", | ,", ",")
+				content = models.RegexpWords(content, `[\(|（](P*S.[0-9|\-| |、]+)+[\)|）]`, "")
+				content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|特別出演|（第[1-9]部）|（主演として.+）`, "")
+				content = strings.TrimSpace(content)
 				data = append(data, content)
 			})
 			wikiURL, _ := t.Find("a").Attr("href")
@@ -219,8 +224,13 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 			}
 			if doramaFlag {
 				html, _ := t.Find("td").Html()
-				content := strings.Replace(p.Sanitize(html), "<br/>", " ", -1)
+				content := strings.Replace(p.Sanitize(html), "<br/>", ",", -1)
 				content = strings.Replace(content, "\n", "", -1)
+				content = strings.Replace(content, ",（", "（", -1)
+				content = models.RegexpWords(content, ", | ,", ",")
+				content = models.RegexpWords(content, `[\(|（](P*S.[0-9|\-| |、]+)+[\)|）]`, "")
+				content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|特別出演|（第[1-9]部）|（主演として.+）`, "")
+				content = strings.TrimSpace(content)
 				switch th {
 				case "ジャンル":
 					if tvProgram.Category != "" {
@@ -240,7 +250,7 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 						topCast = content
 					}
 					if seasonNum != 0 && newTvProgram.Cast != "" {
-						newTvProgram.Cast += " " + content
+						newTvProgram.Cast += "," + content
 					} else {
 						newTvProgram.Cast = content
 					}
@@ -251,18 +261,29 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 						newTvProgram.Production = content
 					}
 				case "オープニング":
-					content = strings.Replace(content, "、「", "「", -1)
-					content = strings.Replace(content, " 「", "「", -1)
+					content = strings.Replace(content, "『", "「", -1)
+					content = strings.Replace(content, "』", "」", -1)
+					content = models.RegexpWords(content, ",「| 「", "「")
+					// content = strings.Replace(content, ",「", "「", -1)
+					// content = strings.Replace(content, " 「", "「", -1)
+					// content = strings.Replace(content, ",『", "『", -1)
+					// content = strings.Replace(content, " 『", "『", -1)
 					newTvProgram.Themesong = content
 				case "エンディング":
 					if strings.TrimSpace(t.Find("td").Text()) != "同上" {
-						content = strings.Replace(content, "、「", "「", -1)
-						content = strings.Replace(content, " 「", "「", -1)
+						content = strings.Replace(content, "『", "「", -1)
+						content = strings.Replace(content, "』", "」", -1)
+						content = models.RegexpWords(content, ",「| 「", "「")
+
+						// content = strings.Replace(content, ",「", "「", -1)
+						// content = strings.Replace(content, " 「", "「", -1)
+						// content = strings.Replace(content, ",『", "『", -1)
+						// content = strings.Replace(content, " 『", "『", -1)
 						if newTvProgram.Themesong == "" {
 							newTvProgram.Themesong = content
 						} else {
 							if !strings.Contains(newTvProgram.Themesong, content) {
-								newTvProgram.Themesong += " " + content
+								newTvProgram.Themesong += "," + content
 							}
 						}
 					}
@@ -427,11 +448,11 @@ func GetMovieWalker(year string, month string) {
 		tvProgram.Content = m.Find(".info > p").Text()
 		director := strings.TrimSpace(m.Find(".info > .directorList > dd").Text())
 		director = strings.Replace(director, " ", "", -1)
-		director = strings.Replace(director, "\n\n\n\n", " ", -1)
+		director = strings.Replace(director, "\n\n\n\n", ",", -1)
 		tvProgram.Director = director
 		cast := strings.TrimSpace(m.Find(".info > .roleList > dd").Text())
 		cast = strings.Replace(cast, " ", "", -1)
-		cast = strings.Replace(cast, "\n\n\n\n", " ", -1)
+		cast = strings.Replace(cast, "\n\n\n\n", ",", -1)
 		tvProgram.Cast = cast
 		tvProgram.Star = 5
 		if _, err := models.AddTvProgram(&tvProgram); err != nil {
@@ -493,8 +514,14 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (newTvProgram models.
 				if doramaFlag {
 					th := t.Find("th").Text()
 					html, _ := t.Find("td").Html()
-					content := strings.Replace(p.Sanitize(html), "<br/>", " ", -1)
+					content := strings.Replace(p.Sanitize(html), "<br/>", ",", -1)
 					content = strings.Replace(content, "\n", "", -1)
+					content = strings.Replace(content, ",（", "（", -1)
+					content = models.RegexpWords(content, ", | ,", ",")
+					content = models.RegexpWords(content, `[\(|（](P*S.[0-9|\-| |、]+)+[\)|）]`, "")
+					content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|特別出演|（第[1-9]部）|（主演として.+）`, "")
+					content = strings.TrimSpace(content)
+
 					switch th {
 					case "ジャンル":
 						content = strings.Replace(content, "ドラマ", "", -1)
@@ -506,22 +533,35 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (newTvProgram models.
 					case "監督":
 						newTvProgram.Supervisor = content
 					case "出演者":
+
 						newTvProgram.Cast = content
 					case "制作", "製作":
 						newTvProgram.Production = content
 					case "オープニング":
-						content = strings.Replace(content, "、「", "「", -1)
-						content = strings.Replace(content, " 「", "「", -1)
+						content = strings.Replace(content, "『", "「", -1)
+						content = strings.Replace(content, "』", "」", -1)
+						content = models.RegexpWords(content, ",「| 「", "「")
+
+						// content = strings.Replace(content, ",「", "「", -1)
+						// content = strings.Replace(content, " 「", "「", -1)
+						// content = strings.Replace(content, ",『", "『", -1)
+						// content = strings.Replace(content, " 『", "『", -1)
 						newTvProgram.Themesong = content
 					case "エンディング":
 						if strings.TrimSpace(t.Find("td").Text()) != "同上" {
-							content = strings.Replace(content, "、「", "「", -1)
-							content = strings.Replace(content, " 「", "「", -1)
+							content = strings.Replace(content, "『", "「", -1)
+							content = strings.Replace(content, "』", "」", -1)
+							content = models.RegexpWords(content, ",「| 「", "「")
+
+							// content = strings.Replace(content, ",「", "「", -1)
+							// content = strings.Replace(content, " 「", "「", -1)
+							// content = strings.Replace(content, ",『", "『", -1)
+							// content = strings.Replace(content, " 『", "『", -1)
 							if newTvProgram.Themesong == "" {
 								newTvProgram.Themesong = content
 							} else {
 								if !strings.Contains(newTvProgram.Themesong, content) {
-									newTvProgram.Themesong += " " + content
+									newTvProgram.Themesong += "," + content
 								}
 							}
 						}
@@ -649,7 +689,9 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 			th := t.Find("th").Text()
 			// 同一テーブルに複数のシーズンが表記されている場合
 			if strings.Contains(color, "background-color: #FDEBD0") {
-				seasonNum += 1
+				if !strings.Contains(th, "話から") {
+					seasonNum += 1
+				}
 				if seasonNum != 1 {
 					if _, err := models.AddTvProgram(&newTvProgram); err != nil {
 						fmt.Println(err)
@@ -669,8 +711,14 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 			}
 			if doramaFlag {
 				html, _ := t.Find("td").Html()
-				content := strings.Replace(p.Sanitize(html), "<br/>", " ", -1)
+				content := strings.Replace(p.Sanitize(html), "<br/>", ",", -1)
 				content = strings.Replace(content, "\n", "", -1)
+				content = strings.Replace(content, ",（", "（", -1)
+				content = models.RegexpWords(content, ", | ,", ",")
+				content = models.RegexpWords(content, `[\(|（](P*S.[0-9|\-| |、]+)+[\)|）]`, "")
+				content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|特別出演|（第[1-9]部）|（主演として.+）`, "")
+				content = strings.TrimSpace(content)
+
 				switch th {
 				case "ジャンル":
 					content = strings.Replace(content, "ドラマ", "", -1)
@@ -682,29 +730,42 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 				case "監督":
 					newTvProgram.Supervisor = content
 				case "出演者":
+
 					if seasonNum == 0 {
 						topCast = content
 					}
 					if seasonNum != 0 && newTvProgram.Cast != "" {
-						newTvProgram.Cast += " " + content
+						newTvProgram.Cast += "," + content
 					} else {
 						newTvProgram.Cast = content
 					}
 				case "制作", "製作":
 					newTvProgram.Production = content
 				case "オープニング":
-					content = strings.Replace(content, "、「", "「", -1)
-					content = strings.Replace(content, " 「", "「", -1)
+					content = strings.Replace(content, "『", "「", -1)
+					content = strings.Replace(content, "』", "」", -1)
+					content = models.RegexpWords(content, ",「| 「", "「")
+
+					// content = strings.Replace(content, ",「", "「", -1)
+					// content = strings.Replace(content, " 「", "「", -1)
+					// content = strings.Replace(content, ",『", "『", -1)
+					// content = strings.Replace(content, " 『", "『", -1)
 					newTvProgram.Themesong = content
 				case "エンディング":
 					if strings.TrimSpace(t.Find("td").Text()) != "同上" {
-						content = strings.Replace(content, "、「", "「", -1)
-						content = strings.Replace(content, " 「", "「", -1)
+						content = strings.Replace(content, "『", "「", -1)
+						content = strings.Replace(content, "』", "」", -1)
+						content = models.RegexpWords(content, ",「| 「", "「")
+
+						// content = strings.Replace(content, ",「", "「", -1)
+						// content = strings.Replace(content, " 「", "「", -1)
+						// content = strings.Replace(content, ",『", "『", -1)
+						// content = strings.Replace(content, " 『", "『", -1)
 						if newTvProgram.Themesong == "" {
 							newTvProgram.Themesong = content
 						} else {
 							if !strings.Contains(newTvProgram.Themesong, content) {
-								newTvProgram.Themesong += " " + content
+								newTvProgram.Themesong += "," + content
 							}
 						}
 					}

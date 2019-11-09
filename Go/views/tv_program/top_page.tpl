@@ -521,8 +521,7 @@
         </script>
       </ons-dialog>
     </template>
-
-    <script type="text/javascript" src="/static/js/common.js"></script>
+    {{ template "/common/js.tpl" . }}
     <script type="text/javascript">
       if({{.TvProgramMon}}){
         autoScroll(carousel01, {{.TvProgramMon}}.length);

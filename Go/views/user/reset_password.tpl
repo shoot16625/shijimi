@@ -38,6 +38,6 @@
       </div>
     </form>
   </ons-page>
-  <script type="text/javascript" src="/static/js/common.js"></script>
+  {{ template "/common/js.tpl" . }}
 </body>
 </html>

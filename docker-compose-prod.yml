@@ -4,7 +4,7 @@ services:
     build:
       context: ./MySQL
     env_file:
-      - dev.env
+      - prod.env
     container_name: go_db
     ports:
       - "3306:3306"
@@ -16,12 +16,12 @@ services:
   app:
     build:
       context: ./Go
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.prod
     volumes:
       - "./Go:/go/src/app"
     container_name: go_app
     env_file:
-      - dev.env
+      - prod.env
     ports:
       - "8080:8080"
     tty: true

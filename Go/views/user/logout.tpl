@@ -32,7 +32,7 @@
       </div>
     </ons-page>
 
-    <script type="text/javascript" src="/static/js/common.js"></script>
+    {{ template "/common/js.tpl" . }}
     <script type="text/javascript">
       setTimeout(function() {
         window.location.href = URL;

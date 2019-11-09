@@ -84,7 +84,7 @@
         </ons-alert-dialog>
       </template>
     </ons-page>
-    <script type="text/javascript" src="/static/js/common.js"></script>
+    {{ template "/common/js.tpl" . }}
     <script type="text/javascript">
        const name = {{.User.Username}};
        if (name === null) { ; }

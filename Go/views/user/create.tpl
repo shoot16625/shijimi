@@ -278,7 +278,7 @@
         </ons-page>
       </ons-dialog>
     </template>
-    <script type="text/javascript" src="/static/js/common.js"></script>
+    {{ template "/common/js.tpl" . }}
     <script type="text/javascript">
       let consentFlag = false;
       $(function() {

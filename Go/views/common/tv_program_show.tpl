@@ -18,30 +18,30 @@
           <div class="content">
             <ons-row class="list-margin-bottom">
               <ons-col width="20%">出演：</ons-col>
-              <ons-col>{{.TvProgram.Cast}}</ons-col>
+              <ons-col id="tv-cast"></ons-col>
             </ons-row>
             <ons-row class="list-margin-bottom">
               <ons-col width="20%">歌：</ons-col>
-              <ons-col>{{.TvProgram.Themesong}}</ons-col>
+              <ons-col id="tv-themesong"></ons-col>
             </ons-row>
             <ons-row class="list-margin-bottom">
               <ons-col width="20%">監督：</ons-col>
-              <ons-col>{{.TvProgram.Supervisor}}</ons-col>
+              <ons-col id="tv-supervisor"></ons-col>
             </ons-row>
             <ons-row class="list-margin-bottom">
               <ons-col width="20%">脚本：</ons-col>
-              <ons-col>{{.TvProgram.Dramatist}}</ons-col>
+              <ons-col id="tv-dramatist"></ons-col>
             </ons-row>
             <ons-row class="list-margin-bottom">
               <ons-col width="20%">演出：</ons-col>
-              <ons-col>{{.TvProgram.Director}}</ons-col>
+              <ons-col id="tv-director"></ons-col>
             </ons-row>
             <ons-row class="list-margin-bottom">
               <ons-col width="20%">制作：</ons-col>
-              <ons-col>{{.TvProgram.Production}}</ons-col>
+              <ons-col id="tv-production"></ons-col>
             </ons-row>
             <ons-row class="list-margin-bottom">
-              <ons-col class="category-area" id="category-area"> </ons-col>
+              <ons-col class="category-area" id="tv-category"></ons-col>
             </ons-row>
           </div>
         </ons-col>

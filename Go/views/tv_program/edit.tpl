@@ -50,7 +50,7 @@
               name="cast"
               modifier="underbar"
               value="{{.TvProgram.Cast}}"
-              placeholder="キャスト(ex.小栗旬 石原さとみ)"
+              placeholder="キャスト(ex.小栗旬,石原さとみ)"
               maxlength="100"
               float
               required
@@ -329,7 +329,7 @@
       </ons-dialog>
     </template>
 
-    <script type="text/javascript" src="/static/js/common.js"></script>
+    {{ template "/common/js.tpl" . }}
 
     <script>
       var target = document.getElementById('hour');
