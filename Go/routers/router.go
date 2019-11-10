@@ -90,7 +90,7 @@ func init() {
 				&controllers.TvProgramUpdateHistoryController{},
 			),
 		),
-		beego.NSNamespace("/footprint_to_user",
+		beego.NSNamespace("/foot_print_to_user",
 			beego.NSInclude(
 				&controllers.FootPrintToUserController{},
 			),
