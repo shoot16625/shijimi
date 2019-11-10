@@ -298,7 +298,7 @@
                     id="limit"
                     modifier="underbar"
                     value="{{.SearchWords.Limit}}"
-                    placeholder="表示数(デフォルト:100)"
+                    placeholder="表示数(上限:50)"
                     float
                   ></ons-input>
                 </p>
@@ -527,17 +527,17 @@
       }
     </script>
     <script>
-      var dial = document.getElementById('speed-dial');
-      let userID = {{.User.Id}};
-      if (comments != null){
-      for (let index = 0; index < comments.length; index++) {
-        if (comments[index].UserId === userID) {
-          userID = -1
+        var dial = document.getElementById('speed-dial');
+        let userID = {{.User.Id}};
+        if (comments != null){
+        for (let index = 0; index < comments.length; index++) {
+          if (comments[index].UserId === userID) {
+            userID = -1
+          }
         }
       }
-    }
-      dial.innerHTML =
-        "<ons-fab><ons-icon icon='md-share'></ons-icon></ons-fab><ons-speed-dial-item><ons-icon icon='md-comment-dots' onclick='dialogBox(\"tweet-dialog\", "+userID+")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-search' onclick='dialogBoxEveryone(\"search-dialog\")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-chart' onclick='goAnotherCarousel(1)'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><i class='fas fa-arrow-up' onclick='goTop()'></i></ons-speed-dial-item>";
+        dial.innerHTML =
+          "<ons-fab><ons-icon icon='md-share'></ons-icon></ons-fab><ons-speed-dial-item><ons-icon icon='md-comment-dots' onclick='dialogBox(\"tweet-dialog\", "+userID+")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-search' onclick='dialogBoxEveryone(\"search-dialog\")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-chart' onclick='goAnotherCarousel(1)'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><i class='fas fa-arrow-up' onclick='goTop()'></i></ons-speed-dial-item>";
     </script>
     <script>
       document.getElementById("tv-cast").innerHTML = reshapeContent({{.TvProgram.Cast}});

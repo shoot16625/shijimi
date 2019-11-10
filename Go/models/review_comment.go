@@ -98,7 +98,7 @@ func GetAllReviewComment(query map[string]string, fields []string, sortby []stri
 	}
 
 	var l []ReviewComment
-	var maxLimit int64 = 1000
+	var maxLimit int64 = 50
 	if maxLimit < limit {
 		limit = maxLimit
 	}
@@ -163,7 +163,7 @@ func GetReviewCommentByTvProgramId(id int64) (v []ReviewComment, err error) {
 }
 
 func GetReviewCommentByUserId(id int64) (v []ReviewComment, err error) {
-	var limit int64 = 1000
+	var limit int64 = 50
 	o := orm.NewOrm()
 	if _, err = o.QueryTable(new(ReviewComment)).Filter("UserId", id).Limit(limit).OrderBy("-Created").All(&v); err == nil {
 		return v, nil

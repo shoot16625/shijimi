@@ -388,12 +388,12 @@ func GetRecommendTvProgramsByUser(userID int64) (ml []interface{}) {
 	var offset int64
 	var BookmarkLow int = 5
 	w, _ := GetAllTvProgram(query, fields, sortby, order, offset, limit)
-	limit = 10
+	var watchingStatuslimit int64 = 10
 	sortby = append(sortby, "Updated")
 	order = append(order, "desc")
 	query["Watched"] = "1"
 	query["UserId"] = strconv.FormatInt(userID, 10)
-	v, _ := GetAllWatchingStatus(query, fields, sortby, order, offset, limit)
+	v, _ := GetAllWatchingStatus(query, fields, sortby, order, offset, watchingStatuslimit)
 	// 最低ブックマーク数
 	if len(v) < BookmarkLow {
 		return nil

@@ -99,7 +99,7 @@ func GetAllComment(query map[string]string, fields []string, sortby []string, or
 
 	var l []Comment
 	qs = qs.OrderBy(sortFields...).RelatedSel()
-	var maxLimit int64 = 1000
+	var maxLimit int64 = 200
 	if maxLimit < limit {
 		limit = maxLimit
 	}
@@ -197,7 +197,7 @@ func SearchComment(query map[string]string, fields []string, sortby []string, or
 
 	var l []Comment
 	qs = qs.OrderBy(sortFields...).RelatedSel()
-	var maxLimit int64 = 1000
+	var maxLimit int64 = 200
 	if maxLimit < limit {
 		limit = maxLimit
 	}
@@ -261,7 +261,7 @@ func GetCommentByTvprogramId(id int64) (v []Comment, err error) {
 }
 
 func GetCommentByUserId(id int64) (v []Comment, err error) {
-	var limit int64 = 1000
+	var limit int64 = 200
 	o := orm.NewOrm()
 	if _, err = o.QueryTable(new(Comment)).Filter("UserId", id).Limit(limit).OrderBy("-Created").All(&v); err == nil {
 		return v, nil

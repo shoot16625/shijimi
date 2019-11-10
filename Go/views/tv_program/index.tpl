@@ -234,7 +234,7 @@
                     id="limit"
                     modifier="underbar"
                     value="{{.SearchWords.Limit}}"
-                    placeholder="表示数(デフォルト:100)"
+                    placeholder="表示数(上限:100)"
                     float
                   ></ons-input>
                 </p>
