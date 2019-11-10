@@ -386,6 +386,7 @@ func GetRecommendTvProgramsByUser(userID int64) (ml []interface{}) {
 	var query = make(map[string]string)
 	var limit int64
 	var offset int64
+	var BookmarkLow int = 5
 	w, _ := GetAllTvProgram(query, fields, sortby, order, offset, limit)
 	limit = 10
 	sortby = append(sortby, "Updated")
@@ -393,7 +394,8 @@ func GetRecommendTvProgramsByUser(userID int64) (ml []interface{}) {
 	query["Watched"] = "1"
 	query["UserId"] = strconv.FormatInt(userID, 10)
 	v, _ := GetAllWatchingStatus(query, fields, sortby, order, offset, limit)
-	if len(v) == 0 {
+	// 最低ブックマーク数
+	if len(v) < BookmarkLow {
 		return nil
 	}
 	var Points []RecommendPoint
@@ -428,13 +430,15 @@ func GetRecommendTvProgramsByUser(userID int64) (ml []interface{}) {
 	if len(Points) < displayNum {
 		displayNum = len(Points)
 	}
-	fmt.Println(displayNum)
 	for _, recommendPoint := range Points[:displayNum] {
 		if v, err := GetWatchingStatusByUserAndTvProgram(userID, recommendPoint.Index); err == nil {
 			if !v.Watched {
 				r, _ := GetTvProgramById(recommendPoint.Index)
 				ml = append(ml, *r)
 			}
+		} else {
+			r, _ := GetTvProgramById(recommendPoint.Index)
+			ml = append(ml, *r)
 		}
 	}
 	return ml
