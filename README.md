@@ -13,7 +13,6 @@ doramaba とかテレビバって考えてたけど，ShiJimi にしよっかな
     1. 自身のコメントの検索機能
     1. 広告の非表示
 1. バグ探し
-1. 0年ヒット
 1. ユーザー縛り，時間縛りをポイントに？？
 
 ## その他
@@ -83,8 +82,16 @@ docker, docker-composeが必要
 1. パスワードをprod版にする
 
 ## herokuの場合
+1. https://qiita.com/pitcher292/items/1ca39c7b0dbd79298c0b
 
 # 公開へのロードマップ
 1. konohaVPS900円借りる
 1. SSD50GB上に全部乗せる（DB：mysql 500/monthもあるらしい）
 1. のっける
+
+# エラーがおきた
+1. ローカルPCからリクエストが投げられない．クロスドメインエラー
+    1. https://qiita.com/growsic/items/a919a7e2a665557d9cf4
+    1. または，common.jsのURLがおかしい
+1. herokuにあげたアプリにリクエスト投げられない
+    1. httpではだめ．https
