@@ -478,6 +478,8 @@ function inputPreviewData() {
   var movieURL = document.getElementsByName('MovieURL')[0].value;
   if (movieURL != '') {
     movieURL = movieURL.replace('watch?v=', 'embed/');
+    movieURL = movieURL.replace('m.youtube.com', 'www.youtube.com');
+    movieURL = movieURL.replace('youtu.be/', 'www.youtube.com/embed/');
     document.getElementById('preview-movie').innerHTML =
       '<iframe src="' +
       movieURL +

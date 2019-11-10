@@ -3,7 +3,6 @@ package controllers
 import (
 	"app/models"
 	"errors"
-	"fmt"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -192,21 +191,20 @@ func (c *UserController) Put() {
 	}
 	oldUserInfo, _ := models.GetUserById(id)
 	v := *oldUserInfo
-	hashPass := v.Password
+	// hashPass := v.Password
 	if c.GetString("password") != "" {
-		hashPass, _ = models.PasswordHash(c.GetString("password"))
+		hashPass, _ := models.PasswordHash(c.GetString("password"))
+		v.Password = hashPass
+	} else {
+		v.Username = c.GetString("username")
+		v.Age = age
+		v.Address = c.GetString("address")
+		v.Gender = c.GetString("gender")
+		v.Job = c.GetString("job")
+		v.IconUrl = IconURL
+		v.Marital = c.GetString("marital")
+		v.BloodType = c.GetString("bloodType")
 	}
-	v.Username = c.GetString("username")
-	v.Password = hashPass
-	v.Age = age
-	v.Address = c.GetString("address")
-	v.Gender = c.GetString("gender")
-	v.Job = c.GetString("job")
-	v.IconUrl = IconURL
-	v.Marital = c.GetString("marital")
-	v.BloodType = c.GetString("bloodType")
-
-	fmt.Println(v)
 	if err := models.UpdateUserById(&v); err == nil {
 		c.Data["json"] = "OK"
 		c.Redirect("show", 302)

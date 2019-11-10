@@ -99,7 +99,7 @@ func GetWikiDoramas(referencePath string) {
 				content = strings.Replace(content, ",（", "（", -1)
 				content = models.RegexpWords(content, ", | ,", ",")
 				content = models.RegexpWords(content, `[\(|（](P*S.[0-9|\-| |、]+)+[\)|）]`, "")
-				content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|（.*特別出演.*）|（第[1-9]部）|（主演として.+）|\[注 *[1-9]\]`, "")
+				content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|（.*特別出演.*）|（第[1-9]部）|（主演として.+）|\[注 *[1-9]\]|以下五十音順`, "")
 				content = strings.TrimSpace(content)
 				data = append(data, content)
 			})
@@ -191,15 +191,26 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 		u.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
 			c, _ := t.Find("td").Attr("class")
 			if c == "category" {
-				if strings.Contains(t.Find("td").Text(), "ドラマ") || strings.Contains(t.Find("td").Text(), "医療ミステリ") {
+				td := t.Find("td").Text()
+				if strings.Contains(td, "ドラマ") || strings.Contains(td, "医療ミステリ") || strings.Contains(td, "コメディ") || strings.Contains(td, "時代劇") {
 					doramaFlag = true
 					tableNum += 1
+					if strings.Contains(td, "ケータイドラマ") {
+						newTvProgram.Year = 2000
+						weekStruct := *new(models.Week)
+						weekStruct.Name = "?"
+						newTvProgram.Week = &weekStruct
+						seasonStruct := *new(models.Season)
+						seasonStruct.Name = "秋"
+						newTvProgram.Season = &seasonStruct
+						newTvProgram.Hour = 100
+					}
 				}
 			}
 			color, _ := t.Find("th").Attr("style")
 			th := t.Find("th").Text()
 			// 同一テーブルに複数のシーズンが表記されている場合
-			if strings.Contains(color, "background-color: #FDEBD0") {
+			if strings.Contains(color, "background-color: #FDEBD0") && doramaFlag {
 				if !strings.Contains(th, "話から") {
 					seasonNum += 1
 				}
@@ -221,16 +232,14 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 				} else {
 					newTvProgram.Title += "（" + th + "）"
 				}
+				if strings.Contains(newTvProgram.Title, "（再放送）") {
+					doramaFlag = false
+				}
 			}
 			if doramaFlag {
 				html, _ := t.Find("td").Html()
 				content := strings.Replace(p.Sanitize(html), "<br/>", ",", -1)
-				content = strings.Replace(content, "\n", "", -1)
-				content = strings.Replace(content, ",（", "（", -1)
-				content = models.RegexpWords(content, ", | ,", ",")
-				content = models.RegexpWords(content, `[\(|（](P*S.[0-9|\-| |、]+)+[\)|）]`, "")
-				content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|（.*特別出演.*）|（第[1-9]部）|（主演として.+）|\[注 *[1-9]\]`, "")
-				content = strings.TrimSpace(content)
+				content = ReshapeText(content)
 				switch th {
 				case "ジャンル":
 					if tvProgram.Category != "" {
@@ -261,24 +270,12 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 						newTvProgram.Production = content
 					}
 				case "オープニング":
-					content = strings.Replace(content, "『", "「", -1)
-					content = strings.Replace(content, "』", "」", -1)
-					content = models.RegexpWords(content, ",「| 「", "「")
-					// content = strings.Replace(content, ",「", "「", -1)
-					// content = strings.Replace(content, " 「", "「", -1)
-					// content = strings.Replace(content, ",『", "『", -1)
-					// content = strings.Replace(content, " 『", "『", -1)
+					content = ReshapeThemesong(content)
 					newTvProgram.Themesong = content
 				case "エンディング":
 					if strings.TrimSpace(t.Find("td").Text()) != "同上" {
-						content = strings.Replace(content, "『", "「", -1)
-						content = strings.Replace(content, "』", "」", -1)
-						content = models.RegexpWords(content, ",「| 「", "「")
+						content = ReshapeThemesong(content)
 
-						// content = strings.Replace(content, ",「", "「", -1)
-						// content = strings.Replace(content, " 「", "「", -1)
-						// content = strings.Replace(content, ",『", "『", -1)
-						// content = strings.Replace(content, " 『", "『", -1)
 						if newTvProgram.Themesong == "" {
 							newTvProgram.Themesong = content
 						} else {
@@ -296,27 +293,16 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 					contents := strings.Split(content, "年")
 					year, _ := strconv.Atoi(re.FindStringSubmatch(contents[0])[0])
 					newTvProgram.Year = year
+
 					contents = strings.Split(contents[1], "月")
 					month, _ := strconv.Atoi(contents[0])
-					seasonName := ""
-					if month <= 3 {
-						seasonName = "冬"
-					} else if month <= 6 {
-						seasonName = "春"
-					} else if month <= 9 {
-						seasonName = "夏"
-					} else if month <= 12 {
-						seasonName = "秋"
-					}
+					seasonName := ReshapeHour(month)
 					seasonStruct := *new(models.Season)
 					seasonStruct.Name = seasonName
 					newTvProgram.Season = &seasonStruct
 				case "放送時間":
 					if content != "同上" {
-						content = strings.Replace(content, "毎週", "", -1)
-						content = strings.Replace(content, "曜日", "曜", -1)
-						content = strings.Replace(content, "月 - 金", "平日", -1)
-						contents := strings.Split(content, "曜")
+						contents := ReshapeWeek(content)
 						weekStruct := *new(models.Week)
 						if len(contents) == 2 {
 							weekStruct.Name = contents[0]
@@ -418,17 +404,9 @@ func GetMovieWalker(year string, month string) {
 		return
 	}
 	yearInt, _ := strconv.Atoi(year)
-	seasonName := ""
+	// seasonName := ""
 	monthInt, _ := strconv.Atoi(month)
-	if monthInt <= 3 {
-		seasonName = "冬"
-	} else if monthInt <= 6 {
-		seasonName = "春"
-	} else if monthInt <= 9 {
-		seasonName = "夏"
-	} else if monthInt <= 12 {
-		seasonName = "秋"
-	}
+	seasonName := ReshapeHour(monthInt)
 	var floatHour float32 = 100
 	doc.Find(".movie").Each(func(_ int, m *goquery.Selection) {
 		var tvProgram models.TvProgram
@@ -507,7 +485,8 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (newTvProgram models.
 			u.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
 				c, _ := t.Find("td").Attr("class")
 				if c == "category" {
-					if strings.Contains(t.Find("td").Text(), "ドラマ") || strings.Contains(t.Find("td").Text(), "医療ミステリ") {
+					td := t.Find("td").Text()
+					if strings.Contains(td, "ドラマ") || strings.Contains(td, "医療ミステリ") || strings.Contains(td, "コメディ") || strings.Contains(td, "時代劇") {
 						doramaFlag = true
 					}
 				}
@@ -515,12 +494,7 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (newTvProgram models.
 					th := t.Find("th").Text()
 					html, _ := t.Find("td").Html()
 					content := strings.Replace(p.Sanitize(html), "<br/>", ",", -1)
-					content = strings.Replace(content, "\n", "", -1)
-					content = strings.Replace(content, ",（", "（", -1)
-					content = models.RegexpWords(content, ", | ,", ",")
-					content = models.RegexpWords(content, `[\(|（](P*S.[0-9|\-| |、]+)+[\)|）]`, "")
-					content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|（.*特別出演.*）|（第[1-9]部）|（主演として.+）|\[注 *[1-9]\]`, "")
-					content = strings.TrimSpace(content)
+					content = ReshapeText(content)
 					switch th {
 					case "ジャンル":
 						content = strings.Replace(content, "ドラマ", "", -1)
@@ -537,25 +511,13 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (newTvProgram models.
 					case "制作", "製作":
 						newTvProgram.Production = content
 					case "オープニング":
-						content = strings.Replace(content, "『", "「", -1)
-						content = strings.Replace(content, "』", "」", -1)
-						content = models.RegexpWords(content, ",「| 「", "「")
+						content = ReshapeThemesong(content)
 
-						// content = strings.Replace(content, ",「", "「", -1)
-						// content = strings.Replace(content, " 「", "「", -1)
-						// content = strings.Replace(content, ",『", "『", -1)
-						// content = strings.Replace(content, " 『", "『", -1)
 						newTvProgram.Themesong = content
 					case "エンディング":
 						if strings.TrimSpace(t.Find("td").Text()) != "同上" {
-							content = strings.Replace(content, "『", "「", -1)
-							content = strings.Replace(content, "』", "」", -1)
-							content = models.RegexpWords(content, ",「| 「", "「")
+							content = ReshapeThemesong(content)
 
-							// content = strings.Replace(content, ",「", "「", -1)
-							// content = strings.Replace(content, " 「", "「", -1)
-							// content = strings.Replace(content, ",『", "『", -1)
-							// content = strings.Replace(content, " 『", "『", -1)
 							if newTvProgram.Themesong == "" {
 								newTvProgram.Themesong = content
 							} else {
@@ -573,27 +535,18 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (newTvProgram models.
 						contents := strings.Split(content, "年")
 						year, _ := strconv.Atoi(re.FindStringSubmatch(contents[0])[0])
 						newTvProgram.Year = year
+						fmt.Println("year", year)
+
 						contents = strings.Split(contents[1], "月")
 						month, _ := strconv.Atoi(contents[0])
-						seasonName := ""
-						if month <= 3 {
-							seasonName = "冬"
-						} else if month <= 6 {
-							seasonName = "春"
-						} else if month <= 9 {
-							seasonName = "夏"
-						} else if month <= 12 {
-							seasonName = "秋"
-						}
+						seasonName := ReshapeHour(month)
+						fmt.Println("seasonName", seasonName)
 						seasonStruct := *new(models.Season)
 						seasonStruct.Name = seasonName
 						newTvProgram.Season = &seasonStruct
 					case "放送時間":
 						if content != "同上" {
-							content = strings.Replace(content, "毎週", "", -1)
-							content = strings.Replace(content, "曜日", "曜", -1)
-							content = strings.Replace(content, "月 - 金", "平日", -1)
-							contents := strings.Split(content, "曜")
+							contents := ReshapeWeek(content)
 							weekStruct := *new(models.Week)
 							if len(contents) == 2 {
 								weekStruct.Name = contents[0]
@@ -604,6 +557,7 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (newTvProgram models.
 								newTvProgram.Week = &weekStruct
 								contents = strings.Split(contents[0], "-")
 							}
+							fmt.Println("Week", newTvProgram.Week)
 							content = strings.TrimSpace(contents[0])
 							contents = strings.Split(content, ":")
 							var floatHour float32 = 100
@@ -679,7 +633,8 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 		u.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
 			c, _ := t.Find("td").Attr("class")
 			if c == "category" {
-				if strings.Contains(t.Find("td").Text(), "ドラマ") || strings.Contains(t.Find("td").Text(), "医療ミステリ") {
+				td := t.Find("td").Text()
+				if strings.Contains(td, "ドラマ") || strings.Contains(td, "医療ミステリ") || strings.Contains(td, "コメディ") || strings.Contains(td, "時代劇") {
 					doramaFlag = true
 					tableNum += 1
 				}
@@ -687,7 +642,7 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 			color, _ := t.Find("th").Attr("style")
 			th := t.Find("th").Text()
 			// 同一テーブルに複数のシーズンが表記されている場合
-			if strings.Contains(color, "background-color: #FDEBD0") {
+			if strings.Contains(color, "background-color: #FDEBD0") && doramaFlag {
 				if !strings.Contains(th, "話から") {
 					seasonNum += 1
 				}
@@ -707,16 +662,20 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 				} else {
 					newTvProgram.Title += "（" + th + "）"
 				}
+				if strings.Contains(newTvProgram.Title, "（再放送）") {
+					doramaFlag = false
+				}
 			}
 			if doramaFlag {
 				html, _ := t.Find("td").Html()
 				content := strings.Replace(p.Sanitize(html), "<br/>", ",", -1)
-				content = strings.Replace(content, "\n", "", -1)
-				content = strings.Replace(content, ",（", "（", -1)
-				content = models.RegexpWords(content, ", | ,", ",")
-				content = models.RegexpWords(content, `[\(|（](P*S.[0-9|\-| |、]+)+[\)|）]`, "")
-				content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|（.*特別出演.*）|（第[1-9]部）|（主演として.+）|\[注 *[1-9]\]`, "")
-				content = strings.TrimSpace(content)
+				content = ReshapeText(content)
+				// content = strings.Replace(content, "\n", "", -1)
+				// content = strings.Replace(content, ",（", "（", -1)
+				// content = models.RegexpWords(content, ", | ,", ",")
+				// content = models.RegexpWords(content, `[\(|（](P*S.[0-9|\-| |、]+)+[\)|）]`, "")
+				// content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|（.*特別出演.*）|（第[1-9]部）|（主演として.+）|\[注 *[1-9]\]|以下五十音順`, "")
+				// content = strings.TrimSpace(content)
 
 				switch th {
 				case "ジャンル":
@@ -741,25 +700,16 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 				case "制作", "製作":
 					newTvProgram.Production = content
 				case "オープニング":
-					content = strings.Replace(content, "『", "「", -1)
-					content = strings.Replace(content, "』", "」", -1)
-					content = models.RegexpWords(content, ",「| 「", "「")
+					content = ReshapeThemesong(content)
 
-					// content = strings.Replace(content, ",「", "「", -1)
-					// content = strings.Replace(content, " 「", "「", -1)
-					// content = strings.Replace(content, ",『", "『", -1)
-					// content = strings.Replace(content, " 『", "『", -1)
 					newTvProgram.Themesong = content
 				case "エンディング":
 					if strings.TrimSpace(t.Find("td").Text()) != "同上" {
-						content = strings.Replace(content, "『", "「", -1)
-						content = strings.Replace(content, "』", "」", -1)
-						content = models.RegexpWords(content, ",「| 「", "「")
+						content = ReshapeThemesong(content)
+						// content = strings.Replace(content, "『", "「", -1)
+						// content = strings.Replace(content, "』", "」", -1)
+						// content = models.RegexpWords(content, ",「| 「", "「")
 
-						// content = strings.Replace(content, ",「", "「", -1)
-						// content = strings.Replace(content, " 「", "「", -1)
-						// content = strings.Replace(content, ",『", "『", -1)
-						// content = strings.Replace(content, " 『", "『", -1)
 						if newTvProgram.Themesong == "" {
 							newTvProgram.Themesong = content
 						} else {
@@ -777,27 +727,30 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 					contents := strings.Split(content, "年")
 					year, _ := strconv.Atoi(re.FindStringSubmatch(contents[0])[0])
 					newTvProgram.Year = year
+
 					contents = strings.Split(contents[1], "月")
 					month, _ := strconv.Atoi(contents[0])
-					seasonName := ""
-					if month <= 3 {
-						seasonName = "冬"
-					} else if month <= 6 {
-						seasonName = "春"
-					} else if month <= 9 {
-						seasonName = "夏"
-					} else if month <= 12 {
-						seasonName = "秋"
-					}
+					seasonName := ReshapeHour(month)
+					// seasonName := ""
+					// if month <= 3 {
+					// 	seasonName = "冬"
+					// } else if month <= 6 {
+					// 	seasonName = "春"
+					// } else if month <= 9 {
+					// 	seasonName = "夏"
+					// } else if month <= 12 {
+					// 	seasonName = "秋"
+					// }
 					seasonStruct := *new(models.Season)
 					seasonStruct.Name = seasonName
 					newTvProgram.Season = &seasonStruct
 				case "放送時間":
 					if content != "同上" {
-						content = strings.Replace(content, "毎週", "", -1)
-						content = strings.Replace(content, "曜日", "曜", -1)
-						content = strings.Replace(content, "月 - 金", "平日", -1)
-						contents := strings.Split(content, "曜")
+						// content = strings.Replace(content, "毎週", "", -1)
+						// content = strings.Replace(content, "曜日", "曜", -1)
+						// content = strings.Replace(content, "月 - 金", "平日", -1)
+						// contents := strings.Split(content, "曜")
+						contents := ReshapeWeek(content)
 						weekStruct := *new(models.Week)
 						if len(contents) == 2 {
 							weekStruct.Name = contents[0]
@@ -842,6 +795,43 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 			}
 		}
 	})
+}
+
+func ReshapeWeek(str string) []string {
+	content := strings.Replace(str, "毎週", "", -1)
+	content = strings.Replace(content, "曜日", "曜", -1)
+	content = strings.Replace(content, "月 - 金", "平日", -1)
+	contents := strings.Split(content, "曜")
+	return contents
+}
+
+func ReshapeHour(month int) string {
+	seasonName := ""
+	if month <= 3 {
+		seasonName = "冬"
+	} else if month <= 6 {
+		seasonName = "春"
+	} else if month <= 9 {
+		seasonName = "夏"
+	} else if month <= 12 {
+		seasonName = "秋"
+	}
+	return seasonName
+}
+func ReshapeThemesong(str string) string {
+	content := strings.Replace(str, "『", "「", -1)
+	content = strings.Replace(content, "』", "」", -1)
+	content = models.RegexpWords(content, ",「| 「", "「")
+	return content
+}
+func ReshapeText(str string) string {
+	content := strings.Replace(str, "\n", "", -1)
+	content = strings.Replace(content, ",（", "（", -1)
+	content = models.RegexpWords(content, ", | ,", ",")
+	content = models.RegexpWords(content, `[\(|（](P*S.[0-9|\-| |、]+)+[\)|）]`, "")
+	content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|（.*特別出演.*）|（第[1-9]部）|（主演として.+）|\[注 *[1-9]\]|以下五十音順`, "")
+	content = strings.TrimSpace(content)
+	return content
 }
 
 // サーバ側でデータ投入

@@ -81,7 +81,6 @@ func (c *TvProgramController) Post() {
 			Themesong:         models.RegexpWords(c.GetString("themesong"), "、|，|　", ","),
 			CreateUserId:      session.Get("UserId").(int64),
 		}
-
 		if _, err := models.AddTvProgram(&v); err == nil {
 			w, _ := models.GetUserById(v.CreateUserId)
 			w.CountEditTvProgram++
@@ -309,7 +308,6 @@ func (c *TvProgramController) Index() {
 		c.Data["WatchStatus"] = ratings
 		v, _ := models.GetUserById(userID)
 		c.Data["User"] = v
-		models.GetRecommendTvProgramsByUser(userID)
 	}
 	// 分析部分
 	t := time.Now()

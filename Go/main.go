@@ -94,7 +94,7 @@ func init() {
 	db.ExecInitSQL()
 	// db.ExecTestSQL()
 	db.AddRecentTvInfo()
-	// db.AddTvProgramsInformation()
+	db.AddTvProgramsInformation()
 	// db.GetMovieWalkers()
-	db.ExecDemoSQL()
+	// db.ExecDemoSQL()
 }

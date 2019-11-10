@@ -380,20 +380,22 @@
     <script type="text/javascript">
       const tvProgram = {{.TvProgram}};
       if (tvProgram != null) {
-        const seasonName = tvProgram.Season.Name;
-        if (seasonName === "春"){
-          document.getElementById('season').value = seasonName+"(4~6)";
-        }
-        else if (seasonName === "夏"){
-          document.getElementById('season').value = seasonName+"(7~9)";
-        }
-        else if (seasonName === "秋"){
-          document.getElementById('season').value = seasonName+"(10~12)";
-        }
-        else if (seasonName === "冬"){
-          document.getElementById('season').value = seasonName+"(1~3)";
-        } else {
-          document.getElementById('season').value = seasonName;
+        if (tvProgram.Season != null){
+          const seasonName = tvProgram.Season.Name;
+          if (seasonName === "春"){
+            document.getElementById('season').value = seasonName+"(4~6)";
+          }
+          else if (seasonName === "夏"){
+            document.getElementById('season').value = seasonName+"(7~9)";
+          }
+          else if (seasonName === "秋"){
+            document.getElementById('season').value = seasonName+"(10~12)";
+          }
+          else if (seasonName === "冬"){
+            document.getElementById('season').value = seasonName+"(1~3)";
+          } else {
+            document.getElementById('season').value = seasonName;
+          }
         }
         let time = String(tvProgram.Hour);
         str = ".5";
@@ -409,7 +411,9 @@
         document.getElementById('hour').value = time;
         setMultipleSelection("category", tvProgram.Category);
         document.getElementById('content').value = tvProgram.Content;
-        document.getElementById('week').value = tvProgram.Week.Name;
+        if (tvProgram.Week != null){
+          document.getElementById('week').value = tvProgram.Week.Name;
+          }
         if (!{{.GetWikiInfo}}){
           dialogBoxEveryone("alert-tv-title");
         }

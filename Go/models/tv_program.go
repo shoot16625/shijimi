@@ -428,9 +428,14 @@ func GetRecommendTvProgramsByUser(userID int64) (ml []interface{}) {
 	if len(Points) < displayNum {
 		displayNum = len(Points)
 	}
+	fmt.Println(displayNum)
 	for _, recommendPoint := range Points[:displayNum] {
-		r, _ := GetTvProgramById(recommendPoint.Index)
-		ml = append(ml, *r)
+		if v, err := GetWatchingStatusByUserAndTvProgram(userID, recommendPoint.Index); err == nil {
+			if !v.Watched {
+				r, _ := GetTvProgramById(recommendPoint.Index)
+				ml = append(ml, *r)
+			}
+		}
 	}
 	return ml
 }
@@ -449,12 +454,15 @@ func ReshapeWordsA(str string) (res string) {
 
 // 入力されたMovieURLのチェック
 func ReshapeMovieURL(str string) (res string) {
-	if !strings.Contains(str, "https") {
+	if !strings.Contains(str, "http") {
 		res = ""
 	} else if strings.Contains(str, "https://www.youtube.com/watch?v=") {
 		res = strings.Replace(str, "watch?v=", "embed/", -1)
 	} else if strings.Contains(str, "https://youtu.be/") {
 		res = strings.Replace(str, "youtu.be/", "www.youtube.com/embed/", -1)
+	} else if strings.Contains(str, "https://m.youtube.com/watch?v=") {
+		res = strings.Replace(str, "m.youtube", "www.youtube", -1)
+		res = strings.Replace(res, "watch?v=", "embed/", -1)
 	} else {
 		res = ""
 	}
