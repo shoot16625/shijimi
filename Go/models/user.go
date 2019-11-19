@@ -13,9 +13,9 @@ import (
 
 type User struct {
 	Id                 int64  `orm:"auto"`
-	Username           string `orm:"size(30);unique"`
+	Username           string `orm:"size(40);unique"`
 	Password           string `orm:"size(300)" json:"-"`
-	Age                int
+	Age                string `orm:"size(30)" json:"-"; null`
 	Gender             string `orm:"size(20)" json:"-"; null`
 	Address            string `orm:"size(20)"; null`
 	Job                string `orm:"size(20)" json:"-"; null`
@@ -169,12 +169,12 @@ func GetUserByUsername(username string) (v *User, err error) {
 }
 
 // ユーザ名の検索
-func GetUserByPasswords(password string, SecondPassword string) (v *User, err error) {
+func GetUserByPasswords(password string, age string, SecondPassword string) (v *User, err error) {
 	o := orm.NewOrm()
-	var u []User
 	num := 0
 	var d User
-	if _, err = o.QueryTable(new(User)).All(&u); err == nil {
+	var u []User
+	if _, err = o.QueryTable(new(User)).Filter("Age", age).All(&u); err == nil {
 		for _, value := range u {
 			if UserPassMach(value.Password, password) {
 				if UserPassMach(value.SecondPassword, SecondPassword) {
@@ -191,7 +191,7 @@ func GetUserByPasswords(password string, SecondPassword string) (v *User, err er
 }
 
 // ユーザー名と第2パスワードを使ってパスワードの再設定
-func GetUserByUsernameAndPassword(username string, age int, SecondPassword string) (v *User, err error) {
+func GetUserByUsernameAndPassword(username string, age string, SecondPassword string) (v *User, err error) {
 	v, err = GetUserByUsername(username)
 	if err != nil {
 		return nil, err

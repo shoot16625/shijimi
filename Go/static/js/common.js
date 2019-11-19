@@ -282,7 +282,7 @@ function reshapeBadges(badge) {
   if (badge != '') {
     let badges = badge.split(',');
     for (let index = 0; index < badges.length; index++) {
-      if (badges[index] == 'thanks') {
+      if (badges[index] == '1') {
         badgeText +=
           "<span class='badge-icon' style='margin-right:7px;'><i class='fab fa-angellist' style ='color:cornflowerblue; font-size:30px;'></i><span style='font-size:10px;'>寄付</span></span>";
       }
@@ -407,6 +407,7 @@ function reshapeReferenceSite(tvPrograms) {
   return referenceSite;
 }
 
+// プレビューの表示部分
 function inputPreviewData() {
   let hour;
   if (document.getElementsByName('hour')[0].value === '指定なし') {
@@ -484,4 +485,32 @@ function inputPreviewData() {
       movieURL +
       '?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="ムービー" width="200" height="112.5" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
   }
+}
+
+// レビューのおすすめポイントの整形
+function reshapeFavoritePoint(comment) {
+  const fps = comment.FavoritePoint.split(',');
+  let fpText = '';
+  for (let j = fps.length - 1; j >= 0; j--) {
+    fpText += "<span style='padding:3px;color:blue;'>#" + fps[j] + '</span>';
+  }
+  return fpText;
+}
+
+// テレビカテゴリーの整形
+function reshapeCategory(categories) {
+  let category = '';
+  for (let j = categories.length - 1; j >= 0; j--) {
+    category += "<span style='padding:3px;'>#" + categories[j] + '</span>';
+  }
+  return category;
+}
+
+// 入れ子の構造体のエラー回避処理
+function avoidStructNameError(elem) {
+  let name = '';
+  if (elem != null) {
+    name = elem.Name;
+  }
+  return name;
 }

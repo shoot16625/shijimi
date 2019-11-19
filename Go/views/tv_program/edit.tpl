@@ -230,14 +230,14 @@
               float
             ></ons-input>
           </p>
-          <p class="create-top-margin">
+          <p class="create-top-bottom-margin">
             <ons-button
               modifier="quiet"
               onclick="previewTvProgram('preview-dialog')"
               >プレビュー</ons-button
             >
           </p>
-          <p class="create-top-margin">
+          <p class="create-top-bottom-margin">
             <input type="hidden" name="_method" value="PUT" />
             <button class="button button--outline">更新する</button>
           </p>

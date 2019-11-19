@@ -79,8 +79,8 @@
                 id="tweet-dialog-content"
                 name="content"
                 type="text"
-                minlength="5"
-                maxlength="450"
+                minlength="20"
+                maxlength="400"
                 required
               ></textarea>
             </div>
@@ -153,7 +153,7 @@
         </ons-page>
         <script type="text/javascript">
           $(function() {
-            var text_max = 450;
+            var text_max = 400;
             $('.count').text(
               text_max - $('#tweet-dialog-content').val().length
             );
@@ -220,7 +220,7 @@
               action="/tv/tv_program/review/search_comment/{{.TvProgram.Id}}"
               method="post"
             >
-              <div class="area-center create-top-margin">
+              <div class="area-center create-top-bottom-margin">
                 <p>
                   <ons-input
                     type="text"
@@ -298,11 +298,13 @@
                     id="limit"
                     modifier="underbar"
                     value="{{.SearchWords.Limit}}"
-                    placeholder="表示数(上限:50)"
+                    placeholder="表示数(デフォルト:100)"
+                    min="1"
+                    max="100"
                     float
                   ></ons-input>
                 </p>
-                <p class="create-top-margin">
+                <p class="create-top-bottom-margin">
                   <button class="button button--outline">search</button>
                 </p>
               </div>
@@ -358,11 +360,7 @@
           if (comments != null) {
             infiniteList.delegate = {
               createItemContent: function(i) {
-              const fps = comments[i].FavoritePoint.split(',');
-              let fpText = "";
-              for (let j = fps.length - 1; j >= 0; j--) {
-                fpText += "<span style='padding:3px;color:blue;'>#"+fps[j]+"</span>";
-              }
+              let fpText = reshapeFavoritePoint(comments[i]);
               if(comments[i].Spoiler){
                 fpText += "<i class='fas fa-hand-paper' style='color:palevioletred;'></i>";
               }
@@ -550,10 +548,7 @@
       if ({{.TvProgram.Category}} === ""){
         categories = [];
       }
-      let category = "";
-      for (let j = categories.length - 1; j >= 0; j--) {
-        category += "<span style='padding:3px;'>#"+categories[j]+"</span>";
-      }
+      let category = reshapeCategory(categories);
       document.getElementById("tv-category").innerHTML = category;
     </script>
   </body>

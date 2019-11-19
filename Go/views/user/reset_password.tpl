@@ -24,14 +24,6 @@
               required
             ></ons-input>
           </p>
-          <!-- <input type="hidden" name="username" value="{{.User.Username}}"></input>
-        <input type="hidden" name="age" value="{{.User.Age}}"></input>
-        <input type="hidden" name="job" value="{{.User.Job}}"></input>
-        <input type="hidden" name="gender" value="{{.User.Gender}}"></input>
-        <input type="hidden" name="address" value="{{.User.Address}}"></input>
-        <input type="hidden" name="IconURL" value="{{.User.IconUrl}}"></input>
-        <input type="hidden" name="marital" value="{{.User.Marital}}"></input>
-        <input type="hidden" name="SecondPassword" value="{{.User.SecondPassword}}"></input> -->
           <p>
             <label class="left">
               <ons-checkbox input-id="password-check"></ons-checkbox>
@@ -40,7 +32,7 @@
               パスワードを表示
             </label>
           </p>
-          <p class="create-top-margin">
+          <p class="create-top-bottom-margin">
             <input type="hidden" name="_method" value="PUT" />
             <button class="button button--outline">パスワード再設定</button>
           </p>

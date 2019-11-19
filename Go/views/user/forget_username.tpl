@@ -12,6 +12,19 @@
       <form id="login-user" action="/tv/user/forget_username" method="post">
         <div class="input-table">
           <p>
+            <label for="age" class="label-margin">＜生年月日＞</label>
+            <ons-input
+              type="date"
+              name="age"
+              id="age"
+              modifier="underbar"
+              min="1920-01-01"
+              max="2030-01-01"
+              float
+              required
+            ></ons-input>
+          </p>
+          <p>
             <label for="password" style="margin: 0 30px 0 30px;"
               >＜パスワード＞</label
             >
@@ -49,7 +62,7 @@
               パスワードを表示
             </label>
           </p>
-          <p class="create-top-margin">
+          <p class="create-top-bottom-margin">
             <button class="button button--outline">ユーザー名を検索</button>
           </p>
         </div>

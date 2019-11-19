@@ -14,7 +14,7 @@ type ReviewComment struct {
 	Id            int64 `orm:"auto"`
 	UserId        int64
 	TvProgramId   int64
-	Content       string `orm:"size(500)"`
+	Content       string `orm:"size(1000)"`
 	CountLike     int    `orm:"default(0)"`
 	Spoiler       bool
 	Star          int       `orm:"default(5)"`
@@ -98,10 +98,10 @@ func GetAllReviewComment(query map[string]string, fields []string, sortby []stri
 	}
 
 	var l []ReviewComment
-	var maxLimit int64 = 50
-	if maxLimit < limit {
-		limit = maxLimit
-	}
+	// var maxLimit int64 = 50
+	// if maxLimit < limit {
+	// 	limit = maxLimit
+	// }
 	qs = qs.OrderBy(sortFields...).RelatedSel()
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -154,16 +154,15 @@ func DeleteReviewComment(id int64) (err error) {
 	return
 }
 
-func GetReviewCommentByTvProgramId(id int64) (v []ReviewComment, err error) {
+func GetReviewCommentByTvProgramId(id int64, limit int64) (v []ReviewComment, err error) {
 	o := orm.NewOrm()
-	if _, err = o.QueryTable(new(ReviewComment)).Filter("TvProgramId", id).OrderBy("-Created").All(&v); err == nil {
+	if _, err = o.QueryTable(new(ReviewComment)).Filter("TvProgramId", id).OrderBy("-Created").Limit(limit).All(&v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-func GetReviewCommentByUserId(id int64) (v []ReviewComment, err error) {
-	var limit int64 = 50
+func GetReviewCommentByUserId(id int64, limit int64) (v []ReviewComment, err error) {
 	o := orm.NewOrm()
 	if _, err = o.QueryTable(new(ReviewComment)).Filter("UserId", id).Limit(limit).OrderBy("-Created").All(&v); err == nil {
 		return v, nil

@@ -160,6 +160,8 @@ label {
   margin-left: 5px;
 }
 
+
+
 /* margin */
 .list-margin {
   margin: 0px 5px 0px 3px;
@@ -167,11 +169,14 @@ label {
 .list-margin-bottom {
   margin-bottom: 5px;
 }
+.label-margin {
+  margin: 0px 30px 0px 30px;
+}
 .margin-bottom-20 {
   margin-bottom: 20px;
 }
 
-.create-top-margin {
+.create-top-bottom-margin {
   margin-top:20px;
   margin-bottom:20px;
 }
@@ -179,13 +184,22 @@ label {
 .create-top-margin-5 {
   margin-top:5px;
 }
-
+.on-air-movie {
+  margin-top:20px;
+  margin-bottom:20px;
+}
 .select-search-table {
   width: 80%;
   max-width: 500px;
 }
-.doramas-on-air{
+.dramas-on-air{
   margin-bottom: 10px;
+}
+
+.drama-on-air-carousel{
+  margin-top: 25px;
+  border-bottom: solid thin lightgray;
+  text-align: left;
 }
 
 /* padding */
@@ -198,6 +212,9 @@ label {
   padding-top: 0px;
 }
 
+.drama-on-air-carousel-padding{
+ padding: 3px;
+}
 
 /* font-size */
 .comment-list-header-font {

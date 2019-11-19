@@ -19,7 +19,7 @@
           style="text-align: center;background-color:linen;margin:10px;"
         >
           「ShiJimi」<br />
-          SNSとレビューサイトを足して<br />2で割ったような．
+          ドラマ・映画の情報共有SNS
         </ons-card>
         <form id="search_form" action="/tv/tv_program/search" method="post">
           <p style="margin-top: 20px;">
@@ -78,13 +78,21 @@
           </ons-col>
         </ons-row>
 
-        <div class="on_airs">
+        <ons-toast id="mypageToast" animation="ascend"
+        >ログインに失敗しました <i class="far fa-sad-tear"></i><button
+          onclick="mypageToast.hide()"
+        >
+          ok
+        </button></ons-toast
+      >
+  
+        <div class="on-air-drama">
           <h2>
             <i class="fas fa-tv" style="color: skyblue;"></i> 現在放送中のドラマ
           </h2>
 
           <p
-            style="margin-top: 25px;border-bottom: solid thin lightgray;text-align: left;"
+            class="drama-on-air-carousel"
           >
             <i class="far fa-moon" style="color:rgb(235, 200, 3);"></i> 月
           </p>
@@ -96,7 +104,7 @@
             swipeable
             overscrollable
             item-width="200px"
-            class="doramas-on-air"
+            class="dramas-on-air"
           >
             {{ range.TvProgramMon }}
             <ons-carousel-item
@@ -104,7 +112,7 @@
               id="{{.Id}}"
               name="{{.Title}}"
             >
-              <div class="area-center" style="padding: 3px;">
+              <div class="area-center drama-on-air-carousel-padding" >
                 <div class="thumbnail">
                   <img
                     src="{{.ImageUrl}}"
@@ -123,7 +131,7 @@
             {{ end }}
           </ons-carousel>
           <p
-            style="margin-top: 25px;border-bottom: solid thin lightgray;text-align: left;"
+            class="drama-on-air-carousel"
           >
             <i class="fas fa-fire" style="color:rgb(235, 30, 30);"></i> 火
           </p>
@@ -135,7 +143,7 @@
             swipeable
             overscrollable
             item-width="200px"
-            class="doramas-on-air"
+            class="dramas-on-air"
           >
             {{ range.TvProgramTue }}
             <ons-carousel-item
@@ -143,7 +151,7 @@
               id="{{.Id}}"
               name="{{.Title}}"
             >
-              <div class="area-center" style="padding: 3px;">
+              <div class="area-center drama-on-air-carousel-padding" >
                 <div class="thumbnail">
                   <img
                     src="{{.ImageUrl}}"
@@ -162,7 +170,7 @@
             {{ end }}
           </ons-carousel>
           <p
-            style="margin-top: 25px;border-bottom: solid thin lightgray;text-align: left;"
+            class="drama-on-air-carousel"
           >
             <i class="fas fa-tint" style="color:rgb(95, 149, 231);"></i> 水
           </p>
@@ -174,7 +182,7 @@
             swipeable
             overscrollable
             item-width="200px"
-            class="doramas-on-air"
+            class="dramas-on-air"
           >
             {{ range.TvProgramWed }}
             <ons-carousel-item
@@ -182,7 +190,7 @@
               id="{{.Id}}"
               name="{{.Title}}"
             >
-              <div class="area-center" style="padding: 3px;">
+              <div class="area-center drama-on-air-carousel-padding" >
                 <div class="thumbnail">
                   <img
                     src="{{.ImageUrl}}"
@@ -201,7 +209,7 @@
             {{ end }}
           </ons-carousel>
           <p
-            style="margin-top: 25px;border-bottom: solid thin lightgray;text-align: left;"
+            class="drama-on-air-carousel"
           >
             <i class="fas fa-tree" style="color:green;"></i> 木
           </p>
@@ -213,7 +221,7 @@
             swipeable
             overscrollable
             item-width="200px"
-            class="doramas-on-air"
+            class="dramas-on-air"
           >
             {{ range.TvProgramThu }}
             <ons-carousel-item
@@ -221,7 +229,7 @@
               id="{{.Id}}"
               name="{{.Title}}"
             >
-              <div class="area-center" style="padding: 3px;">
+              <div class="area-center drama-on-air-carousel-padding" >
                 <div class="thumbnail">
                   <img
                     src="{{.ImageUrl}}"
@@ -240,7 +248,7 @@
             {{ end }}
           </ons-carousel>
           <p
-            style="margin-top: 25px;border-bottom: solid thin lightgray;text-align: left;"
+            class="drama-on-air-carousel"
           >
             <i class="fas fa-coins" style="color:rgb(187, 162, 24);"></i> 金
           </p>
@@ -252,7 +260,7 @@
             swipeable
             overscrollable
             item-width="200px"
-            class="doramas-on-air"
+            class="dramas-on-air"
           >
             {{ range.TvProgramFri }}
             <ons-carousel-item
@@ -260,7 +268,7 @@
               id="{{.Id}}"
               name="{{.Title}}"
             >
-              <div class="area-center" style="padding: 3px;">
+              <div class="area-center drama-on-air-carousel-padding" >
                 <div class="thumbnail">
                   <img
                     src="{{.ImageUrl}}"
@@ -279,7 +287,7 @@
             {{ end }}
           </ons-carousel>
           <p
-            style="margin-top: 25px;border-bottom: solid thin lightgray;text-align: left;"
+            class="drama-on-air-carousel"
           >
             <i class="fas fa-globe" style="color:rgb(138, 193, 219);"></i> 土
           </p>
@@ -291,7 +299,7 @@
             swipeable
             overscrollable
             item-width="200px"
-            class="doramas-on-air"
+            class="dramas-on-air"
           >
             {{ range.TvProgramSat }}
             <ons-carousel-item
@@ -299,7 +307,7 @@
               id="{{.Id}}"
               name="{{.Title}}"
             >
-              <div class="area-center" style="padding: 3px;">
+              <div class="area-center drama-on-air-carousel-padding" >
                 <div class="thumbnail">
                   <img
                     src="{{.ImageUrl}}"
@@ -318,7 +326,7 @@
             {{ end }}
           </ons-carousel>
           <p
-            style="margin-top: 25px;border-bottom: solid thin lightgray;text-align: left;"
+            class="drama-on-air-carousel"
           >
             <i class="fas fa-sun" style="color:rgb(255, 166, 0);"></i> 日
           </p>
@@ -330,7 +338,7 @@
             swipeable
             overscrollable
             item-width="200px"
-            class="doramas-on-air"
+            class="dramas-on-air"
           >
             {{ range.TvProgramSun }}
             <ons-carousel-item
@@ -338,7 +346,7 @@
               id="{{.Id}}"
               name="{{.Title}}"
             >
-              <div class="area-center" style="padding: 3px;">
+              <div class="area-center drama-on-air-carousel-padding" >
                 <div class="thumbnail">
                   <img
                     src="{{.ImageUrl}}"
@@ -356,6 +364,47 @@
             </ons-carousel-item>
             {{ end }}
           </ons-carousel>
+        </div>
+        <div class="on-air-movie">
+            <h2>
+              <i class="fas fa-film" style="color:chocolate;"></i> 最近の映画
+            </h2>
+            <p class="drama-on-air-carousel">
+            </p>
+            <ons-carousel
+              id="carousel10"
+              auto-refresh
+              auto-scroll
+              auto-scroll-ratio="0.15"
+              swipeable
+              overscrollable
+              item-width="200px"
+              class="dramas-on-air"
+            >
+              {{ range.TvProgramMovie }}
+              <ons-carousel-item
+                modifier="nodivider"
+                id="{{.Id}}"
+                name="{{.Title}}"
+              >
+                <div class="area-center drama-on-air-carousel-padding" >
+                  <div class="thumbnail">
+                    <img
+                      src="{{.ImageUrl}}"
+                      alt="{{.Title}}"
+                      class="image-carousel"
+                      onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/tv_img/hanko_02.png'"
+                    />
+                    <a href="/tv/tv_program/comment/{{.Id}}"></a>
+                  </div>
+                  {{if .ImageUrlReference}}
+                  <div class="reference">出典:{{.ImageUrlReference}}</div>
+                  {{ end }}
+                  <div>{{.Title}}</div>
+                </div>
+              </ons-carousel-item>
+              {{ end }}
+            </ons-carousel>
         </div>
         <ons-row>
           <ons-col class="area-right">
@@ -404,7 +453,7 @@
           class="area-right"
           style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;margin: 10px;"
         >
-          &copy; 2019 ShiJimi
+          &copy; 2020 ShiJimi
         </div>
       </div>
     </ons-page>
@@ -544,6 +593,9 @@
       if ({{.TvProgramSun}}) {
         autoScroll(carousel07, {{.TvProgramSun}}.length);
       }
+      if ({{.TvProgramMovie}}) {
+        autoScroll(carousel10, {{.TvProgramMovie}}.length);
+      }
     </script>
     <script>
       !(function(d, s, id) {
@@ -565,5 +617,10 @@
       crossorigin="anonymous"
       src="https://connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v4.0"
     ></script>
+    <script>
+        if ({{.LoginError}}) {
+          document.querySelector('ons-toast').show();
+        }
+      </script>
   </body>
 </html>

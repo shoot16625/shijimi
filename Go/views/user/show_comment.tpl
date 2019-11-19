@@ -13,10 +13,9 @@
       <ons-list class="list-margin">
         <ons-lazy-repeat id="comments"></ons-lazy-repeat>
       </ons-list>
-      <ons-toast id="mypageToast" animation="ascend"
-        >{{.LoginPoint}}ポイント獲得しました!!<button
-          onclick="mypageToast.hide()"
-        >
+      <ons-toast id="mypageToast" animation="ascend">
+        {{.Status}}
+        <button onclick="mypageToast.hide()">
           ok
         </button></ons-toast
       >
@@ -97,7 +96,7 @@
       reshapeBadges({{.User.Badge}});
     </script>
     <script>
-      if ({{.LoginPoint}}) {
+      if ({{.Status}}) {
         document.querySelector('ons-toast').show();
       }
     </script>

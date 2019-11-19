@@ -60,12 +60,14 @@ func init() {
 		return in.Format("2006-01-02 15:04:05")
 	})
 	// 年齢計算
-	beego.AddFuncMap("birthday2Age", func(birthday int) (age string) {
+	beego.AddFuncMap("birthday2Age", func(birthday string) (age string) {
 		t := time.Now()
-		year := birthday / 100
-		month := (birthday - year*100)
-		ageInt := t.Year() - int(year)
-		if b := int(t.Month()) - month; b < 0 {
+		birth, _ := time.Parse("2006-01-02", birthday)
+		ageInt := t.Year() - birth.Year()
+		t2 := time.Date(birth.Year(), t.Month(), t.Day(), 0, 0, 0, 0, time.Local)
+		duration := t2.Sub(birth)
+		fmt.Println(ageInt, birth, duration)
+		if int(duration.Hours()) < 0 {
 			ageInt--
 		}
 		age = strconv.Itoa(ageInt)
@@ -93,7 +95,7 @@ func init() {
 	// 初期データの投入
 	db.ExecInitSQL()
 	// db.ExecTestSQL()
-	db.AddRecentTvInfo()
+	// db.AddRecentTvInfo()
 	// db.AddTvProgramsInformation()
 	// db.GetMovieWalkers()
 	// db.ExecDemoSQL()

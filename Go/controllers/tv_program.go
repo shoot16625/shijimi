@@ -349,11 +349,14 @@ func (c *TvProgramController) Get() {
 	for i, v := range week {
 		query["Week.Name"] = v
 		w, err := models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
-		if err != nil {
-			c.Data["TvProgram"+weekName[i]] = nil
-		} else {
+		if err == nil {
 			c.Data["TvProgram"+weekName[i]] = w
 		}
+	}
+	query["Week.Name"] = "映画"
+	w, err := models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
+	if err == nil {
+		c.Data["TvProgramMovie"] = w
 	}
 	c.TplName = "tv_program/top_page.tpl"
 }
@@ -446,6 +449,15 @@ func (c *TvProgramController) SearchTvProgram() {
 		query["Year"] = v
 	}
 	if v := c.GetStrings("week"); v != nil {
+		for _, value := range v {
+			if strings.Contains(value, "映画以外") {
+				dramas := []string{"月", "火", "水", "木", "金", "土", "日"}
+				for _, w := range dramas {
+					v = append(v, w)
+				}
+				break
+			}
+		}
 		query["Week"] = v
 	}
 	if v := c.GetStrings("hour"); v != nil {

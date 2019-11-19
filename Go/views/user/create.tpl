@@ -81,9 +81,7 @@
             </select>
           </p>
           <p>
-            <label for="address" style="margin: 0 30px 0 30px;"
-              >＜居住地＞</label
-            >
+            <label for="address" class="label-margin">＜居住地＞</label>
             <select
               class="select-input select-input--underbar select-search-table"
               id="address"
@@ -141,7 +139,7 @@
             </select>
           </p>
           <p>
-            <label for="job" style="margin: 0 30px 0 30px;">＜職業＞</label>
+            <label for="job" class="label-margin">＜職業＞</label>
             <select
               class="select-input select-input--underbar select-search-table"
               id="job"
@@ -162,20 +160,21 @@
             </select>
           </p>
           <p>
+            <label for="age" class="label-margin">＜生年月日＞</label>
             <ons-input
-              type="number"
+              type="date"
               name="age"
+              id="age"
               value="{{.User.Age}}"
               modifier="underbar"
-              placeholder="生年月(ex.1990年10月 → 199010)"
-              min="192001"
-              max="205012"
+              min="1920-01-01"
+              max="2030-01-01"
               float
               required
             ></ons-input>
           </p>
           <p>
-            <label for="IconURL" style="margin: 0 30px 0 30px;"
+            <label for="IconURL" class="label-margin"
               >＜プロフィール画像のURL＞</label
             >
             <ons-input
@@ -189,7 +188,7 @@
             ></ons-input>
           </p>
           <p>
-            <label for="SecondPassword" style="margin: 0 30px 0 30px;"
+            <label for="SecondPassword" class="label-margin"
               >＜第2パスワードの設定＞</label
             >
             <ons-input
@@ -230,7 +229,7 @@
               >プライバシーポリシーに同意</ons-button
             >
           </p>
-          <p class="create-top-margin">
+          <p class="create-top-bottom-margin">
             <button class="button button--outline">作成する</button>
           </p>
         </div>

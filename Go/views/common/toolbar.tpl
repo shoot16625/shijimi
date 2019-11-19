@@ -43,7 +43,7 @@
         </div>
       </ons-toolbar>
       <form id="search_tv_program" action="/tv/tv_program/search" method="post">
-        <div class="area-center create-top-margin">
+        <div class="area-center create-top-bottom-margin">
           <p>
             <ons-search-input
               name="search-word"
@@ -51,7 +51,7 @@
               id="search-word"
             ></ons-search-input>
           </p>
-          <p class="create-top-margin">
+          <p class="create-top-bottom-margin">
             <button class="button button--outline">search</button>
           </p>
           <p style="margin-top: 40px;">

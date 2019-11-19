@@ -47,7 +47,8 @@ func (c *UserController) URLMapping() {
 // @router / [post]
 func (c *UserController) Post() {
 	// var v models.User
-	age, _ := c.GetInt("age")
+	// age, _ := c.GetInt("age")
+	// fmt.Println(c.GetString("age"))
 	hashPass, _ := models.PasswordHash(c.GetString("password"))
 	hashSecondpass, _ := models.PasswordHash(c.GetString("SecondPassword"))
 	IconURL := c.GetString("IconURL")
@@ -64,7 +65,7 @@ func (c *UserController) Post() {
 		Username:       c.GetString("username"),
 		Password:       hashPass,
 		SecondPassword: hashSecondpass,
-		Age:            age,
+		Age:            c.GetString("age"),
 		Address:        c.GetString("address"),
 		Gender:         c.GetString("gender"),
 		Job:            c.GetString("job"),
@@ -178,7 +179,7 @@ func (c *UserController) GetAll() {
 func (c *UserController) Put() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
-	age, _ := c.GetInt("age")
+	// age, _ := c.GetInt("age")
 
 	IconURL := c.GetString("IconURL")
 	if !strings.Contains(IconURL, "http") && !strings.Contains(IconURL, "/static/img") {
@@ -197,7 +198,7 @@ func (c *UserController) Put() {
 		v.Password = hashPass
 	} else {
 		v.Username = c.GetString("username")
-		v.Age = age
+		v.Age = c.GetString("age")
 		v.Address = c.GetString("address")
 		v.Gender = c.GetString("gender")
 		v.Job = c.GetString("job")
@@ -268,7 +269,7 @@ func (c *UserController) Show() {
 	if id != 0 {
 		v, _ := models.GetUserById(id)
 		c.Data["User"] = v
-		w, _ := models.GetCommentByUserId(id)
+		w, _ := models.GetCommentByUserId(id, 1000)
 		c.Data["Comment"] = w
 
 		var commentLikes []models.CommentLike
@@ -316,7 +317,7 @@ func (c *UserController) Show() {
 			UserID := session.Get("UserId").(int64)
 			v, _ := models.GetUserById(UserID)
 			c.Data["User"] = v
-			w, _ := models.GetCommentByUserId(UserID)
+			w, _ := models.GetCommentByUserId(UserID, 1000)
 			c.Data["Comment"] = w
 
 			var commentLikes []models.CommentLike
@@ -347,7 +348,7 @@ func (c *UserController) ShowReview() {
 	if id != 0 {
 		v, _ := models.GetUserById(id)
 		c.Data["User"] = v
-		w, _ := models.GetReviewCommentByUserId(id)
+		w, _ := models.GetReviewCommentByUserId(id, 100)
 		c.Data["Comment"] = w
 		if session.Get("UserId") == nil {
 			c.Data["MyUserId"] = nil
@@ -388,7 +389,7 @@ func (c *UserController) ShowReview() {
 			userID := session.Get("UserId").(int64)
 			v, _ := models.GetUserById(userID)
 			c.Data["User"] = v
-			w, _ := models.GetReviewCommentByUserId(userID)
+			w, _ := models.GetReviewCommentByUserId(userID, 100)
 			c.Data["Comment"] = w
 
 			var commentLikes []models.ReviewCommentLike
@@ -489,23 +490,15 @@ func (c *UserController) Edit() {
 func (c *UserController) Login() {
 	session := c.StartSession()
 	v, _ := models.GetUserByUsername(c.GetString("username"))
-	if v == nil {
-		c.Data["Status"] = "ログインに失敗しました"
-		var Info struct {
-			CntUsers      int64
-			CntTvPrograms int64
-		}
-		Info.CntUsers = models.GetUserCount()
-		Info.CntTvPrograms = models.GetTvProgramCount()
-		c.Data["Info"] = Info
-		c.TplName = "user/logout.tpl"
-	} else {
+	if v != nil {
 		if models.UserPassMach(v.Password, c.GetString("password")) {
 			session.Set("username", c.GetString("username"))
 			session.Set("UserId", v.Id)
 			firstLoginToday := models.AddLoginPoint(v.Id)
 			if firstLoginToday {
-				c.Data["LoginPoint"] = 1
+				c.Data["Status"] = "1ポイント獲得しました!!"
+			} else {
+				c.Data["Status"] = "ログインしました!!"
 			}
 			z := models.LoginHistory{
 				UserId: v.Id,
@@ -515,7 +508,7 @@ func (c *UserController) Login() {
 			UserID := v.Id
 			v, _ := models.GetUserById(UserID)
 			c.Data["User"] = v
-			w, _ := models.GetCommentByUserId(UserID)
+			w, _ := models.GetCommentByUserId(UserID, 1000)
 			c.Data["Comment"] = w
 
 			var commentLikes []models.CommentLike
@@ -535,17 +528,35 @@ func (c *UserController) Login() {
 			c.Data["CommentLike"] = commentLikes
 			c.Data["TvProgram"] = tvPrograms
 			c.TplName = "user/show_comment.tpl"
-		} else {
-			c.Data["Status"] = "ログインに失敗しました"
-			var Info struct {
-				CntUsers      int64
-				CntTvPrograms int64
-			}
-			Info.CntUsers = models.GetUserCount()
-			Info.CntTvPrograms = models.GetTvProgramCount()
-			c.Data["Info"] = Info
-			c.TplName = "user/logout.tpl"
 		}
+	} else {
+		c.Data["LoginError"] = true
+		c.Data["UserId"] = session.Get("UserId")
+		var fields []string
+		var sortby []string
+		var order []string
+		var limit int64 = 100
+		var offset int64
+		var query = make(map[string]string)
+		sortby = append(sortby, "Hour")
+		order = append(order, "asc")
+		query["Year"] = strconv.Itoa(time.Now().Year())
+		query["Season"] = models.GetOnAirSeason()
+		week := [7]string{"月", "火", "水", "木", "金", "土", "日"}
+		weekName := [7]string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"}
+		for i, v := range week {
+			query["Week.Name"] = v
+			w, err := models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
+			if err == nil {
+				c.Data["TvProgram"+weekName[i]] = w
+			}
+		}
+		query["Week.Name"] = "映画"
+		w, err := models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
+		if err == nil {
+			c.Data["TvProgramMovie"] = w
+		}
+		c.TplName = "tv_program/top_page.tpl"
 	}
 }
 
@@ -576,7 +587,7 @@ func (c *UserController) ForgetPasswordPage() {
 }
 
 func (c *UserController) ForgetUsername() {
-	v, _ := models.GetUserByPasswords(c.GetString("password"), c.GetString("SecondPassword"))
+	v, _ := models.GetUserByPasswords(c.GetString("password"), c.GetString("age"), c.GetString("SecondPassword"))
 	if v == nil {
 		c.Data["User"] = new(models.User)
 	} else {
@@ -586,8 +597,7 @@ func (c *UserController) ForgetUsername() {
 }
 
 func (c *UserController) ForgetPassword() {
-	age, _ := c.GetInt("age")
-	v, _ := models.GetUserByUsernameAndPassword(c.GetString("username"), age, c.GetString("SecondPassword"))
+	v, _ := models.GetUserByUsernameAndPassword(c.GetString("username"), c.GetString("age"), c.GetString("SecondPassword"))
 	if v == nil {
 		c.Data["User"] = new(models.User)
 		c.TplName = "user/forget_password.tpl"

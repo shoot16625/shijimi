@@ -78,7 +78,7 @@
               name="content"
               type="text"
               minlength="5"
-              maxlength="250"
+              maxlength="180"
               required
             ></textarea>
           </div>
@@ -86,7 +86,7 @@
         </ons-page>
         <script type="text/javascript">
           $(function() {
-            const text_max = 250;
+            const text_max = 180;
             let text_length;
             let countdown;
             $('.count').text(
@@ -156,7 +156,7 @@
                     id="username"
                     value="{{.SearchWords.Username}}"
                     modifier="underbar"
-                    placeholder="ユーザー"
+                    placeholder="ユーザーを指定"
                     float
                   ></ons-input>
                 </p>
@@ -217,11 +217,13 @@
                     id="limit"
                     modifier="underbar"
                     value="{{.SearchWords.Limit}}"
-                    placeholder="表示数(上限:200)"
+                    placeholder="表示数(デフォルト:200)"
+                    min="1"
+                    max="200"
                     float
                   ></ons-input>
                 </p>
-                <p class="create-top-margin">
+                <p class="create-top-bottom-margin">
                   <button class="button button--outline">search</button>
                 </p>
               </div>
@@ -459,10 +461,7 @@
       if ({{.TvProgram.Category}} === ""){
         categories = [];
       }
-      let category = "";
-      for (let j = categories.length - 1; j >= 0; j--) {
-        category += "<span style='padding:3px;'>#"+categories[j]+"</span>";
-      }
+      let category = reshapeCategory(categories);
       document.getElementById("tv-category").innerHTML = category;
     </script>
   </body>

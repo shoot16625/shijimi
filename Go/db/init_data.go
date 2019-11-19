@@ -24,10 +24,10 @@ func ExecInitSQL() {
 		o.Insert(v)
 	}
 	// 管理者用 ID：1
-	UserSQL("doramaba-admin", "doramaba-password", 199505, "男性", "愛知県", "学生", "doramaba-password", "/static/img/shijimi-transparence.png", "未婚", "A型", 500, "thanks")
+	UserSQL("doramaba-admin", "doramaba-password", "1995-05-06", "男性", "愛知県", "学生", "doramaba-password", "/static/img/shijimi-transparence.png", "未婚", "A型", 500, "1")
 
 	// uchida用 ID：2
-	UserSQL("ちゃお倉木", "password", 199505, "男性", "愛知県", "学生", "乃木小学校", "https://img.cinematoday.jp/a/N0077397/_size_640x/_v_1445346612/1.jpg", "未婚", "A型", 500, "thanks")
+	UserSQL("ちゃお倉木", "password", "1995-05-06", "男性", "愛知県", "学生", "乃木小学校", "https://img.cinematoday.jp/a/N0077397/_size_640x/_v_1445346612/1.jpg", "未婚", "A型", 500, "1")
 
 	// お問い合わせ用 ID：1
 	TvProgramSQL("お問い合わせ専用", "サービス改善のため、忌憚のないご意見・ご感想をお待ちしております。3回に1回くらい褒めていただけると幸いです。", "/static/img/shijimi-transparence.png", "", "", "", "こんにちは", "コメディ・パロディ", "松江育ち", "単独開発", "日記感覚で", "Shiny & Jiminy", 2019, "夏", "miletがすき", "日", 100, 5, 0, 0, 0)
@@ -35,7 +35,7 @@ func ExecInitSQL() {
 
 func ExecTestSQL() {
 	for i := 1; i < 3; i++ {
-		UserSQL("test-user-"+strconv.Itoa(i), "password", 199001, "男性", "愛知県", "学生", "乃木", "http://blog-imgs-34.fc2.com/m/i/n/minamijima/Mx1mTAr153j4wz96j8npWxBF_500.jpg", "未婚", "A型", 500, "thanks")
+		UserSQL("test-user-"+strconv.Itoa(i), "password", "1995-05-06", "男性", "愛知県", "学生", "乃木", "http://blog-imgs-34.fc2.com/m/i/n/minamijima/Mx1mTAr153j4wz96j8npWxBF_500.jpg", "未婚", "A型", 500, "1")
 	}
 
 	for i := 1; i < 5; i++ {
@@ -52,8 +52,8 @@ func ExecTestSQL() {
 }
 
 func ExecDemoSQL() {
-	UserSQL("ユーザA", "password", 199001, "男性", "愛知県", "学生", "乃木", "http://flat-icon-design.com/f/f_object_161/s512_f_object_161_0bg.png", "未婚", "A型", 500, "thanks")
-	UserSQL("Bさん", "password", 199001, "男性", "愛知県", "学生", "乃木", "http://flat-icon-design.com/f/f_object_105/s512_f_object_105_0bg.png", "未婚", "A型", 500, "thanks")
+	UserSQL("ユーザA", "password", "1995-05-06", "男性", "愛知県", "学生", "乃木", "http://flat-icon-design.com/f/f_object_161/s512_f_object_161_0bg.png", "未婚", "A型", 500, "1")
+	UserSQL("Bさん", "password", "1995-05-06", "男性", "愛知県", "学生", "乃木", "http://flat-icon-design.com/f/f_object_105/s512_f_object_105_0bg.png", "未婚", "A型", 500, "1")
 	for j := 1; j < 20; j++ {
 		CommentSQL("コメントを投稿（250字まで）\r\nコメントを投稿（250字まで）\r\n"+strconv.Itoa(j), 3, 19, int(j))
 		CommentSQL("桑野さん最高すぎる！\r\n"+strconv.Itoa(j), 4, 19, int(j*3))
@@ -139,7 +139,7 @@ func ReviewCommentLikeSQL(userID int64, reviewcommentID int64, like bool) {
 	o.Insert(v)
 }
 
-func UserSQL(username string, password string, age int, gender string, address string, job string, secondPassword string, IconURL string, marital string, bloodType string, MoneyPoint int, badge string) {
+func UserSQL(username string, password string, age string, gender string, address string, job string, secondPassword string, IconURL string, marital string, bloodType string, MoneyPoint int, badge string) {
 	o := orm.NewOrm()
 	o.Using("default")
 	v := new(models.User)

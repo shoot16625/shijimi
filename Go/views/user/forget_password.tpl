@@ -21,13 +21,14 @@
             ></ons-input>
           </p>
           <p>
+            <label for="age" class="label-margin">＜生年月日＞</label>
             <ons-input
-              type="number"
+              type="date"
               name="age"
+              id="age"
               modifier="underbar"
-              placeholder="生年月(ex.1990年10月 → 199010)"
-              min="192001"
-              max="205012"
+              min="1920-01-01"
+              max="2030-01-01"
               float
               required
             ></ons-input>
@@ -46,7 +47,7 @@
               required
             ></ons-input>
           </p>
-          <p class="create-top-margin">
+          <p class="create-top-bottom-margin">
             <button class="button button--outline">パスワードを再設定</button>
           </p>
         </div>

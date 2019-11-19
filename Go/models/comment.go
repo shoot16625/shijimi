@@ -12,7 +12,7 @@ import (
 
 type Comment struct {
 	Id          int64  `orm:"auto"`
-	Content     string `orm:"type(longtext)"`
+	Content     string `orm:"size(500)""`
 	TvProgramId int64
 	UserId      int64
 	CountLike   int       `orm:"default(0)"`
@@ -99,10 +99,10 @@ func GetAllComment(query map[string]string, fields []string, sortby []string, or
 
 	var l []Comment
 	qs = qs.OrderBy(sortFields...).RelatedSel()
-	var maxLimit int64 = 200
-	if maxLimit < limit {
-		limit = maxLimit
-	}
+	// var maxLimit int64 = 200
+	// if maxLimit < limit {
+	// 	limit = maxLimit
+	// }
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
 			for _, v := range l {
@@ -197,10 +197,10 @@ func SearchComment(query map[string]string, fields []string, sortby []string, or
 
 	var l []Comment
 	qs = qs.OrderBy(sortFields...).RelatedSel()
-	var maxLimit int64 = 200
-	if maxLimit < limit {
-		limit = maxLimit
-	}
+	// var maxLimit int64 = 200
+	// if maxLimit < limit {
+	// 	limit = maxLimit
+	// }
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
 			for _, v := range l {
@@ -252,18 +252,17 @@ func DeleteComment(id int64) (err error) {
 	return
 }
 
-func GetCommentByTvprogramId(id int64) (v []Comment, err error) {
+func GetCommentByTvprogramId(id int64, limit int64) (v []Comment, err error) {
 	o := orm.NewOrm()
-	if _, err = o.QueryTable(new(Comment)).Filter("TvProgramId", id).OrderBy("-Created").All(&v); err == nil {
+	if _, err = o.QueryTable(new(Comment)).Filter("TvProgramId", id).OrderBy("-Created").Limit(limit).All(&v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-func GetCommentByUserId(id int64) (v []Comment, err error) {
-	var limit int64 = 200
+func GetCommentByUserId(id int64, limit int64) (v []Comment, err error) {
 	o := orm.NewOrm()
-	if _, err = o.QueryTable(new(Comment)).Filter("UserId", id).Limit(limit).OrderBy("-Created").All(&v); err == nil {
+	if _, err = o.QueryTable(new(Comment)).Filter("UserId", id).OrderBy("-Created").Limit(limit).All(&v); err == nil {
 		return v, nil
 	}
 	return nil, err

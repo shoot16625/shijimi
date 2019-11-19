@@ -193,7 +193,7 @@ func (c *CommentController) Show() {
 		c.Data["TvProgram"] = v
 	}
 
-	l, err := models.GetCommentByTvprogramId(tvProgramID)
+	l, err := models.GetCommentByTvprogramId(tvProgramID, 200)
 	if err != nil {
 		c.Data["Comment"] = nil
 	} else {
@@ -266,7 +266,7 @@ func (c *CommentController) SearchComment() {
 	var sortby []string
 	var order []string
 	var query = make(map[string]string)
-	var limit int64 = 100
+	var limit int64 = 200
 	var offset int64
 	var word string
 	var userName string

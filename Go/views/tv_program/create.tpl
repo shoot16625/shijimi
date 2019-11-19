@@ -9,7 +9,7 @@
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
       <div
-        class="area-center create-top-margin"
+        class="area-center create-top-bottom-margin"
         style="background-color: rgb(186, 236, 243);"
       >
         <form id="get-tv-info" action="/tv/tv_program/get_info" method="post">
@@ -236,14 +236,14 @@
               float
             ></ons-input>
           </p>
-          <p class="create-top-margin">
+          <p class="create-top-bottom-margin">
             <ons-button
               modifier="quiet"
               onclick="previewTvProgram('preview-dialog')"
               >プレビュー</ons-button
             >
           </p>
-          <p class="create-top-margin">
+          <p class="create-top-bottom-margin">
             <button class="button button--outline">作成する</button>
           </p>
         </div>

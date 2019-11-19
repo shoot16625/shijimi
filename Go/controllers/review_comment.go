@@ -45,7 +45,7 @@ func (c *ReviewCommentController) Post() {
 			if _, err := models.AddReviewComment(&v); err == nil {
 				c.Data["json"] = v
 				if w, err := models.GetTvProgramById(v.TvProgramId); err == nil {
-					if y, err := models.GetReviewCommentByTvProgramId(v.TvProgramId); err == nil {
+					if y, err := models.GetReviewCommentByTvProgramId(v.TvProgramId, 100000); err == nil {
 						w.CountStar = len(y)
 						var n int = 0
 						for _, z := range y {
@@ -206,7 +206,7 @@ func (c *ReviewCommentController) Show() {
 		c.Data["TvProgram"] = v
 	}
 
-	l, err := models.GetReviewCommentByTvProgramId(tvProgramID)
+	l, err := models.GetReviewCommentByTvProgramId(tvProgramID, 100)
 	if err != nil {
 		c.Data["Comment"] = nil
 	} else {
