@@ -36,15 +36,13 @@
             <ons-list-item id="browsing-ranking-24-expandable" expandable>
               閲覧ランキング（24時間以内）
               <div class="expandable-content">
-                <ons-list modifier="inset" id="browsing-ranking-24"> </ons-list>
+                <ons-list modifier="inset" id="browsing-ranking-24"></ons-list>
               </div>
             </ons-list-item>
-          </ons-list>
-          <ons-list>
             <ons-list-item id="star-ranking-on-air-expandable" expandable>
               レビューランキング（放送中）
               <div class="expandable-content">
-                <ons-list modifier="inset" id="star-ranking-on-air"> </ons-list>
+                <ons-list modifier="inset" id="star-ranking-on-air"></ons-list>
               </div>
             </ons-list-item>
           </ons-list>
@@ -329,7 +327,7 @@
               }
               let category = reshapeCategory(categories);
 
-              return ons.createElement('<div id="' + tvPrograms[i].Id + '"><ons-list-header style="background-color:'+ headerColor +';"><div class="area-left">' + tvPrograms[i].Year + '年 ' + seasonName + '（' + weekName + time + '）</div><div class="area-right list-margin">閲覧数：' + tvPrograms[i].CountClicked + '</div></ons-list-header><ons-list-item><div class="tv-program-list-title-font">' + tvPrograms[i].Title + '</div></ons-list-item><ons-list-item><ons-row><ons-col><ons-row class="list-margin-bottom"><ons-col width="15%">出演：</ons-col><ons-col>' + reshapeContents(casts) + '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="15%">歌：</ons-col><ons-col>' + reshapeContents(themesongs)+ '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col class="category-area">' + category + '</ons-col></ons-row><ons-row></ons-list-item><div class="area-center" style="margin:5px;">' + moviePosition + '<div class="reference">'+referenceSite+'</div></div><ons-list-item expandable>あらすじ・見どころ<div class="expandable-content">' + tvPrograms[i].Content + '</div></ons-list-item><ons-list-item modifier="nodivider"><i class="'+ setLikeBold(watchStatus[i].Watched) +' fa-laugh-beam" id="check-watched-' + i + '" onclick="clickWatchStatus(this)" style="color:' + setLikeStatus(watchStatus[i].Watched, 'deeppink') + ';"></i><div id="check-watched-' + i + '-text" class="tv-program-watch" style="margin-right: 8px;">見た：' + tvPrograms[i].CountWatched + '</div><i class="'+ setLikeBold(watchStatus[i].WantToWatch) +' fa-bookmark" id="check-wan2wat-' + i + '" onclick="clickWatchStatus(this)" style="color:' + setLikeStatus(watchStatus[i].WantToWatch, 'lightseagreen') + ';"></i><div id="check-wan2wat-' + i + '-text" class="tv-program-watch">また今度：' + tvPrograms[i].CountWantToWatch + '</div></ons-list-item><ons-list-item><div class="right list-item__right"><a href="/tv/tv_program/comment/' + tvPrograms[i].Id + '">コメントを見る</a></div></ons-list-item></div>');
+              return ons.createElement('<div id="' + tvPrograms[i].Id + '"><ons-list-header style="background-color:'+ headerColor +';"><div class="area-left">' + tvPrograms[i].Year + '年 ' + seasonName + '（' + weekName + time + '）</div><div class="area-right list-margin">閲覧数：' + tvPrograms[i].CountClicked + '</div></ons-list-header><ons-list-item><div class="tv-program-list-title-font">' + tvPrograms[i].Title + '</div></ons-list-item><ons-list-item><ons-row><ons-col><ons-row class="list-margin-bottom"><ons-col width="15%">出演：</ons-col><ons-col>' + reshapeContents(casts) + '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="15%">歌：</ons-col><ons-col>' + reshapeContents(themesongs)+ '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col class="category-area">' + category + '</ons-col></ons-row><ons-row></ons-list-item><div class="area-center" style="margin:5px;">' + moviePosition + '<div class="reference">' + referenceSite + '</div></div><ons-list-item expandable>あらすじ・見どころ<div class="expandable-content">' + tvPrograms[i].Content + '</div></ons-list-item><ons-list-item modifier="nodivider"><i class="'+ setLikeBold(watchStatus[i].Watched) +' fa-laugh-beam" id="check-watched-' + i + '" onclick="clickWatchStatus(this)" style="color:' + setLikeStatus(watchStatus[i].Watched, 'deeppink') + ';"></i><div id="check-watched-' + i + '-text" class="tv-program-watch" style="margin-right: 8px;">見た：' + tvPrograms[i].CountWatched + '</div><i class="'+ setLikeBold(watchStatus[i].WantToWatch) +' fa-bookmark" id="check-wan2wat-' + i + '" onclick="clickWatchStatus(this)" style="color:' + setLikeStatus(watchStatus[i].WantToWatch, 'lightseagreen') + ';"></i><div id="check-wan2wat-' + i + '-text" class="tv-program-watch">また今度：' + tvPrograms[i].CountWantToWatch + '</div></ons-list-item><ons-list-item><div class="right list-item__right"><a href="/tv/tv_program/comment/' + tvPrograms[i].Id + '">コメントを見る</a></div></ons-list-item></div>');
             },
             countItems: function() {
               return tvPrograms.length;

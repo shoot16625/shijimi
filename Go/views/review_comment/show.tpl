@@ -38,14 +38,16 @@
           </ons-list>
         </ons-carousel-item>
         <ons-carousel-item>
-          <div style="height: 200px; padding: 1px 0 0 0;">
-            <div class="card" style="background-color: rgb(249, 252, 255);">
-              <h2 class="card__title">工事中<i class="fas fa-wrench"></i></h2>
-              <div class="card__content">
-                ログの解析結果を表示.
-              </div>
-            </div>
-          </div>
+          <ons-list>
+            <ons-list-item>総レビュー数：{{ .CommentNum}}</ons-list-item>
+            <ons-list-item>平均星：{{ .TvProgram.Star}}</ons-list-item>
+            <ons-list-item id="favorite-point-ranking-expandable" expandable>
+                おすすめポイントランキング
+                <div class="expandable-content">
+                  <ons-list modifier="inset" id="favorite-point-ranking"></ons-list>
+                </div>
+              </ons-list-item>
+          </ons-list>
         </ons-carousel-item>
       </ons-carousel>
     </ons-page>
@@ -550,6 +552,8 @@
       }
       let category = reshapeCategory(categories);
       document.getElementById("tv-category").innerHTML = category;
+      document.getElementById("tv-image").innerHTML = reshapeMovieCode({{ .TvProgram }});
+      document.getElementById("tv-reference").innerHTML = reshapeReferenceSite({{ .TvProgram }});
     </script>
   </body>
 </html>

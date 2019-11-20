@@ -212,6 +212,8 @@ func (c *ReviewCommentController) Show() {
 	} else {
 		c.Data["Comment"] = l
 	}
+	cnt := models.CountAllReviewCommentNumByTvProgramId(tvProgramID)
+	c.Data["CommentNum"] = cnt
 
 	var users []models.User
 	for _, comment := range l {

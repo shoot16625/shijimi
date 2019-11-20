@@ -193,12 +193,14 @@ func (c *CommentController) Show() {
 		c.Data["TvProgram"] = v
 	}
 
-	l, err := models.GetCommentByTvprogramId(tvProgramID, 200)
+	l, err := models.GetCommentByTvProgramId(tvProgramID, 200)
 	if err != nil {
 		c.Data["Comment"] = nil
 	} else {
 		c.Data["Comment"] = l
 	}
+	cnt := models.CountAllCommentNumByTvProgramId(tvProgramID)
+	c.Data["CommentNum"] = cnt
 
 	var users []models.User
 	for _, comment := range l {

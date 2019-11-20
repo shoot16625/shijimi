@@ -46,21 +46,8 @@
           </div>
         </ons-col>
       </ons-row>
-      <div class="area-center">
-        <img
-          src="{{.TvProgram.ImageUrl}}"
-          alt="{{.Title}}"
-          class="image"
-          onerror="this.src='/static/img/tv_img/hanko_02.png'"
-        />
-      </div>
-      {{if .TvProgram.ImageUrlReference}}
-      <div class="reference">
-        <a href="{{.TvProgram.ImageUrl}}" target="_blank">
-          出典:{{.TvProgram.ImageUrlReference}}
-        </a>
-      </div>
-      {{ end }}
+      <div id="tv-image" class="area-center"></div>
+      <div id="tv-reference" class="reference"></div>
       <ons-list-item expandable>
         あらすじ・見どころ
         <div class="right"></div>

@@ -252,12 +252,18 @@ func DeleteComment(id int64) (err error) {
 	return
 }
 
-func GetCommentByTvprogramId(id int64, limit int64) (v []Comment, err error) {
+func GetCommentByTvProgramId(id int64, limit int64) (v []Comment, err error) {
 	o := orm.NewOrm()
 	if _, err = o.QueryTable(new(Comment)).Filter("TvProgramId", id).OrderBy("-Created").Limit(limit).All(&v); err == nil {
 		return v, nil
 	}
 	return nil, err
+}
+
+func CountAllCommentNumByTvProgramId(id int64) (cnt int64) {
+	o := orm.NewOrm()
+	cnt, _ = o.QueryTable(new(Comment)).Filter("TvProgramId", id).Count()
+	return cnt
 }
 
 func GetCommentByUserId(id int64, limit int64) (v []Comment, err error) {

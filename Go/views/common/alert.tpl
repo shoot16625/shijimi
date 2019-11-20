@@ -100,3 +100,40 @@
     </div>
   </ons-alert-dialog>
 </template>
+
+<!-- アラートではない -->
+<template id="search-toolbar.html">
+  <ons-dialog id="search-toolbar" modifier="large" cancelable fullscreen>
+    <ons-page>
+      <ons-toolbar>
+        <div class="left">
+          <ons-button
+            id="cancel-button"
+            onclick="hideAlertDialog('search-toolbar')"
+            ><i class="fas fa-window-close"></i
+          ></ons-button>
+        </div>
+        <div class="center">
+          ドラマ・映画検索
+        </div>
+      </ons-toolbar>
+      <form id="search_tv_program" action="/tv/tv_program/search" method="post">
+        <div class="area-center create-top-bottom-margin">
+          <p>
+            <ons-search-input
+              name="search-word"
+              placeholder="Search"
+              id="search-word"
+            ></ons-search-input>
+          </p>
+          <p class="create-top-bottom-margin">
+            <button class="button button--outline">search</button>
+          </p>
+          <p style="margin-top: 40px;">
+            タイトル・出演者・主題歌・スタッフ<br />季節・年・曜日・ジャンルなど
+          </p>
+        </div>
+      </form>
+    </ons-page>
+  </ons-dialog>
+</template>

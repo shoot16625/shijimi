@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"net/http"
 	"reflect"
 	"regexp"
 	"sort"
@@ -472,19 +473,30 @@ func ReshapeMovieURL(str string) (res string) {
 	}
 	return res
 }
-func ReshapeImageURL(str string) (res string) {
-	if !strings.Contains(str, "http") {
-		rand.Seed(time.Now().UnixNano())
-		r := strconv.Itoa(rand.Intn(10) + 1)
-		if len(r) == 1 {
-			r = "0" + r
+
+// イメージ画像URLのチェック
+func CheckImageURL(str string) (res string) {
+	if !strings.Contains(str, "/static/img/tv_img") {
+		resp, err := http.Get(str)
+		defer resp.Body.Close()
+		if err != nil || resp.Status == "404 Not Found" {
+			// fmt.Println(err)
+			rand.Seed(time.Now().UnixNano())
+			r := strconv.Itoa(rand.Intn(10) + 1)
+			if len(r) == 1 {
+				r = "0" + r
+			}
+			res = "/static/img/tv_img/hanko_" + r + ".png"
+		} else {
+			res = str
 		}
-		res = "/static/img/tv_img/hanko_" + r + ".png"
 	} else {
 		res = str
 	}
 	return res
 }
+
+// イメージ画像の出典整形
 func ReshapeImageURLReference(str string) (res string) {
 	res = ""
 	if str != "" {

@@ -396,8 +396,11 @@ func GetMovieWalker(year string, month string) {
 		id, _ := m.Find("h3 > a").Attr("href")
 		id = strings.Replace(id, "/", "", -1)
 		id = strings.Replace(id, "mv", "", -1)
-		tvProgram.ImageUrl = "https://movie.walkerplus.com/api/resizeimage/content/" + id + "?w=300"
-		tvProgram.ImageUrlReference = "MovieWalker"
+		imageURL := "https://movie.walkerplus.com/api/resizeimage/content/" + id + "?w=300"
+		imageURL = models.CheckImageURL(imageURL)
+		tvProgram.ImageUrl = imageURL
+		tvProgram.ImageUrlReference = models.ReshapeImageURLReference(imageURL)
+
 		tvProgram.Content = m.Find(".info > p").Text()
 		director := strings.TrimSpace(m.Find(".info > .directorList > dd").Text())
 		director = strings.Replace(director, " ", "", -1)

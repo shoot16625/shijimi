@@ -367,42 +367,42 @@ function reshapeContent(element) {
 }
 
 // 動画・画像の埋め込み変換
-function reshapeMovieCode(tvPrograms) {
+function reshapeMovieCode(tvProgram) {
   let moviePosition;
-  if (tvPrograms.MovieUrl === '') {
+  if (tvProgram.MovieUrl === '') {
     moviePosition =
       '<img class="image" id="image-' +
-      tvPrograms.Id +
+      tvProgram.Id +
       '" src="' +
-      tvPrograms.ImageUrl +
+      tvProgram.ImageUrl +
       '" alt="' +
-      tvPrograms.Title +
+      tvProgram.Title +
       '" width="80%" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'">';
   } else {
     moviePosition =
       '<iframe id="movie-' +
-      tvPrograms.Id +
+      tvProgram.Id +
       '" class="movie" src="' +
-      tvPrograms.MovieUrl +
+      tvProgram.MovieUrl +
       '?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="' +
-      tvPrograms.Title +
+      tvProgram.Title +
       '" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
   }
   return moviePosition;
 }
 // 出典の所
-function reshapeReferenceSite(tvPrograms) {
+function reshapeReferenceSite(tvProgram) {
   let referenceSite = '';
-  if (tvPrograms.ImageUrlReference != '' && tvPrograms.MovieUrl == '') {
+  if (tvProgram.ImageUrlReference != '' && tvProgram.MovieUrl == '') {
     referenceSite =
       '<a href=' +
-      tvPrograms.ImageUrl +
+      tvProgram.ImageUrl +
       " target='_blank'>出典:" +
-      tvPrograms.ImageUrlReference +
+      tvProgram.ImageUrlReference +
       '</a>';
-  } else if (tvPrograms.MovieUrl != '') {
+  } else if (tvProgram.MovieUrl != '') {
     referenceSite =
-      '<a href=' + tvPrograms.MovieUrl + " target='_blank'>出典:Youtube</a>";
+      '<a href=' + tvProgram.MovieUrl + " target='_blank'>出典:Youtube</a>";
   }
   return referenceSite;
 }
@@ -489,10 +489,12 @@ function inputPreviewData() {
 
 // レビューのおすすめポイントの整形
 function reshapeFavoritePoint(comment) {
-  const fps = comment.FavoritePoint.split(',');
   let fpText = '';
-  for (let j = fps.length - 1; j >= 0; j--) {
-    fpText += "<span style='padding:3px;color:blue;'>#" + fps[j] + '</span>';
+  if (comment.FavoritePoint != '') {
+    const fps = comment.FavoritePoint.split(',');
+    for (let j = fps.length - 1; j >= 0; j--) {
+      fpText += "<span style='padding:3px;color:blue;'>#" + fps[j] + '</span>';
+    }
   }
   return fpText;
 }

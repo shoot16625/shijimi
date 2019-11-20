@@ -56,7 +56,7 @@ func (c *TvProgramController) Post() {
 			hour, _ = strconv.ParseFloat(hourString, 32)
 		}
 		movieURL := models.ReshapeMovieURL(c.GetString("MovieURL"))
-		imageURL := models.ReshapeImageURL(c.GetString("ImageURL"))
+		imageURL := models.CheckImageURL(c.GetString("ImageURL"))
 		imageURLReference := models.ReshapeImageURLReference(imageURL)
 
 		var v models.TvProgram
@@ -201,7 +201,7 @@ func (c *TvProgramController) Put() {
 		hour, _ = strconv.ParseFloat(hourString, 32)
 	}
 	movieURL := models.ReshapeMovieURL(c.GetString("MovieURL"))
-	imageURL := models.ReshapeImageURL(c.GetString("ImageURL"))
+	imageURL := models.CheckImageURL(c.GetString("ImageURL"))
 	imageURLReference := models.ReshapeImageURLReference(imageURL)
 	oldTvInfo, _ := models.GetTvProgramById(id)
 	v := *oldTvInfo
@@ -223,6 +223,7 @@ func (c *TvProgramController) Put() {
 	v.Hour = float32(hour)
 	v.Themesong = c.GetString("themesong")
 	v.CountUpdated++
+	// fmt.Println("here1")
 
 	if err := models.UpdateTvProgramById(&v); err == nil {
 		userID := session.Get("UserId").(int64)
@@ -232,8 +233,10 @@ func (c *TvProgramController) Put() {
 		}
 		_, _ = models.AddTvProgramUpdateHistory(&w)
 		z, _ := models.GetUserById(userID)
+		// fmt.Println("here")
 		z.CountEditTvProgram++
 		_ = models.UpdateUserById(z)
+		// fmt.Println("here2")
 		// fmt.Println(v)
 		c.Redirect("/tv/tv_program/comment/"+idStr, 302)
 	} else {

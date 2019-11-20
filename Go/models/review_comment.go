@@ -298,3 +298,9 @@ func DeleteReviewCommentsByUserId(id int64) {
 	num, _ := o.QueryTable(new(ReviewComment)).Filter("UserId", id).Delete()
 	fmt.Println("delete review comment", num)
 }
+
+func CountAllReviewCommentNumByTvProgramId(id int64) (cnt int64) {
+	o := orm.NewOrm()
+	cnt, _ = o.QueryTable(new(ReviewComment)).Filter("TvProgramId", id).Count()
+	return cnt
+}

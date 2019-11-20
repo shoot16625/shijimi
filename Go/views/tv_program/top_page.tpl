@@ -11,6 +11,8 @@
   </head>
   <body>
     <ons-page id="top-page">
+      <!-- <div class="background" style="background-color: white;"></div> -->
+      <!-- <ons-toolbar class="toolbar" id="my-toolbar"></ons-toolbar> -->
       {{ template "/common/toolbar.tpl" . }}
       <ons-pull-hook id="pull-hook"></ons-pull-hook>
       {{ template "/common/alert.tpl" . }}
@@ -85,7 +87,6 @@
           ok
         </button></ons-toast
       >
-  
         <div class="on-air-drama">
           <h2>
             <i class="fas fa-tv" style="color: skyblue;"></i> 現在放送中のドラマ
@@ -118,7 +119,7 @@
                     src="{{.ImageUrl}}"
                     alt="{{.Title}}"
                     class="image-carousel"
-                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/tv_img/hanko_02.png'"
+                    onerror="this.src='/static/img/tv_img/hanko_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -157,7 +158,7 @@
                     src="{{.ImageUrl}}"
                     alt="{{.Title}}"
                     class="image-carousel"
-                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/tv_img/hanko_02.png'"
+                    onerror="this.src='/static/img/tv_img/hanko_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -196,7 +197,7 @@
                     src="{{.ImageUrl}}"
                     alt="{{.Title}}"
                     class="image-carousel"
-                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/tv_img/hanko_02.png'"
+                    onerror="this.src='/static/img/tv_img/hanko_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -235,7 +236,7 @@
                     src="{{.ImageUrl}}"
                     alt="{{.Title}}"
                     class="image-carousel"
-                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/tv_img/hanko_02.png'"
+                    onerror="this.src='/static/img/tv_img/hanko_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -274,7 +275,7 @@
                     src="{{.ImageUrl}}"
                     alt="{{.Title}}"
                     class="image-carousel"
-                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/tv_img/hanko_02.png'"
+                    onerror="this.src='/static/img/tv_img/hanko_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -313,7 +314,7 @@
                     src="{{.ImageUrl}}"
                     alt="{{.Title}}"
                     class="image-carousel"
-                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/tv_img/hanko_02.png'"
+                    onerror="this.src='/static/img/tv_img/hanko_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -352,7 +353,7 @@
                     src="{{.ImageUrl}}"
                     alt="{{.Title}}"
                     class="image-carousel"
-                    onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/tv_img/hanko_02.png'"
+                    onerror="this.src='/static/img/tv_img/hanko_02.png'"
                   />
                   <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
@@ -393,7 +394,7 @@
                       src="{{.ImageUrl}}"
                       alt="{{.Title}}"
                       class="image-carousel"
-                      onerror="this.src='http:\/\/hankodeasobu.com/wp-content/uploads/tv_img/hanko_02.png'"
+                      onerror="this.src='/static/img/tv_img/hanko_02.png'"
                     />
                     <a href="/tv/tv_program/comment/{{.Id}}"></a>
                   </div>
@@ -618,9 +619,15 @@
       src="https://connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v4.0"
     ></script>
     <script>
-        if ({{.LoginError}}) {
-          document.querySelector('ons-toast').show();
-        }
-      </script>
+      if ({{.LoginError}}) {
+        document.querySelector('ons-toast').show();
+      }
+    </script>
+    <!-- 保留 -->
+    <!-- <script>
+      ons.ready(function(){
+        document.getElementById("my-toolbar").innerHTML= '<div class="left" id="mypage-toolbar"><ons-toolbar-button icon="md-face" style="font-size:24px;" onclick="location.href=\'/tv/user/show\'"></ons-toolbar-button></div><div class="center" id="image-toolbar"><div class="area-center"><img src="/static/img/shijimi-transparence.png" alt="shijimi" height="42px;" onclick="location.href=\'/\'"/></div></div><div class="right"><ons-toolbar-button icon="fa-search" onclick="dialogBoxEveryone(\'search-toolbar\')"></ons-toolbar-button></div>';
+      })
+    </script> -->
   </body>
 </html>
