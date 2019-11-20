@@ -65,6 +65,8 @@ func (c *ReviewCommentController) Post() {
 				c.Data["json"] = err.Error()
 			}
 		}
+		// 必要ないけど，ないとpanicでてくる
+		c.Redirect("/tv/tv_program/review/"+strconv.FormatInt(v.TvProgramId, 10), 302)
 	}
 }
 
@@ -214,6 +216,10 @@ func (c *ReviewCommentController) Show() {
 	}
 	cnt := models.CountAllReviewCommentNumByTvProgramId(tvProgramID)
 	c.Data["CommentNum"] = cnt
+
+	fpRanking := models.FavoritePointRankingByTvProgramId(tvProgramID)
+	fmt.Println(fpRanking[0].Name)
+	c.Data["FavoritePointRanking"] = fpRanking[:3]
 
 	var users []models.User
 	for _, comment := range l {

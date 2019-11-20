@@ -99,4 +99,5 @@ func init() {
 	// db.AddTvProgramsInformation()
 	// db.GetMovieWalkers()
 	// db.ExecDemoSQL()
+	// models.FavoritePointRankingByTvProgramId(19)
 }

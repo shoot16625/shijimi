@@ -33,6 +33,7 @@ func init() {
 			beego.NSInclude(
 				&controllers.CommentController{},
 			),
+			beego.NSRouter("/update/:id/:top", &controllers.CommentController{}, "*:GetAllOfTvProgram"),
 		),
 		beego.NSNamespace("/tv_program",
 			beego.NSInclude(

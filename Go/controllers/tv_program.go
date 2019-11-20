@@ -223,7 +223,6 @@ func (c *TvProgramController) Put() {
 	v.Hour = float32(hour)
 	v.Themesong = c.GetString("themesong")
 	v.CountUpdated++
-	// fmt.Println("here1")
 
 	if err := models.UpdateTvProgramById(&v); err == nil {
 		userID := session.Get("UserId").(int64)
@@ -233,16 +232,12 @@ func (c *TvProgramController) Put() {
 		}
 		_, _ = models.AddTvProgramUpdateHistory(&w)
 		z, _ := models.GetUserById(userID)
-		// fmt.Println("here")
 		z.CountEditTvProgram++
 		_ = models.UpdateUserById(z)
-		// fmt.Println("here2")
-		// fmt.Println(v)
 		c.Redirect("/tv/tv_program/comment/"+idStr, 302)
 	} else {
-		c.Data["json"] = err.Error()
 		c.Data["TvProgram"] = v
-		c.Data["TitleFlag"] = true
+		c.Data["TitleFlag"] = 1
 		c.Redirect("/tv/tv_program/edit/"+idStr, 302)
 	}
 }

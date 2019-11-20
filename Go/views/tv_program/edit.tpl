@@ -406,10 +406,13 @@
       if (tvProgram.Week != null){
           document.getElementById('week').value = tvProgram.Week.Name;
           }
-      console.log({{.TitleFlag}});
-      if ({{.TitleFlag}}) {
+      if ({{ .TitleFlag}}) {
         dialogBoxEveryone("alert-tv-title");
       };
+    </script>
+    <script>
+      // うまくいかない．．．
+      console.log({{ .TitleFlag}});
     </script>
   </body>
 </html>

@@ -42,11 +42,15 @@
             <ons-list-item>総レビュー数：{{ .CommentNum}}</ons-list-item>
             <ons-list-item>平均星：{{ .TvProgram.Star}}</ons-list-item>
             <ons-list-item id="favorite-point-ranking-expandable" expandable>
-                おすすめポイントランキング
-                <div class="expandable-content">
-                  <ons-list modifier="inset" id="favorite-point-ranking"></ons-list>
-                </div>
-              </ons-list-item>
+              おすすめポイントランキング
+              <div class="expandable-content">
+                {{ range.FavoritePointRanking }}
+                <ons-list modifier="inset" id="favorite-point-ranking"
+                  >{{.Name}}:{{.Value}}
+                </ons-list>
+                {{ end }}
+              </div>
+            </ons-list-item>
           </ons-list>
         </ons-carousel-item>
       </ons-carousel>
@@ -554,6 +558,11 @@
       document.getElementById("tv-category").innerHTML = category;
       document.getElementById("tv-image").innerHTML = reshapeMovieCode({{ .TvProgram }});
       document.getElementById("tv-reference").innerHTML = reshapeReferenceSite({{ .TvProgram }});
+    </script>
+    <script>
+      document
+        .querySelector('#favorite-point-ranking-expandable')
+        .showExpansion();
     </script>
   </body>
 </html>

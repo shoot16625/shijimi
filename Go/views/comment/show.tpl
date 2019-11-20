@@ -231,15 +231,15 @@
           }
         </script>
         <script>
-          var today = new Date();
+          let today = new Date();
           today.setDate(today.getDate());
-          var yyyy = today.getFullYear();
-          var mm = ('0' + (today.getMonth() + 1)).slice(-2);
-          var dd = ('0' + today.getDate()).slice(-2);
-          var h = ('0' + today.getHours()).slice(-2);
-          var min = ('0' + today.getMinutes()).slice(-2);
-          var date = yyyy + '-' + mm + '-' + dd;
-          var time = h + ':' + min;
+          let yyyy = today.getFullYear();
+          let mm = ('0' + (today.getMonth() + 1)).slice(-2);
+          let dd = ('0' + today.getDate()).slice(-2);
+          let h = ('0' + today.getHours()).slice(-2);
+          let min = ('0' + today.getMinutes()).slice(-2);
+          let date = yyyy + '-' + mm + '-' + dd;
+          let time = h + ':' + min;
           if({{.SearchWords.BeforeDate}}===null||{{.SearchWords.BeforeDate}}===""){
             document.getElementById('before-date').value = date;
           }
@@ -263,13 +263,12 @@
       });
     </script>
     <script>
-      let comments = {{.Comment}};
+      comments = {{.Comment}};
       if (comments === null || comments.length === 0) {
         comments = null;
       }
-      const users = {{.Users}};
-      let commentLikes;
-      if ({{.CommentLike}} ===null && comments != null){
+      users = {{.Users}};
+      if ({{.CommentLike}} === null && comments != null){
         commentLikes = [comments.length];
         for (let i = comments.length - 1; i >= 0; i--) {
           commentLikes[i] = {Like:false};
@@ -296,6 +295,60 @@
         }
       });
     </script>
+    <script>
+      function getNewComment(){
+        let url = URL+"/tv/comment/update/"+{{.TvProgram.Id}}+"/"+comments[0].Id;
+        let method = "GET"
+        var request = new XMLHttpRequest();
+        request.open(method, url, true);
+        request.setRequestHeader('Content-type','application/json; charset=utf-8');
+        request.send();
+        request.onreadystatechange = function() {
+          if(request.readyState === 4 && request.status === 200) {
+            let commentsAndUsers = JSON.parse(request.responseText);
+            if(commentsAndUsers.Comments != null){
+            let newComments = commentsAndUsers.Comments;
+            let newUsers = commentsAndUsers.Users;
+            let newCommentLikes = [newComments.length];
+            for (let i = newComments.length - 1; i >= 0; i--) {
+              newCommentLikes[i] = {Like:false};
+            }
+            comments = newComments.concat(comments);
+            if (comments === null || comments.length === 0) {
+              comments = null;
+            }
+            if (commentLikes === null && comments != null){
+              commentLikes = [comments.length];
+              for (let i = comments.length - 1; i >= 0; i--) {
+                commentLikes[i] = {Like:false};
+              }
+            } else {
+              commentLikes = newCommentLikes.concat(commentLikes);
+            }
+            users = newUsers.concat(users);
+            var infiniteList = document.getElementById('comments');
+            if (comments != null) {
+
+            infiniteList.delegate = {
+              createItemContent: function(i) {
+
+                return ons.createElement('<div class="user-' + users[i].Id + '"><ons-list-header style="background-color:aliceblue;text-transform:none;"><div class="area-left comment-list-header-font">@' + users[i].Username + '</div><div class="area-right list-margin">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm") + '</div></ons-list-header><ons-list-item><div class="left"><a href="/tv/user/show/' + users[i].Id + '" title="user_comment"><img class="list-item__thumbnail" src="' + users[i].IconUrl + '" alt="@' + users[i].Username + '"></a></div><div class="center"><span class="list-item__subtitle comment-list-content-font" id="comment-content-' + String(i) + '">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle area-right"><div style="float:right;" id="count-like-' + i + '">：' + comments[i].CountLike + '</div><div style="float:right;"><i class="' + setLikeBold(commentLikes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="clickLike(this)" style="color:' + setLikeStatus(commentLikes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
+              },
+              countItems: function() {
+                return comments.length;
+              }
+            };
+            infiniteList.refresh();
+            } else {
+                infiniteList.innerHTML = "<div style='text-align:center;margin-top:40px;'><i class='far fa-surprise' style='color:chocolate;'></i> Not Found !!</div>"
+            }
+          }
+          }
+        }
+      };
+      // setInterval(getNewComment, 30000);
+      setTimeout(getNewComment, 5000);
+    </script>
 
     <script type="text/javascript">
       setWatchBold("check-watched", {{.WatchStatus.Watched}});
@@ -305,7 +358,10 @@
     </script>
 
     <script>
-      globalCommentLikeStatus = {{.CommentLike}};
+      globalCommentLikeStatus = commentLikes;
+      if ({{.User}} === null ){
+        globalCommentLikeStatus = null;
+      }
     </script>
 
     <script type="text/javascript">
@@ -317,7 +373,8 @@
           method = 'POST';
           data.UserId = {{.User.Id}};
           globalCommentLikeStatus[elem.id].UserId = data.UserId;
-          data.CommentId = {{.Comment}}[elem.id].Id;
+          data.CommentId = comments[elem.id].Id;
+          // data.CommentId = {{.Comment}}[elem.id].Id;
           globalCommentLikeStatus[elem.id].CommentId = data.CommentId;
         } else {
           method = 'PUT';

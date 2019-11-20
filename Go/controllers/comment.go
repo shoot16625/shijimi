@@ -22,6 +22,7 @@ func (c *CommentController) URLMapping() {
 	c.Mapping("Post", c.Post)
 	c.Mapping("GetOne", c.GetOne)
 	c.Mapping("GetAll", c.GetAll)
+	c.Mapping("GetAllOfTvProgram", c.GetAllOfTvProgram)
 	c.Mapping("Put", c.Put)
 	c.Mapping("Delete", c.Delete)
 	c.Mapping("Show", c.Show)
@@ -51,7 +52,7 @@ func (c *CommentController) Post() {
 		} else {
 			c.Data["json"] = err.Error()
 		}
-		c.Redirect("/tv/tv_program/comment/"+c.GetString("TvProgramId"), 302)
+		c.Redirect("/tv/tv_program/comment/"+strconv.FormatInt(v.TvProgramId, 10), 302)
 	}
 }
 
@@ -137,6 +138,43 @@ func (c *CommentController) GetAll() {
 	c.ServeJSON()
 }
 
+func (c *CommentController) GetAllOfTvProgram() {
+	type CommentAndUser struct {
+		Comments []interface{}
+		Users    []models.User
+	}
+	tvProgramID := c.Ctx.Input.Param(":id")
+	topCommentId := c.Ctx.Input.Param(":top")
+
+	var fields []string
+	var sortby []string
+	var order []string
+	var query = make(map[string]string)
+	var limit int64 = 100
+	var offset int64
+
+	sortby = append(sortby, "Created")
+	order = append(order, "desc")
+	query["TvProgramId"] = tvProgramID
+	query["Id__gt"] = topCommentId
+	l, err := models.GetAllComment(query, fields, sortby, order, offset, limit)
+	if err != nil {
+		c.Data["json"] = nil
+	} else {
+		c.Ctx.Output.SetStatus(200)
+		var users []models.User
+		for _, comment := range l {
+			u, _ := models.GetUserById(comment.(models.Comment).UserId)
+			users = append(users, *u)
+		}
+		commentAndUser := *new(CommentAndUser)
+		commentAndUser.Comments = l
+		commentAndUser.Users = users
+		c.Data["json"] = commentAndUser
+	}
+	c.ServeJSON()
+}
+
 // Put ...
 // @Title Put
 // @Description update the Comment
@@ -199,6 +237,7 @@ func (c *CommentController) Show() {
 	} else {
 		c.Data["Comment"] = l
 	}
+
 	cnt := models.CountAllCommentNumByTvProgramId(tvProgramID)
 	c.Data["CommentNum"] = cnt
 
