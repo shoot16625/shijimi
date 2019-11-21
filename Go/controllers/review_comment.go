@@ -218,8 +218,13 @@ func (c *ReviewCommentController) Show() {
 	c.Data["CommentNum"] = cnt
 
 	fpRanking := models.FavoritePointRankingByTvProgramId(tvProgramID)
-	fmt.Println(fpRanking[0].Name)
-	c.Data["FavoritePointRanking"] = fpRanking[:3]
+	if len(fpRanking) > 3 {
+		// お気に入りポイントトップ3を抽出
+		fpRanking = fpRanking[:3]
+	} else if fpRanking[0].Value == 0 {
+		fpRanking = nil
+	}
+	c.Data["FavoritePointRanking"] = fpRanking
 
 	var users []models.User
 	for _, comment := range l {

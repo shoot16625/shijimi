@@ -20,7 +20,7 @@ type User struct {
 	Address            string `orm:"size(20)"; null`
 	Job                string `orm:"size(20)" json:"-"; null`
 	SecondPassword     string `orm:"size(300)" json:"-"`
-	IconUrl            string `orm:"size(255);null"`
+	IconUrl            string `orm:"size(300);null"`
 	Marital            string `orm:"size(20)" json:"-"; null"`
 	BloodType          string `orm:"size(20)" json:"-"; null"`
 	MoneyPoint         int    `orm:"default(0)" json:"-"`

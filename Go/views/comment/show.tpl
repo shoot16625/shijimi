@@ -81,18 +81,16 @@
         </ons-page>
         <script type="text/javascript">
           $(function() {
-            const text_max = 180;
-            let text_length;
+            const textMax = 180;
+            let textLength;
             let countdown;
-            $('.count').text(
-              text_max - $('#tweet-dialog-content').val().length
-            );
+            $('.count').text(textMax - $('#tweet-dialog-content').val().length);
 
             $('#tweet-dialog-content').on(
               'keydown keyup keypress change',
               function() {
-                text_length = $(this).val().length;
-                countdown = text_max - text_length;
+                textLength = $(this).val().length;
+                countdown = textMax - textLength;
                 $('.count').text(countdown);
               }
             );
@@ -283,7 +281,7 @@
         infiniteList.delegate = {
           createItemContent: function(i) {
 
-            return ons.createElement('<div class="user-' + users[i].Id + '"><ons-list-header style="background-color:aliceblue;text-transform:none;"><div class="area-left comment-list-header-font">@' + users[i].Username + '</div><div class="area-right list-margin">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm") + '</div></ons-list-header><ons-list-item><div class="left"><a href="/tv/user/show/' + users[i].Id + '" title="user_comment"><img class="list-item__thumbnail" src="' + users[i].IconUrl + '" alt="@' + users[i].Username + '"></a></div><div class="center"><span class="list-item__subtitle comment-list-content-font" id="comment-content-' + String(i) + '">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle area-right"><div style="float:right;" id="count-like-' + i + '">：' + comments[i].CountLike + '</div><div style="float:right;"><i class="' + setLikeBold(commentLikes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="clickLike(this)" style="color:' + setLikeStatus(commentLikes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
+            return ons.createElement('<div id="commentID-' + comments[i].Id + '"><ons-list-header style="background-color:aliceblue;text-transform:none;"><div class="area-left comment-list-header-font">@' + users[i].Username + '</div><div class="area-right list-margin">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm") + '</div></ons-list-header><ons-list-item><div class="left"><a href="/tv/user/show/' + users[i].Id + '" title="user_comment"><img class="list-item__thumbnail" src="' + users[i].IconUrl + '" onerror="this.src=\'/static/img/user_img/s256_f_01.png\'"></a></div><div class="center"><span class="list-item__subtitle comment-list-content-font" id="comment-content-' + String(i) + '">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle area-right"><div style="float:right;" id="count-like-' + i + '">：' + comments[i].CountLike + '</div><div style="float:right;"><i class="' + setLikeBold(commentLikes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="clickLike(this)" style="color:' + setLikeStatus(commentLikes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
           },
           countItems: function() {
             return comments.length;
@@ -296,58 +294,67 @@
       });
     </script>
     <script>
+      // 非同期通信でのコメント取得・更新
       function getNewComment(){
+        if ({{.SearchWords}}===null){
         let url = URL+"/tv/comment/update/"+{{.TvProgram.Id}}+"/"+comments[0].Id;
         let method = "GET"
         var request = new XMLHttpRequest();
+        let pos;
         request.open(method, url, true);
         request.setRequestHeader('Content-type','application/json; charset=utf-8');
         request.send();
         request.onreadystatechange = function() {
           if(request.readyState === 4 && request.status === 200) {
+            pos = $('.page__content').scrollTop();
             let commentsAndUsers = JSON.parse(request.responseText);
             if(commentsAndUsers.Comments != null){
-            let newComments = commentsAndUsers.Comments;
-            let newUsers = commentsAndUsers.Users;
-            let newCommentLikes = [newComments.length];
-            for (let i = newComments.length - 1; i >= 0; i--) {
-              newCommentLikes[i] = {Like:false};
-            }
-            comments = newComments.concat(comments);
-            if (comments === null || comments.length === 0) {
-              comments = null;
-            }
-            if (commentLikes === null && comments != null){
-              commentLikes = [comments.length];
-              for (let i = comments.length - 1; i >= 0; i--) {
-                commentLikes[i] = {Like:false};
+              let newComments = commentsAndUsers.Comments;
+              let newUsers = commentsAndUsers.Users;
+              let newCommentLikes = [newComments.length];
+              for (let i = newComments.length - 1; i >= 0; i--) {
+                newCommentLikes[i] = {Like:false};
               }
-            } else {
-              commentLikes = newCommentLikes.concat(commentLikes);
-            }
-            users = newUsers.concat(users);
-            var infiniteList = document.getElementById('comments');
-            if (comments != null) {
-
-            infiniteList.delegate = {
-              createItemContent: function(i) {
-
-                return ons.createElement('<div class="user-' + users[i].Id + '"><ons-list-header style="background-color:aliceblue;text-transform:none;"><div class="area-left comment-list-header-font">@' + users[i].Username + '</div><div class="area-right list-margin">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm") + '</div></ons-list-header><ons-list-item><div class="left"><a href="/tv/user/show/' + users[i].Id + '" title="user_comment"><img class="list-item__thumbnail" src="' + users[i].IconUrl + '" alt="@' + users[i].Username + '"></a></div><div class="center"><span class="list-item__subtitle comment-list-content-font" id="comment-content-' + String(i) + '">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle area-right"><div style="float:right;" id="count-like-' + i + '">：' + comments[i].CountLike + '</div><div style="float:right;"><i class="' + setLikeBold(commentLikes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="clickLike(this)" style="color:' + setLikeStatus(commentLikes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
-              },
-              countItems: function() {
-                return comments.length;
+              comments = newComments.concat(comments);
+              if (comments === null || comments.length === 0) {
+                comments = null;
               }
-            };
-            infiniteList.refresh();
-            } else {
-                infiniteList.innerHTML = "<div style='text-align:center;margin-top:40px;'><i class='far fa-surprise' style='color:chocolate;'></i> Not Found !!</div>"
+              if (commentLikes === null && comments != null){
+                commentLikes = [comments.length];
+                for (let i = comments.length - 1; i >= 0; i--) {
+                  commentLikes[i] = {Like:false};
+                }
+              } else {
+                commentLikes = newCommentLikes.concat(commentLikes);
+              }
+              users = newUsers.concat(users);
+              var infiniteList = document.getElementById('comments');
+              if (comments != null) {
+
+              infiniteList.delegate = {
+                createItemContent: function(i) {
+
+                  return ons.createElement('<div id="commentID-' + comments[i].Id + '"><ons-list-header style="background-color:aliceblue;text-transform:none;"><div class="area-left comment-list-header-font">@' + users[i].Username + '</div><div class="area-right list-margin">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm") + '</div></ons-list-header><ons-list-item><div class="left"><a href="/tv/user/show/' + users[i].Id + '" title="user_comment"><img class="list-item__thumbnail" src="' + users[i].IconUrl + '" onerror="this.src=\'/static/img/user_img/s256_f_01.png\'"></a></div><div class="center"><span class="list-item__subtitle comment-list-content-font" id="comment-content-' + String(i) + '">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle area-right"><div style="float:right;" id="count-like-' + i + '">：' + comments[i].CountLike + '</div><div style="float:right;"><i class="' + setLikeBold(commentLikes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="clickLike(this)" style="color:' + setLikeStatus(commentLikes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
+                },
+                countItems: function() {
+                  return comments.length;
+                }
+              };
+              infiniteList.refresh();
+              } else {
+                  infiniteList.innerHTML = "<div style='text-align:center;margin-top:40px;'><i class='far fa-surprise' style='color:chocolate;'></i> Not Found !!</div>"
+              }
+              let firstOldCommentId = comments[newComments.length].Id;
+              let firstNewCommentId = newComments[0].Id;
+              let firstOldCommentTopPos = $('#commentID-'+firstOldCommentId).offset().top;
+              let firstNewCommentTopPos = $('#commentID-'+firstNewCommentId).offset().top;
+              scrollToTarget(pos + firstOldCommentTopPos - firstNewCommentTopPos);
             }
-          }
           }
         }
+      }
       };
-      // setInterval(getNewComment, 30000);
-      setTimeout(getNewComment, 5000);
+      setInterval(getNewComment, 30000);
     </script>
 
     <script type="text/javascript">
@@ -374,7 +381,6 @@
           data.UserId = {{.User.Id}};
           globalCommentLikeStatus[elem.id].UserId = data.UserId;
           data.CommentId = comments[elem.id].Id;
-          // data.CommentId = {{.Comment}}[elem.id].Id;
           globalCommentLikeStatus[elem.id].CommentId = data.CommentId;
         } else {
           method = 'PUT';
@@ -444,8 +450,8 @@
     <!-- ツイートを保存する -->
     <script type="text/javascript">
       function postComment() {
-        const text_length = document.getElementById("tweet-dialog-content").value.length;
-        if (text_length < 5){
+        const textLength = document.getElementById("tweet-dialog-content").value.length;
+        if (textLength < 5){
           return dialogBox('alert-min-length', {{.User.Id}});
         }
         let url = URL+"/tv/comment/";
@@ -459,6 +465,7 @@
         var request = new XMLHttpRequest();
         request.open('POST', url, true);
         request.setRequestHeader('Content-type','application/json; charset=utf-8');
+        request.send(json);
         request.onload = function () {
           var x = JSON.parse(request.responseText);
           if (request.readyState == 4 && request.status == "200") {
@@ -467,8 +474,7 @@
             console.error(x);
           }
         }
-        request.send(json);
-        hideAlertDialog('tweet-dialog')
+        hideAlertDialog('tweet-dialog');
         setTimeout(window.location.reload(false), 500);
       };
     </script>

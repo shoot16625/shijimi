@@ -250,6 +250,11 @@ function goTop() {
   $('.page__content').animate({ scrollTop: 0 }, 500, 'swing');
 }
 
+// ページの上部へ移動
+function scrollToTarget(pos) {
+  $('.page__content').scrollTop(pos);
+}
+
 // カルーセルを移動してページのトップへ移動
 function goAnotherCarousel(index) {
   ons.ready(function() {

@@ -183,7 +183,7 @@
               value="{{.User.IconUrl}}"
               modifier="underbar"
               placeholder="必須ではない"
-              maxlength="200"
+              maxlength="250"
               float
             ></ons-input>
           </p>
