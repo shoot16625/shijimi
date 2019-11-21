@@ -189,7 +189,7 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 		newTvProgram.Title = doc.Find("h1").Text()
 		newTvProgram.Star = 5
 		newTvProgram.WikiReference = tvProgram.WikiReference
-		newTvProgram.ImageUrl = SetRandomImageURL()
+		// newTvProgram.ImageUrl = SetRandomImageURL()
 		u.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
 			c, _ := t.Find("td").Attr("class")
 			if c == "category" {
@@ -219,6 +219,9 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 				if seasonNum != 1 {
 					// fmt.Println("there\n", newTvProgram)
 					dataAddFlag = true
+					newTvProgram.ImageUrl = GetImageURL(newTvProgram.Title)
+					newTvProgram.ImageUrlReference = models.ReshapeImageURLReference(newTvProgram.ImageUrl)
+					newTvProgram.MovieUrl = GetYoutubeURL(newTvProgram.Title)
 					if _, err := models.AddTvProgram(&newTvProgram); err != nil {
 						fmt.Println(err)
 					}
@@ -344,7 +347,9 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 		})
 
 		if doramaFlag {
-			// fmt.Println(newTvProgram.Title, newTvProgram.Category)
+			newTvProgram.ImageUrl = GetImageURL(newTvProgram.Title)
+			newTvProgram.ImageUrlReference = models.ReshapeImageURLReference(newTvProgram.ImageUrl)
+			newTvProgram.MovieUrl = GetYoutubeURL(newTvProgram.Title)
 			if _, err := models.AddTvProgram(&newTvProgram); err != nil {
 				fmt.Println(err)
 			}
@@ -400,7 +405,7 @@ func GetMovieWalker(year string, month string) {
 		imageURL = models.CheckImageURL(imageURL)
 		tvProgram.ImageUrl = imageURL
 		tvProgram.ImageUrlReference = models.ReshapeImageURLReference(imageURL)
-
+		tvProgram.MovieUrl = GetYoutubeURL(tvProgram.Title)
 		tvProgram.Content = m.Find(".info > p").Text()
 		director := strings.TrimSpace(m.Find(".info > .directorList > dd").Text())
 		director = strings.Replace(director, " ", "", -1)
@@ -460,7 +465,8 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (newTvProgram models.
 			newTvProgram = *new(models.TvProgram)
 			newTvProgram.Title = doc.Find("h1").Text()
 			newTvProgram.WikiReference = wikiReferenceURL
-			newTvProgram.ImageUrl = SetRandomImageURL()
+			// newTvProgram.ImageUrl = SetRandomImageURL()
+			newTvProgram.ImageUrl = GetImageURL(newTvProgram.Title)
 			u.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
 				c, _ := t.Find("td").Attr("class")
 				if c == "category" {
@@ -514,12 +520,10 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (newTvProgram models.
 						contents := strings.Split(content, "年")
 						year, _ := strconv.Atoi(re.FindStringSubmatch(contents[0])[0])
 						newTvProgram.Year = year
-						fmt.Println("year", year)
 
 						contents = strings.Split(contents[1], "月")
 						month, _ := strconv.Atoi(contents[0])
 						seasonName := ReshapeHour(month)
-						fmt.Println("seasonName", seasonName)
 						seasonStruct := *new(models.Season)
 						seasonStruct.Name = seasonName
 						newTvProgram.Season = &seasonStruct
@@ -536,7 +540,6 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (newTvProgram models.
 								newTvProgram.Week = &weekStruct
 								contents = strings.Split(contents[0], "-")
 							}
-							fmt.Println("Week", newTvProgram.Week)
 							content = strings.TrimSpace(contents[0])
 							contents = strings.Split(content, ":")
 							var floatHour float32 = 100
@@ -567,22 +570,12 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (newTvProgram models.
 		}
 	})
 	if doramaFlag {
+		newTvProgram.MovieUrl = GetYoutubeURL(newTvProgram.Title)
 		return newTvProgram
 	} else {
 		newTvProgram = *new(models.TvProgram)
 		return newTvProgram
 	}
-}
-
-// イメージ画像をランダムに選ぶ
-func SetRandomImageURL() (url string) {
-	rand.Seed(time.Now().UnixNano())
-	r := strconv.Itoa(rand.Intn(10) + 1)
-	if len(r) == 1 {
-		r = "0" + r
-	}
-	url = "/static/img/tv_img/hanko_" + r + ".png"
-	return url
 }
 
 // Scraping TvProgram Information in main.go.
@@ -607,8 +600,8 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 		newTvProgram.Title = doc.Find("h1").Text()
 		newTvProgram.Star = 5
 		newTvProgram.WikiReference = wikiReferenceURL
-		newTvProgram.ImageUrl = SetRandomImageURL()
-		newTvProgram.ImageUrlReference = ""
+		// newTvProgram.ImageUrl = SetRandomImageURL()
+		// newTvProgram.ImageUrlReference = ""
 		u.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
 			c, _ := t.Find("td").Attr("class")
 			if c == "category" {
@@ -626,6 +619,9 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 					seasonNum += 1
 				}
 				if seasonNum != 1 {
+					newTvProgram.ImageUrl = GetImageURL(newTvProgram.Title)
+					newTvProgram.ImageUrlReference = models.ReshapeImageURLReference(newTvProgram.ImageUrl)
+					newTvProgram.MovieUrl = GetYoutubeURL(newTvProgram.Title)
 					if _, err := models.AddTvProgram(&newTvProgram); err != nil {
 						fmt.Println(err)
 					}
@@ -744,11 +740,97 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 			}
 		})
 		if doramaFlag {
+			newTvProgram.ImageUrl = GetImageURL(newTvProgram.Title)
+			newTvProgram.ImageUrlReference = models.ReshapeImageURLReference(newTvProgram.ImageUrl)
+			newTvProgram.MovieUrl = GetYoutubeURL(newTvProgram.Title)
 			if _, err := models.AddTvProgram(&newTvProgram); err != nil {
 				fmt.Println(err)
 			}
 		}
 	})
+}
+
+func GetYoutubeURL(str string) (URL string) {
+	str = strings.Replace(str, " ", "", -1)
+	query := "https://www.youtube.com/results?search_query=" + str
+	doc, err := goquery.NewDocument(query)
+	if err != nil {
+		fmt.Print("URL scarapping failed\n")
+		return
+	}
+	s := doc.Find("h3")
+	flag := true
+	s.Each(func(_ int, u *goquery.Selection) {
+		id, _ := u.Find("a").Attr("href")
+		movieTime := u.Find(".accessible-description").Text()
+		if flag {
+			time := strings.Split(movieTime, "長さ:")
+			if len(time) == 2 {
+				t := strings.TrimSpace(time[1])
+				t = strings.Replace(t, "。", "", -1)
+				time = strings.Split(t, ":")
+				if len(time) == 2 {
+					h, _ := strconv.Atoi(time[0])
+					// 10分以内の動画に絞る
+					if h < 10 {
+						URL = strings.Replace(id, "/watch?v=", "https://www.youtube.com/embed/", -1)
+						flag = false
+					}
+				}
+			}
+		}
+	})
+	return URL
+}
+
+func GetImageURL(str string) (URL string) {
+	str = strings.Replace(str, " ", "", -1)
+	query := "https://search.yahoo.co.jp/image/search?p=" + str
+	doc, err := goquery.NewDocument(query)
+	if err != nil {
+		fmt.Print("URL scarapping failed\n")
+		return
+	}
+	s := doc.Find("#gridlist > div > div > p.tb")
+	flag := true
+
+	s.Each(func(_ int, u *goquery.Selection) {
+		var x int = 1
+		var y int = 1
+		if flag {
+			URL, _ = u.Find("img").Attr("src")
+			urls := strings.Split(URL, "&")
+			for _, v := range urls {
+				if strings.Contains(v, "x=") {
+					v = strings.Replace(v, "x=", "", 1)
+					x, _ = strconv.Atoi(v)
+				} else if strings.Contains(v, "y=") {
+					v = strings.Replace(v, "y=", "", 1)
+					y, _ = strconv.Atoi(v)
+				}
+			}
+			ratio := float32(x) / float32(y)
+			// fmt.Println(x, y, ratio)
+			if len(URL) < 480 && ratio > 0.85 {
+				flag = false
+			}
+		}
+	})
+	if URL == "" {
+		URL = SetRandomImageURL()
+	}
+	return URL
+}
+
+// イメージ画像をランダムに選ぶ
+func SetRandomImageURL() (url string) {
+	rand.Seed(time.Now().UnixNano())
+	r := strconv.Itoa(rand.Intn(10) + 1)
+	if len(r) == 1 {
+		r = "0" + r
+	}
+	url = "/static/img/tv_img/hanko_" + r + ".png"
+	return url
 }
 
 func ReshapeWeek(str string) []string {

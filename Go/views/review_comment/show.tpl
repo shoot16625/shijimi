@@ -40,15 +40,14 @@
         <ons-carousel-item>
           <ons-list>
             <ons-list-item>総レビュー数：{{ .CommentNum}}</ons-list-item>
-            <ons-list-item>平均星：{{ .TvProgram.Star}}</ons-list-item>
+            <ons-list-item
+              ><i class="fas fa-star"></i>：{{ .TvProgram.Star}}</ons-list-item
+            >
             <ons-list-item id="favorite-point-ranking-expandable" expandable>
               おすすめポイントランキング
               <div class="expandable-content">
-                {{ range.FavoritePointRanking }}
-                <ons-list modifier="inset" id="favorite-point-ranking"
-                  >{{.Name}}:{{.Value}}
+                <ons-list modifier="inset" id="favorite-point-ranking">
                 </ons-list>
-                {{ end }}
               </div>
             </ons-list-item>
           </ons-list>
@@ -560,6 +559,16 @@
       document.getElementById("tv-reference").innerHTML = reshapeReferenceSite({{ .TvProgram }});
     </script>
     <script>
+          let fprank = {{ .FavoritePointRanking }};
+        if (fprank === null) {
+          fprank = "";
+        }
+        text = "";
+        headerColor = ["lightpink","seashell","lavenderblush","antiquewhite","azure"];
+        for (let i = 0; i < fprank.length; i++) {
+          text += '<ons-list-item style="background:'+headerColor[i]+'"><div class="left">'+fprank[i].Name+'</div><div class="center tv-program-list-content-font">' + fprank[i].Value + '</div></ons-list-item>';
+        }
+        document.querySelector('#favorite-point-ranking').innerHTML = text;
       document
         .querySelector('#favorite-point-ranking-expandable')
         .showExpansion();

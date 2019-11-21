@@ -4,6 +4,7 @@ import (
 	"app/models"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -22,7 +23,7 @@ func (c *CommentController) URLMapping() {
 	c.Mapping("Post", c.Post)
 	c.Mapping("GetOne", c.GetOne)
 	c.Mapping("GetAll", c.GetAll)
-	c.Mapping("GetAllOfTvProgram", c.GetAllOfTvProgram)
+	c.Mapping("GetNewComments", c.GetNewComments)
 	c.Mapping("Put", c.Put)
 	c.Mapping("Delete", c.Delete)
 	c.Mapping("Show", c.Show)
@@ -138,7 +139,7 @@ func (c *CommentController) GetAll() {
 	c.ServeJSON()
 }
 
-func (c *CommentController) GetAllOfTvProgram() {
+func (c *CommentController) GetNewComments() {
 	type CommentAndUser struct {
 		Comments []interface{}
 		Users    []models.User
@@ -239,6 +240,7 @@ func (c *CommentController) Show() {
 	}
 
 	cnt := models.CountAllCommentNumByTvProgramId(tvProgramID)
+	fmt.Println(cnt)
 	c.Data["CommentNum"] = cnt
 
 	var users []models.User
@@ -302,6 +304,9 @@ func (c *CommentController) SearchComment() {
 	} else {
 		c.Data["TvProgram"] = v
 	}
+	cnt := models.CountAllCommentNumByTvProgramId(tvProgramID)
+	fmt.Println(cnt)
+	c.Data["CommentNum"] = cnt
 
 	var fields []string
 	var sortby []string

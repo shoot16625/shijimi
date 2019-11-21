@@ -335,7 +335,7 @@ func (c *TvProgramController) Get() {
 	var fields []string
 	var sortby []string
 	var order []string
-	var limit int64 = 100
+	var limit int64 = 10
 	var offset int64
 	var query = make(map[string]string)
 	sortby = append(sortby, "Hour")
@@ -625,7 +625,6 @@ func (c *TvProgramController) GetWikiInfo() {
 		wikiReference = "https://ja.wikipedia.org/wiki/" + wikiReference
 	}
 	tvProgram := db.GetTvProgramInformationByURL(wikiReference)
-	tvProgram.ImageUrl = ""
 	c.Data["TvProgram"] = tvProgram
 	c.Data["GetWikiInfo"] = true
 	c.TplName = "tv_program/create.tpl"

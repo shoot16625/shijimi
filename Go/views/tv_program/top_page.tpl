@@ -2,6 +2,7 @@
 <html lang="ja">
   <head>
     {{ template "/common/header.tpl" . }}
+
     <style type="text/css">
       p {
         text-align: center;
@@ -22,7 +23,6 @@
         >
           「ShiJimi」<br />
           ドラマ・映画の情報共有SNS
-          <ons-button modifier="quiet" class="add-button comment-list-content-font">ホーム画面に追加する</ons-button>
         </ons-card>
         <form id="search_form" action="/tv/tv_program/search" method="post">
           <p style="margin-top: 20px;">
@@ -81,20 +81,17 @@
           </ons-col>
         </ons-row>
         <ons-toast id="loginErrorToast" animation="ascend"
-        >ログインに失敗しました <i class="far fa-sad-tear"></i><button
-          onclick="loginErrorToast.hide()"
+          >ログインに失敗しました <i class="far fa-sad-tear"></i
+          ><button onclick="loginErrorToast.hide()">
+            ok
+          </button></ons-toast
         >
-          ok
-        </button></ons-toast
-      >
         <div class="on-air-drama">
           <h2>
             <i class="fas fa-tv" style="color: skyblue;"></i> 現在放送中のドラマ
           </h2>
 
-          <p
-            class="drama-on-air-carousel"
-          >
+          <p class="drama-on-air-carousel">
             <i class="far fa-moon" style="color:rgb(235, 200, 3);"></i> 月
           </p>
           <ons-carousel
@@ -107,13 +104,13 @@
             item-width="200px"
             class="dramas-on-air"
           >
-            {{ range.TvProgramMon }}
+            {{ range .TvProgramMon }}
             <ons-carousel-item
               modifier="nodivider"
               id="{{.Id}}"
               name="{{.Title}}"
             >
-              <div class="area-center drama-on-air-carousel-padding" >
+              <div class="area-center drama-on-air-carousel-padding">
                 <div class="thumbnail">
                   <img
                     src="{{.ImageUrl}}"
@@ -131,9 +128,7 @@
             </ons-carousel-item>
             {{ end }}
           </ons-carousel>
-          <p
-            class="drama-on-air-carousel"
-          >
+          <p class="drama-on-air-carousel">
             <i class="fas fa-fire" style="color:rgb(235, 30, 30);"></i> 火
           </p>
           <ons-carousel
@@ -146,13 +141,13 @@
             item-width="200px"
             class="dramas-on-air"
           >
-            {{ range.TvProgramTue }}
+            {{ range .TvProgramTue }}
             <ons-carousel-item
               modifier="nodivider"
               id="{{.Id}}"
               name="{{.Title}}"
             >
-              <div class="area-center drama-on-air-carousel-padding" >
+              <div class="area-center drama-on-air-carousel-padding">
                 <div class="thumbnail">
                   <img
                     src="{{.ImageUrl}}"
@@ -170,9 +165,7 @@
             </ons-carousel-item>
             {{ end }}
           </ons-carousel>
-          <p
-            class="drama-on-air-carousel"
-          >
+          <p class="drama-on-air-carousel">
             <i class="fas fa-tint" style="color:rgb(95, 149, 231);"></i> 水
           </p>
           <ons-carousel
@@ -185,13 +178,13 @@
             item-width="200px"
             class="dramas-on-air"
           >
-            {{ range.TvProgramWed }}
+            {{ range .TvProgramWed }}
             <ons-carousel-item
               modifier="nodivider"
               id="{{.Id}}"
               name="{{.Title}}"
             >
-              <div class="area-center drama-on-air-carousel-padding" >
+              <div class="area-center drama-on-air-carousel-padding">
                 <div class="thumbnail">
                   <img
                     src="{{.ImageUrl}}"
@@ -209,9 +202,7 @@
             </ons-carousel-item>
             {{ end }}
           </ons-carousel>
-          <p
-            class="drama-on-air-carousel"
-          >
+          <p class="drama-on-air-carousel">
             <i class="fas fa-tree" style="color:green;"></i> 木
           </p>
           <ons-carousel
@@ -224,13 +215,13 @@
             item-width="200px"
             class="dramas-on-air"
           >
-            {{ range.TvProgramThu }}
+            {{ range .TvProgramThu }}
             <ons-carousel-item
               modifier="nodivider"
               id="{{.Id}}"
               name="{{.Title}}"
             >
-              <div class="area-center drama-on-air-carousel-padding" >
+              <div class="area-center drama-on-air-carousel-padding">
                 <div class="thumbnail">
                   <img
                     src="{{.ImageUrl}}"
@@ -248,9 +239,7 @@
             </ons-carousel-item>
             {{ end }}
           </ons-carousel>
-          <p
-            class="drama-on-air-carousel"
-          >
+          <p class="drama-on-air-carousel">
             <i class="fas fa-coins" style="color:rgb(187, 162, 24);"></i> 金
           </p>
           <ons-carousel
@@ -263,13 +252,13 @@
             item-width="200px"
             class="dramas-on-air"
           >
-            {{ range.TvProgramFri }}
+            {{ range .TvProgramFri }}
             <ons-carousel-item
               modifier="nodivider"
               id="{{.Id}}"
               name="{{.Title}}"
             >
-              <div class="area-center drama-on-air-carousel-padding" >
+              <div class="area-center drama-on-air-carousel-padding">
                 <div class="thumbnail">
                   <img
                     src="{{.ImageUrl}}"
@@ -287,9 +276,7 @@
             </ons-carousel-item>
             {{ end }}
           </ons-carousel>
-          <p
-            class="drama-on-air-carousel"
-          >
+          <p class="drama-on-air-carousel">
             <i class="fas fa-globe" style="color:rgb(138, 193, 219);"></i> 土
           </p>
           <ons-carousel
@@ -302,13 +289,13 @@
             item-width="200px"
             class="dramas-on-air"
           >
-            {{ range.TvProgramSat }}
+            {{ range .TvProgramSat }}
             <ons-carousel-item
               modifier="nodivider"
               id="{{.Id}}"
               name="{{.Title}}"
             >
-              <div class="area-center drama-on-air-carousel-padding" >
+              <div class="area-center drama-on-air-carousel-padding">
                 <div class="thumbnail">
                   <img
                     src="{{.ImageUrl}}"
@@ -326,9 +313,7 @@
             </ons-carousel-item>
             {{ end }}
           </ons-carousel>
-          <p
-            class="drama-on-air-carousel"
-          >
+          <p class="drama-on-air-carousel">
             <i class="fas fa-sun" style="color:rgb(255, 166, 0);"></i> 日
           </p>
           <ons-carousel
@@ -341,13 +326,13 @@
             item-width="200px"
             class="dramas-on-air"
           >
-            {{ range.TvProgramSun }}
+            {{ range .TvProgramSun }}
             <ons-carousel-item
               modifier="nodivider"
               id="{{.Id}}"
               name="{{.Title}}"
             >
-              <div class="area-center drama-on-air-carousel-padding" >
+              <div class="area-center drama-on-air-carousel-padding">
                 <div class="thumbnail">
                   <img
                     src="{{.ImageUrl}}"
@@ -367,46 +352,50 @@
           </ons-carousel>
         </div>
         <div class="on-air-movie">
-            <h2>
-              <i class="fas fa-film" style="color:chocolate;"></i> 最近の映画
-            </h2>
-            <p class="drama-on-air-carousel">
-            </p>
-            <ons-carousel
-              id="carousel10"
-              auto-refresh
-              auto-scroll
-              auto-scroll-ratio="0.15"
-              swipeable
-              overscrollable
-              item-width="200px"
-              class="dramas-on-air"
+          <h2>
+            <i class="fas fa-film" style="color:chocolate;"></i> 最近の映画
+          </h2>
+          <p class="drama-on-air-carousel"></p>
+          <ons-carousel
+            id="carousel10"
+            auto-refresh
+            auto-scroll
+            auto-scroll-ratio="0.15"
+            swipeable
+            overscrollable
+            item-width="200px"
+            class="dramas-on-air"
+          >
+            {{ range .TvProgramMovie }}
+            <ons-carousel-item
+              modifier="nodivider"
+              id="{{.Id}}"
+              name="{{.Title}}"
             >
-              {{ range.TvProgramMovie }}
-              <ons-carousel-item
-                modifier="nodivider"
-                id="{{.Id}}"
-                name="{{.Title}}"
-              >
-                <div class="area-center drama-on-air-carousel-padding" >
-                  <div class="thumbnail">
-                    <img
-                      src="{{.ImageUrl}}"
-                      alt="{{.Title}}"
-                      class="image-carousel"
-                      onerror="this.src='/static/img/tv_img/hanko_02.png'"
-                    />
-                    <a href="/tv/tv_program/comment/{{.Id}}"></a>
-                  </div>
-                  {{if .ImageUrlReference}}
-                  <div class="reference">出典:{{.ImageUrlReference}}</div>
-                  {{ end }}
-                  <div>{{.Title}}</div>
+              <div class="area-center drama-on-air-carousel-padding">
+                <div class="thumbnail">
+                  <img
+                    src="{{.ImageUrl}}"
+                    alt="{{.Title}}"
+                    class="image-carousel"
+                    onerror="this.src='/static/img/tv_img/hanko_02.png'"
+                  />
+                  <a href="/tv/tv_program/comment/{{.Id}}"></a>
                 </div>
-              </ons-carousel-item>
-              {{ end }}
-            </ons-carousel>
+                {{if .ImageUrlReference}}
+                <div class="reference">出典:{{.ImageUrlReference}}</div>
+                {{ end }}
+                <div>{{.Title}}</div>
+              </div>
+            </ons-carousel-item>
+            {{ end }}
+          </ons-carousel>
         </div>
+        <ons-button
+          modifier="quiet"
+          class="add-button comment-list-content-font"
+          >ホーム画面にインストールする</ons-button
+        >
         <ons-row>
           <ons-col class="area-right">
             <a
@@ -473,8 +462,8 @@
             <div class="center">利用規約</div>
           </ons-toolbar>
           <div class="scroller list-margin">
-          {{ template "/common/terms_of_service.tpl" . }}
-        </div>
+            {{ template "/common/terms_of_service.tpl" . }}
+          </div>
         </ons-page>
       </ons-dialog>
     </template>
@@ -493,8 +482,8 @@
             <div class="center">プライバシーポリシー</div>
           </ons-toolbar>
           <div class="scroller list-margin">
-          {{ template "/common/privacy_policy.tpl" . }}
-        </div>
+            {{ template "/common/privacy_policy.tpl" . }}
+          </div>
         </ons-page>
       </ons-dialog>
     </template>
@@ -621,6 +610,9 @@
     <script>
       if ({{.LoginError}}) {
         document.querySelector('ons-toast').show();
+        setTimeout(function() {
+          document.querySelector('ons-toast').hide();
+        }, 2000);
       }
     </script>
     <!-- 保留 -->
@@ -630,11 +622,26 @@
       })
     </script> -->
     <script>
+      // serviceEorkerの設置
+      window.addEventListener('load', function() {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker
+            .register('/serviceWorker.js')
+            .then(function(registration) {
+              console.log('serviceWorker registed.');
+            })
+            .catch(function(error) {
+              console.warn('serviceWorker error.', error);
+            });
+        }
+      });
+    </script>
+    <script>
       // インストールボタンの機能(たぶんchromeのみ，localhostかhttpsでないと表示されない)
       let deferredPrompt;
       const addBtn = document.querySelector('.add-button');
       addBtn.style.display = 'none';
-      window.addEventListener('beforeinstallprompt', (e) => {
+      window.addEventListener('beforeinstallprompt', e => {
         // Prevent Chrome 67 and earlier from automatically showing the prompt
         e.preventDefault();
         // Stash the event so it can be triggered later.
@@ -642,20 +649,20 @@
         // Update UI to notify the user they can add to home screen
         addBtn.style.display = 'block';
 
-        addBtn.addEventListener('click', (e) => {
+        addBtn.addEventListener('click', e => {
           // hide our user interface that shows our A2HS button
           addBtn.style.display = 'none';
           // Show the prompt
           deferredPrompt.prompt();
           // Wait for the user to respond to the prompt
-          deferredPrompt.userChoice.then((choiceResult) => {
-              if (choiceResult.outcome === 'accepted') {
-                console.log('User accepted the A2HS prompt');
-              } else {
-                console.log('User dismissed the A2HS prompt');
-              }
-              deferredPrompt = null;
-            });
+          deferredPrompt.userChoice.then(choiceResult => {
+            if (choiceResult.outcome === 'accepted') {
+              console.log('User accepted the A2HS prompt');
+            } else {
+              console.log('User dismissed the A2HS prompt');
+            }
+            deferredPrompt = null;
+          });
         });
       });
     </script>

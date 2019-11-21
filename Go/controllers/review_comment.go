@@ -269,6 +269,17 @@ func (c *ReviewCommentController) SearchComment() {
 	} else {
 		c.Data["TvProgram"] = v
 	}
+	cnt := models.CountAllReviewCommentNumByTvProgramId(tvProgramID)
+	c.Data["CommentNum"] = cnt
+
+	fpRanking := models.FavoritePointRankingByTvProgramId(tvProgramID)
+	if len(fpRanking) > 3 {
+		// お気に入りポイントトップ3を抽出
+		fpRanking = fpRanking[:3]
+	} else if fpRanking[0].Value == 0 {
+		fpRanking = nil
+	}
+	c.Data["FavoritePointRanking"] = fpRanking
 
 	var fields []string
 	var sortby []string

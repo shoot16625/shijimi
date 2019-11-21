@@ -25,6 +25,7 @@ func main() {
 	}
 	if beego.BConfig.RunMode == "prod" {
 		port, _ := strconv.Atoi(os.Getenv("PORT"))
+		fmt.Println(port)
 		beego.BConfig.Listen.HTTPPort = port
 		beego.BConfig.Listen.HTTPSPort = port
 	}
@@ -37,6 +38,7 @@ func init() {
 	// タイムゾーンを日本に設定
 	loc, e := time.LoadLocation(location)
 	if e != nil {
+		fmt.Println(e)
 		loc = time.FixedZone(location, 9*60*60)
 	}
 	time.Local = loc
@@ -44,13 +46,13 @@ func init() {
 	user := os.Getenv("MYSQL_USER")
 	pass := os.Getenv("MYSQL_PASSWORD")
 	dbName := os.Getenv("MYSQL_DATABASE")
-	fmt.Println(user)
 	sqlconn := user + ":" + pass + "@tcp(db:3306)/" + dbName
 	orm.RegisterDataBase("default", beego.AppConfig.String("driver"), sqlconn+"?charset=utf8mb4&loc=Asia%2FTokyo")
+	// orm.RegisterDataBase("default", beego.AppConfig.String("driver"), beego.AppConfig.String("sqlconn")+"?charset=utf8mb4&loc=Asia%2FTokyo")
 	// データを初期化して起動
-	// err := orm.RunSyncdb("default", true, false)
+	err := orm.RunSyncdb("default", true, false)
 	// データの変更点を追加して起動
-	err := orm.RunSyncdb("default", false, false)
+	// err := orm.RunSyncdb("default", false, false)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -97,8 +99,11 @@ func init() {
 	db.ExecInitSQL()
 	// db.ExecTestSQL()
 	db.AddRecentTvInfo()
-	// db.AddTvProgramsInformation()
-	// db.GetMovieWalkers()
+	db.AddTvProgramsInformation()
+	db.GetMovieWalkers()
 	// db.ExecDemoSQL()
-	// models.FavoritePointRankingByTvProgramId(19)
+	// fmt.Println(db.GetYoutubeURL("シャーロック_(テレビドラマ)"))
+	// fmt.Println(db.GetImageURL("シャーロック (テレビドラマ)"))
+	// fmt.Println(db.GetImageURL("4分間のマリーゴールド"))
+	// db.GetYoutubeURL("スカーレット (テレビドラマ)")
 }

@@ -98,6 +98,9 @@
     <script>
       if ({{.Status}}) {
         document.querySelector('ons-toast').show();
+        setTimeout(function() {
+          document.querySelector('ons-toast').hide();
+        }, 3000);
       }
     </script>
   </body>

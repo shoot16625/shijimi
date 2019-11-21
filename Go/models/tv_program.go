@@ -20,12 +20,12 @@ type TvProgram struct {
 	Title             string `orm:"size(128);unique"`
 	Content           string `orm:"size(500);null"`
 	ImageUrl          string `orm:"size(500);null"`
-	ImageUrlReference string `orm:"size(200);null"`
+	ImageUrlReference string `orm:"size(100);null"`
 	MovieUrl          string `orm:"size(500);null"`
 	// MovieUrlReference  string    `orm:"size(200);null"`
 	WikiReference      string  `orm:"size(500);null"`
 	Cast               string  `orm:"size(256);null"`
-	Category           string  `orm:"size(32);null"`
+	Category           string  `orm:"size(64);null"`
 	Dramatist          string  `orm:"size(128);null"`
 	Supervisor         string  `orm:"size(128);null"`
 	Director           string  `orm:"size(128);null"`
@@ -459,8 +459,8 @@ func ReshapeWordsA(str string) (res string) {
 
 // 入力されたMovieURLのチェック
 func ReshapeMovieURL(str string) (res string) {
-	if !strings.Contains(str, "http") {
-		res = ""
+	if strings.Contains(str, "https://www.youtube.com/embed/") {
+		res = str
 	} else if strings.Contains(str, "https://www.youtube.com/watch?v=") {
 		res = strings.Replace(str, "watch?v=", "embed/", -1)
 	} else if strings.Contains(str, "https://youtu.be/") {

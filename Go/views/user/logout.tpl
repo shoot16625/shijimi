@@ -8,13 +8,7 @@
   <body>
     <ons-page>
       {{ template "/common/toolbar.tpl" . }}
-      <ons-row>
-        <!-- <ons-col class="area-center"> -->
-        <!-- <img
-            style="width: 80%;height: auto; max-width: 600px;"
-            src="http://gahag.net/img/201604/05s/gahag-0072969531-1.jpg"
-            alt="3秒後にTopへ移動．"
-          /> -->
+      <div style="margin:50px 0 30px 0;">
         <div
           class="tenor-gif-embed"
           data-postid="10252927"
@@ -28,13 +22,12 @@
           from
           <a href="https://tenor.com/search/thankyou-gifs">Thankyou GIFs</a>
         </div>
-        <script
-          type="text/javascript"
-          async
-          src="https://tenor.com/embed.js"
-        ></script>
-        <!-- </ons-col> -->
-      </ons-row>
+      </div>
+      <script
+        type="text/javascript"
+        async
+        src="https://tenor.com/embed.js"
+      ></script>
       <ons-row>
         <ons-col class="area-right">登録ユーザ数：</ons-col>
         <ons-col>{{.Info.CntUsers}}</ons-col>
@@ -43,8 +36,8 @@
         <ons-col class="area-right">登録テレビ数：</ons-col>
         <ons-col>{{.Info.CntTvPrograms}}</ons-col>
       </ons-row>
-      <div class="toast toast--material">
-        <div class="toast__message toast--material__message">
+      <div class="toast">
+        <div class="toast__message">
           {{.Status}}
         </div>
       </div>

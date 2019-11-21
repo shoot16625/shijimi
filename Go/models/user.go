@@ -14,17 +14,17 @@ import (
 type User struct {
 	Id                 int64  `orm:"auto"`
 	Username           string `orm:"size(40);unique"`
-	Password           string `orm:"size(300)" json:"-"`
+	Password           string `orm:"size(200)" json:"-"`
 	Age                string `orm:"size(30)" json:"-"; null`
 	Gender             string `orm:"size(20)" json:"-"; null`
 	Address            string `orm:"size(20)"; null`
 	Job                string `orm:"size(20)" json:"-"; null`
-	SecondPassword     string `orm:"size(300)" json:"-"`
-	IconUrl            string `orm:"size(300);null"`
+	SecondPassword     string `orm:"size(200)" json:"-"`
+	IconUrl            string `orm:"size(500);null"`
 	Marital            string `orm:"size(20)" json:"-"; null"`
 	BloodType          string `orm:"size(20)" json:"-"; null"`
 	MoneyPoint         int    `orm:"default(0)" json:"-"`
-	Badge              string `orm:"size(300)"; null"`
+	Badge              string `orm:"size(500)"; null"`
 	CountEditTvProgram int
 	CountComment       int
 	CountReviewComment int
