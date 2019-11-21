@@ -1,0 +1,25 @@
+{
+    "lang": "ja",
+    "name": "ShiJimi - ドラマ・映画の情報共有SNS",
+    "short_name": "ShiJimi",
+    "icons": [
+        {
+            "src": "/static/img/shijimi-144x144.png",
+            "sizes": "144x144",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/shijimi-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+        // {
+        //     "src": "/static/img/shijimi-512x512.png",
+        //     "sizes": "512x512",
+        //     "type": "image/png"
+        // }
+    ],
+    "start_url": "/",
+    "display": "standalone",
+    "theme_color": "linen"
+}

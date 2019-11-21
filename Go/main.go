@@ -21,7 +21,6 @@ const location = "Asia/Tokyo"
 
 func main() {
 	if beego.BConfig.RunMode == "dev" {
-		beego.BConfig.WebConfig.DirectoryIndex = true
 		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
 	}
 	if beego.BConfig.RunMode == "prod" {
@@ -29,6 +28,8 @@ func main() {
 		beego.BConfig.Listen.HTTPPort = port
 		beego.BConfig.Listen.HTTPSPort = port
 	}
+	beego.BConfig.WebConfig.StaticDir["/manifest.json"] = "manifest.json"
+	beego.BConfig.WebConfig.StaticDir["/serviceWorker.js"] = "serviceWorker.js"
 	beego.Run()
 }
 

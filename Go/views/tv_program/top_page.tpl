@@ -22,6 +22,7 @@
         >
           「ShiJimi」<br />
           ドラマ・映画の情報共有SNS
+          <ons-button modifier="quiet" class="add-button comment-list-content-font">ホーム画面に追加する</ons-button>
         </ons-card>
         <form id="search_form" action="/tv/tv_program/search" method="post">
           <p style="margin-top: 20px;">
@@ -79,10 +80,9 @@
             </p>
           </ons-col>
         </ons-row>
-
-        <ons-toast id="mypageToast" animation="ascend"
+        <ons-toast id="loginErrorToast" animation="ascend"
         >ログインに失敗しました <i class="far fa-sad-tear"></i><button
-          onclick="mypageToast.hide()"
+          onclick="loginErrorToast.hide()"
         >
           ok
         </button></ons-toast
@@ -629,5 +629,35 @@
         document.getElementById("my-toolbar").innerHTML= '<div class="left" id="mypage-toolbar"><ons-toolbar-button icon="md-face" style="font-size:24px;" onclick="location.href=\'/tv/user/show\'"></ons-toolbar-button></div><div class="center" id="image-toolbar"><div class="area-center"><img src="/static/img/shijimi-transparence.png" alt="shijimi" height="42px;" onclick="location.href=\'/\'"/></div></div><div class="right"><ons-toolbar-button icon="fa-search" onclick="dialogBoxEveryone(\'search-toolbar\')"></ons-toolbar-button></div>';
       })
     </script> -->
+    <script>
+      // インストールボタンの機能(たぶんchromeのみ，localhostかhttpsでないと表示されない)
+      let deferredPrompt;
+      const addBtn = document.querySelector('.add-button');
+      addBtn.style.display = 'none';
+      window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        deferredPrompt = e;
+        // Update UI to notify the user they can add to home screen
+        addBtn.style.display = 'block';
+
+        addBtn.addEventListener('click', (e) => {
+          // hide our user interface that shows our A2HS button
+          addBtn.style.display = 'none';
+          // Show the prompt
+          deferredPrompt.prompt();
+          // Wait for the user to respond to the prompt
+          deferredPrompt.userChoice.then((choiceResult) => {
+              if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the A2HS prompt');
+              } else {
+                console.log('User dismissed the A2HS prompt');
+              }
+              deferredPrompt = null;
+            });
+        });
+      });
+    </script>
   </body>
 </html>
