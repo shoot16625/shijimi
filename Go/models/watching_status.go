@@ -147,6 +147,13 @@ func DeleteWatchingStatus(id int64) (err error) {
 	return
 }
 
+// テレビ登録削除時の処理
+func DeleteWatchingStatusByTvProgramId(id int64) {
+	o := orm.NewOrm()
+	num, _ := o.QueryTable(new(WatchingStatus)).Filter("TvProgramId", id).Delete()
+	fmt.Println("delete WatchingStatus", num)
+}
+
 func GetWatchingStatusByUserAndTvProgram(userID int64, tvProgramID int64) (v *WatchingStatus, err error) {
 	o := orm.NewOrm()
 	v = &WatchingStatus{UserId: userID, TvProgramId: tvProgramID}

@@ -229,6 +229,9 @@ func (c *ReviewCommentController) Show() {
 	var users []models.User
 	for _, comment := range l {
 		u, _ := models.GetUserById(comment.UserId)
+		if err != nil {
+			u = new(models.User)
+		}
 		users = append(users, *u)
 	}
 	c.Data["Users"] = users

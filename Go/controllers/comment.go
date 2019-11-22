@@ -4,7 +4,6 @@ import (
 	"app/models"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -144,16 +143,14 @@ func (c *CommentController) GetNewComments() {
 		Comments []interface{}
 		Users    []models.User
 	}
-	tvProgramID := c.Ctx.Input.Param(":id")
-	topCommentId := c.Ctx.Input.Param(":top")
-
 	var fields []string
 	var sortby []string
 	var order []string
 	var query = make(map[string]string)
 	var limit int64 = 100
 	var offset int64
-
+	tvProgramID := c.Ctx.Input.Param(":id")
+	topCommentId := c.Ctx.Input.Param(":top")
 	sortby = append(sortby, "Created")
 	order = append(order, "desc")
 	query["TvProgramId"] = tvProgramID
@@ -222,12 +219,11 @@ func (c *CommentController) Delete() {
 }
 
 func (c *CommentController) Show() {
-
 	idStr := c.Ctx.Input.Param(":id")
 	tvProgramID, _ := strconv.ParseInt(idStr, 0, 64)
 	v, err := models.GetTvProgramById(tvProgramID)
 	if err != nil {
-		c.Data["TvProgram"] = err.Error()
+		c.Data["TvProgram"] = nil
 	} else {
 		c.Data["TvProgram"] = v
 	}
@@ -240,12 +236,14 @@ func (c *CommentController) Show() {
 	}
 
 	cnt := models.CountAllCommentNumByTvProgramId(tvProgramID)
-	fmt.Println(cnt)
 	c.Data["CommentNum"] = cnt
 
 	var users []models.User
 	for _, comment := range l {
-		u, _ := models.GetUserById(comment.UserId)
+		u, err := models.GetUserById(comment.UserId)
+		if err != nil {
+			u = new(models.User)
+		}
 		users = append(users, *u)
 	}
 	c.Data["Users"] = users
@@ -296,18 +294,6 @@ func (c *CommentController) Show() {
 
 func (c *CommentController) SearchComment() {
 
-	idStr := c.Ctx.Input.Param(":id")
-	tvProgramID, _ := strconv.ParseInt(idStr, 0, 64)
-	v, err := models.GetTvProgramById(tvProgramID)
-	if err != nil {
-		c.Data["TvProgram"] = err.Error()
-	} else {
-		c.Data["TvProgram"] = v
-	}
-	cnt := models.CountAllCommentNumByTvProgramId(tvProgramID)
-	fmt.Println(cnt)
-	c.Data["CommentNum"] = cnt
-
 	var fields []string
 	var sortby []string
 	var order []string
@@ -326,6 +312,33 @@ func (c *CommentController) SearchComment() {
 		Limit      int64
 		Sortby     string
 	}
+	idStr := c.Ctx.Input.Param(":id")
+	tvProgramID, _ := strconv.ParseInt(idStr, 0, 64)
+	s := SearchWords{
+		Word:       c.GetString("word"),
+		Username:   c.GetString("username"),
+		BeforeDate: c.GetString("before-date"),
+		BeforeTime: c.GetString("before-time"),
+		AfterDate:  c.GetString("after-date"),
+		AfterTime:  c.GetString("after-time"),
+		Limit:      limit,
+		Sortby:     c.GetString("sortby"),
+	}
+	// ゴミ箱ボタンを押下した場合はリダイレクト
+	if s.BeforeDate == "" && s.BeforeTime == "" && s.AfterDate == "" && s.AfterTime == "" {
+		c.Redirect("/tv/tv_program/comment/"+idStr, 302)
+	}
+
+	c.Data["SearchWords"] = s
+
+	v, err := models.GetTvProgramById(tvProgramID)
+	if err != nil {
+		c.Data["TvProgram"] = err.Error()
+	} else {
+		c.Data["TvProgram"] = v
+	}
+	cnt := models.CountAllCommentNumByTvProgramId(tvProgramID)
+	c.Data["CommentNum"] = cnt
 
 	if v, err := c.GetInt64("limit"); err == nil {
 		limit = v
@@ -368,18 +381,6 @@ func (c *CommentController) SearchComment() {
 		}
 	}
 
-	var s SearchWords
-	s = SearchWords{
-		Word:       c.GetString("word"),
-		Username:   c.GetString("username"),
-		BeforeDate: c.GetString("before-date"),
-		BeforeTime: c.GetString("before-time"),
-		AfterDate:  c.GetString("after-date"),
-		AfterTime:  c.GetString("after-time"),
-		Limit:      limit,
-		Sortby:     c.GetString("sortby"),
-	}
-	c.Data["SearchWords"] = s
 	session := c.StartSession()
 	if session.Get("UserId") != nil {
 		var u models.SearchHistory
@@ -391,6 +392,7 @@ func (c *CommentController) SearchComment() {
 			UserId: session.Get("UserId").(int64),
 			Word:   searchWord,
 			Limit:  s.Limit,
+			Hour:   s.BeforeDate + " " + s.BeforeTime + "," + s.AfterDate + " " + s.AfterTime,
 			Sortby: s.Sortby,
 			Item:   "comment",
 		}

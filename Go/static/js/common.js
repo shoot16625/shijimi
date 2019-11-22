@@ -267,8 +267,14 @@ function goAnotherCarousel(index) {
 function goOtherPage(userID, tvProgramID, path) {
   if (userID == null) {
     return dialogBoxEveryone('alert-only-user-dialog');
+  } else if (path == 'delete-tvprogram') {
+    if (userID != 1) {
+      return dialogBoxEveryone('alert-only-admin-dialog');
+    } else {
+      return dialogBoxEveryone('tvprogram-delete-dialog');
+    }
   } else if (userID != 1 && tvProgramID === 1) {
-    return dialogBoxEveryone('alert-only-user-dialog');
+    return dialogBoxEveryone('alert-only-admin-dialog');
   } else {
     window.location.href = path;
   }

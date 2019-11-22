@@ -250,15 +250,29 @@ func (c *TvProgramController) Put() {
 // @Failure 403 id is empty
 // @router /:id [delete]
 func (c *TvProgramController) Delete() {
-	// idStr := c.Ctx.Input.Param(":id")
-	// id, _ := strconv.ParseInt(idStr, 0, 64)
-	// if err := models.DeleteTvProgram(id); err == nil {
-	// 	c.Data["json"] = "OK"
-	// } else {
-	// 	c.Data["json"] = err.Error()
-	// }
-	c.Data["json"] = "delete function stop"
-	c.ServeJSON()
+	idStr := c.Ctx.Input.Param(":id")
+	id, _ := strconv.ParseInt(idStr, 0, 64)
+	session := c.StartSession()
+	if session.Get("UserId") != nil {
+		if err := models.DeleteTvProgram(id); err == nil {
+			models.DeleteWatchingStatusByTvProgramId(id)
+			models.DeleteBrowsingHistoryByTvProgramId(id)
+			models.DeleteTvProgramUpdateHistoryByTvProgramId(id)
+			c.Data["Status"] = "テレビ番組を削除しました"
+		} else {
+			c.Data["Status"] = "テレビ番組の削除に失敗しました"
+		}
+	} else {
+		c.Data["Status"] = "テレビ番組の削除に失敗しました"
+	}
+	var Info struct {
+		CntUsers      int64
+		CntTvPrograms int64
+	}
+	Info.CntUsers = models.GetUserCount()
+	Info.CntTvPrograms = models.GetTvProgramCount()
+	c.Data["Info"] = Info
+	c.TplName = "user/logout.tpl"
 }
 
 func (c *TvProgramController) Index() {
@@ -321,10 +335,16 @@ func (c *TvProgramController) Index() {
 }
 
 func (c *TvProgramController) EditPage() {
+	session := c.StartSession()
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	v, _ := models.GetTvProgramById(id)
 	c.Data["TvProgram"] = v
+	if session.Get("UserId") != nil {
+		userID := session.Get("UserId").(int64)
+		w, _ := models.GetUserById(userID)
+		c.Data["User"] = w
+	}
 	c.TplName = "tv_program/edit.tpl"
 }
 

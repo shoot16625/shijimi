@@ -50,9 +50,9 @@ func init() {
 	orm.RegisterDataBase("default", beego.AppConfig.String("driver"), sqlconn+"?charset=utf8mb4&loc=Asia%2FTokyo")
 	// orm.RegisterDataBase("default", beego.AppConfig.String("driver"), beego.AppConfig.String("sqlconn")+"?charset=utf8mb4&loc=Asia%2FTokyo")
 	// データを初期化して起動
-	err := orm.RunSyncdb("default", true, false)
+	// err := orm.RunSyncdb("default", true, false)
 	// データの変更点を追加して起動
-	// err := orm.RunSyncdb("default", false, false)
+	err := orm.RunSyncdb("default", false, false)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -69,7 +69,6 @@ func init() {
 		ageInt := t.Year() - birth.Year()
 		t2 := time.Date(birth.Year(), t.Month(), t.Day(), 0, 0, 0, 0, time.Local)
 		duration := t2.Sub(birth)
-		fmt.Println(ageInt, birth, duration)
 		if int(duration.Hours()) < 0 {
 			ageInt--
 		}
@@ -96,14 +95,11 @@ func init() {
 	go beego.GlobalSessions.GC()
 
 	// 初期データの投入
-	db.ExecInitSQL()
-	// db.ExecTestSQL()
-	db.AddRecentTvInfo()
-	db.AddTvProgramsInformation()
-	db.GetMovieWalkers()
+	db.EmptyInitSQL()
+
+	// db.ExecInitSQL()
+	// db.AddRecentTvInfo()
+	// db.AddTvProgramsInformation()
+	// db.GetMovieWalkers()
 	// db.ExecDemoSQL()
-	// fmt.Println(db.GetYoutubeURL("シャーロック_(テレビドラマ)"))
-	// fmt.Println(db.GetImageURL("シャーロック (テレビドラマ)"))
-	// fmt.Println(db.GetImageURL("4分間のマリーゴールド"))
-	// db.GetYoutubeURL("スカーレット (テレビドラマ)")
 }

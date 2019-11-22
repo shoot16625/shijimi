@@ -8,6 +8,10 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
+func EmptyInitSQL() {
+
+}
+
 func ExecInitSQL() {
 	o := orm.NewOrm()
 	o.Using("default")
@@ -27,7 +31,7 @@ func ExecInitSQL() {
 	UserSQL("doramaba-admin", "doramaba-password", "1995-05-06", "男性", "愛知県", "学生", "doramaba-password", "/static/img/shijimi-transparence.png", "未婚", "A型", 500, "1")
 
 	// uchida用 ID：2
-	UserSQL("ちゃお倉木", "password", "1995-05-06", "男性", "愛知県", "学生", "乃木小学校", "https://img.cinematoday.jp/a/N0077397/_size_640x/_v_1445346612/1.jpg", "未婚", "A型", 500, "1")
+	UserSQL("ちゃお倉木", "password", "1995-05-06", "男性", "愛知県", "学生", "乃木小学校", "https://avatars2.githubusercontent.com/u/24419610?s=460&v=4", "未婚", "A型", 500, "1")
 
 	// お問い合わせ用 ID：1
 	TvProgramSQL("お問い合わせ専用", "サービス改善のため、忌憚のないご意見・ご感想をお待ちしております。3回に1回くらい褒めていただけると幸いです。", "/static/img/shijimi-transparence.png", "", "", "", "こんにちは", "", "松江が好き", "音楽って大事", "日記感覚でいこう", "Shiny & Jiminy", 2019, "夏", "miletが好き", "日", 100, 5, 0, 0, 0)
@@ -52,9 +56,9 @@ func ExecTestSQL() {
 }
 
 func ExecDemoSQL() {
-	UserSQL("ユーザA", "password", "1995-05-06", "男性", "愛知県", "学生", "乃木", "http://flat-icon-design.com/f/f_object_161/s512_f_object_161_0bg.png", "未婚", "B型", 500, "1")
-	UserSQL("Bさん", "password", "1995-12-22", "男性", "愛知県", "学生", "乃木", "http://flat-icon-design.com/f/f_object_105/s512_f_object_105_0bg.png", "未婚", "A型", 0, "")
-	for j := 1; j < 20; j++ {
+	UserSQL("ユーザA", "password", "1995-05-06", "男性", "愛知県", "学生", "password", "http://flat-icon-design.com/f/f_object_161/s512_f_object_161_0bg.png", "未婚", "B型", 500, "1")
+	UserSQL("Bさん", "password", "1995-12-22", "男性", "愛知県", "学生", "password", "http://flat-icon-design.com/f/f_object_105/s512_f_object_105_0bg.png", "未婚", "A型", 0, "")
+	for j := 1; j <= 200; j++ {
 		CommentSQL("コメントを投稿（180字まで）\r\nコメントを投稿（180字まで）\r\n"+strconv.Itoa(j), 3, 19, int(j))
 		CommentSQL("桑野さん最高すぎる！\r\n"+strconv.Itoa(j), 4, 19, int(j*3))
 	}

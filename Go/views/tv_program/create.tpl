@@ -8,9 +8,10 @@
     <ons-page>
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
+      <ons-pull-hook id="pull-hook"></ons-pull-hook>
       <div
         class="area-center create-top-bottom-margin"
-        style="background-color: rgb(186, 236, 243);"
+        style="background-color: aliceblue;"
       >
         <form id="get-tv-info" action="/tv/tv_program/get_info" method="post">
           <p>
@@ -26,6 +27,11 @@
             データ取得(ドラマのみ)
           </button>
         </form>
+      </div>
+      <div class="area-right" style="height: 0px;">
+        <ons-button modifier="quiet" onclick="dialogBoxEveryone('hint-dialog')"
+          ><i class="far fa-question-circle hint-icon-right"></i
+        ></ons-button>
       </div>
       <form id="create-tv-program" action="/tv/tv_program/" method="post">
         <div class="area-center">
@@ -285,7 +291,7 @@
               <ons-list-header style="background-color:ghostwhite;">
                 <div class="area-left" id="preview-on-air-info"></div>
                 <div class="area-right list-margin">
-                  閲覧数：0
+                  <i class="fas fa-eye"></i>：0
                 </div>
               </ons-list-header>
               <ons-list-item id="expandable-list-item" expandable>
@@ -299,7 +305,13 @@
                           <ons-col id="preview-cast"></ons-col>
                         </ons-row>
                         <ons-row class="list-margin-bottom">
-                          <ons-col width="20%">歌：</ons-col>
+                          <ons-col width="20%"
+                            ><i
+                              class="fas fa-music"
+                              style="color: cornflowerblue;"
+                            ></i
+                            >：</ons-col
+                          >
                           <ons-col id="preview-themesong"></ons-col>
                         </ons-row>
                         <ons-row class="list-margin-bottom">
@@ -347,7 +359,30 @@
         </ons-page>
       </ons-dialog>
     </template>
-
+    <template id="hint-dialog.html">
+      <ons-dialog id="hint-dialog" modifier="large" cancelable fullscreen>
+        <ons-page>
+          <ons-toolbar>
+            <div class="left">
+              <ons-button
+                id="cancel-button"
+                onclick="hideAlertDialog('hint-dialog')"
+              >
+                <i class="fas fa-window-close"></i>
+              </ons-button>
+            </div>
+            <div class="center">
+              ヒント <i class="far fa-question-circle hint-font-size"></i>
+            </div>
+          </ons-toolbar>
+          <div class="scroller list-margin">
+            <ol>
+              <li></li>
+            </ol>
+          </div>
+        </ons-page>
+      </ons-dialog>
+    </template>
     {{ template "/common/js.tpl" . }}
 
     <script>

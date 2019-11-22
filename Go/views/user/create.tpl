@@ -9,6 +9,11 @@
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
 
+      <div class="area-right" style="height: 0px;">
+        <ons-button modifier="quiet" onclick="dialogBoxEveryone('hint-dialog')"
+          ><i class="far fa-question-circle hint-icon-right"></i
+        ></ons-button>
+      </div>
       <form id="create-user" action="/tv/user/" method="post">
         <div class="input-table">
           <p>
@@ -274,6 +279,31 @@
               OK
             </ons-button>
           </p>
+        </ons-page>
+      </ons-dialog>
+    </template>
+    <!-- ヒントページ -->
+    <template id="hint-dialog.html">
+      <ons-dialog id="hint-dialog" modifier="large" cancelable fullscreen>
+        <ons-page>
+          <ons-toolbar>
+            <div class="left">
+              <ons-button
+                id="cancel-button"
+                onclick="hideAlertDialog('hint-dialog')"
+              >
+                <i class="fas fa-window-close"></i>
+              </ons-button>
+            </div>
+            <div class="center">
+              ヒント <i class="far fa-question-circle hint-font-size"></i>
+            </div>
+          </ons-toolbar>
+          <div class="scroller list-margin">
+            <ol>
+              <li></li>
+            </ol>
+          </div>
         </ons-page>
       </ons-dialog>
     </template>

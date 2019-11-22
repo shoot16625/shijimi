@@ -227,29 +227,23 @@ func (c *UserController) Delete() {
 	session := c.StartSession()
 	id := session.Get("UserId").(int64)
 	if err := models.DeleteUser(id); err == nil {
-		c.Data["Status"] = "ユーザを削除しました"
-		// 過去の投稿データを削除
+		// 過去の投稿データを削除(いいねも削除)
 		models.DeleteCommentsByUserId(id)
 		models.DeleteReviewCommentsByUserId(id)
 		session.Delete("UserId")
 		session.Delete("Username")
-		var Info struct {
-			CntUsers      int64
-			CntTvPrograms int64
-		}
-		Info.CntUsers = models.GetUserCount()
-		Info.CntTvPrograms = models.GetTvProgramCount()
-		c.Data["Info"] = Info
+		c.Data["Status"] = "ユーザを削除しました"
 	} else {
 		c.Data["Status"] = "退会に失敗しました"
-		var Info struct {
-			CntUsers      int64
-			CntTvPrograms int64
-		}
-		Info.CntUsers = models.GetUserCount()
-		Info.CntTvPrograms = models.GetTvProgramCount()
-		c.Data["Info"] = Info
 	}
+	var Info struct {
+		CntUsers      int64
+		CntTvPrograms int64
+	}
+	Info.CntUsers = models.GetUserCount()
+	Info.CntTvPrograms = models.GetTvProgramCount()
+	c.Data["Info"] = Info
+
 	c.TplName = "user/logout.tpl"
 }
 
@@ -489,46 +483,44 @@ func (c *UserController) Edit() {
 
 func (c *UserController) Login() {
 	session := c.StartSession()
-	v, _ := models.GetUserByUsername(c.GetString("username"))
-	if v != nil {
-		if models.UserPassMach(v.Password, c.GetString("password")) {
-			session.Set("username", c.GetString("username"))
-			session.Set("UserId", v.Id)
-			firstLoginToday := models.AddLoginPoint(v.Id)
-			if firstLoginToday {
-				c.Data["Status"] = "1ポイント獲得しました!!"
-			} else {
-				c.Data["Status"] = "ログインしました!!"
-			}
-			z := models.LoginHistory{
-				UserId: v.Id,
-			}
-			_, _ = models.AddLoginHistory(&z)
-
-			UserID := v.Id
-			v, _ := models.GetUserById(UserID)
-			c.Data["User"] = v
-			w, _ := models.GetCommentByUserId(UserID, 1000)
-			c.Data["Comment"] = w
-
-			var commentLikes []models.CommentLike
-			var tvPrograms []models.TvProgram
-			for _, comment := range w {
-				u, err := models.GetCommentLikeByCommentAndUser(comment.Id, UserID)
-				if err != nil {
-					u = new(models.CommentLike)
-				}
-				commentLikes = append(commentLikes, *u)
-				v, err := models.GetTvProgramById(comment.TvProgramId)
-				if err != nil {
-					v = new(models.TvProgram)
-				}
-				tvPrograms = append(tvPrograms, *v)
-			}
-			c.Data["CommentLike"] = commentLikes
-			c.Data["TvProgram"] = tvPrograms
-			c.TplName = "user/show_comment.tpl"
+	v, err := models.GetUserByUsername(c.GetString("username"))
+	if err == nil && models.UserPassMach(v.Password, c.GetString("password")) {
+		session.Set("username", c.GetString("username"))
+		session.Set("UserId", v.Id)
+		firstLoginToday := models.AddLoginPoint(v.Id)
+		if firstLoginToday {
+			c.Data["Status"] = "1ポイント獲得しました!!"
+		} else {
+			c.Data["Status"] = "ログインしました!!"
 		}
+		z := models.LoginHistory{
+			UserId: v.Id,
+		}
+		_, _ = models.AddLoginHistory(&z)
+
+		UserID := v.Id
+		v, _ := models.GetUserById(UserID)
+		c.Data["User"] = v
+		w, _ := models.GetCommentByUserId(UserID, 1000)
+		c.Data["Comment"] = w
+
+		var commentLikes []models.CommentLike
+		var tvPrograms []models.TvProgram
+		for _, comment := range w {
+			u, err := models.GetCommentLikeByCommentAndUser(comment.Id, UserID)
+			if err != nil {
+				u = new(models.CommentLike)
+			}
+			commentLikes = append(commentLikes, *u)
+			v, err := models.GetTvProgramById(comment.TvProgramId)
+			if err != nil {
+				v = new(models.TvProgram)
+			}
+			tvPrograms = append(tvPrograms, *v)
+		}
+		c.Data["CommentLike"] = commentLikes
+		c.Data["TvProgram"] = tvPrograms
+		c.TplName = "user/show_comment.tpl"
 	} else {
 		c.Data["LoginError"] = true
 		c.Data["UserId"] = session.Get("UserId")

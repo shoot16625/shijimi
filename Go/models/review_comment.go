@@ -157,7 +157,7 @@ func DeleteReviewComment(id int64) (err error) {
 
 func GetReviewCommentByTvProgramId(id int64, limit int64) (v []ReviewComment, err error) {
 	o := orm.NewOrm()
-	if _, err = o.QueryTable(new(ReviewComment)).Filter("TvProgramId", id).OrderBy("-Created").Limit(limit).All(&v); err == nil {
+	if _, err = o.QueryTable(new(ReviewComment)).Filter("TvProgramId", id).OrderBy("-Id").Limit(limit).All(&v); err == nil {
 		return v, nil
 	}
 	return nil, err
@@ -165,7 +165,7 @@ func GetReviewCommentByTvProgramId(id int64, limit int64) (v []ReviewComment, er
 
 func GetReviewCommentByUserId(id int64, limit int64) (v []ReviewComment, err error) {
 	o := orm.NewOrm()
-	if _, err = o.QueryTable(new(ReviewComment)).Filter("UserId", id).Limit(limit).OrderBy("-Created").All(&v); err == nil {
+	if _, err = o.QueryTable(new(ReviewComment)).Filter("UserId", id).Limit(limit).OrderBy("-Id").All(&v); err == nil {
 		return v, nil
 	}
 	return nil, err
@@ -296,6 +296,11 @@ func GetAllReviewCommentByUserId(id int64) (v []ReviewComment, err error) {
 
 func DeleteReviewCommentsByUserId(id int64) {
 	o := orm.NewOrm()
+	if v, err := GetAllReviewCommentByUserId(id); err == nil {
+		for _, w := range v {
+			o.QueryTable(new(ReviewCommentLike)).Filter("ReviewCommentId", w.Id).Delete()
+		}
+	}
 	num, _ := o.QueryTable(new(ReviewComment)).Filter("UserId", id).Delete()
 	fmt.Println("delete review comment", num)
 }

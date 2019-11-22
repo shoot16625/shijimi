@@ -175,6 +175,10 @@ label {
 .margin-bottom-20 {
   margin-bottom: 20px;
 }
+.hint-icon-right {
+  margin-right: 5px;
+  color: chocolate;
+}
 
 .create-top-bottom-margin {
   margin-top:20px;
@@ -183,6 +187,9 @@ label {
 
 .create-top-margin-5 {
   margin-top:5px;
+}
+.create-top-margin-20 {
+  margin-top:20px;
 }
 .on-air-movie {
   margin-top:20px;
@@ -201,7 +208,9 @@ label {
   border-bottom: solid thin lightgray;
   text-align: left;
 }
-
+li {
+  margin-bottom: 7px;
+}
 /* padding */
 .list-header--material {
   padding: 5px;
@@ -229,7 +238,9 @@ label {
 .tv-program-list-title-font {
   font-size: 20px;
 }
-
+.hint-font-size {
+  font-size: 16px;
+}
 
 /* color */
 .flag-color {

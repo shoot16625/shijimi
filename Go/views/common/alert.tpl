@@ -14,6 +14,22 @@
   </ons-alert-dialog>
 </template>
 
+<template id="alert-only-admin-dialog.html">
+  <ons-alert-dialog id="alert-only-admin-dialog" modifier="rowfooter">
+    <div class="alert-dialog-title">Alert</div>
+    <div class="alert-dialog-content">
+      <span>この機能は管理者のみ</span
+      ><span class="new-line">利用できます。</span>
+    </div>
+    <div class="alert-dialog-footer">
+      <ons-alert-dialog-button
+        onclick="hideAlertDialog('alert-only-admin-dialog')"
+        >OK</ons-alert-dialog-button
+      >
+    </div>
+  </ons-alert-dialog>
+</template>
+
 <template id="alert-username-dialog.html">
   <ons-alert-dialog id="alert-username-dialog" modifier="rowfooter">
     <div class="alert-dialog-title">Alert</div>
@@ -84,6 +100,7 @@
     </div>
   </ons-alert-dialog>
 </template>
+
 <template id="alert-review-twice.html">
   <ons-alert-dialog id="alert-review-twice" modifier="rowfooter">
     <div class="alert-dialog-title">Alert</div>

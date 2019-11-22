@@ -144,6 +144,13 @@ func DeleteBrowsingHistory(id int64) (err error) {
 	return
 }
 
+// テレビ登録削除時の処理
+func DeleteBrowsingHistoryByTvProgramId(id int64) {
+	o := orm.NewOrm()
+	num, _ := o.QueryTable(new(BrowsingHistory)).Filter("TvProgramId", id).Delete()
+	fmt.Println("delete BrowsingHistory", num)
+}
+
 // n時間の間で閲覧数の多かった番組を取得
 func GetTopBrowsingHistory(t string) (l []orm.Params, err error) {
 	o := orm.NewOrm()

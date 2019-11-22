@@ -149,6 +149,7 @@ func SearchComment(query map[string]string, fields []string, sortby []string, or
 			} else if k == "AfterTime" {
 				t, _ := time.Parse("2006-01-02 15:04", value)
 				t = t.Local()
+				// herokuならコメントアウト
 				t = t.Add(-9 * time.Hour)
 				condOnly = condOnly.And("created__lte", t)
 			}
@@ -254,7 +255,7 @@ func DeleteComment(id int64) (err error) {
 
 func GetCommentByTvProgramId(id int64, limit int64) (v []Comment, err error) {
 	o := orm.NewOrm()
-	if _, err = o.QueryTable(new(Comment)).Filter("TvProgramId", id).OrderBy("-Created").Limit(limit).All(&v); err == nil {
+	if _, err = o.QueryTable(new(Comment)).Filter("TvProgramId", id).OrderBy("-Id").Limit(limit).All(&v); err == nil {
 		return v, nil
 	}
 	return nil, err
@@ -268,7 +269,7 @@ func CountAllCommentNumByTvProgramId(id int64) (cnt int64) {
 
 func GetCommentByUserId(id int64, limit int64) (v []Comment, err error) {
 	o := orm.NewOrm()
-	if _, err = o.QueryTable(new(Comment)).Filter("UserId", id).OrderBy("-Created").Limit(limit).All(&v); err == nil {
+	if _, err = o.QueryTable(new(Comment)).Filter("UserId", id).OrderBy("-Id").Limit(limit).All(&v); err == nil {
 		return v, nil
 	}
 	return nil, err
@@ -282,8 +283,16 @@ func GetAllCommentByUserId(id int64) (v []Comment, err error) {
 	return nil, err
 }
 
+// コメント削除時の処理
 func DeleteCommentsByUserId(id int64) {
 	o := orm.NewOrm()
+	// num, _ := o.QueryTable(new(Comment)).Filter("UserId", id).Delete()
+	if v, err := GetAllCommentByUserId(id); err == nil {
+		for _, w := range v {
+			o.QueryTable(new(CommentLike)).Filter("CommentId", w.Id).Delete()
+		}
+	}
 	num, _ := o.QueryTable(new(Comment)).Filter("UserId", id).Delete()
+	// いいね情報も同時に削除する
 	fmt.Println("delete comment", num)
 }

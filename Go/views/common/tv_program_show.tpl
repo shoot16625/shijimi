@@ -7,7 +7,7 @@
       ><span id="tv-program-hour"></span>）
     </div>
     <div class="area-right list-margin">
-      閲覧数：{{.TvProgram.CountClicked}}
+      <i class="fas fa-eye"></i>：{{.TvProgram.CountClicked}}
     </div>
   </ons-list-header>
   <ons-list-item id="expandable-list-item" expandable>
@@ -21,7 +21,10 @@
               <ons-col id="tv-cast"></ons-col>
             </ons-row>
             <ons-row class="list-margin-bottom">
-              <ons-col width="20%">歌：</ons-col>
+              <ons-col width="20%"
+                ><i class="fas fa-music" style="color: cornflowerblue;"></i
+                >：</ons-col
+              >
               <ons-col id="tv-themesong"></ons-col>
             </ons-row>
             <ons-row class="list-margin-bottom">

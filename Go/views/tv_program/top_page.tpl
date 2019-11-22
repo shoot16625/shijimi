@@ -24,14 +24,24 @@
           「ShiJimi」<br />
           ドラマ・映画の情報共有SNS
         </ons-card>
-        <form id="search_form" action="/tv/tv_program/search" method="post">
-          <p style="margin-top: 20px;">
-            <ons-search-input
-              name="search-word"
-              placeholder="ドラマ・映画を検索"
-            ></ons-search-input>
-          </p>
-        </form>
+        <ons-row class="create-top-margin-20">
+          <ons-col width="15%"></ons-col>
+          <ons-col width="70%" style="text-align: center;">
+            <form id="search_form" action="/tv/tv_program/search" method="post">
+              <ons-search-input
+                name="search-word"
+                placeholder="ドラマ・映画を検索"
+              ></ons-search-input>
+            </form>
+          </ons-col>
+          <ons-col>
+            <ons-button
+              modifier="quiet"
+              onclick="dialogBoxEveryone('hint-dialog')"
+              ><i class="far fa-question-circle hint-icon-right"></i
+            ></ons-button>
+          </ons-col>
+        </ons-row>
         <ons-row>
           <ons-col>
             <p>
@@ -104,7 +114,7 @@
             item-width="200px"
             class="dramas-on-air"
           >
-            {{ range .TvProgramMon }}
+            {{ range.TvProgramMon }}
             <ons-carousel-item
               modifier="nodivider"
               id="{{.Id}}"
@@ -141,7 +151,7 @@
             item-width="200px"
             class="dramas-on-air"
           >
-            {{ range .TvProgramTue }}
+            {{ range.TvProgramTue }}
             <ons-carousel-item
               modifier="nodivider"
               id="{{.Id}}"
@@ -178,7 +188,7 @@
             item-width="200px"
             class="dramas-on-air"
           >
-            {{ range .TvProgramWed }}
+            {{ range.TvProgramWed }}
             <ons-carousel-item
               modifier="nodivider"
               id="{{.Id}}"
@@ -215,7 +225,7 @@
             item-width="200px"
             class="dramas-on-air"
           >
-            {{ range .TvProgramThu }}
+            {{ range.TvProgramThu }}
             <ons-carousel-item
               modifier="nodivider"
               id="{{.Id}}"
@@ -252,7 +262,7 @@
             item-width="200px"
             class="dramas-on-air"
           >
-            {{ range .TvProgramFri }}
+            {{ range.TvProgramFri }}
             <ons-carousel-item
               modifier="nodivider"
               id="{{.Id}}"
@@ -289,7 +299,7 @@
             item-width="200px"
             class="dramas-on-air"
           >
-            {{ range .TvProgramSat }}
+            {{ range.TvProgramSat }}
             <ons-carousel-item
               modifier="nodivider"
               id="{{.Id}}"
@@ -326,7 +336,7 @@
             item-width="200px"
             class="dramas-on-air"
           >
-            {{ range .TvProgramSun }}
+            {{ range.TvProgramSun }}
             <ons-carousel-item
               modifier="nodivider"
               id="{{.Id}}"
@@ -366,7 +376,7 @@
             item-width="200px"
             class="dramas-on-air"
           >
-            {{ range .TvProgramMovie }}
+            {{ range.TvProgramMovie }}
             <ons-carousel-item
               modifier="nodivider"
               id="{{.Id}}"
@@ -560,6 +570,34 @@
         </script>
       </ons-dialog>
     </template>
+    <!-- ヒントページ -->
+    <template id="hint-dialog.html">
+      <ons-dialog id="hint-dialog" modifier="large" cancelable fullscreen>
+        <ons-page>
+          <ons-toolbar>
+            <div class="left">
+              <ons-button
+                id="cancel-button"
+                onclick="hideAlertDialog('hint-dialog')"
+              >
+                <i class="fas fa-window-close"></i>
+              </ons-button>
+            </div>
+            <div class="center">
+              ヒント <i class="far fa-question-circle hint-font-size"></i>
+            </div>
+          </ons-toolbar>
+          <div class="scroller list-margin">
+              <ol>
+                <li>ツールバーのしじみをクリックすると、トップページへ移動できます。</li>
+                <li>ユーザ登録をすれば、誰でも番組の作成・編集が可能です。どんどん作っていこう！！</li>
+                <li>「検索」複数のキーワードで指定したいときは、スペースで区切ってね。</li>
+                <li>「バグ」→ お問い合わせへポスト</li>
+              </ol>
+          </div>
+        </ons-page>
+      </ons-dialog>
+    </template>
     {{ template "/common/js.tpl" . }}
     <script type="text/javascript">
       if({{.TvProgramMon}}){
@@ -612,7 +650,7 @@
         document.querySelector('ons-toast').show();
         setTimeout(function() {
           document.querySelector('ons-toast').hide();
-        }, 2000);
+        }, 4000);
       }
     </script>
     <!-- 保留 -->

@@ -21,6 +21,13 @@
               編集
             </button>
           </a>
+          <div class="area-right-float" style="margin-right: 5px;">
+            <ons-button
+              modifier="quiet"
+              onclick="dialogBoxEveryone('hint-dialog')"
+              ><i class="far fa-question-circle hint-icon-right"></i
+            ></ons-button>
+          </div>
         </div>
       </ons-col>
       <ons-col width="50%">
@@ -34,3 +41,27 @@
     </ons-row>
   </ons-list-item>
 </ons-list>
+<template id="hint-dialog.html">
+  <ons-dialog id="hint-dialog" modifier="large" cancelable fullscreen>
+    <ons-page>
+      <ons-toolbar>
+        <div class="left">
+          <ons-button
+            id="cancel-button"
+            onclick="hideAlertDialog('hint-dialog')"
+          >
+            <i class="fas fa-window-close"></i>
+          </ons-button>
+        </div>
+        <div class="center">
+          ヒント <i class="far fa-question-circle hint-font-size"></i>
+        </div>
+      </ons-toolbar>
+      <div class="scroller list-margin">
+        <ol>
+          <li></li>
+        </ol>
+      </div>
+    </ons-page>
+  </ons-dialog>
+</template>

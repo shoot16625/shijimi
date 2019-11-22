@@ -10,7 +10,7 @@
       {{ template "/common/alert.tpl" . }}
 
       <ons-pull-hook id="pull-hook">
-        Pull to refresh
+        <!-- Pull to refresh -->
       </ons-pull-hook>
 
       <ons-speed-dial
@@ -226,6 +226,13 @@
               method="post"
             >
               <div class="area-center create-top-bottom-margin">
+                <div class="area-right" style="height: 0px;">
+                  <ons-button
+                    modifier="quiet"
+                    onclick="dialogBoxEveryone('hint-dialog')"
+                    ><i class="far fa-question-circle hint-icon-right"></i
+                  ></ons-button>
+                </div>
                 <p>
                   <ons-input
                     type="text"
@@ -336,7 +343,30 @@
         </script>
       </ons-dialog>
     </template>
-
+    <template id="hint-dialog.html">
+      <ons-dialog id="hint-dialog" modifier="large" cancelable fullscreen>
+        <ons-page>
+          <ons-toolbar>
+            <div class="left">
+              <ons-button
+                id="cancel-button"
+                onclick="hideAlertDialog('hint-dialog')"
+              >
+                <i class="fas fa-window-close"></i>
+              </ons-button>
+            </div>
+            <div class="center">
+              ヒント <i class="far fa-question-circle hint-font-size"></i>
+            </div>
+          </ons-toolbar>
+          <div class="scroller list-margin">
+            <ol>
+              <li></li>
+            </ol>
+          </div>
+        </ons-page>
+      </ons-dialog>
+    </template>
     {{ template "/common/js.tpl" . }}
 
     <script>

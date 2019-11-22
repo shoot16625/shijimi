@@ -15,6 +15,7 @@
     <ons-page>
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
+      <ons-pull-hook id="pull-hook"></ons-pull-hook>
       <form
         id="edit-tv-program"
         action="/tv/tv_program/{{.TvProgram.Id}}"
@@ -241,6 +242,13 @@
             <input type="hidden" name="_method" value="PUT" />
             <button class="button button--outline">更新する</button>
           </p>
+          <p class="area-right">
+            <ons-button
+              modifier="quiet"
+              onclick="goOtherPage({{.User.Id}},{{.TvProgram.Id}},'delete-tvprogram')"
+              >テレビ削除</ons-button
+            >
+          </p>
         </div>
       </form>
     </ons-page>
@@ -279,7 +287,7 @@
               <ons-list-header style="background-color:ghostwhite;">
                 <div class="area-left" id="preview-on-air-info"></div>
                 <div class="area-right list-margin">
-                  閲覧数：0
+                  <i class="fas fa-eye"></i>：0
                 </div>
               </ons-list-header>
               <ons-list-item id="expandable-list-item" expandable>
@@ -293,7 +301,7 @@
                           <ons-col id="preview-cast"></ons-col>
                         </ons-row>
                         <ons-row class="list-margin-bottom">
-                          <ons-col width="20%">歌：</ons-col>
+                          <ons-col width="20%"><i class="fas fa-music" style="color: cornflowerblue;"></i>：</ons-col>
                           <ons-col id="preview-themesong"></ons-col>
                         </ons-row>
                         <ons-row class="list-margin-bottom">
@@ -340,6 +348,37 @@
           </div>
         </ons-page>
       </ons-dialog>
+    </template>
+    <template id="tvprogram-delete-dialog.html">
+      <ons-alert-dialog id="tvprogram-delete-dialog" modifier="rowfooter">
+        <div class="alert-dialog-title">Alert</div>
+        <div class="alert-dialog-content">
+          本当に削除しますか？<br />番組・ブックマーク・閲覧ログ・アップデートログの情報が削除されます。
+        </div>
+        <div class="alert-dialog-footer">
+          <ons-alert-dialog-button
+            onclick="hideAlertDialog('tvprogram-delete-dialog')"
+            >Cancel</ons-alert-dialog-button
+          >
+          <ons-alert-dialog-button>
+            <form
+              id="delete-tvprogram"
+              action="/tv/tv_program/{{.TvProgram.Id}}"
+              method="post"
+              onSubmit="showLoading();"
+            >
+              <input type="hidden" name="_method" value="DELETE" />
+              <button
+                id="delete-tvprogram-button"
+                class="button--quiet"
+                type="submit"
+              >
+                OK
+              </button>
+            </form>
+          </ons-alert-dialog-button>
+        </div>
+      </ons-alert-dialog>
     </template>
 
     {{ template "/common/js.tpl" . }}

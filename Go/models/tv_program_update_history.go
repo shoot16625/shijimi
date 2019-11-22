@@ -143,3 +143,10 @@ func DeleteTvProgramUpdateHistory(id int64) (err error) {
 	}
 	return
 }
+
+// テレビ登録削除時の処理
+func DeleteTvProgramUpdateHistoryByTvProgramId(id int64) {
+	o := orm.NewOrm()
+	num, _ := o.QueryTable(new(TvProgramUpdateHistory)).Filter("TvProgramId", id).Delete()
+	fmt.Println("delete TvProgramUpdateHistory", num)
+}
