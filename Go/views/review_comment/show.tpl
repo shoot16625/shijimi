@@ -361,7 +361,7 @@
           </ons-toolbar>
           <div class="scroller list-margin">
             <ol>
-              <li></li>
+              <li>複数選択方法(PC)→ctrlを押しながらクリック</li>
             </ol>
           </div>
         </ons-page>

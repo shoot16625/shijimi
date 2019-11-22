@@ -301,7 +301,11 @@
           </ons-toolbar>
           <div class="scroller list-margin">
             <ol>
-              <li></li>
+              <li>ユーザ名：文字種制限なし</li>
+              <li>パスワード：ハッシュ化しています</li>
+              <li>
+                プロフィール画像：URLで指定(http://の場合、表示されない場合があります)。<br />指定しない場合はランダムに設定されます。
+              </li>
             </ol>
           </div>
         </ons-page>

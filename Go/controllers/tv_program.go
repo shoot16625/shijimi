@@ -424,6 +424,7 @@ func (c *TvProgramController) Search() {
 	c.TplName = "tv_program/index.tpl"
 }
 
+// 詳細検索機能
 func (c *TvProgramController) SearchTvProgram() {
 	var fields []string
 	var sortby []string
@@ -598,10 +599,8 @@ func (c *TvProgramController) SearchTvProgram() {
 		_, _ = models.AddSearchHistory(&u)
 	}
 
-	// fmt.Println(fields, limit, offset, sortby, order, query)
 	l, _ := models.SearchTvProgram(query, fields, sortby, order, offset, limit)
 	c.Data["TvProgram"] = l
-	// session := c.StartSession()
 	if session.Get("UserId") != nil {
 		userID := session.Get("UserId").(int64)
 		var ratings []models.WatchingStatus

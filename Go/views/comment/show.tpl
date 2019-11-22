@@ -278,8 +278,9 @@
           </ons-toolbar>
           <div class="scroller list-margin">
             <ol>
-              <li></li>
-            </ol>
+                <li>ユーザーを指定：OR検索です。</li>
+                <li>時間帯を設定することで、いつでもリアルタイムにタイムラインを眺めることができます。</li>
+              </ol>
           </div>
         </ons-page>
       </ons-dialog>
@@ -326,7 +327,7 @@
     <script>
       // 非同期通信でのコメント取得・更新
       function getNewComment(){
-        if ({{.SearchWords}}===null){
+        if ({{.SearchWords}}===null && comments != null){
         let url = URL+"/tv/comment/update/"+{{.TvProgram.Id}}+"/"+comments[0].Id;
         let method = "GET"
         var request = new XMLHttpRequest();

@@ -7,7 +7,7 @@
 />
 <meta
   name="description"
-  content="ドラマや映画のコメントを投稿。みんなで盛り上がろう！！AIによるおすすめ機能もあるよ。"
+  content="ドラマ・映画の情報共有SNS。コメントやレビューをして熱狂しよう!!。作品のおすすめ機能も搭載。"
 />
 <meta name="keywords" content="レビュー,映画,ドラマ,ツイート,おすすめ" />
 
@@ -15,15 +15,11 @@
 
 <title>ShiJimi</title>
 
-<!-- <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.min.css" /> -->
 <link
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/onsen/2.10.10/css/onsenui.min.css"
 />
-<!-- <link
-  rel="stylesheet"
-  href="https://unpkg.com/onsenui/css/onsen-css-components.min.css"
-/> -->
+
 <link
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/onsen/2.10.10/css/onsen-css-components.min.css"

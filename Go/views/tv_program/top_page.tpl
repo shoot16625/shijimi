@@ -411,8 +411,8 @@
             <a
               href="https://twitter.com/share"
               class="twitter-share-button"
-              data-url="https://www.yahoo.co.jp"
-              data-text="AIがあなたにおすすめなドラマ・映画を選定！！"
+              data-url="https://shijimi.herokuapp.com/"
+              data-text="ドラマ・映画の情報共有SNS"
               data-hashtags="shijimi"
               >Tweet</a
             >
@@ -420,7 +420,7 @@
           <ons-col>
             <div
               class="fb-share-button"
-              data-href="https://developers.facebook.com/docs/plugins/"
+              data-href="https://shijimi.herokuapp.com/"
               data-layout="button_count"
               data-size="small"
             >
@@ -590,8 +590,9 @@
           <div class="scroller list-margin">
               <ol>
                 <li>ツールバーのしじみをクリックすると、トップページへ移動できます。</li>
-                <li>ユーザ登録をすれば、誰でも番組の作成・編集が可能です。どんどん作っていこう！！</li>
+                <li>ユーザ登録をすれば、誰でも番組の作成・編集が可能。</li>
                 <li>「検索」複数のキーワードで指定したいときは、スペースで区切ってね。</li>
+                <li>機能は今後も追加していく予定です。</li>
                 <li>「バグ」→ お問い合わせへポスト</li>
               </ol>
           </div>

@@ -307,7 +307,7 @@
           </ons-toolbar>
           <div class="scroller list-margin">
             <ol>
-              <li></li>
+              <li>基本的にAND検索です。</li>
             </ol>
           </div>
         </ons-page>
