@@ -29,7 +29,8 @@ func (c *TvProgramController) URLMapping() {
 	c.Mapping("Search", c.Search)
 	c.Mapping("SearchTvProgram", c.SearchTvProgram)
 	c.Mapping("CreatePage", c.CreatePage)
-	c.Mapping("GetWikiInfo", c.GetWikiInfo)
+	c.Mapping("GetTvProgramWikiInfo", c.GetTvProgramWikiInfo)
+	c.Mapping("GetMovieWikiInfo", c.GetMovieWikiInfo)
 }
 
 // Post ...
@@ -638,12 +639,23 @@ func (c *TvProgramController) CreatePage() {
 	}
 }
 
-func (c *TvProgramController) GetWikiInfo() {
+func (c *TvProgramController) GetTvProgramWikiInfo() {
 	wikiReference := c.GetString("wikiReference")
 	if !strings.Contains(wikiReference, "wikipedia") {
 		wikiReference = "https://ja.wikipedia.org/wiki/" + wikiReference
 	}
 	tvProgram := db.GetTvProgramInformationByURL(wikiReference)
+	c.Data["TvProgram"] = tvProgram
+	c.Data["GetWikiInfo"] = true
+	c.TplName = "tv_program/create.tpl"
+}
+
+func (c *TvProgramController) GetMovieWikiInfo() {
+	wikiReference := c.GetString("wikiReference")
+	if !strings.Contains(wikiReference, "wikipedia") {
+		wikiReference = "https://ja.wikipedia.org/wiki/" + wikiReference
+	}
+	tvProgram := db.GetMovieInformationByURL(wikiReference)
 	c.Data["TvProgram"] = tvProgram
 	c.Data["GetWikiInfo"] = true
 	c.TplName = "tv_program/create.tpl"

@@ -134,7 +134,7 @@
               name="category"
               id="category"
               style="height: 130px;"
-              class="select-input select-input--underbar select-search-table"
+              class="select-input select-input--underbar select-search-table restrict"
               required
               multiple
             >
@@ -301,7 +301,13 @@
                           <ons-col id="preview-cast"></ons-col>
                         </ons-row>
                         <ons-row class="list-margin-bottom">
-                          <ons-col width="20%"><i class="fas fa-music" style="color: cornflowerblue;"></i>：</ons-col>
+                          <ons-col width="20%"
+                            ><i
+                              class="fas fa-music"
+                              style="color: cornflowerblue;"
+                            ></i
+                            >&emsp;：</ons-col
+                          >
                           <ons-col id="preview-themesong"></ons-col>
                         </ons-row>
                         <ons-row class="list-margin-bottom">
@@ -387,7 +393,17 @@
       let textTop = '<option>指定なし</option>';
       document.getElementById('hour').innerHTML = getSelectHour(textTop);
     </script>
-
+    <script type="text/javascript">
+      $('.restrict').change(function() {
+        var count = $('.restrict option:selected').length;
+        var not = $('.restrict option').not(':selected');
+        if (count >= 3) {
+          not.attr('disabled', true);
+        } else {
+          not.attr('disabled', false);
+        }
+      });
+    </script>
     <script type="text/javascript">
       var previewTvProgram = function(elemID) {
         ons.ready(function() {

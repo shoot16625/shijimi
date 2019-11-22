@@ -325,9 +325,9 @@ function seasonHeaderColor(seasonName) {
   } else if (seasonName === '夏') {
     headerColor = 'aliceblue';
   } else if (seasonName === '秋') {
-    headerColor = 'khaki';
+    headerColor = 'antiquewhite';
   } else if (seasonName === '冬') {
-    headerColor = 'thistle';
+    headerColor = 'lavender';
   } else {
     headerColor = 'ghostwhite';
   }

@@ -13,7 +13,8 @@
         class="area-center create-top-bottom-margin"
         style="background-color: aliceblue;"
       >
-        <form id="get-tv-info" action="/tv/tv_program/get_info" method="post">
+        <!-- <form id="get-tv-info" action="/tv/tv_program/get_tv_info" method="post"> -->
+        <form id="get-tv-info" name="getInfo" method="post">
           <p>
             <ons-input
               name="wikiReference"
@@ -23,8 +24,19 @@
               float
             ></ons-input>
           </p>
-          <button class="button button--cta" style="font-size: 14px;">
-            データ取得(ドラマのみ)
+          <button
+            class="button button--cta"
+            style="font-size: 14px;"
+            onclick="submitDrama()"
+          >
+            データ取得(ドラマ)
+          </button>
+          <button
+            class="button button--cta"
+            style="font-size: 14px;"
+            onclick="submitMovie()"
+          >
+            データ取得(映画)
           </button>
         </form>
       </div>
@@ -146,7 +158,7 @@
               name="category"
               id="category"
               style="height: 130px;"
-              class="select-input select-input--underbar select-search-table"
+              class="select-input select-input--underbar select-search-table restrict"
               required
               multiple
             >
@@ -377,16 +389,21 @@
           </ons-toolbar>
           <div class="scroller list-margin">
             <ol>
-                <li>Wikiデータ取得：ページタイトルのみでも取得できます。(ex. アンナチュラル)</li>
-                <li>タイトル：既存のタイトル名は指定できません。</li>
-                <li>あらすじ・みどころ：主観でいいですよ。</li>
-                <li>キャストなど：情報は多ければ多いほうが良いです。</li>
-                <li>区切り文字：,や、が利用できます。半角スペースは☓</li>
-                <li>歌：名前「曲名」と間を空けずに入力してください。<br>複数ある場合は上記の区切り文字が利用できます。</li>
-                <li>ジャンル：複数選択方法(PC)→ctrlを押しながらクリック</li>
-                <li>MovieURL：公式サイトのyoutubeURLを指定</li>
-                <li>プレビューで確認してね。</li>
-              </ol>
+              <li>
+                Wikiデータ取得：ページタイトルのみでも取得できます。(ex.
+                アンナチュラル)
+              </li>
+              <li>タイトル：既存のタイトル名は指定できません。</li>
+              <li>あらすじ・みどころ：主観でいいですよ。</li>
+              <li>キャストなど：情報は多ければ多いほうが良いです。</li>
+              <li>区切り文字：,や、が利用できます。半角スペースは☓</li>
+              <li>
+                歌：名前「曲名」と間を空けずに入力してください。<br />複数ある場合は上記の区切り文字が利用できます。
+              </li>
+              <li>ジャンル：複数選択方法(PC)→ctrlを押しながらクリック</li>
+              <li>MovieURL：公式サイトのyoutubeURLを指定</li>
+              <li>プレビューで確認してね。</li>
+            </ol>
           </div>
         </ons-page>
       </ons-dialog>
@@ -397,7 +414,25 @@
       let textTop = '<option>指定なし</option>';
       document.getElementById('hour').innerHTML = getSelectHour(textTop);
     </script>
-
+    <script type="text/javascript">
+      $('.restrict').change(function() {
+        var count = $('.restrict option:selected').length;
+        var not = $('.restrict option').not(':selected');
+        if (count >= 3) {
+          not.attr('disabled', true);
+        } else {
+          not.attr('disabled', false);
+        }
+      });
+    </script>
+    <script>
+      function submitDrama() {
+        document.getInfo.action = '/tv/tv_program/get_tv_info';
+      }
+      function submitMovie() {
+        document.getInfo.action = '/tv/tv_program/get_movie_info';
+      }
+    </script>
     <script type="text/javascript">
       var previewTvProgram = function(elemID) {
         ons.ready(function() {

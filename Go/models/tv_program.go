@@ -459,6 +459,7 @@ func ReshapeWordsA(str string) (res string) {
 
 // 入力されたMovieURLのチェック
 func ReshapeMovieURL(str string) (res string) {
+	res = ""
 	if strings.Contains(str, "https://www.youtube.com/embed/") {
 		res = str
 	} else if strings.Contains(str, "https://www.youtube.com/watch?v=") {
@@ -468,19 +469,16 @@ func ReshapeMovieURL(str string) (res string) {
 	} else if strings.Contains(str, "https://m.youtube.com/watch?v=") {
 		res = strings.Replace(str, "m.youtube", "www.youtube", -1)
 		res = strings.Replace(res, "watch?v=", "embed/", -1)
-	} else {
-		res = ""
 	}
 	return res
 }
 
 // イメージ画像URLのチェック
 func CheckImageURL(str string) (res string) {
+	res = str
 	if !strings.Contains(str, "/static/img/tv_img") {
 		resp, err := http.Get(str)
-		defer resp.Body.Close()
 		if err != nil || resp.Status == "404 Not Found" {
-			// fmt.Println(err)
 			rand.Seed(time.Now().UnixNano())
 			r := strconv.Itoa(rand.Intn(10) + 1)
 			if len(r) == 1 {
@@ -488,10 +486,8 @@ func CheckImageURL(str string) (res string) {
 			}
 			res = "/static/img/tv_img/hanko_" + r + ".png"
 		} else {
-			res = str
+			defer resp.Body.Close()
 		}
-	} else {
-		res = str
 	}
 	return res
 }

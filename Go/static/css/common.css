@@ -209,8 +209,13 @@ label {
   text-align: left;
 }
 li {
-  margin-bottom: 7px;
+  word-break: break-word;
+  margin-bottom: 20px;
 }
+.toolbar--material__center {
+  margin-top: 5px;
+}
+
 /* padding */
 .list-header--material {
   padding: 5px;

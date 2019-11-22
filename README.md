@@ -90,7 +90,7 @@ docker, docker-composeが必要
 ## herokuの場合
 1. https://qiita.com/pitcher292/items/1ca39c7b0dbd79298c0b
 1. 30分でスタンバイ状態：再起動時にきどうしなおしちゃう
-1. herokuだとsearch_historyがでてこない
+1. heroku:60秒以内にサーバーを起動しないと落ちるため、多くのデータスクレイピングは不可能
 
 # 公開へのロードマップ
 1. konohaVPS900円借りる

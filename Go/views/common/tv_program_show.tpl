@@ -23,7 +23,7 @@
             <ons-row class="list-margin-bottom">
               <ons-col width="20%"
                 ><i class="fas fa-music" style="color: cornflowerblue;"></i
-                >：</ons-col
+                >&emsp;：</ons-col
               >
               <ons-col id="tv-themesong"></ons-col>
             </ons-row>
