@@ -36,14 +36,14 @@ func (c *ReviewCommentController) URLMapping() {
 // @router / [post]
 func (c *ReviewCommentController) Post() {
 	var v models.ReviewComment
+	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 	session := c.StartSession()
 	if session.Get("UserId") != nil {
-		json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 		// 初投稿の場合のみ許可
 		_, err := models.GetReviewCommentByUserIdAndTvProgramId(v.UserId, v.TvProgramId)
 		if err != nil {
 			if _, err := models.AddReviewComment(&v); err == nil {
-				c.Data["json"] = v
+				// c.Data["json"] = v
 				if w, err := models.GetTvProgramById(v.TvProgramId); err == nil {
 					if y, err := models.GetReviewCommentByTvProgramId(v.TvProgramId, 100000); err == nil {
 						w.CountStar = len(y)
@@ -60,14 +60,13 @@ func (c *ReviewCommentController) Post() {
 						w.CountReviewComment++
 						_ = models.UpdateUserById(w)
 					}
+				} else {
+					c.Redirect("/", 302)
 				}
-			} else {
-				c.Data["json"] = err.Error()
 			}
 		}
-		// 必要ないけど，ないとpanicでてくる
-		c.Redirect("/tv/tv_program/review/"+strconv.FormatInt(v.TvProgramId, 10), 302)
 	}
+	c.Redirect("/tv/tv_program/review/"+strconv.FormatInt(v.TvProgramId, 10), 302)
 }
 
 // GetOne ...
@@ -203,7 +202,7 @@ func (c *ReviewCommentController) Show() {
 	tvProgramID, _ := strconv.ParseInt(idStr, 0, 64)
 	v, err := models.GetTvProgramById(tvProgramID)
 	if err != nil {
-		c.Data["TvProgram"] = err.Error()
+		c.Redirect("/", 302)
 	} else {
 		c.Data["TvProgram"] = v
 	}
@@ -268,7 +267,7 @@ func (c *ReviewCommentController) SearchComment() {
 	tvProgramID, _ := strconv.ParseInt(idStr, 0, 64)
 	v, err := models.GetTvProgramById(tvProgramID)
 	if err != nil {
-		c.Data["TvProgram"] = err.Error()
+		c.Redirect("/", 302)
 	} else {
 		c.Data["TvProgram"] = v
 	}

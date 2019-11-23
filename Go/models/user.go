@@ -3,7 +3,9 @@ package models
 import (
 	"errors"
 	"fmt"
+	"math/rand"
 	"reflect"
+	"strconv"
 	"strings"
 	"time"
 
@@ -237,4 +239,15 @@ func AddLoginPoint(userID int64) bool {
 		return true
 	}
 	return false
+}
+
+// イメージ画像をランダムに選ぶ
+func SetRandomImageUser() (IconURL string) {
+	rand.Seed(time.Now().UnixNano())
+	r := strconv.Itoa(rand.Intn(13) + 1)
+	if len(r) == 1 {
+		r = "0" + r
+	}
+	IconURL = "/static/img/user_img/s256_f_" + r + ".png"
+	return IconURL
 }

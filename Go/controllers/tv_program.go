@@ -42,57 +42,62 @@ func (c *TvProgramController) URLMapping() {
 // @router / [post]
 func (c *TvProgramController) Post() {
 	session := c.StartSession()
-	// ログインユーザのみ作成（html側でも縛りあり）
-	if session.Get("UserId") != nil {
-		year, _ := c.GetInt("year")
-		season := *new(models.Season)
-		season.Name = models.RegexpWords(c.GetString("season"), `\(.+\)`, "")
-		week := *new(models.Week)
-		week.Name = c.GetString("week")
-		var hour float64 = 100
-		if c.GetString("hour") != "指定なし" {
-			hourString := c.GetString("hour")
-			hourString = strings.Replace(hourString, ":00", "", -1)
-			hourString = strings.Replace(hourString, ":30", ".5", -1)
-			hour, _ = strconv.ParseFloat(hourString, 32)
-		}
-		movieURL := models.ReshapeMovieURL(c.GetString("MovieURL"))
-		imageURL := models.CheckImageURL(c.GetString("ImageURL"))
-		imageURLReference := models.ReshapeImageURLReference(imageURL)
-
-		var v models.TvProgram
-		v = models.TvProgram{
-			Title:             c.GetString("title"),
-			Content:           c.GetString("content"),
-			ImageUrl:          imageURL,
-			ImageUrlReference: imageURLReference,
-			MovieUrl:          movieURL,
-			WikiReference:     c.GetString("WikiReference"),
-			Cast:              models.RegexpWords(c.GetString("cast"), "、|，|　", ","),
-			Category:          strings.Join(c.GetStrings("category"), ","),
-			Dramatist:         models.RegexpWords(c.GetString("dramatist"), "、|，|　", ","),
-			Supervisor:        models.RegexpWords(c.GetString("supervisor"), "、|，|　", ","),
-			Director:          models.RegexpWords(c.GetString("director"), "、|，|　", ","),
-			Production:        models.RegexpWords(c.GetString("production"), "、|，|　| ", ","),
-			Year:              year,
-			Star:              5,
-			Season:            &season,
-			Week:              &week,
-			Hour:              float32(hour),
-			Themesong:         models.RegexpWords(c.GetString("themesong"), "、|，|　", ","),
-			CreateUserId:      session.Get("UserId").(int64),
-		}
-		if _, err := models.AddTvProgram(&v); err == nil {
-			w, _ := models.GetUserById(v.CreateUserId)
-			w.CountEditTvProgram++
-			_ = models.UpdateUserById(w)
-			c.Redirect("/tv/tv_program/comment/"+strconv.FormatInt(v.Id, 10), 302)
-		} else {
-			c.Data["TvProgram"] = v
-			c.Data["GetWikiInfo"] = false
-			c.TplName = "tv_program/create.tpl"
-		}
+	if session.Get("UserId") == nil {
+		c.Redirect("/", 302)
 	}
+	// ログインユーザのみ作成（html側でも縛りあり）
+	// if session.Get("UserId") != nil {
+	year, _ := c.GetInt("year")
+	season := *new(models.Season)
+	season.Name = models.RegexpWords(c.GetString("season"), `\(.+\)`, "")
+	week := *new(models.Week)
+	week.Name = c.GetString("week")
+	var hour float64 = 100
+	if c.GetString("hour") != "指定なし" {
+		hourString := c.GetString("hour")
+		hourString = strings.Replace(hourString, ":00", "", -1)
+		hourString = strings.Replace(hourString, ":30", ".5", -1)
+		hour, _ = strconv.ParseFloat(hourString, 32)
+	}
+	movieURL := models.ReshapeMovieURL(c.GetString("MovieURL"))
+	imageURL := models.CheckImageURL(c.GetString("ImageURL"))
+	imageURLReference := models.ReshapeImageURLReference(imageURL)
+
+	var v models.TvProgram
+	v = models.TvProgram{
+		Title:             c.GetString("title"),
+		Content:           c.GetString("content"),
+		ImageUrl:          imageURL,
+		ImageUrlReference: imageURLReference,
+		MovieUrl:          movieURL,
+		WikiReference:     c.GetString("WikiReference"),
+		Cast:              models.RegexpWords(c.GetString("cast"), "、|，|　", ","),
+		Category:          strings.Join(c.GetStrings("category"), ","),
+		Dramatist:         models.RegexpWords(c.GetString("dramatist"), "、|，|　", ","),
+		Supervisor:        models.RegexpWords(c.GetString("supervisor"), "、|，|　", ","),
+		Director:          models.RegexpWords(c.GetString("director"), "、|，|　", ","),
+		Production:        models.RegexpWords(c.GetString("production"), "、|，|　| ", ","),
+		Year:              year,
+		Star:              5,
+		Season:            &season,
+		Week:              &week,
+		Hour:              float32(hour),
+		Themesong:         models.RegexpWords(c.GetString("themesong"), "、|，|　", ","),
+		CreateUserId:      session.Get("UserId").(int64),
+	}
+	if _, err := models.AddTvProgram(&v); err == nil {
+		w, _ := models.GetUserById(v.CreateUserId)
+		w.CountEditTvProgram++
+		_ = models.UpdateUserById(w)
+		c.Redirect("/tv/tv_program/comment/"+strconv.FormatInt(v.Id, 10), 302)
+	} else {
+		c.Data["TvProgram"] = v
+		c.Data["GetWikiInfo"] = false
+		c.TplName = "tv_program/create.tpl"
+	}
+	// } else {
+	// 	c.Redirect("/", 302)
+	// }
 }
 
 // GetOne ...
@@ -187,6 +192,10 @@ func (c *TvProgramController) GetAll() {
 // @router /:id [put]
 func (c *TvProgramController) Put() {
 	session := c.StartSession()
+	if session.Get("UserId") == nil {
+		c.Redirect("/", 302)
+	}
+	// if session.Get("UserId") != nil {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	year, _ := c.GetInt("year")
@@ -241,6 +250,9 @@ func (c *TvProgramController) Put() {
 		c.Data["TitleFlag"] = 1
 		c.Redirect("/tv/tv_program/edit/"+idStr, 302)
 	}
+	// } else {
+	// 	c.Redirect("/", 302)
+	// }
 }
 
 // Delete ...
@@ -339,14 +351,19 @@ func (c *TvProgramController) EditPage() {
 	session := c.StartSession()
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
-	v, _ := models.GetTvProgramById(id)
-	c.Data["TvProgram"] = v
 	if session.Get("UserId") != nil {
+		v, err := models.GetTvProgramById(id)
+		if err != nil {
+			c.Redirect("/", 302)
+		}
+		c.Data["TvProgram"] = v
 		userID := session.Get("UserId").(int64)
 		w, _ := models.GetUserById(userID)
 		c.Data["User"] = w
+		c.TplName = "tv_program/edit.tpl"
+	} else {
+		c.Redirect("/tv/tv_program/comment/"+idStr, 302)
 	}
-	c.TplName = "tv_program/edit.tpl"
 }
 
 // トップページの処理
@@ -579,14 +596,38 @@ func (c *TvProgramController) SearchTvProgram() {
 	}
 	c.Data["SearchWords"] = s
 	session := c.StartSession()
+	// if session.Get("UserId") != nil {
+	// 	var u models.SearchHistory
+	// 	searchWords := []string{s.Title, s.Staff, s.Themesong}
+	// 	searchWord := strings.Join(searchWords, ",")
+	// 	searchWord = strings.Trim(searchWord, ",")
+	// 	searchWord = strings.Replace(searchWord, ",,", ",", 1)
+	// 	u = models.SearchHistory{
+	// 		UserId:   session.Get("UserId").(int64),
+	// 		Word:     searchWord,
+	// 		Year:     s.Year,
+	// 		Season:   s.Season,
+	// 		Week:     s.Week,
+	// 		Hour:     s.Hour,
+	// 		Category: s.Category,
+	// 		Limit:    s.Limit,
+	// 		Sortby:   s.Sortby,
+	// 		Item:     "tv",
+	// 	}
+	// 	_, _ = models.AddSearchHistory(&u)
+	// }
+
+	l, _ := models.SearchTvProgram(query, fields, sortby, order, offset, limit)
+	c.Data["TvProgram"] = l
 	if session.Get("UserId") != nil {
+		userID := session.Get("UserId").(int64)
 		var u models.SearchHistory
 		searchWords := []string{s.Title, s.Staff, s.Themesong}
 		searchWord := strings.Join(searchWords, ",")
 		searchWord = strings.Trim(searchWord, ",")
 		searchWord = strings.Replace(searchWord, ",,", ",", 1)
 		u = models.SearchHistory{
-			UserId:   session.Get("UserId").(int64),
+			UserId:   userID,
 			Word:     searchWord,
 			Year:     s.Year,
 			Season:   s.Season,
@@ -598,12 +639,7 @@ func (c *TvProgramController) SearchTvProgram() {
 			Item:     "tv",
 		}
 		_, _ = models.AddSearchHistory(&u)
-	}
 
-	l, _ := models.SearchTvProgram(query, fields, sortby, order, offset, limit)
-	c.Data["TvProgram"] = l
-	if session.Get("UserId") != nil {
-		userID := session.Get("UserId").(int64)
 		var ratings []models.WatchingStatus
 		for _, tvProgram := range l {
 			r, err := models.GetWatchingStatusByUserAndTvProgram(userID, tvProgram.(models.TvProgram).Id)
@@ -640,6 +676,10 @@ func (c *TvProgramController) CreatePage() {
 }
 
 func (c *TvProgramController) GetTvProgramWikiInfo() {
+	session := c.StartSession()
+	if session.Get("UserId") == nil {
+		c.Redirect("/", 302)
+	}
 	wikiReference := c.GetString("wikiReference")
 	if !strings.Contains(wikiReference, "wikipedia") {
 		wikiReference = "https://ja.wikipedia.org/wiki/" + wikiReference
@@ -651,6 +691,10 @@ func (c *TvProgramController) GetTvProgramWikiInfo() {
 }
 
 func (c *TvProgramController) GetMovieWikiInfo() {
+	session := c.StartSession()
+	if session.Get("UserId") == nil {
+		c.Redirect("/", 302)
+	}
 	wikiReference := c.GetString("wikiReference")
 	if !strings.Contains(wikiReference, "wikipedia") {
 		wikiReference = "https://ja.wikipedia.org/wiki/" + wikiReference

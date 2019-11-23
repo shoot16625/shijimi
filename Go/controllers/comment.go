@@ -38,22 +38,24 @@ func (c *CommentController) URLMapping() {
 // @router / [post]
 func (c *CommentController) Post() {
 	session := c.StartSession()
+	var v models.Comment
+	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 	if session.Get("UserId") != nil {
-		var v models.Comment
-		json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 		if _, err := models.AddComment(&v); err == nil {
-			c.Data["json"] = v
-			w, _ := models.GetTvProgramById(v.TvProgramId)
+			// c.Data["json"] = v
+			w, err := models.GetTvProgramById(v.TvProgramId)
+			if err != nil {
+				c.Redirect("/", 302)
+			}
 			w.CountComment++
 			_ = models.UpdateTvProgramById(w)
 			z, _ := models.GetUserById(v.UserId)
 			z.CountComment++
 			_ = models.UpdateUserById(z)
-		} else {
-			c.Data["json"] = err.Error()
 		}
-		c.Redirect("/tv/tv_program/comment/"+strconv.FormatInt(v.TvProgramId, 10), 302)
 	}
+	c.Redirect("/tv/tv_program/comment/"+strconv.FormatInt(v.TvProgramId, 10), 302)
+	// }
 }
 
 // GetOne ...
@@ -140,8 +142,9 @@ func (c *CommentController) GetAll() {
 
 func (c *CommentController) GetNewComments() {
 	type CommentAndUser struct {
-		Comments []interface{}
-		Users    []models.User
+		Comments     []interface{}
+		Users        []models.User
+		CommentLikes []models.CommentLike
 	}
 	var fields []string
 	var sortby []string
@@ -161,13 +164,18 @@ func (c *CommentController) GetNewComments() {
 	} else {
 		c.Ctx.Output.SetStatus(200)
 		var users []models.User
+		var commentLikes []models.CommentLike
 		for _, comment := range l {
 			u, _ := models.GetUserById(comment.(models.Comment).UserId)
 			users = append(users, *u)
+			// 新規投稿にcommentLikeは常にfalse
+			commentLikes = append(commentLikes, *new(models.CommentLike))
 		}
+		c.Data["CommentLike"] = commentLikes
 		commentAndUser := *new(CommentAndUser)
 		commentAndUser.Comments = l
 		commentAndUser.Users = users
+		commentAndUser.CommentLikes = commentLikes
 		c.Data["json"] = commentAndUser
 	}
 	c.ServeJSON()
@@ -223,7 +231,7 @@ func (c *CommentController) Show() {
 	tvProgramID, _ := strconv.ParseInt(idStr, 0, 64)
 	v, err := models.GetTvProgramById(tvProgramID)
 	if err != nil {
-		c.Data["TvProgram"] = nil
+		c.Redirect("/", 302)
 	} else {
 		c.Data["TvProgram"] = v
 	}
@@ -333,7 +341,7 @@ func (c *CommentController) SearchComment() {
 
 	v, err := models.GetTvProgramById(tvProgramID)
 	if err != nil {
-		c.Data["TvProgram"] = err.Error()
+		c.Redirect("/", 302)
 	} else {
 		c.Data["TvProgram"] = v
 	}

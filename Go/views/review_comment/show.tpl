@@ -376,13 +376,17 @@
     </script>
 
     <script>
+        globalCommentLikeStatus = {{.CommentLike}};
+        globalWatchStatus = {{.WatchStatus}};
         let comments = {{.Comment}};
         if (comments === null || comments.length === 0) {
           comments = null;
         }
         const users = {{.Users}};
         let commentLikes;
+        // console.log({{.CommentLike}},comments)
         if ({{.CommentLike}} === null && comments != null){
+          // ログインしていない場合
           commentLikes = [comments.length];
           for (let i = comments.length - 1; i >= 0; i--) {
             commentLikes[i] = {Like:false};
@@ -390,6 +394,10 @@
         } else {
           commentLikes = {{.CommentLike}};
         }
+        let myUserID = {{.User.Id}};
+              if (myUserID === null) {
+                myUserID = "";
+              }
         ons.ready(function() {
           var infiniteList = document.getElementById('comments');
           if (comments != null) {
@@ -399,7 +407,7 @@
               if(comments[i].Spoiler){
                 fpText += "<i class='fas fa-hand-paper' style='color:palevioletred;'></i>";
               }
-              return ons.createElement('<div class="user-' + users[i].Id + '"><ons-list-header style="background-color:antiquewhite;text-transform:none;"><div class="area-left comment-list-header-font">@' + users[i].Username + '</div><div class="area-right list-margin">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm") + '</div></ons-list-header><ons-list-item><ons-row><ons-col width="15%"><i class="fas fa-star"></i>：' + comments[i].Star +'</ons-col><ons-col style="font-size:12px;">'+ fpText + '</ons-col></ons-row></ons-list-item><ons-list-item><div class="left"><a href="/tv/user/show/' + users[i].Id + '" title="' + users[i].Username + '"><img class="list-item__thumbnail" src="' + users[i].IconUrl + '" onerror="this.src=\'/static/img/user_img/s256_f_01.png\'"></a></div><div class="center"><span class="list-item__subtitle"id="comment-content-' + users[i].Id + '" style="font-size:14px;">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle" class="area-right"><div style="float:right;" id="count-like-' + i + '">：' + comments[i].CountLike + '</div><div style="float:right;"><i class="' + setLikeBold(commentLikes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="clickLike(this)" style="color:' + setLikeStatus(commentLikes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
+              return ons.createElement('<div class="user-' + users[i].Id + '"><ons-list-header style="background-color:antiquewhite;text-transform:none;"><div class="area-left comment-list-header-font">@' + users[i].Username + '</div><div class="area-right list-margin">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm") + '</div></ons-list-header><ons-list-item><ons-row><ons-col width="15%"><i class="fas fa-star"></i>：' + comments[i].Star +'</ons-col><ons-col style="font-size:12px;">'+ fpText + '</ons-col></ons-row></ons-list-item><ons-list-item><div class="left"><a href="/tv/user/show/' + users[i].Id + '" title="' + users[i].Username + '"><img class="list-item__thumbnail" src="' + users[i].IconUrl + '" onerror="this.src=\'/static/img/user_img/s256_f_01.png\'"></a></div><div class="center"><span class="list-item__subtitle"id="comment-content-' + users[i].Id + '" style="font-size:14px;">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle" class="area-right"><div style="float:right;" id="count-like-' + i + '">：' + comments[i].CountLike + '</div><div style="float:right;"><i class="' + setLikeBold(commentLikes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="clickLike(this,myUserID,comments,\'review\')" style="color:' + setLikeStatus(commentLikes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
             },
             countItems: function() {
               return comments.length;
@@ -419,85 +427,13 @@
       setWatchStatus("check-wtw", "lightseagreen", {{.WatchStatus.WantToWatch}});
     </script>
 
-    <script>
+    <!-- <script>
       globalCommentLikeStatus = {{.CommentLike}};
-    </script>
-
-    <script type="text/javascript">
-      function commentLikeStatus(elem, checkFlag) {
-        let url = URL+"/tv/review_comment_like/";
-        var data = globalCommentLikeStatus[elem.id];
-        let method;
-        if (data.Id === 0){
-          method = 'POST';
-          data.UserId = {{.User.Id}};
-          globalCommentLikeStatus[elem.id].UserId = data.UserId;
-          data.ReviewCommentId = {{.Comment}}[elem.id].Id;
-          globalCommentLikeStatus[elem.id].ReviewCommentId = data.ReviewCommentId;
-        } else {
-          method = 'PUT';
-          url = url+data.Id;
-        }
-        data.Like = checkFlag;
-          globalCommentLikeStatus[elem.id].Like = data.Like;
-          var json = JSON.stringify(data);
-          var request = new XMLHttpRequest();
-          request.open(method, url, true);
-          request.setRequestHeader('Content-type','application/json; charset=utf-8');
-          request.onload = function () {
-            var x = JSON.parse(request.responseText);
-            if (request.readyState == 4 && request.status == "200") {
-              // console.table(x);
-            } else {
-              globalCommentLikeStatus[elem.id].Id = x.Id;
-            }
-          }
-          request.send(json);
-        };
-    </script>
-
+    </script> -->
+    <!-- 
     <script type="text/javascript">
       globalWatchStatus = {{.WatchStatus}};
-    </script>
-
-    <script type="text/javascript">
-      function WatchStatus(elem, checkFlag) {
-        let url = URL+"/tv/watching_status/";
-        var data = globalWatchStatus;
-        let method;
-        if (data.Id === 0){
-          method = 'POST';
-          data.UserId = {{.User.Id}};
-          globalWatchStatus.UserId = data.UserId;
-          data.TvProgramId = {{.TvProgram.Id}};
-          globalWatchStatus.TvProgramId = data.TvProgramId;
-        } else {
-          method = 'PUT';
-          url = url+data.Id;
-        }
-        const str ="check-watched";
-        if (elem.id.indexOf(str)===0) {
-          data.Watched = checkFlag;
-          globalWatchStatus.Watched = data.Watched;
-        } else {
-          data.WantToWatch = checkFlag;
-          globalWatchStatus.WantToWatch = data.WantToWatch;
-
-        }
-        var json = JSON.stringify(data);
-        var request = new XMLHttpRequest();
-        request.open(method, url, true);
-        request.setRequestHeader('Content-type','application/json; charset=utf-8');
-        request.onload = function () {
-          var x = JSON.parse(request.responseText);
-          if (request.readyState == 4 && request.status == "200") {
-          } else {
-            globalWatchStatus.Id = x.Id;
-          }
-        }
-        request.send(json);
-      };
-    </script>
+    </script> -->
 
     <!-- ツイートを保存する -->
     <script type="text/javascript">
@@ -530,19 +466,19 @@
         request.onload = function () {
           var x = JSON.parse(request.responseText);
           if (request.readyState == 4 && request.status == "200") {
-            console.table(x);
+            // console.table(x);
           } else {
-            console.error(x);
+            // console.error(x);
           }
         }
         request.send(json);
         hideAlertDialog('tweet-dialog')
-        setTimeout(window.location.reload(false), 500);
+        setTimeout(window.location.reload(false), 1000);
       };
     </script>
-    <script>
+    <!-- <script>
       document.getElementById('tv-program-hour').innerHTML = reshapeHour(String({{.TvProgram.Hour}}));
-    </script>
+    </script> -->
     <script type="text/javascript">
       document
         .querySelector('ons-carousel')
@@ -573,6 +509,7 @@
           "<ons-fab><ons-icon icon='md-share'></ons-icon></ons-fab><ons-speed-dial-item><ons-icon icon='md-comment-dots' onclick='dialogBox(\"tweet-dialog\", "+userID+")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-search' onclick='dialogBoxEveryone(\"search-dialog\")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-chart' onclick='goAnotherCarousel(1)'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><i class='fas fa-arrow-up' onclick='goTop()'></i></ons-speed-dial-item>";
     </script>
     <script>
+      document.getElementById('tv-program-hour').innerHTML = reshapeHour(String({{.TvProgram.Hour}}));
       document.getElementById("tv-cast").innerHTML = reshapeContent({{.TvProgram.Cast}});
       document.getElementById("tv-themesong").innerHTML = reshapeContent({{.TvProgram.Themesong}});
       document.getElementById("tv-supervisor").innerHTML = reshapeContent({{.TvProgram.Supervisor}});

@@ -3,7 +3,6 @@ package controllers
 import (
 	"app/models"
 	"errors"
-	"math/rand"
 	"strconv"
 	"strings"
 	"time"
@@ -53,12 +52,12 @@ func (c *UserController) Post() {
 	hashSecondpass, _ := models.PasswordHash(c.GetString("SecondPassword"))
 	IconURL := c.GetString("IconURL")
 	if !strings.Contains(IconURL, "http") {
-		rand.Seed(time.Now().UnixNano())
-		r := strconv.Itoa(rand.Intn(13) + 1)
-		if len(r) == 1 {
-			r = "0" + r
-		}
-		IconURL = "/static/img/user_img/s256_f_" + r + ".png"
+		// rand.Seed(time.Now().UnixNano())
+		// r := strconv.Itoa(rand.Intn(13) + 1)
+		// if len(r) == 1 {
+		// 	r = "0" + r
+		// }
+		IconURL = models.SetRandomImageUser()
 	}
 	// json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 	v := models.User{
@@ -177,18 +176,17 @@ func (c *UserController) GetAll() {
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *UserController) Put() {
+	session := c.StartSession()
+	if session.Get("UserId") == nil {
+		c.Redirect("/", 302)
+	}
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	// age, _ := c.GetInt("age")
 
 	IconURL := c.GetString("IconURL")
 	if !strings.Contains(IconURL, "http") && !strings.Contains(IconURL, "/static/img") {
-		rand.Seed(time.Now().UnixNano())
-		r := strconv.Itoa(rand.Intn(13) + 1)
-		if len(r) == 1 {
-			r = "0" + r
-		}
-		IconURL = "/static/img/user_img/s256_f_" + r + ".png"
+		IconURL = models.SetRandomImageUser()
 	}
 	oldUserInfo, _ := models.GetUserById(id)
 	v := *oldUserInfo
@@ -207,7 +205,7 @@ func (c *UserController) Put() {
 		v.BloodType = c.GetString("bloodType")
 	}
 	if err := models.UpdateUserById(&v); err == nil {
-		c.Data["json"] = "OK"
+		// c.Data["json"] = "OK"
 		c.Redirect("show", 302)
 	} else {
 		c.Data["User"] = v
@@ -225,6 +223,9 @@ func (c *UserController) Put() {
 // @router /:id [delete]
 func (c *UserController) Delete() {
 	session := c.StartSession()
+	if session.Get("UserId") == nil {
+		c.Redirect("/", 302)
+	}
 	id := session.Get("UserId").(int64)
 	if err := models.DeleteUser(id); err == nil {
 		// 過去の投稿データを削除(いいねも削除)
@@ -261,7 +262,11 @@ func (c *UserController) Show() {
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	// コメント欄からプロフィール遷移してきた場合
 	if id != 0 {
-		v, _ := models.GetUserById(id)
+		v, err := models.GetUserById(id)
+		if err != nil {
+			// ユーザが退会したとき
+			c.Redirect("/", 302)
+		}
 		c.Data["User"] = v
 		w, _ := models.GetCommentByUserId(id, 1000)
 		c.Data["Comment"] = w
@@ -339,8 +344,13 @@ func (c *UserController) ShowReview() {
 	session := c.StartSession()
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
+	// コメント欄からプロフィール遷移してきた場合
 	if id != 0 {
-		v, _ := models.GetUserById(id)
+		v, err := models.GetUserById(id)
+		if err != nil {
+			// ユーザが退会したとき
+			c.Redirect("/", 302)
+		}
 		c.Data["User"] = v
 		w, _ := models.GetReviewCommentByUserId(id, 100)
 		c.Data["Comment"] = w
@@ -356,12 +366,13 @@ func (c *UserController) ShowReview() {
 			}
 			c.Data["TvProgram"] = tvPrograms
 		} else {
-			c.Data["MyUserId"] = session.Get("UserId").(int64)
+			myUserID := session.Get("UserId").(int64)
+			c.Data["MyUserId"] = myUserID
 
 			var commentLikes []models.ReviewCommentLike
 			var tvPrograms []models.TvProgram
 			for _, comment := range w {
-				u, err := models.GetReviewCommentLikeByCommentAndUser(comment.Id, id)
+				u, err := models.GetReviewCommentLikeByCommentAndUser(comment.Id, myUserID)
 				if err != nil {
 					u = new(models.ReviewCommentLike)
 				}
@@ -416,6 +427,9 @@ func (c *UserController) ShowWatchedTv() {
 	var offset int64
 
 	session := c.StartSession()
+	if session.Get("UserId") == nil {
+		c.Redirect("/", 302)
+	}
 	userID := session.Get("UserId").(int64)
 
 	sortby = append(sortby, "Updated")
@@ -449,6 +463,9 @@ func (c *UserController) ShowWtwTv() {
 	var offset int64
 
 	session := c.StartSession()
+	if session.Get("UserId") == nil {
+		c.Redirect("/", 302)
+	}
 	userID := session.Get("UserId").(int64)
 
 	sortby = append(sortby, "Updated")
@@ -475,6 +492,9 @@ func (c *UserController) ShowWtwTv() {
 
 func (c *UserController) Edit() {
 	session := c.StartSession()
+	if session.Get("UserId") == nil {
+		c.Redirect("/", 302)
+	}
 	userID := session.Get("UserId").(int64)
 	v, _ := models.GetUserById(userID)
 	c.Data["User"] = v
@@ -518,6 +538,7 @@ func (c *UserController) Login() {
 			}
 			tvPrograms = append(tvPrograms, *v)
 		}
+		// fmt.Println(commentLikes)
 		c.Data["CommentLike"] = commentLikes
 		c.Data["TvProgram"] = tvPrograms
 		c.TplName = "user/show_comment.tpl"

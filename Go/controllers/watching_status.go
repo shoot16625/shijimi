@@ -4,7 +4,6 @@ import (
 	"app/models"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -35,22 +34,24 @@ func (c *WatchingStatusController) URLMapping() {
 func (c *WatchingStatusController) Post() {
 	var v models.WatchingStatus
 	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
-	if _, err := models.AddWatchingStatus(&v); err == nil {
-		c.Ctx.Output.SetStatus(201)
-		c.Data["json"] = v
-	} else {
-		c.Data["json"] = err.Error()
+	session := c.StartSession()
+	c.Data["json"] = nil
+	if session.Get("UserId") != nil {
+		if _, err := models.AddWatchingStatus(&v); err == nil {
+			c.Ctx.Output.SetStatus(201)
+			c.Data["json"] = v
+		} else {
+			c.Data["json"] = err.Error()
+		}
+		w, _ := models.GetTvProgramById(v.TvProgramId)
+		if v.Watched {
+			w.CountWatched++
+		} else {
+			w.CountWantToWatch++
+		}
+		_ = models.UpdateTvProgramById(w)
 	}
 	c.ServeJSON()
-	w, _ := models.GetTvProgramById(v.TvProgramId)
-	if v.Watched {
-		w.CountWatched++
-	} else {
-		w.CountWantToWatch++
-	}
-	if err := models.UpdateTvProgramById(w); err != nil {
-		fmt.Println(err.Error())
-	}
 }
 
 // GetOne ...
@@ -144,35 +145,37 @@ func (c *WatchingStatusController) GetAll() {
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *WatchingStatusController) Put() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.ParseInt(idStr, 0, 64)
-	u, _ := models.GetWatchingStatusById(id)
-	v := models.WatchingStatus{Id: id}
-	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
-	if err := models.UpdateWatchingStatusById(&v); err == nil {
-		c.Data["json"] = "OK"
-	} else {
-		c.Data["json"] = err.Error()
+	session := c.StartSession()
+	c.Data["json"] = nil
+	if session.Get("UserId") != nil {
+		idStr := c.Ctx.Input.Param(":id")
+		id, _ := strconv.ParseInt(idStr, 0, 64)
+		u, _ := models.GetWatchingStatusById(id)
+		v := models.WatchingStatus{Id: id}
+		json.Unmarshal(c.Ctx.Input.RequestBody, &v)
+		if err := models.UpdateWatchingStatusById(&v); err == nil {
+			c.Data["json"] = "OK"
+		} else {
+			c.Data["json"] = err.Error()
+		}
+		// fmt.Println(v.TvProgramId)
+		w, _ := models.GetTvProgramById(v.TvProgramId)
+		if v.Watched != u.Watched {
+			if v.Watched {
+				w.CountWatched++
+			} else {
+				w.CountWatched--
+			}
+		} else {
+			if v.WantToWatch {
+				w.CountWantToWatch++
+			} else {
+				w.CountWantToWatch--
+			}
+		}
+		_ = models.UpdateTvProgramById(w)
 	}
 	c.ServeJSON()
-	// fmt.Println(v.TvProgramId)
-	w, _ := models.GetTvProgramById(v.TvProgramId)
-	if v.Watched != u.Watched {
-		if v.Watched {
-			w.CountWatched++
-		} else {
-			w.CountWatched--
-		}
-	} else {
-		if v.WantToWatch {
-			w.CountWantToWatch++
-		} else {
-			w.CountWantToWatch--
-		}
-	}
-	if err := models.UpdateTvProgramById(w); err != nil {
-		fmt.Println(err.Error())
-	}
 }
 
 // Delete ...

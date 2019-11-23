@@ -4,7 +4,6 @@ import (
 	"app/models"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -33,20 +32,26 @@ func (c *ReviewCommentLikeController) URLMapping() {
 // @Failure 403 body is empty
 // @router / [post]
 func (c *ReviewCommentLikeController) Post() {
-	var v models.ReviewCommentLike
-	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
-	if _, err := models.AddReviewCommentLike(&v); err == nil {
-		c.Ctx.Output.SetStatus(201)
-		c.Data["json"] = v
-	}
-	w, _ := models.GetReviewCommentById(v.ReviewCommentId)
-	if v.Like {
-		w.CountLike++
-	} else {
-		w.CountLike--
-	}
-	if err := models.UpdateReviewCommentById(w); err != nil {
-		fmt.Println(err.Error())
+	session := c.StartSession()
+	c.Data["json"] = nil
+	if session.Get("UserId") != nil {
+		var v models.ReviewCommentLike
+		json.Unmarshal(c.Ctx.Input.RequestBody, &v)
+		if _, err := models.AddReviewCommentLike(&v); err == nil {
+			c.Ctx.Output.SetStatus(201)
+			c.Data["json"] = v
+		} else {
+			c.Data["json"] = err.Error()
+		}
+		w, err := models.GetReviewCommentById(v.ReviewCommentId)
+		if err == nil {
+			if v.Like {
+				w.CountLike++
+			} else {
+				w.CountLike--
+			}
+			_ = models.UpdateReviewCommentById(w)
+		}
 	}
 	c.ServeJSON()
 }
@@ -142,23 +147,28 @@ func (c *ReviewCommentLikeController) GetAll() {
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *ReviewCommentLikeController) Put() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.ParseInt(idStr, 0, 64)
-	v := models.ReviewCommentLike{Id: id}
-	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
-	if err := models.UpdateReviewCommentLikeById(&v); err == nil {
-		c.Data["json"] = "OK"
-	}
-	w, _ := models.GetReviewCommentById(v.ReviewCommentId)
-	if v.Like {
-		w.CountLike++
-	} else {
-		w.CountLike--
-	}
-	if err := models.UpdateReviewCommentById(w); err == nil {
-		c.Data["json"] = "OK"
-	} else {
-		c.Data["json"] = err.Error()
+	session := c.StartSession()
+	c.Data["json"] = nil
+	if session.Get("UserId") != nil {
+		idStr := c.Ctx.Input.Param(":id")
+		id, _ := strconv.ParseInt(idStr, 0, 64)
+		v := models.ReviewCommentLike{Id: id}
+		json.Unmarshal(c.Ctx.Input.RequestBody, &v)
+		if err := models.UpdateReviewCommentLikeById(&v); err == nil {
+			c.Ctx.Output.SetStatus(201)
+			c.Data["json"] = v
+		} else {
+			c.Data["json"] = err.Error()
+		}
+		w, err := models.GetReviewCommentById(v.ReviewCommentId)
+		if err == nil {
+			if v.Like {
+				w.CountLike++
+			} else {
+				w.CountLike--
+			}
+			_ = models.UpdateReviewCommentById(w)
+		}
 	}
 	c.ServeJSON()
 }

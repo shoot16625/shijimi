@@ -97,9 +97,10 @@ func init() {
 	// 初期データの投入
 	db.EmptyInitSQL()
 
-	// db.ExecInitSQL()
-	// db.AddRecentTvInfo()
+	db.ExecInitSQL()
+	db.AddRecentTvInfo()
 	// db.AddTvProgramsInformation()
 	// db.GetMovieWalkers()
 	// db.ExecDemoSQL()
+	// db.ExecDemoHerokuSQL()
 }

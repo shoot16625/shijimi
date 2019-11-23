@@ -24,10 +24,15 @@
       const tvPrograms = {{.TvProgram}};
       let commentLikes = {{.CommentLike}};
       if ({{.CommentLike}} === null && comments != null){
+        // ログインしていない場合
         commentLikes = [comments.length];
         for (let i = comments.length - 1; i >= 0; i--) {
           commentLikes[i] = {Like:false};
         }
+      }
+      let myUserID = {{.MyUserId}};
+      if (myUserID === null) {
+        myUserID = "";
       }
         ons.ready(function() {
           var infiniteList = document.getElementById('comments');
@@ -38,7 +43,7 @@
               if(comments[i].Spoiler){
                 fpText += "<i class='fas fa-hand-paper' style='color:palevioletred;'></i>";
               }
-              return ons.createElement('<div class="comment-' + comments[i].Id + '"><ons-list-header style="background-color:antiquewhite;text-transform:none;"><div class="area-left profile-comment-list-header-font"><a href="/tv/tv_program/review/'+tvPrograms[i].Id+'" style="color:black;">' + tvPrograms[i].Title + '</a></div><div class="area-right list-margin">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm") + '</div></ons-list-header><ons-list-item><ons-row><ons-col width="15%"><i class="fas fa-star" style="color:gold;"></i>：' + comments[i].Star +'</ons-col><ons-col style="font-size:12px;">'+ fpText + '</ons-col></ons-row></ons-list-item><ons-list-item><div class="left"><a href="/tv/user/show/' + user.Id + '" title="user-page"><img class="list-item__thumbnail" src="' + user.IconUrl + '" onerror="this.src=\'/static/img/user_img/s256_f_01.png\'"></a></div><div class="center"><span class="list-item__subtitle"id="comment-content-' + comments[i].Id + '" class="comment-list-content-font">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle" class="area-right"><div style="float:right;" id="count-like-' + i + '">：' + comments[i].CountLike + '</div><div class="area-right"><i class="' + setLikeBold(commentLikes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="clickLike(this)" style="color:' + setLikeStatus(commentLikes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
+              return ons.createElement('<div class="comment-' + comments[i].Id + '"><ons-list-header style="background-color:antiquewhite;text-transform:none;"><div class="area-left profile-comment-list-header-font"><a href="/tv/tv_program/review/'+tvPrograms[i].Id+'" style="color:black;">' + tvPrograms[i].Title + '</a></div><div class="area-right list-margin">' + moment(comments[i].Created, "YYYY-MM-DDHH:mm:ss").format("YYYY/MM/DD HH:mm") + '</div></ons-list-header><ons-list-item><ons-row><ons-col width="15%"><i class="fas fa-star" style="color:gold;"></i>：' + comments[i].Star +'</ons-col><ons-col style="font-size:12px;">'+ fpText + '</ons-col></ons-row></ons-list-item><ons-list-item><div class="left"><a href="/tv/user/show/' + user.Id + '" title="user-page"><img class="list-item__thumbnail" src="' + user.IconUrl + '" onerror="this.src=\'/static/img/user_img/s256_f_01.png\'"></a></div><div class="center"><span class="list-item__subtitle"id="comment-content-' + comments[i].Id + '" class="comment-list-content-font">' + comments[i].Content.replace(/(\r\n|\n|\r)/gm, "<br>") + '</span><span class="list-item__subtitle" class="area-right"><div style="float:right;" id="count-like-' + i + '">：' + comments[i].CountLike + '</div><div class="area-right"><i class="' + setLikeBold(commentLikes[i].Like) + ' fa-thumbs-up" id="' + i + '" onclick="clickLike(this,myUserID,comments,\'review\')" style="color:' + setLikeStatus(commentLikes[i].Like, 'orchid') + ';"></i></div></span></div></ons-list-item></div>');
             },
             countItems: function() {
               return comments.length;
@@ -53,9 +58,10 @@
 
     <script>
       globalCommentLikeStatus = {{.CommentLike}};
+      // console.log(globalCommentLikeStatus);
     </script>
 
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
       function commentLikeStatus(elem, checkFlag) {
         let url = URL+"/tv/review_comment_like/";
         let data = globalCommentLikeStatus[elem.id];
@@ -80,14 +86,14 @@
         request.onload = function () {
           var x = JSON.parse(request.responseText);
           if (request.readyState == 4 && request.status == "200") {
-            console.table(x);
+            // console.table(x);
           } else {
             globalCommentLikeStatus[elem.id].Id = x.Id;
           }
         }
         request.send(json);
       }
-    </script>
+    </script> -->
     <script>
       reshapeBadges({{.User.Badge}});
     </script>

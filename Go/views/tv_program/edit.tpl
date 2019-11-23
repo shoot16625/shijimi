@@ -306,7 +306,7 @@
                               class="fas fa-music"
                               style="color: cornflowerblue;"
                             ></i
-                            >&emsp;：</ons-col
+                            >：</ons-col
                           >
                           <ons-col id="preview-themesong"></ons-col>
                         </ons-row>

@@ -4,7 +4,6 @@ import (
 	"app/models"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -33,23 +32,28 @@ func (c *CommentLikeController) URLMapping() {
 // @Failure 403 body is empty
 // @router / [post]
 func (c *CommentLikeController) Post() {
-	var v models.CommentLike
-	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
-	if _, err := models.AddCommentLike(&v); err == nil {
-		c.Ctx.Output.SetStatus(201)
-		c.Data["json"] = v
+	session := c.StartSession()
+	c.Data["json"] = nil
+	if session.Get("UserId") != nil {
+		var v models.CommentLike
+		json.Unmarshal(c.Ctx.Input.RequestBody, &v)
+		if _, err := models.AddCommentLike(&v); err == nil {
+			c.Ctx.Output.SetStatus(201)
+			c.Data["json"] = v
+		} else {
+			c.Data["json"] = err.Error()
+		}
+		w, err := models.GetCommentById(v.CommentId)
+		if err == nil {
+			if v.Like {
+				w.CountLike++
+			} else {
+				w.CountLike--
+			}
+			_ = models.UpdateCommentById(w)
+		}
 	}
-	// いるらしい
 	c.ServeJSON()
-	w, _ := models.GetCommentById(v.CommentId)
-	if v.Like {
-		w.CountLike++
-	} else {
-		w.CountLike--
-	}
-	if err := models.UpdateCommentById(w); err != nil {
-		fmt.Println(err.Error())
-	}
 }
 
 // GetOne ...
@@ -143,23 +147,28 @@ func (c *CommentLikeController) GetAll() {
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *CommentLikeController) Put() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.ParseInt(idStr, 0, 64)
-	v := models.CommentLike{Id: id}
-	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
-	if err := models.UpdateCommentLikeById(&v); err == nil {
-		c.Data["json"] = "OK"
-	}
-	w, _ := models.GetCommentById(v.CommentId)
-	if v.Like {
-		w.CountLike++
-	} else {
-		w.CountLike--
-	}
-	if err := models.UpdateCommentById(w); err == nil {
-		c.Data["json"] = "OK"
-	} else {
-		c.Data["json"] = err.Error()
+	session := c.StartSession()
+	c.Data["json"] = nil
+	if session.Get("UserId") != nil {
+		idStr := c.Ctx.Input.Param(":id")
+		id, _ := strconv.ParseInt(idStr, 0, 64)
+		v := models.CommentLike{Id: id}
+		json.Unmarshal(c.Ctx.Input.RequestBody, &v)
+		if err := models.UpdateCommentLikeById(&v); err == nil {
+			c.Ctx.Output.SetStatus(201)
+			c.Data["json"] = v
+		} else {
+			c.Data["json"] = err.Error()
+		}
+		w, err := models.GetCommentById(v.CommentId)
+		if err == nil {
+			if v.Like {
+				w.CountLike++
+			} else {
+				w.CountLike--
+			}
+			_ = models.UpdateCommentById(w)
+		}
 	}
 	c.ServeJSON()
 }

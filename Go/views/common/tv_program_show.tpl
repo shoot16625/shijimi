@@ -23,7 +23,7 @@
             <ons-row class="list-margin-bottom">
               <ons-col width="20%"
                 ><i class="fas fa-music" style="color: cornflowerblue;"></i
-                >&emsp;：</ons-col
+                >：</ons-col
               >
               <ons-col id="tv-themesong"></ons-col>
             </ons-row>
@@ -58,10 +58,11 @@
       </ons-list-item>
       <ons-list-item>
         <div class="left">
+          {{ if .User }}
           <i
             class="fa-laugh-beam"
             id="check-watched"
-            onclick="clickWatchStatus(this)"
+            onclick="clickWatchStatus(this, {{.User.Id}}, {{.TvProgram.Id}})"
           ></i>
           <div
             id="check-watched-text"
@@ -72,11 +73,32 @@
           <i
             class="fa-bookmark"
             id="check-wtw"
-            onclick="clickWatchStatus(this)"
+            onclick="clickWatchStatus(this, {{.User.Id}}, {{.TvProgram.Id}})"
           ></i>
           <div id="check-wtw-text" style="float:right; margin-left: 5px;">
             また今度：{{.TvProgram.CountWantToWatch}}
           </div>
+          {{ else }}
+          <i
+            class="fa-laugh-beam"
+            id="check-watched"
+            onclick="clickWatchStatus(this, '', {{.TvProgram.Id}})"
+          ></i>
+          <div
+            id="check-watched-text"
+            style="float:right; margin-left: 5px;margin-right: 8px;"
+          >
+            見た：{{.TvProgram.CountWatched}}
+          </div>
+          <i
+            class="fa-bookmark"
+            id="check-wtw"
+            onclick="clickWatchStatus(this, '', {{.TvProgram.Id}})"
+          ></i>
+          <div id="check-wtw-text" style="float:right; margin-left: 5px;">
+            また今度：{{.TvProgram.CountWantToWatch}}
+          </div>
+          {{ end }}
         </div>
         <div class="right">
           <div id="edit-tv-program">

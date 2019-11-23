@@ -161,9 +161,9 @@ function setWatchBold(elemID, status) {
 }
 
 // いいねボタンがクリックされたら色を変える
-function clickLike(elem) {
+function clickLike(elem, userID, comments, commentOrReview) {
   const newColor = 'orchid';
-  if (globalCommentLikeStatus === null) {
+  if (userID === '') {
     return dialogBoxEveryone('alert-only-user-dialog');
   }
   var count = document.getElementById('count-like-' + elem.id);
@@ -184,13 +184,19 @@ function clickLike(elem) {
     checkFlag = false;
     newCount = parseInt(count.textContent.slice(1), 10) - 1;
   }
+  // commentsがグローバルっぽくなる？（ラッキ－7）
+  comments[elem.id].CountLike = newCount;
   count.textContent = '：' + newCount;
-  commentLikeStatus(elem, checkFlag);
+  if (commentOrReview === 'comment') {
+    commentLikeStatus(elem, checkFlag, userID, comments);
+  } else if (commentOrReview === 'review') {
+    reviewCommentLikeStatus(elem, checkFlag, userID, comments);
+  }
 }
 
 // 見たボタンのクリック処理
-function clickWatchStatus(elem) {
-  if (globalWatchStatus === null) {
+function clickWatchStatus(elem, userID, tvProgram) {
+  if (userID === '') {
     return dialogBoxEveryone('alert-only-user-dialog');
   }
   var count = document.getElementById(elem.id + '-text');
@@ -229,7 +235,12 @@ function clickWatchStatus(elem) {
   } else {
     count.textContent = 'また今度：' + newCount;
   }
-  WatchStatus(elem, checkFlag);
+  if (typeof tvProgram === 'number') {
+    // tvProgramはId
+    commentPageWatchStatusUpdate(elem, checkFlag, userID, tvProgram);
+  } else {
+    tvPageWatchStatusUpdate(elem, checkFlag, userID, tvProgram);
+  }
 }
 
 // セレクタが複数設定されていた時の再描画処理
@@ -526,4 +537,153 @@ function avoidStructNameError(elem) {
     name = elem.Name;
   }
   return name;
+}
+
+function commentLikeStatus(elem, checkFlag, userID, comments) {
+  let url = URL + '/tv/comment_like/';
+  let data = globalCommentLikeStatus[elem.id];
+  let method;
+  if (data.Id === 0) {
+    method = 'POST';
+    data.UserId = userID;
+    globalCommentLikeStatus[elem.id].UserId = data.UserId;
+    data.CommentId = comments[elem.id].Id;
+    globalCommentLikeStatus[elem.id].CommentId = data.CommentId;
+  } else {
+    method = 'PUT';
+    // console.log(data.Id);
+    url = url + data.Id;
+  }
+  data.Like = checkFlag;
+  globalCommentLikeStatus[elem.id].Like = data.Like;
+
+  var json = JSON.stringify(data);
+  var request = new XMLHttpRequest();
+  request.open(method, url, true);
+  request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+  request.onload = function() {
+    var x = JSON.parse(request.responseText);
+    if (request.readyState == 4 && request.status == '200') {
+      // console.table(x);
+    } else {
+      if (method === 'POST') {
+        globalCommentLikeStatus[elem.id].Id = x.Id;
+      }
+      // console.log(x.Id);
+    }
+  };
+  request.send(json);
+}
+
+function reviewCommentLikeStatus(elem, checkFlag, userID, comments) {
+  let url = URL + '/tv/review_comment_like/';
+  let data = globalCommentLikeStatus[elem.id];
+  let method;
+  if (data.Id === 0) {
+    method = 'POST';
+    data.UserId = userID;
+    globalCommentLikeStatus[elem.id].UserId = data.UserId;
+    data.ReviewCommentId = comments[elem.id].Id;
+    globalCommentLikeStatus[elem.id].ReviewCommentId = data.ReviewCommentId;
+  } else {
+    method = 'PUT';
+    url = url + data.Id;
+  }
+  data.Like = checkFlag;
+  globalCommentLikeStatus[elem.id].Like = data.Like;
+
+  var json = JSON.stringify(data);
+  var request = new XMLHttpRequest();
+  request.open(method, url, true);
+  request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+  request.onload = function() {
+    var x = JSON.parse(request.responseText);
+    if (request.readyState == 4 && request.status == '200') {
+      // console.table(x);
+    } else {
+      if (method === 'POST') {
+        globalCommentLikeStatus[elem.id].Id = x.Id;
+      }
+      // console.log(globalCommentLikeStatus);
+    }
+  };
+  request.send(json);
+}
+
+function commentPageWatchStatusUpdate(elem, checkFlag, userID, tvProgramId) {
+  let url = URL + '/tv/watching_status/';
+  var data = globalWatchStatus;
+  let method;
+  if (data.Id === 0) {
+    method = 'POST';
+    data.UserId = userID;
+    globalWatchStatus.UserId = data.UserId;
+    data.TvProgramId = tvProgramId;
+    globalWatchStatus.TvProgramId = data.TvProgramId;
+  } else {
+    method = 'PUT';
+    url = url + data.Id;
+  }
+  const str = 'check-watched';
+  if (elem.id.indexOf(str) === 0) {
+    data.Watched = checkFlag;
+    globalWatchStatus.Watched = data.Watched;
+  } else {
+    data.WantToWatch = checkFlag;
+    globalWatchStatus.WantToWatch = data.WantToWatch;
+  }
+  var json = JSON.stringify(data);
+  var request = new XMLHttpRequest();
+  request.open(method, url, true);
+  request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+  request.onload = function() {
+    var x = JSON.parse(request.responseText);
+    if (request.readyState == 4 && request.status == '200') {
+    } else {
+      if (method === 'POST') {
+        globalWatchStatus.Id = x.Id;
+      }
+    }
+  };
+  request.send(json);
+}
+
+function tvPageWatchStatusUpdate(elem, checkFlag, userID, tvProgram) {
+  let url = URL + '/tv/watching_status/';
+  const index = elem.id.slice(14);
+  let data = globalWatchStatus[index];
+  let method;
+  if (data.Id === 0) {
+    method = 'POST';
+    data.UserId = userID;
+    globalWatchStatus[index].UserId = data.UserId;
+    data.TvProgramId = tvProgram[index].Id;
+    globalWatchStatus[index].TvProgramId = data.TvProgramId;
+  } else {
+    method = 'PUT';
+    url = url + data.Id;
+  }
+  const str = 'check-watched';
+  if (elem.id.indexOf(str) === 0) {
+    data.Watched = checkFlag;
+    globalWatchStatus[index].Watched = data.Watched;
+  } else {
+    data.WantToWatch = checkFlag;
+    globalWatchStatus[index].WantToWatch = data.WantToWatch;
+  }
+  var json = JSON.stringify(data);
+  var request = new XMLHttpRequest();
+  request.open(method, url, true);
+  request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+  request.onload = function() {
+    var x = JSON.parse(request.responseText);
+    if (request.readyState == 4 && request.status == '200') {
+      // // console.table(x);
+    } else {
+      if (method === 'POST') {
+        globalWatchStatus[index].Id = x.Id;
+      }
+    }
+  };
+  request.send(json);
 }
