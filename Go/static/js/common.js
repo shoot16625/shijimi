@@ -261,7 +261,11 @@ function goTop() {
   $('.page__content').animate({ scrollTop: 0 }, 500, 'swing');
 }
 
-// ページの上部へ移動
+document.getElementById('image-toolbar').onclick = function() {
+  goTop();
+};
+
+// 指定位置へスクロール
 function scrollToTarget(pos) {
   $('.page__content').scrollTop(pos);
 }
