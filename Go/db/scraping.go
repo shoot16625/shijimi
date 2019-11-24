@@ -188,6 +188,7 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 			newTvProgram = *new(models.TvProgram)
 		}
 		newTvProgram.Title = doc.Find("h1").Text()
+		newTvProgram.Title = ReshapeTitle(newTvProgram.Title)
 		newTvProgram.Star = 5
 		newTvProgram.WikiReference = tvProgram.WikiReference
 		// newTvProgram.ImageUrl = SetRandomImageURL()
@@ -233,6 +234,7 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 				newTvProgram.Cast = topCast
 				newTvProgram.Star = 5
 				newTvProgram.Title = doc.Find("h1").Text()
+				newTvProgram.Title = ReshapeTitle(newTvProgram.Title)
 				if strings.Contains(th, newTvProgram.Title) {
 					newTvProgram.Title = th
 				} else if strings.Contains(newTvProgram.Title, th) {
@@ -562,6 +564,7 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (newTvProgram models.
 		} else {
 			newTvProgram = *new(models.TvProgram)
 			newTvProgram.Title = doc.Find("h1").Text()
+			newTvProgram.Title = ReshapeTitle(newTvProgram.Title)
 			newTvProgram.WikiReference = wikiReferenceURL
 			// newTvProgram.ImageUrl = SetRandomImageURL()
 			newTvProgram.ImageUrl = GetImageURL(newTvProgram.Title)
@@ -699,6 +702,7 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 			newTvProgram = *new(models.TvProgram)
 		}
 		newTvProgram.Title = doc.Find("h1").Text()
+		newTvProgram.Title = ReshapeTitle(newTvProgram.Title)
 		newTvProgram.Star = 5
 		newTvProgram.WikiReference = wikiReferenceURL
 		u.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
@@ -740,6 +744,7 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 				if strings.Contains(newTvProgram.Title, "（再放送）") {
 					dramaFlag = false
 				}
+				newTvProgram.Title = ReshapeTitle(newTvProgram.Title)
 			}
 			if dramaFlag {
 				html, _ := t.Find("td").Html()
@@ -943,10 +948,7 @@ func SetRandomImageURL() (url string) {
 }
 
 func ReshapeTitle(str string) string {
-	content := strings.Replace(str, " (連続ドラマ)", "", 1)
-	// content = strings.Replace(content, " (テレビドラマ)", "", 1)
-	// content = strings.Replace(content, " (日本のテレビドラマ)", "", 1)
-	content = models.RegexpWords(content, `(.*テレビドラマ)`, "")
+	content := models.RegexpWords(str, ` *[\(|（].*[テレビドラマ|連続ドラマ][\)|）]`, "")
 	return content
 }
 
