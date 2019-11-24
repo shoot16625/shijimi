@@ -1,10 +1,7 @@
 <ons-list>
   <ons-list-header style="background-color:ghostwhite;">
     <div class="area-left">
-      <span id="tv-program-week">
-        {{.TvProgram.Year}}年
-        {{.TvProgram.Season.Name}}（{{.TvProgram.Week.Name}}</span
-      ><span id="tv-program-hour"></span>）
+      <span id="tv-program-week"></span><span id="tv-program-hour"></span>
     </div>
     <div class="area-right list-margin">
       <i class="fas fa-eye"></i>：{{.TvProgram.CountClicked}}

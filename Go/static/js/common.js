@@ -261,6 +261,7 @@ function goTop() {
   $('.page__content').animate({ scrollTop: 0 }, 500, 'swing');
 }
 
+// ツールバークリックで上部へ移動
 document.getElementById('image-toolbar').onclick = function() {
   goTop();
 };

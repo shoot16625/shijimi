@@ -302,11 +302,13 @@ func (c *UserController) Show() {
 			c.Data["CommentLike"] = commentLikes
 			c.Data["TvProgram"] = tvPrograms
 			// foot_print_log：停止中
-			// z := models.FootPrintToUser {
-			// 	UserId:   myUserID,
-			// 	ToUserId: id,
-			// }
-			// _, _ = models.AddFootPrintToUser(&z)
+			z := models.FootPrintToUser{
+				UserId:   myUserID,
+				ToUserId: id,
+			}
+			if myUserID != id {
+				_, _ = models.AddFootPrintToUser(&z)
+			}
 		}
 		c.TplName = "user/user_comment.tpl"
 	} else {

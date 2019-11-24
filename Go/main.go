@@ -50,9 +50,9 @@ func init() {
 	orm.RegisterDataBase("default", beego.AppConfig.String("driver"), sqlconn+"?charset=utf8mb4&loc=Asia%2FTokyo")
 	// orm.RegisterDataBase("default", beego.AppConfig.String("driver"), beego.AppConfig.String("sqlconn")+"?charset=utf8mb4&loc=Asia%2FTokyo")
 	// データを初期化して起動
-	// err := orm.RunSyncdb("default", true, false)
+	err := orm.RunSyncdb("default", true, false)
 	// データの変更点を追加して起動
-	err := orm.RunSyncdb("default", false, false)
+	// err := orm.RunSyncdb("default", false, false)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -97,10 +97,11 @@ func init() {
 	// 初期データの投入
 	db.EmptyInitSQL()
 
-	// db.ExecInitSQL()
-	// db.AddRecentTvInfo()
-	// db.AddTvProgramsInformation()
+	db.ExecInitSQL()
+	db.AddRecentTvInfo()
+	db.AddTvProgramsInformation()
 	// db.GetMovieWalkers()
 	// db.ExecDemoSQL()
 	// db.ExecDemoHerokuSQL()
+	// fmt.Println(db.GetTvProgramInformationByURL("https://ja.wikipedia.org/wiki/%E3%82%B3%E3%83%BC%E3%83%89%E3%83%BB%E3%83%96%E3%83%AB%E3%83%BC_-%E3%83%89%E3%82%AF%E3%82%BF%E3%83%BC%E3%83%98%E3%83%AA%E7%B7%8A%E6%80%A5%E6%95%91%E5%91%BD-"))
 }

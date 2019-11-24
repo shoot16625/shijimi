@@ -509,7 +509,10 @@
           "<ons-fab><ons-icon icon='md-share'></ons-icon></ons-fab><ons-speed-dial-item><ons-icon icon='md-comment-dots' onclick='dialogBox(\"tweet-dialog\", "+userID+")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-search' onclick='dialogBoxEveryone(\"search-dialog\")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-chart' onclick='goAnotherCarousel(1)'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><i class='fas fa-arrow-up' onclick='goTop()'></i></ons-speed-dial-item>";
     </script>
     <script>
-      document.getElementById('tv-program-hour').innerHTML = reshapeHour(String({{.TvProgram.Hour}}));
+      document.getElementById('tv-program-hour').innerHTML = reshapeHour(String({{.TvProgram.Hour}}))+"）";
+      let seasonName = avoidStructNameError({{.TvProgram.Season}});
+      let weekName = avoidStructNameError({{.TvProgram.Week}});
+      document.getElementById('tv-program-week').innerHTML = "{{.TvProgram.Year}}年 "+seasonName+"（"+weekName;
       document.getElementById("tv-cast").innerHTML = reshapeContent({{.TvProgram.Cast}});
       document.getElementById("tv-themesong").innerHTML = reshapeContent({{.TvProgram.Themesong}});
       document.getElementById("tv-supervisor").innerHTML = reshapeContent({{.TvProgram.Supervisor}});

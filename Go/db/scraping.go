@@ -32,7 +32,7 @@ func CategoryReshape(category string) (newCategory string) {
 		newCategory = "時代劇"
 	case "法律", "法廷もの", "法廷ものコメディー", "裁判":
 		newCategory = "弁護士"
-	case "探偵", "推理", "サイコスリラー", "推理アクション":
+	case "探偵", "推理", "サイコスリラー", "推理アクション", "クイズ番組":
 		newCategory = "探偵・推理"
 	case "シリアス・コメディ", "ファンタジー", "ファンタジーコメディ", "コメディ", "パロディ", "音楽コメディ", "冒険コメディ", "コメディヒューマン", "ケータイ発", "ロマンティック・コメディ", "冒険コメディー", "ヒューマンコメディー", "ホラーコメディ":
 		newCategory = "コメディ・パロディ"
@@ -99,6 +99,7 @@ func GetWikiDoramas(referencePath string) {
 				content := strings.Replace(p.Sanitize(html), "<br/>", ",", -1)
 				content = strings.Replace(content, "\n", ",", -1)
 				content = strings.Replace(content, ",（", "（", -1)
+				content = strings.Replace(content, "、", ",", -1)
 				content = models.RegexpWords(content, ", | ,", ",")
 				content = models.RegexpWords(content, `[\(|（](P*S.[0-9|\-| |、]+)+[\)|）]`, "")
 				content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|（.*特別出演.*）|（第[1-9]部）|（主演として.+）|\[注 *[1-9]\]|以下五十音順`, "")
@@ -241,6 +242,7 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 				if strings.Contains(newTvProgram.Title, "（再放送）") {
 					dramaFlag = false
 				}
+				newTvProgram.Title = ReshapeTitle(newTvProgram.Title)
 			}
 			if dramaFlag {
 				html, _ := t.Find("td").Html()
@@ -253,7 +255,7 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 					} else {
 						content = strings.Replace(content, "ドラマ", "", -1)
 					}
-					newTvProgram.Category = content
+					newTvProgram.Category = CategoryReshape(content)
 				case "脚本":
 					newTvProgram.Dramatist = content
 				case "演出":
@@ -311,6 +313,9 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 						contents := ReshapeWeek(content)
 						weekStruct := *new(models.Week)
 						if len(contents) == 2 {
+							if len(contents[0]) > 6 {
+								contents[0] = "?"
+							}
 							weekStruct.Name = contents[0]
 							newTvProgram.Week = &weekStruct
 							contents = strings.Split(contents[1], "-")
@@ -625,6 +630,9 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (newTvProgram models.
 							contents := ReshapeWeek(content)
 							weekStruct := *new(models.Week)
 							if len(contents) == 2 {
+								if len(contents[0]) > 6 {
+									contents[0] = "?"
+								}
 								weekStruct.Name = contents[0]
 								newTvProgram.Week = &weekStruct
 								contents = strings.Split(contents[1], "-")
@@ -795,6 +803,9 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 						contents := ReshapeWeek(content)
 						weekStruct := *new(models.Week)
 						if len(contents) == 2 {
+							if len(contents[0]) > 6 {
+								contents[0] = "?"
+							}
 							weekStruct.Name = contents[0]
 							newTvProgram.Week = &weekStruct
 							contents = strings.Split(contents[1], "-")
@@ -931,6 +942,14 @@ func SetRandomImageURL() (url string) {
 	return url
 }
 
+func ReshapeTitle(str string) string {
+	content := strings.Replace(str, " (連続ドラマ)", "", 1)
+	// content = strings.Replace(content, " (テレビドラマ)", "", 1)
+	// content = strings.Replace(content, " (日本のテレビドラマ)", "", 1)
+	content = models.RegexpWords(content, `(.*テレビドラマ)`, "")
+	return content
+}
+
 func ReshapeWeek(str string) []string {
 	content := strings.Replace(str, "毎週", "", -1)
 	content = strings.Replace(content, "曜日", "曜", -1)
@@ -963,9 +982,18 @@ func ReshapeText(str string) string {
 	content := strings.Replace(str, "\n", "", -1)
 	content = strings.Replace(content, ",（", "（", -1)
 	content = models.RegexpWords(content, ", | ,", ",")
-	content = models.RegexpWords(content, `[\(|（](P*S.[0-9|\-| |、]+)+[\)|）]`, "")
-	content = models.RegexpWords(content, `[\(|（].*出演.*[\)|）]|[\(|（]第.+部[\)|）]|[\(|（]主演として.+[\)|）]|\[注 *[1-9]\]|[\(|（].*シーズン.*[\)|）]`, "")
-	content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|以下五十音順`, "")
+	var contents []string
+	for _, v := range strings.Split(content, ",") {
+		v = models.RegexpWords(v, `[\(|（](P*S.[0-9|\-| |、]+)+[\)|）]|[\(|（].*[出演|シーズン|1st|2nd|3rd|原案]+.*[\)|）]|[\(|（].+[のみ|シリーズ]+[\)|）]|[\(|（][主演として|特別|脚本|SP\.|以上|当時]+.+[\)|）]|）]|[\(|（][音楽|MMJ|テレビ朝日|日本テレビ|関西テレビ|共同テレビ|CP|連続ドラマ]+[\)|）]|[\(|（].*第.+[部|作|話|期]+.*[\)|）]|[\(|（][1-9]* - [1-9]*[\)|）]|[\(|（][1-9]+[\)|）]`, "")
+		// カッコでないもの
+		v = models.RegexpWords(v, `\[注.* *[1-9]\]|\[[1-9]+\]|下記詳細|参照|スタッフ参照|ほか|以下五十音順|[0-9]+年版|第[1-9]+シリーズ|1st|2nd|3rd`, "")
+		v = strings.TrimSpace(v)
+		if v != "" {
+			contents = append(contents, v)
+		}
+	}
+	content = strings.Join(contents, ",")
+	content = strings.TrimRight(content, "他")
 	content = strings.TrimSpace(content)
 	return content
 }

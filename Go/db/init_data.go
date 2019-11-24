@@ -73,14 +73,16 @@ func ExecDemoHerokuSQL() {
 		CommentSQL("桑野さん\n最\n高\nす\nぎる！\r\n"+strconv.Itoa(j), 11, 181, 0)
 		CommentSQL("コメントを投稿（180字まで）\r\nコメントを投稿（180字まで）\r\n"+strconv.Itoa(j), 21, 181, int(j))
 		CommentSQL("桑野さん最高すぎる！\r\n"+strconv.Itoa(j), 31, 181, int(j*2))
+
 		CommentSQL("桑野さん\n最\n高\nす\nぎる！\r\n"+strconv.Itoa(j), 11, 191, 0)
 		CommentSQL("コメントを投稿（180字まで）\r\nコメントを投稿（180字まで）\r\n"+strconv.Itoa(j), 21, 191, int(j))
 		CommentSQL("桑野さん最高すぎる！\r\n"+strconv.Itoa(j), 31, 191, int(j*2))
 	}
-	ReviewCommentSQL("レビューを投稿（400字まで）\nネタバレありです\nレビューは一人一回まで\n評価は10段階\nおすすめポイントタグ", 11, 181, 3, true, "神曲,ゆる～い", int(6))
+	ReviewCommentSQL("レビューを投稿（400字まで）\nネタバレありです\nレビューは一人一回まで\n評価は10段階\nおすすめポイントタグ", 11, 181, 3, true, "神曲,ゆる～い", int(4))
 	ReviewCommentSQL("レビューを投稿（400字まで）\nネタバレありです\nレビューは一人一回まで\n評価は10段階\nおすすめポイントタグ", 21, 181, 3, true, "神曲,ゆる～い", int(6))
 	ReviewCommentSQL("再放送4回みた。ELTは熱いよね！！\nネタバレはありません\n", 31, 181, 20, false, "泣きっぱなし,演技すごい", int(8))
-	ReviewCommentSQL("再放送4回みた。ELTは熱いよね！！\nネタバレはありません\n", 11, 191, 20, false, "泣きっぱなし,演技すごい", int(8))
+
+	ReviewCommentSQL("再放送4回みた。ELTは熱いよね！！\nネタバレはありません\n", 11, 191, 20, false, "泣きっぱなし,演技すごい", int(4))
 	ReviewCommentSQL("レビューを投稿（400字まで）\nネタバレありです\nレビューは一人一回まで\n評価は10段階\nおすすめポイントタグ", 21, 191, 3, true, "神曲,ゆる～い", int(6))
 	ReviewCommentSQL("再放送4回みた。ELTは熱いよね！！\nネタバレはありません\n", 31, 191, 20, false, "泣きっぱなし,演技すごい", int(8))
 }
