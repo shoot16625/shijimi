@@ -413,7 +413,7 @@ function reshapeMovieCode(tvProgram) {
       tvProgram.Id +
       '" class="movie" src="' +
       tvProgram.MovieUrl +
-      '?modestbranding=1&rel=0&playsinline=1" frameborder="0" alt="' +
+      '?modestbranding=1&rel=0&playsinline=0" frameborder="0" alt="' +
       tvProgram.Title +
       '" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
   }
