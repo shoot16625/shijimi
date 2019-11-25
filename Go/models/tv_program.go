@@ -500,6 +500,8 @@ func ReshapeImageURLReference(str string) (res string) {
 			res = "MovieWalker"
 		} else if strings.Contains(str, "1.bp.blogspot.com") {
 			res = "いらすとや"
+		} else if strings.Contains(str, "msp.c.yimg.jp") {
+			res = "Yahoo"
 		} else if strings.Contains(str, "/static/img") {
 			res = ""
 		} else {

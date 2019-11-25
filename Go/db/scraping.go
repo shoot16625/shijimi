@@ -948,7 +948,8 @@ func SetRandomImageURL() (url string) {
 }
 
 func ReshapeTitle(str string) string {
-	content := models.RegexpWords(str, ` *[\(|（].*[テレビドラマ|連続ドラマ][\)|）]`, "")
+	content := models.RegexpWords(str, ` *[\(|（].*[テレビドラマ|連続ドラマ|時代劇|漫画|小説][\)|）]`, "")
+	content = strings.Replace(content, "　", " ", -1)
 	return content
 }
 
@@ -984,11 +985,12 @@ func ReshapeText(str string) string {
 	content := strings.Replace(str, "\n", "", -1)
 	content = strings.Replace(content, ",（", "（", -1)
 	content = models.RegexpWords(content, ", | ,", ",")
+	content = strings.Replace(content, "　", " ", -1)
 	var contents []string
 	for _, v := range strings.Split(content, ",") {
-		v = models.RegexpWords(v, `[\(|（](P*S.[0-9|\-| |、]+)+[\)|）]|[\(|（].*[出演|シーズン|1st|2nd|3rd|原案]+.*[\)|）]|[\(|（].+[のみ|シリーズ]+[\)|）]|[\(|（][主演として|特別|脚本|SP\.|以上|当時]+.+[\)|）]|）]|[\(|（][音楽|MMJ|テレビ朝日|日本テレビ|関西テレビ|共同テレビ|CP|連続ドラマ]+[\)|）]|[\(|（].*第.+[部|作|話|期]+.*[\)|）]|[\(|（][1-9]* - [1-9]*[\)|）]|[\(|（][1-9]+[\)|）]`, "")
+		v = models.RegexpWords(v, `[\(|（](P*S.[0-9|\-| |、]+)+[\)|）]|[\(|（].*[出演|シーズン|1st|2nd|3rd|原案]+.*[\)|）]|[\(|（].+[のみ|シリーズ]+[\)|）]|[\(|（][主演として|特別|脚本|SP\.|以上|当時]+.+[\)|）]|）]|[\(|（][音楽|MMJ|テレビ朝日|日本テレビ|関西テレビ|TBS|共同テレビ|CP|FCC|連続ドラマ]+[\)|）]|[\(|（].*第.+[部|作|話|期]+.*[\)|）]|[\(|（][1-9]* - [1-9]*[\)|）]|[\(|（][1-9]+[\)|）]`, "")
 		// カッコでないもの
-		v = models.RegexpWords(v, `\[注.* *[1-9]\]|\[[1-9]+\]|下記詳細|参照|スタッフ参照|ほか|以下五十音順|[0-9]+年版|第[1-9]+シリーズ|1st|2nd|3rd`, "")
+		v = models.RegexpWords(v, `\[注.* *[1-9]\]|\[[1-9]+\]|下記詳細|参照|スタッフ参照|ほか|以下五十音順|[0-9]+年版|第[1-9]+シリーズ|1st|2nd|3rd|【連続ドラマ】|【特別編】`, "")
 		v = strings.TrimSpace(v)
 		if v != "" {
 			contents = append(contents, v)

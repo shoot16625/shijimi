@@ -9,6 +9,7 @@
     <ons-page>
       {{ template "/common/toolbar.tpl" . }}
       <div style="margin:50px 0 30px 0;">
+        <ons-row>
         <div
           class="tenor-gif-embed"
           data-postid="10252927"
@@ -23,11 +24,7 @@
           <a href="https://tenor.com/search/thankyou-gifs">Thankyou GIFs</a>
         </div>
       </div>
-      <script
-        type="text/javascript"
-        async
-        src="https://tenor.com/embed.js"
-      ></script>
+    </ons-row>
       <ons-row>
         <ons-col class="area-right">登録ユーザ数：</ons-col>
         <ons-col>{{.Info.CntUsers}}</ons-col>
@@ -44,10 +41,15 @@
     </ons-page>
 
     {{ template "/common/js.tpl" . }}
+    <script
+    type="text/javascript"
+    async
+    src="https://tenor.com/embed.js"
+  ></script>
     <script type="text/javascript">
-      setTimeout(function() {
-        window.location.href = URL;
-      }, 3 * 1000);
+        setTimeout(function() {
+          window.location.href = URL;
+        }, 4 * 1000);
     </script>
   </body>
 </html>

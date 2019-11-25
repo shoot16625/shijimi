@@ -258,7 +258,9 @@ function setMultipleSelection(elem, data) {
 
 // ページの上部へ移動
 function goTop() {
-  $('.page__content').animate({ scrollTop: 0 }, 500, 'swing');
+  let pos = $('.page__content').scrollTop();
+  let swingSpeed = pos / 20;
+  $('.page__content').animate({ scrollTop: 0 }, swingSpeed, 'swing');
 }
 
 // ツールバークリックで上部へ移動
