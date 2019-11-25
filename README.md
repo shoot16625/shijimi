@@ -6,12 +6,21 @@ doramaba とかテレビバって考えてたけど，ShiJimi にしよっかな
 # To Do List
 ## ますと
 1. バグ探し（だいたいちゃんと動くように，エラー画面が出ないように）
-1. ヒントボタン
+1. ヒントボタンかいてく
+1. ポイント利用する
+1. 新しいコメントがあります．
+1. リロードで位置を変えない
+1. 季節ごとの自分的ランキング（コミュニティを作る？（キャストの部屋・今季の部屋（プロフィールでは，自分のだけ見れる）））
+1. お知らせページ（ヒントに組み込めば）
+1. サーバの契約・ドメイン取得・SSL化（年明けかな）
+
 
 ## その他
-1. ホーム画面に登録（serviceworker）
-1. なぜか映画データを投入すると，おすすめで2重に繰り返される（表示側の問題/chromeのみ）
+1. ホーム画面に登録（serviceworker(chrome/firefox/androidのみ動作中)）
+1. おすすめページでデータ数が40超えてくると，2重に繰り返される（表示側の問題/chromeのみ）
 1. スクロールポジションがコメントリロード時にも固定される（表示側の問題/firefoxのみ）
+1. 時間指定検索で9時間のズレ（herokuのみ）
+1. コメントリロードすると検索キャッシュ消える（herokuのみ）
 1. 自動更新（検索の場合どうなるか(検索時は無効化しといた)）
 1. ポイントの利用方法考える．（１日一回ログインで1ポイント獲得）
     1. 表示数の上限に利用できる（自身の投稿，テレビのコメント，テレビの検索）
@@ -22,6 +31,9 @@ doramaba とかテレビバって考えてたけど，ShiJimi にしよっかな
     1. 自身のコメントの検索機能
     1. 広告の非表示
     1. 自動リロード時間を設定（デフォ：30sec）
+1. 推薦あるご
+    1. 今：喫緊10見たのキャストが出てる他番組
+    1. とりまシーズンで一個に
 1. ログアウトページてきとう
 1. ログインからの導線
 1. カスタマイズ機能
@@ -31,7 +43,6 @@ doramaba とかテレビバって考えてたけど，ShiJimi にしよっかな
 1. tv edit部分のタイトルかぶり処理，なぜかFlagがNULLになる
 1. コード関数化してまとめる jsもgoも
 1. androidでの見た目がmarital，ちょっと変かも
-1. いろんな説明文
 1. 各ユーザへの管理側からのメッセージ
 1. カテゴリクリック・キャストクリックで検索
 1. 寄付マーククリックアクション
@@ -122,3 +133,31 @@ docker, docker-composeが必要
 1. 
 1. 
 1. 
+
+# herokuへのアップ方法
+```
+heroku apps:destroy -a shijimi --confirm shijimi
+git remote rm heroku
+
+git clone git@github.com:shoot16625/shijimi.git
+cd shijimi/Go
+
+(
+heroku login
+heroku container:login
+)
+heroku create -a shijimi
+heroku git:remote -a shijimi
+heroku addons:add cleardb:ignite
+heroku config | grep CLEARDB_DATABASE_URL
+
+conf内：sqlconとprod変更
+common.jsのURL変更
+main.go：sqlconn変更/投入データ変更
+models/comment.go heroku 時間で検索部分
+
+heroku container:push web -a shijimi
+heroku container:release web -a shijimi
+heroku open
+heroku logs --tail
+```

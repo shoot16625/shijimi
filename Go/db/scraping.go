@@ -14,48 +14,6 @@ import (
 	"github.com/microcosm-cc/bluemonday"
 )
 
-func CategoryReshape(category string) (newCategory string) {
-	switch category {
-	case "刑事", "検事", "スピンオフ刑事", "刑事ミステリー", "刑事コメディー", "刑事推理", "警察学園":
-		newCategory = "刑事・検事"
-	case "社会派", "ビジネス", "企業", "オフィス", "ロマンティック・コメディ経済", "空港", "会社", "業界":
-		newCategory = "企業・オフィス"
-	case "学園", "青春", "学園コメディ", "学園コメディー", "学園恋愛", "学園アクション", "青春ホラー":
-		newCategory = "学園・青春"
-	case "ホーム", "ヒューマン", "人間", "SF人間", "ホームヒューマン", "女性":
-		newCategory = "ホーム・ヒューマン"
-	case "ラブコメディ", "SF・恋愛", "ラブストーリー":
-		newCategory = "恋愛"
-	case "ミステリー", "推理サスペンス", "サスペンス", "SFサスペンス", "コメディーミステリー", "ロマンチックミステリー", "犯罪サスペンス", "ホームサスペンス", "逃亡サスペンス", "サスペンス推理", "サバイバルサスペンス", "クライム・サスペンス", "純愛ミステリー", "学園青春サスペンス":
-		newCategory = "ミステリー・サスペンス"
-	case "大河", "伝記", "SF歴史", "戦国":
-		newCategory = "時代劇"
-	case "法律", "法廷もの", "法廷ものコメディー", "裁判":
-		newCategory = "弁護士"
-	case "探偵", "推理", "サイコスリラー", "推理アクション", "クイズ番組":
-		newCategory = "探偵・推理"
-	case "シリアス・コメディ", "ファンタジー", "ファンタジーコメディ", "コメディ", "パロディ", "音楽コメディ", "冒険コメディ", "コメディヒューマン", "ケータイ発", "ロマンティック・コメディ", "冒険コメディー", "ヒューマンコメディー", "ホラーコメディ":
-		newCategory = "コメディ・パロディ"
-	case "経済", "金融", "政治コメディ":
-		newCategory = "政治"
-	case "料理・人間", "料理":
-		newCategory = "グルメ"
-	case "サスペンス犯罪", "犯罪", "復讐":
-		newCategory = "犯罪・復讐"
-	case "医療アクション", "医療恋愛":
-		newCategory = "医療"
-	case "スポーツコメディ":
-		newCategory = "スポーツ"
-	case "スパイコメディ", "アクションサスペンス":
-		newCategory = "アクション"
-	case "SF・ファンタジー", "特撮":
-		newCategory = "SF"
-	case "テレビ", "連続":
-		newCategory = "ホーム・ヒューマン"
-	}
-	return newCategory
-}
-
 // Scraping TvPrograms by wiki list.
 func GetWikiDoramas(referencePath string) {
 	doc, err := goquery.NewDocument(referencePath)
@@ -378,6 +336,7 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 }
 
 // Add drama information in wiki lists.
+// change here
 func AddTvProgramsInformation() {
 	// wikis := []string{"日本のテレビドラマ一覧_(2010年代)", "日本のテレビドラマ一覧_(2000年代)"}
 	wikis := []string{"日本のテレビドラマ一覧_(2010年代)"}
@@ -524,6 +483,7 @@ func GetMovieWalker(year string, month string) {
 }
 
 // Get movies.
+// change here
 func GetMovieWalkers() {
 	var start int = 2019
 	// var start int = 2000
@@ -924,7 +884,7 @@ func GetImageURL(str string) (URL string) {
 				}
 			}
 			ratio := float32(x) / float32(y)
-			// fmt.Println(x, y, ratio)
+			// 縦長の写真は却下
 			if len(URL) < 480 && ratio > 0.85 {
 				flag = false
 			}
@@ -974,6 +934,7 @@ func ReshapeHour(month int) string {
 	}
 	return seasonName
 }
+
 func ReshapeThemesong(str string) string {
 	content := strings.Replace(str, "『", "「", -1)
 	content = strings.Replace(content, "』", "」", -1)
@@ -1009,4 +970,46 @@ func AddRecentTvInfo() {
 		url := "https://ja.wikipedia.org/wiki/" + v
 		GetTvProgramInformationByURLOnGo(url)
 	}
+}
+
+func CategoryReshape(category string) (newCategory string) {
+	switch category {
+	case "刑事", "検事", "スピンオフ刑事", "刑事ミステリー", "刑事コメディー", "刑事推理", "警察学園":
+		newCategory = "刑事・検事"
+	case "社会派", "ビジネス", "企業", "オフィス", "ロマンティック・コメディ経済", "空港", "会社", "業界":
+		newCategory = "企業・オフィス"
+	case "学園", "青春", "学園コメディ", "学園コメディー", "学園恋愛", "学園アクション", "青春ホラー":
+		newCategory = "学園・青春"
+	case "ホーム", "ヒューマン", "人間", "SF人間", "ホームヒューマン", "女性":
+		newCategory = "ホーム・ヒューマン"
+	case "ラブコメディ", "SF・恋愛", "ラブストーリー":
+		newCategory = "恋愛"
+	case "ミステリー", "推理サスペンス", "サスペンス", "SFサスペンス", "コメディーミステリー", "ロマンチックミステリー", "犯罪サスペンス", "ホームサスペンス", "逃亡サスペンス", "サスペンス推理", "サバイバルサスペンス", "クライム・サスペンス", "純愛ミステリー", "学園青春サスペンス":
+		newCategory = "ミステリー・サスペンス"
+	case "大河", "伝記", "SF歴史", "戦国":
+		newCategory = "時代劇"
+	case "法律", "法廷もの", "法廷ものコメディー", "裁判":
+		newCategory = "弁護士"
+	case "探偵", "推理", "サイコスリラー", "推理アクション", "クイズ番組":
+		newCategory = "探偵・推理"
+	case "シリアス・コメディ", "ファンタジー", "ファンタジーコメディ", "コメディ", "パロディ", "音楽コメディ", "冒険コメディ", "コメディヒューマン", "ケータイ発", "ロマンティック・コメディ", "冒険コメディー", "ヒューマンコメディー", "ホラーコメディ":
+		newCategory = "コメディ・パロディ"
+	case "経済", "金融", "政治コメディ":
+		newCategory = "政治"
+	case "料理・人間", "料理":
+		newCategory = "グルメ"
+	case "サスペンス犯罪", "犯罪", "復讐":
+		newCategory = "犯罪・復讐"
+	case "医療アクション", "医療恋愛":
+		newCategory = "医療"
+	case "スポーツコメディ":
+		newCategory = "スポーツ"
+	case "スパイコメディ", "アクションサスペンス":
+		newCategory = "アクション"
+	case "SF・ファンタジー", "特撮":
+		newCategory = "SF"
+	case "テレビ", "連続":
+		newCategory = "ホーム・ヒューマン"
+	}
+	return newCategory
 }
