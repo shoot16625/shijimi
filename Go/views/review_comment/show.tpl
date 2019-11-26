@@ -57,7 +57,7 @@
     <template id="tweet-dialog.html">
       <ons-dialog id="tweet-dialog" modifier="large" cancelable fullscreen>
         <ons-page>
-          <ons-toolbar>
+          <ons-toolbar id="tweet-hide-swipe">
             <div class="left">
               <ons-button
                 id="cancel-button"
@@ -191,13 +191,16 @@
               'score：' + star;
           });
         </script>
+        <script>
+          hideSwipeToolbar("tweet-hide-swipe", "tweet-dialog");
+        </script>
       </ons-dialog>
     </template>
 
     <template id="search-dialog.html">
       <ons-dialog id="search-dialog" modifier="large" cancelable fullscreen>
         <ons-page>
-          <ons-toolbar>
+          <ons-toolbar id="search-hide-swipe">
             <div class="left">
               <ons-button
                 id="cancel-button"
@@ -341,12 +344,15 @@
             document.getElementById('sortby').value = {{.SearchWords.Sortby}};
           }
         </script>
+        <script>
+          hideSwipeToolbar("search-hide-swipe", "search-dialog");
+        </script>
       </ons-dialog>
     </template>
     <template id="hint-dialog.html">
       <ons-dialog id="hint-dialog" modifier="large" cancelable fullscreen>
         <ons-page>
-          <ons-toolbar>
+          <ons-toolbar id="hint-hide-swipe">
             <div class="left">
               <ons-button
                 id="cancel-button"
@@ -365,6 +371,9 @@
             </ol>
           </div>
         </ons-page>
+        <script>
+          hideSwipeToolbar("hint-hide-swipe", "hint-dialog");
+        </script>
       </ons-dialog>
     </template>
     {{ template "/common/js.tpl" . }}

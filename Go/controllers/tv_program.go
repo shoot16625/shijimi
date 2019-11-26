@@ -172,6 +172,8 @@ func (c *TvProgramController) GetAll() {
 			query[k] = v
 		}
 	}
+	sortby = append(sortby, "Id")
+	order = append(order, "desc")
 
 	l, err := models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
 	if err != nil {
@@ -247,12 +249,10 @@ func (c *TvProgramController) Put() {
 		c.Redirect("/tv/tv_program/comment/"+idStr, 302)
 	} else {
 		c.Data["TvProgram"] = v
+		// なぜか効かない
 		c.Data["TitleFlag"] = 1
 		c.Redirect("/tv/tv_program/edit/"+idStr, 302)
 	}
-	// } else {
-	// 	c.Redirect("/", 302)
-	// }
 }
 
 // Delete ...
@@ -266,6 +266,7 @@ func (c *TvProgramController) Delete() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	session := c.StartSession()
+	// 管理者のみ削除できるようjs側で制御
 	if session.Get("UserId") != nil {
 		if err := models.DeleteTvProgram(id); err == nil {
 			models.DeleteWatchingStatusByTvProgramId(id)
@@ -288,6 +289,7 @@ func (c *TvProgramController) Delete() {
 	c.TplName = "user/logout.tpl"
 }
 
+// 番組一覧・おすすめページ
 func (c *TvProgramController) Index() {
 	var l []interface{}
 	session := c.StartSession()
@@ -347,6 +349,7 @@ func (c *TvProgramController) Index() {
 	c.TplName = "tv_program/index.tpl"
 }
 
+// 番組登録情報の編集ページへ移動
 func (c *TvProgramController) EditPage() {
 	session := c.StartSession()
 	idStr := c.Ctx.Input.Param(":id")
@@ -373,7 +376,7 @@ func (c *TvProgramController) Get() {
 	var fields []string
 	var sortby []string
 	var order []string
-	var limit int64 = 10
+	var limit int64 = 100
 	var offset int64
 	var query = make(map[string]string)
 	sortby = append(sortby, "Hour")
@@ -666,6 +669,7 @@ func (c *TvProgramController) SearchTvProgram() {
 	c.TplName = "tv_program/index.tpl"
 }
 
+// 新規テレビ登録ページへ移動
 func (c *TvProgramController) CreatePage() {
 	session := c.StartSession()
 	if session.Get("UserId") == nil {
@@ -675,6 +679,7 @@ func (c *TvProgramController) CreatePage() {
 	}
 }
 
+// ドラマ情報をwikiから取得
 func (c *TvProgramController) GetTvProgramWikiInfo() {
 	session := c.StartSession()
 	if session.Get("UserId") == nil {
@@ -690,6 +695,7 @@ func (c *TvProgramController) GetTvProgramWikiInfo() {
 	c.TplName = "tv_program/create.tpl"
 }
 
+// 映画情報をwikiから取得
 func (c *TvProgramController) GetMovieWikiInfo() {
 	session := c.StartSession()
 	if session.Get("UserId") == nil {

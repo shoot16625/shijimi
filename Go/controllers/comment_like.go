@@ -128,7 +128,8 @@ func (c *CommentLikeController) GetAll() {
 			query[k] = v
 		}
 	}
-
+	sortby = append(sortby, "Id")
+	order = append(order, "desc")
 	l, err := models.GetAllCommentLike(query, fields, sortby, order, offset, limit)
 	if err != nil {
 		c.Data["json"] = err.Error()

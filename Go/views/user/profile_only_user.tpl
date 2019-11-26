@@ -44,7 +44,7 @@
 <template id="hint-dialog.html">
   <ons-dialog id="hint-dialog" modifier="large" cancelable fullscreen>
     <ons-page>
-      <ons-toolbar>
+      <ons-toolbar id="hint-hide-swipe">
         <div class="left">
           <ons-button
             id="cancel-button"
@@ -72,5 +72,8 @@
         </ol>
       </div>
     </ons-page>
+    <script>
+      hideSwipeToolbar('hint-hide-swipe', 'hint-dialog');
+    </script>
   </ons-dialog>
 </template>

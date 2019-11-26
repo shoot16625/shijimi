@@ -141,7 +141,8 @@ func (c *ReviewCommentController) GetAll() {
 			query[k] = v
 		}
 	}
-
+	sortby = append(sortby, "Id")
+	order = append(order, "desc")
 	l, err := models.GetAllReviewComment(query, fields, sortby, order, offset, limit)
 	if err != nil {
 		c.Data["json"] = err.Error()

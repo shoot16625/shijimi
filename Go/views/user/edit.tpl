@@ -8,6 +8,7 @@
     <ons-page>
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
+      <ons-pull-hook id="pull-hook"></ons-pull-hook>
 
       <form id="create-user" action="/tv/user/{{.User.Id}}" method="post">
         <div class="input-table">

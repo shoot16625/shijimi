@@ -439,14 +439,14 @@
           var dialog = document.getElementById(elemID);
           // 同じページで2度目以降のプレビュークリック時発動
           if (dialog) {
-            inputPreviewData();
+            inputPreviewTvData();
             document.querySelector('#expandable-list-item').showExpansion();
             dialog.show();
           } else {
             ons
               .createElement(elemID + '.html', { append: true })
               .then(function(dialog) {
-                inputPreviewData();
+                inputPreviewTvData();
                 document.querySelector('#expandable-list-item').showExpansion();
                 dialog.show();
               });

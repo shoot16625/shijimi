@@ -17,7 +17,7 @@ type Comment struct {
 	UserId      int64
 	CountLike   int       `orm:"default(0)"`
 	Created     time.Time `orm:"auto_now_add;type(datetime)"`
-	Updated     time.Time `orm:"auto_now;type(datetime)"`
+	// Updated     time.Time `orm:"auto_now;type(datetime)"`
 }
 
 func init() {

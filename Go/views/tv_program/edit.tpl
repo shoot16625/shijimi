@@ -409,14 +409,14 @@
         ons.ready(function() {
           var dialog = document.getElementById(elemID);
           if (dialog) {
-            inputPreviewData();
+            inputPreviewTvData();
             document.querySelector('#expandable-list-item').showExpansion();
             dialog.show();
           } else {
             ons
               .createElement(elemID + '.html', { append: true })
               .then(function(dialog) {
-                inputPreviewData();
+                inputPreviewTvData();
                 document.querySelector('#expandable-list-item').showExpansion();
                 dialog.show();
               });

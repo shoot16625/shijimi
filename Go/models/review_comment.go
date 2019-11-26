@@ -21,7 +21,7 @@ type ReviewComment struct {
 	Star          int       `orm:"default(5)"`
 	FavoritePoint string    `orm:"size(100)";null"`
 	Created       time.Time `orm:"auto_now_add;type(datetime)"`
-	Updated       time.Time `orm:"auto_now;type(datetime)"`
+	// Updated       time.Time `orm:"auto_now;type(datetime)"`
 }
 
 func init() {

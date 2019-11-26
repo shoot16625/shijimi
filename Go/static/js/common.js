@@ -437,7 +437,7 @@ function reshapeReferenceSite(tvProgram) {
 }
 
 // プレビューの表示部分
-function inputPreviewData() {
+function inputPreviewTvData() {
   let hour;
   if (document.getElementsByName('hour')[0].value === '指定なし') {
     hour = '';
@@ -516,6 +516,47 @@ function inputPreviewData() {
   }
 }
 
+//誕生日→年齢変換
+function getAge(y, m, d) {
+  //誕生年月日
+  var birthday = new Date(y, m - 1, d);
+  //今日
+  var today = new Date();
+  //今年の誕生日
+  var thisYearBirthday = new Date(
+    today.getFullYear(),
+    birthday.getMonth(),
+    birthday.getDate()
+  );
+  //今年-誕生年
+  var age = today.getFullYear() - birthday.getFullYear();
+  //今年の誕生日を迎えていなければage-1を返す
+  return today < thisYearBirthday ? age - 1 : age;
+}
+
+// ユーザーデータのプレビュー表示
+function inputPreviewUserData() {
+  document.getElementById(
+    'preview-username'
+  ).innerHTML = document.getElementsByName('username')[0].value;
+  let births = document.getElementsByName('age')[0].value.split('-');
+  let contents =
+    '<p>年齢　：' +
+    getAge(births[0], births[1], births[2]) +
+    '</p><p>居住地：' +
+    document.getElementsByName('address')[0].value +
+    '</p>';
+  document.getElementById('preview-contents').innerHTML = contents;
+  let iconURL = document.getElementsByName('IconURL')[0].value;
+  if (iconURL === '') {
+    iconURL = '/static/img/user_img/s256_f_01.png';
+  }
+  document.getElementById('preview-image').innerHTML =
+    '<img src="' +
+    iconURL +
+    '" onerror="this.src=\'/static/img/user_img/s256_f_01.png\'" width="100%" />';
+}
+
 // レビューのおすすめポイントの整形
 function reshapeFavoritePoint(comment) {
   let fpText = '';
@@ -546,6 +587,7 @@ function avoidStructNameError(elem) {
   return name;
 }
 
+// 非同期通信でいいねボタン更新
 function commentLikeStatus(elem, checkFlag, userID, comments) {
   let url = URL + '/tv/comment_like/';
   let data = globalCommentLikeStatus[elem.id];
@@ -582,6 +624,7 @@ function commentLikeStatus(elem, checkFlag, userID, comments) {
   request.send(json);
 }
 
+// 非同期通信でいいねボタン更新
 function reviewCommentLikeStatus(elem, checkFlag, userID, comments) {
   let url = URL + '/tv/review_comment_like/';
   let data = globalCommentLikeStatus[elem.id];
@@ -617,6 +660,7 @@ function reviewCommentLikeStatus(elem, checkFlag, userID, comments) {
   request.send(json);
 }
 
+// 非同期通信で見たボタン更新
 function commentPageWatchStatusUpdate(elem, checkFlag, userID, tvProgramId) {
   let url = URL + '/tv/watching_status/';
   var data = globalWatchStatus;
@@ -655,6 +699,7 @@ function commentPageWatchStatusUpdate(elem, checkFlag, userID, tvProgramId) {
   request.send(json);
 }
 
+// 非同期通信で見たボタン更新
 function tvPageWatchStatusUpdate(elem, checkFlag, userID, tvProgram) {
   let url = URL + '/tv/watching_status/';
   const index = elem.id.slice(14);
@@ -693,4 +738,12 @@ function tvPageWatchStatusUpdate(elem, checkFlag, userID, tvProgram) {
     }
   };
   request.send(json);
+}
+
+function hideSwipeToolbar(elemID, dialog) {
+  let elem = document.getElementById(elemID);
+  let ham = new Hammer(elem);
+  ham.on('swipe', function(event) {
+    hideAlertDialog(dialog);
+  });
 }

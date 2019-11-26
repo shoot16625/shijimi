@@ -115,6 +115,8 @@ func (c *TvProgramUpdateHistoryController) GetAll() {
 			query[k] = v
 		}
 	}
+	sortby = append(sortby, "Id")
+	order = append(order, "desc")
 
 	l, err := models.GetAllTvProgramUpdateHistory(query, fields, sortby, order, offset, limit)
 	if err != nil {

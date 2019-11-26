@@ -54,7 +54,7 @@
             <p>
               <ons-button
                 modifier="quiet"
-                onclick="goOtherPage({{.UserId}},0, 'tv/tv_program/create_page')"
+                onclick="goOtherPage({{.UserId}}, 0, 'tv/tv_program/create_page')"
                 >ドラマ・映画をつくる</ons-button
               >
             </p>
@@ -90,6 +90,7 @@
             </p>
           </ons-col>
         </ons-row>
+
         <ons-toast id="loginErrorToast" animation="ascend"
           >ログインに失敗しました <i class="far fa-sad-tear"></i
           ><button onclick="loginErrorToast.hide()">
@@ -460,7 +461,7 @@
     <template id="terms-of-service.html">
       <ons-dialog id="terms-of-service" modifier="large" cancelable fullscreen>
         <ons-page>
-          <ons-toolbar>
+          <ons-toolbar id="terms-of-service-hide-swipe">
             <div class="left">
               <ons-button
                 id="cancel-button"
@@ -475,12 +476,15 @@
             {{ template "/common/terms_of_service.tpl" . }}
           </div>
         </ons-page>
+        <script>
+          hideSwipeToolbar('terms-of-service-hide-swipe', 'terms-of-service');
+        </script>
       </ons-dialog>
     </template>
     <template id="privacy-policy.html">
       <ons-dialog id="privacy-policy" modifier="large" cancelable fullscreen>
         <ons-page>
-          <ons-toolbar>
+          <ons-toolbar id="privacy-policy-hide-swipe">
             <div class="left">
               <ons-button
                 id="cancel-button"
@@ -495,12 +499,15 @@
             {{ template "/common/privacy_policy.tpl" . }}
           </div>
         </ons-page>
+        <script>
+          hideSwipeToolbar('privacy-policy-hide-swipe', 'privacy-policy');
+        </script>
       </ons-dialog>
     </template>
     <template id="login-dialog.html">
       <ons-dialog id="login-dialog" modifier="large" cancelable fullscreen>
         <ons-page>
-          <ons-toolbar>
+          <ons-toolbar id="login-hide-swipe">
             <div class="left">
               <ons-button
                 id="cancel-button"
@@ -567,6 +574,8 @@
               }
             });
           });
+
+          hideSwipeToolbar('login-hide-swipe', 'login-dialog');
         </script>
       </ons-dialog>
     </template>
@@ -574,7 +583,7 @@
     <template id="hint-dialog.html">
       <ons-dialog id="hint-dialog" modifier="large" cancelable fullscreen>
         <ons-page>
-          <ons-toolbar>
+          <ons-toolbar id="hint-hide-swipe">
             <div class="left">
               <ons-button
                 id="cancel-button"
@@ -588,17 +597,27 @@
             </div>
           </ons-toolbar>
           <div class="scroller list-margin">
-              <ol>
-                <li>ツールバーの<b>しじみ</b>をクリックすると、<br>トップページへ移動できます。</li>
-                <li><b>しじみ</b>の周辺をクリックすると、<br>上部へ移動できます。</li>
-                <li>ユーザ登録をすれば、<br>誰でも番組の作成・編集が可能。</li>
-                <li>検索：複数のキーワードで指定したいときは、スペースで区切ってください。</li>
-                <li>機能は今後も追加していく予定です。</li>
-                <li>バグ：→ お問い合わせへポスト</li>
-                <li>アドレスバーの消し方(iphone)：アドレスバーを上スワイプ</li>
-              </ol>
+            <ol>
+              <li>
+                ツールバーの<b>しじみ</b>をクリックすると、<br />トップページへ移動できます。
+              </li>
+              <li>
+                <b>しじみ</b>の周辺をクリックすると、<br />上部へ移動できます。
+              </li>
+              <li>ユーザ登録をすれば、<br />誰でも番組の作成・編集が可能。</li>
+              <li>
+                検索：複数のキーワードで指定したいときは、スペースで区切ってください。
+              </li>
+              <li>機能は今後も追加していく予定です。</li>
+              <li>バグ：→ お問い合わせへポスト</li>
+              <li>アドレスバーの消し方(iphone)：アドレスバーを上スワイプ</li>
+              <li>ツールバーを横スワイプ：ダイアログが隠れます。</li>
+            </ol>
           </div>
         </ons-page>
+        <script>
+          hideSwipeToolbar('hint-hide-swipe', 'hint-dialog');
+        </script>
       </ons-dialog>
     </template>
     {{ template "/common/js.tpl" . }}
@@ -627,8 +646,8 @@
       if ({{.TvProgramMovie}}) {
         autoScroll(carousel10, {{.TvProgramMovie}}.length);
       }
-    </script>
-    <script>
+
+      // ツイッターガジェット
       !(function(d, s, id) {
         var js,
           fjs = d.getElementsByTagName(s)[0],
@@ -648,14 +667,7 @@
       crossorigin="anonymous"
       src="https://connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v4.0"
     ></script>
-    <script>
-      if ({{.LoginError}}) {
-        document.querySelector('ons-toast').show();
-        setTimeout(function() {
-          document.querySelector('ons-toast').hide();
-        }, 4000);
-      }
-    </script>
+
     <!-- 保留 -->
     <!-- <script>
       ons.ready(function(){
@@ -663,6 +675,14 @@
       })
     </script> -->
     <script>
+        // ログイン失敗ポップアップ
+        if ({{.LoginError}}) {
+          document.querySelector('ons-toast').show();
+          setTimeout(function() {
+            document.querySelector('ons-toast').hide();
+          }, 4000);
+        }
+
       // serviceEorkerの設置
       window.addEventListener('load', function() {
         if ('serviceWorker' in navigator) {
@@ -676,8 +696,7 @@
             });
         }
       });
-    </script>
-    <script>
+
       // インストールボタンの機能(たぶんchromeのみ，localhostかhttpsでないと表示されない)
       let deferredPrompt;
       const addBtn = document.querySelector('.add-button');

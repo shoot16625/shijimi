@@ -8,7 +8,7 @@
     <ons-page>
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
-
+      <ons-pull-hook id="pull-hook"></ons-pull-hook>
       <div class="area-right" style="height: 0px;">
         <ons-button modifier="quiet" onclick="dialogBoxEveryone('hint-dialog')"
           ><i class="far fa-question-circle hint-icon-right"></i
@@ -206,6 +206,11 @@
               required
             ></ons-input>
           </p>
+          <p class="create-top-bottom-margin">
+            <ons-button modifier="quiet" onclick="previewUser('preview-dialog')"
+              >プレビュー</ons-button
+            >
+          </p>
           <p>
             <ons-checkbox
               value="consent"
@@ -282,11 +287,51 @@
         </ons-page>
       </ons-dialog>
     </template>
+    <template id="preview-dialog.html">
+      <ons-dialog id="preview-dialog" modifier="large" cancelable fullscreen>
+        <ons-page>
+          <ons-toolbar id="preview-hide-swipe">
+            <div class="left">
+              <ons-button
+                id="cancel-button"
+                onclick="hideAlertDialog('preview-dialog')"
+                style="background:left;color: grey;"
+                ><i class="fas fa-window-close"></i
+              ></ons-button>
+            </div>
+            <div class="center">
+              プレビュー
+            </div>
+          </ons-toolbar>
+          <div class="scroller">
+            <ons-list>
+              <ons-list-header>
+                <div class="area-left">作成日：○○</div>
+              </ons-list-header>
+              <ons-list-item>
+                <ons-row>
+                  <ons-col>
+                    <div class="title" id="preview-username"></div>
+                    <div class="content" id="preview-contents"></div>
+                  </ons-col>
+                  <ons-col width="50%">
+                    <div class="profile-image" id="preview-image"></div>
+                  </ons-col>
+                </ons-row>
+              </ons-list-item>
+            </ons-list>
+          </div>
+        </ons-page>
+        <script>
+          hideSwipeToolbar("preview-hide-swipe", "preview-dialog");
+        </script>
+      </ons-dialog>
+    </template>
     <!-- ヒントページ -->
     <template id="hint-dialog.html">
       <ons-dialog id="hint-dialog" modifier="large" cancelable fullscreen>
         <ons-page>
-          <ons-toolbar>
+          <ons-toolbar id="hint-hide-swipe">
             <div class="left">
               <ons-button
                 id="cancel-button"
@@ -309,9 +354,31 @@
             </ol>
           </div>
         </ons-page>
+        <script>
+          hideSwipeToolbar("hint-hide-swipe", "hint-dialog");
+        </script>
       </ons-dialog>
     </template>
     {{ template "/common/js.tpl" . }}
+    <script type="text/javascript">
+      var previewUser = function(elemID) {
+        ons.ready(function() {
+          var dialog = document.getElementById(elemID);
+          // 同じページで2度目以降のプレビュークリック時発動
+          if (dialog) {
+            inputPreviewUserData();
+            dialog.show();
+          } else {
+            ons
+              .createElement(elemID + '.html', { append: true })
+              .then(function(dialog) {
+                inputPreviewUserData();
+                dialog.show();
+              });
+          }
+        });
+      };
+    </script>
     <script type="text/javascript">
       let consentFlag = false;
       $(function() {

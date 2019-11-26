@@ -52,7 +52,7 @@
     <template id="search-dialog.html">
       <ons-dialog id="search-dialog" modifier="large" cancelable fullscreen>
         <ons-page>
-          <ons-toolbar>
+          <ons-toolbar id="search-hide-swipe">
             <div class="left">
               <ons-button
                 id="cancel-button"
@@ -254,10 +254,10 @@
           </div>
         </ons-page>
         <script>
+          // 時間セレクタ生成
           let textTop = '';
           document.getElementById('hour').innerHTML = getSelectHour(textTop);
-        </script>
-        <script>
+          // 年セレクタ生成
           const today = new Date();
           const year = today.getFullYear() + 2;
           text = '';
@@ -265,8 +265,7 @@
             text += '<option>' + i + '</option>';
           }
           document.getElementById('year').innerHTML = text;
-        </script>
-        <script type="text/javascript">
+          // 複数セレクタ再設置
           if ({{.SearchWords}} != null){
             setMultipleSelection("year", {{.SearchWords.Year}});
             setMultipleSelection("week", {{.SearchWords.Week}});
@@ -277,8 +276,7 @@
           if ({{.SearchWords.Sortby}} != null){
             document.getElementById('sortby').value = {{.SearchWords.Sortby}};
           }
-        </script>
-        <script type="text/javascript">
+          // リセットボタン
           function resetSelect() {
             document.search_tv_program.reset();
             document.getElementById('title').value = '';
@@ -286,13 +284,15 @@
             document.getElementById('themesong').value = '';
             document.getElementById('limit').value = '';
           }
+
+          hideSwipeToolbar("search-hide-swipe", "search-dialog");
         </script>
       </ons-dialog>
     </template>
     <template id="hint-dialog.html">
       <ons-dialog id="hint-dialog" modifier="large" cancelable fullscreen>
         <ons-page>
-          <ons-toolbar>
+          <ons-toolbar id="hint-hide-swipe">
             <div class="left">
               <ons-button
                 id="cancel-button"
@@ -312,6 +312,9 @@
             </ol>
           </div>
         </ons-page>
+        <script>
+          hideSwipeToolbar('hint-hide-swipe', 'hint-dialog');
+        </script>
       </ons-dialog>
     </template>
     {{ template "/common/js.tpl" . }}
@@ -356,13 +359,17 @@
               // supervisors = supervisors.split(",").slice(0, 3);
               let themesongs = tvPrograms[i].Themesong;
               themesongs = themesongs.split(",");
+              let themesongText = '<ons-row class="list-margin-bottom"><ons-col width="15%"><i class="fas fa-music" style="color: cornflowerblue;"></i>：</ons-col><ons-col>'+reshapeContents(themesongs)+'</ons-col></ons-row>';
+              if (tvPrograms[i].Themesong === ""){
+                themesongText = "";
+              }
               let categories = tvPrograms[i].Category.split(',');
               if (tvPrograms[i].Category === ""){
                 categories = [];
               }
               let category = reshapeCategory(categories);
 
-              return ons.createElement('<div id="' + tvPrograms[i].Id + '"><ons-list-header style="background-color:'+ headerColor +';"><div class="area-left">' + tvPrograms[i].Year + '年 ' + seasonName + '（' + weekName + time + '）</div><div class="area-right list-margin"><i class="fas fa-eye"></i>：' + tvPrograms[i].CountClicked + '</div></ons-list-header><ons-list-item><div class="tv-program-list-title-font">' + tvPrograms[i].Title + '</div></ons-list-item><ons-list-item><ons-row><ons-col><ons-row class="list-margin-bottom"><ons-col width="15%">出演：</ons-col><ons-col>' + reshapeContents(casts) + '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col width="15%"><i class="fas fa-music" style="color: cornflowerblue;"></i>：</ons-col><ons-col>' + reshapeContents(themesongs)+ '</ons-col></ons-row><ons-row class="list-margin-bottom"><ons-col class="category-area">' + category + '</ons-col></ons-row><ons-row></ons-list-item><div class="area-center" style="margin:5px;">' + moviePosition + '<div class="reference">' + referenceSite + '</div></div><ons-list-item expandable>あらすじ・見どころ<div class="expandable-content">' + tvPrograms[i].Content + '</div></ons-list-item><ons-list-item modifier="nodivider"><i class="'+ setLikeBold(watchStatus[i].Watched) +' fa-laugh-beam" id="check-watched-' + i + '" onclick="clickWatchStatus(this,myUserID,tvPrograms)" style="color:' + setLikeStatus(watchStatus[i].Watched, 'deeppink') + ';"></i><div id="check-watched-' + i + '-text" class="tv-program-watch" style="margin-right: 8px;">見た：' + tvPrograms[i].CountWatched + '</div><i class="'+ setLikeBold(watchStatus[i].WantToWatch) +' fa-bookmark" id="check-wan2wat-' + i + '" onclick="clickWatchStatus(this,myUserID,tvPrograms)" style="color:' + setLikeStatus(watchStatus[i].WantToWatch, 'lightseagreen') + ';"></i><div id="check-wan2wat-' + i + '-text" class="tv-program-watch">また今度：' + tvPrograms[i].CountWantToWatch + '</div></ons-list-item><ons-list-item><div class="right list-item__right"><a href="/tv/tv_program/comment/' + tvPrograms[i].Id + '">コメントを見る</a></div></ons-list-item></div>');
+              return ons.createElement('<div id="' + tvPrograms[i].Id + '"><ons-list-header style="background-color:'+ headerColor +';"><div class="area-left">' + tvPrograms[i].Year + '年 ' + seasonName + '（' + weekName + time + '）</div><div class="area-right list-margin"><i class="fas fa-eye"></i>：' + tvPrograms[i].CountClicked + '</div></ons-list-header><ons-list-item><div class="tv-program-list-title-font">' + tvPrograms[i].Title + '</div></ons-list-item><ons-list-item><ons-row><ons-col><ons-row class="list-margin-bottom"><ons-col width="15%">出演：</ons-col><ons-col>' + reshapeContents(casts) + '</ons-col></ons-row>'+themesongText+'<ons-row class="list-margin-bottom"><ons-col class="category-area">' + category + '</ons-col></ons-row><ons-row></ons-list-item><div class="area-center" style="margin:5px;">' + moviePosition + '<div class="reference">' + referenceSite + '</div></div><ons-list-item expandable>あらすじ・見どころ<div class="expandable-content">' + tvPrograms[i].Content + '</div></ons-list-item><ons-list-item modifier="nodivider"><i class="'+ setLikeBold(watchStatus[i].Watched) +' fa-laugh-beam" id="check-watched-' + i + '" onclick="clickWatchStatus(this,myUserID,tvPrograms)" style="color:' + setLikeStatus(watchStatus[i].Watched, 'deeppink') + ';"></i><div id="check-watched-' + i + '-text" class="tv-program-watch" style="margin-right: 8px;">見た：' + tvPrograms[i].CountWatched + '</div><i class="'+ setLikeBold(watchStatus[i].WantToWatch) +' fa-bookmark" id="check-wan2wat-' + i + '" onclick="clickWatchStatus(this,myUserID,tvPrograms)" style="color:' + setLikeStatus(watchStatus[i].WantToWatch, 'lightseagreen') + ';"></i><div id="check-wan2wat-' + i + '-text" class="tv-program-watch">また今度：' + tvPrograms[i].CountWantToWatch + '</div></ons-list-item><ons-list-item><div class="right list-item__right"><a href="/tv/tv_program/comment/' + tvPrograms[i].Id + '">コメントを見る</a></div></ons-list-item></div>');
             },
             countItems: function() {
               return tvPrograms.length;
@@ -374,10 +381,6 @@
           }
       });
     </script>
-
-    <!-- <script type="text/javascript">
-      globalWatchStatus = {{.WatchStatus}};
-    </script> -->
 
     <script>
       let browsingCount = {{ .ViewTvProgramIn24 }};
@@ -411,6 +414,7 @@
     </script>
 
     <script type="text/javascript">
+      // 分析ページへ移動したら，トップへ移動
       document
         .querySelector('ons-carousel')
         .addEventListener('postchange', function() {
@@ -418,8 +422,7 @@
             goTop();
           }
         });
-    </script>
-    <script>
+      // スピードダイアルは後から表示（表示バグ回避）
       document.getElementById('speed-dial').innerHTML =
         "<ons-fab><ons-icon icon='md-share'></ons-icon></ons-fab><ons-speed-dial-item><ons-icon icon='md-search' onclick='dialogBoxEveryone(\"search-dialog\")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-chart' onclick='goAnotherCarousel(1)'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><i class='fas fa-arrow-up' onclick='goTop()'></i></ons-speed-dial-item>";
     </script>
