@@ -4,6 +4,7 @@ import (
 	"app/models"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -41,17 +42,23 @@ func (c *CommentController) Post() {
 	var v models.Comment
 	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 	if session.Get("UserId") != nil {
-		if _, err := models.AddComment(&v); err == nil {
-			// c.Data["json"] = v
-			w, err := models.GetTvProgramById(v.TvProgramId)
-			if err != nil {
-				c.Redirect("/", 302)
+		if v.Content != "" && v.UserId != 0 {
+			if _, err := models.AddComment(&v); err == nil {
+				// c.Data["json"] = v
+				w, err := models.GetTvProgramById(v.TvProgramId)
+				if err != nil {
+					c.Redirect("/", 302)
+				}
+				w.CountComment++
+				_ = models.UpdateTvProgramById(w)
+				z, err := models.GetUserById(v.UserId)
+				if err != nil {
+					z.CountComment++
+					_ = models.UpdateUserById(z)
+				}
 			}
-			w.CountComment++
-			_ = models.UpdateTvProgramById(w)
-			z, _ := models.GetUserById(v.UserId)
-			z.CountComment++
-			_ = models.UpdateUserById(z)
+		} else {
+			fmt.Println("正常なデータでない")
 		}
 	}
 	c.Redirect("/tv/tv_program/comment/"+strconv.FormatInt(v.TvProgramId, 10), 302)

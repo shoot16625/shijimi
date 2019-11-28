@@ -148,7 +148,7 @@
               value="{{.User.Age}}"
               modifier="underbar"
               min="1920-01-01"
-              max="2030-01-01"
+              max="2020-01-01"
               float
               required
             ></ons-input>
@@ -163,7 +163,7 @@
               value="{{.User.IconUrl}}"
               modifier="underbar"
               placeholder="必須ではない"
-              maxlength="250"
+              maxlength="400"
               float
             ></ons-input>
           </p>

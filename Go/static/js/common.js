@@ -258,8 +258,12 @@ function setMultipleSelection(elem, data) {
 
 // ページの上部へ移動
 function goTop() {
+  let limit = 500;
   let pos = $('.page__content').scrollTop();
   let swingSpeed = pos / 20;
+  if (swingSpeed < limit) {
+    swingSpeed = limit;
+  }
   $('.page__content').animate({ scrollTop: 0 }, swingSpeed, 'swing');
 }
 

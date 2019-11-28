@@ -173,7 +173,7 @@
               value="{{.User.Age}}"
               modifier="underbar"
               min="1920-01-01"
-              max="2030-01-01"
+              max="2020-01-01"
               float
               required
             ></ons-input>
@@ -188,7 +188,7 @@
               value="{{.User.IconUrl}}"
               modifier="underbar"
               placeholder="必須ではない"
-              maxlength="250"
+              maxlength="400"
               float
             ></ons-input>
           </p>
@@ -313,6 +313,7 @@
                   <ons-col>
                     <div class="title" id="preview-username"></div>
                     <div class="content" id="preview-contents"></div>
+                    <div>※年齢・居住地・アイコンのみ公開されます。</div>
                   </ons-col>
                   <ons-col width="50%">
                     <div class="profile-image" id="preview-image"></div>
@@ -323,7 +324,7 @@
           </div>
         </ons-page>
         <script>
-          hideSwipeToolbar("preview-hide-swipe", "preview-dialog");
+          hideSwipeToolbar('preview-hide-swipe', 'preview-dialog');
         </script>
       </ons-dialog>
     </template>
@@ -349,13 +350,13 @@
               <li>ユーザ名：文字種制限なし</li>
               <li>パスワード：ハッシュ化しています</li>
               <li>
-                プロフィール画像：URLで指定(http://の場合、表示されない場合があります)。<br />指定しない場合はランダムに設定されます。
+                プロフィール画像：URLで指定(http://の場合、表示されない場合があります)。<br />なお、指定しない場合はランダムに設定されます。
               </li>
             </ol>
           </div>
         </ons-page>
         <script>
-          hideSwipeToolbar("hint-hide-swipe", "hint-dialog");
+          hideSwipeToolbar('hint-hide-swipe', 'hint-dialog');
         </script>
       </ons-dialog>
     </template>

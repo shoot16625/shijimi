@@ -56,9 +56,10 @@ func (c *ReviewCommentController) Post() {
 						if err := models.UpdateTvProgramById(w); err != nil {
 							fmt.Println(err)
 						}
-						w, _ := models.GetUserById(v.UserId)
-						w.CountReviewComment++
-						_ = models.UpdateUserById(w)
+						if w, err := models.GetUserById(v.UserId); err == nil {
+							w.CountReviewComment++
+							_ = models.UpdateUserById(w)
+						}
 					}
 				} else {
 					c.Redirect("/", 302)
