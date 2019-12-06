@@ -142,6 +142,7 @@ docker, docker-composeが必要
 heroku apps:destroy -a shijimi --confirm shijimi
 git remote rm heroku
 
+
 git clone git@github.com:shoot16625/shijimi.git
 cd shijimi/Go
 
@@ -154,13 +155,16 @@ heroku git:remote -a shijimi
 heroku addons:add cleardb:ignite
 heroku config | grep CLEARDB_DATABASE_URL
 
+
 conf内：sqlconとprod変更
 common.jsのURL変更
 main.go：sqlconn変更/投入データ変更
 models/comment.go heroku 時間で検索部分
+comment/showタイムライン時間
 
 heroku container:push web -a shijimi
 heroku container:release web -a shijimi
 heroku open
 heroku logs --tail
+
 ```
