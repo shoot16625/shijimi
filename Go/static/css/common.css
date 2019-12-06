@@ -296,21 +296,20 @@ li {
   display: none;
 }
 
-/* .floating-top {
-  position: absolute;
+.floating-top {
+  position: fixed;
   width: 95%;
-  margin:0 10px 0 5px;
+  margin:0 10px 0 10px;
   text-align: center;
-  top: 100px;
+  top: 65px;
   display: none;
   z-index: 10002;
-} */
-
+}
 
 .toast-hide-button {
   float: right;
   border: none;
   background: none;
   color: white;
-  font-size: 12px;
+  font-size: 17px;
 }

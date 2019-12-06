@@ -234,7 +234,7 @@ func (c *UserController) Delete() {
 		models.DeleteCommentsByUserId(id)
 		models.DeleteReviewCommentsByUserId(id)
 		session.Delete("UserId")
-		session.Delete("Username")
+		// session.Delete("Username")
 		c.Data["Status"] = "ユーザを削除しました"
 	} else {
 		c.Data["Status"] = "退会に失敗しました"
@@ -303,7 +303,7 @@ func (c *UserController) Show() {
 			}
 			c.Data["CommentLike"] = commentLikes
 			c.Data["TvProgram"] = tvPrograms
-			// foot_print_log：停止中
+			// foot_print_log
 			z := models.FootPrintToUser{
 				UserId:   myUserID,
 				ToUserId: id,
@@ -509,7 +509,7 @@ func (c *UserController) Login() {
 	session := c.StartSession()
 	v, err := models.GetUserByUsername(c.GetString("username"))
 	if err == nil && models.UserPassMach(v.Password, c.GetString("password")) {
-		session.Set("username", c.GetString("username"))
+		// session.Set("username", c.GetString("username"))
 		session.Set("UserId", v.Id)
 		firstLoginToday := models.AddLoginPoint(v.Id)
 		if firstLoginToday {
@@ -550,7 +550,7 @@ func (c *UserController) Login() {
 		c.Data["LoginError"] = true
 		// c.Data["User"] = session.Get("UserId")
 		session.Delete("UserId")
-		session.Delete("Username")
+		// session.Delete("Username")
 		var fields []string
 		var sortby []string
 		var order []string
@@ -581,11 +581,11 @@ func (c *UserController) Login() {
 
 func (c *UserController) Logout() {
 	session := c.StartSession()
-	userID := session.Get("UserId")
-	if userID != nil {
-		session.Delete("UserId")
-		session.Delete("Username")
-	}
+	// userID := session.Get("UserId")
+	// if userID != nil {
+	session.Delete("UserId")
+	// session.Delete("Username")
+	// }
 	c.Data["Status"] = "ログアウトしました"
 	var Info struct {
 		CntUsers      int64
@@ -598,14 +598,20 @@ func (c *UserController) Logout() {
 }
 
 func (c *UserController) ForgetUsernamePage() {
+	session := c.StartSession()
+	session.Delete("UserId")
 	c.TplName = "user/forget_username.tpl"
 }
 
 func (c *UserController) ForgetPasswordPage() {
+	session := c.StartSession()
+	session.Delete("UserId")
 	c.TplName = "user/forget_password.tpl"
 }
 
 func (c *UserController) ForgetUsername() {
+	session := c.StartSession()
+	session.Delete("UserId")
 	v, _ := models.GetUserByPasswords(c.GetString("password"), c.GetString("age"), c.GetString("SecondPassword"))
 	if v == nil {
 		c.Data["User"] = new(models.User)
@@ -616,6 +622,8 @@ func (c *UserController) ForgetUsername() {
 }
 
 func (c *UserController) ForgetPassword() {
+	session := c.StartSession()
+	session.Delete("UserId")
 	v, _ := models.GetUserByUsernameAndPassword(c.GetString("username"), c.GetString("age"), c.GetString("SecondPassword"))
 	if v == nil {
 		c.Data["User"] = new(models.User)

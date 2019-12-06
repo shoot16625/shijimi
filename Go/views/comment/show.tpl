@@ -5,6 +5,7 @@
   </head>
 
   <body>
+    <div class="floating-top"></div>
     <ons-page id="tv-comments">
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
@@ -18,7 +19,7 @@
         direction="up"
         ripple
       >
-        <ons-fab> </ons-fab>
+        <ons-fab></ons-fab>
       </ons-speed-dial>
 
       <ons-carousel
@@ -29,19 +30,9 @@
         id="carousel"
       >
         <ons-carousel-item>
-          <!-- <ons-toast
-            id="
-          notificationNewCommentToast"
-            animation="ascend"
-            >New Comments !!
-            <button onclick="notificationNewCommentToast.hide()">
-              ok
-            </button></ons-toast
-          > -->
           {{ template "/common/tv_program_show.tpl" . }}
           {{ template "/common/comment_review_change.tpl" . }}
           <ons-list class="list-margin">
-            <!-- <div class="floating-top"></div> -->
             <ons-lazy-repeat id="comments"></ons-lazy-repeat>
           </ons-list>
         </ons-carousel-item>
@@ -400,19 +391,13 @@
                 }
               };
               infiniteList.refresh();
-              // if (newComments) {
-                // ons.notification.toast(newComments.length + ' New Comments!', { timeout: 1000, animation: 'fall', buttonLabel:  "Ok"});
-                // document.querySelector('ons-toast').show();
-                // setTimeout(function() {
-                //   document.querySelector('ons-toast').hide();
-                // }, 3000);
-
-                // $(".floating-top").html('<div class="toast"><div class="toast__message">' + newComments.length + ' New Comments !!<button class="toast-hide-button" onclick="hideToast(\'.floating-top\')">ok</button></div></div>');
-                // $(".floating-top").fadeIn();
-                // setTimeout(function() {
-                //   $(".floating-top").fadeOut();
-                // }, 3000);
-              // }
+              if (newComments && carousel.getActiveIndex() === 0) {
+                $(".floating-top").html('<div class="toast"><div class="toast__message">' + newComments.length + ' New Comments !!<button class="toast-hide-button" onclick="hideToast(\'.floating-top\')">ok</button></div></div>');
+                $(".floating-top").fadeIn();
+                setTimeout(function() {
+                  $(".floating-top").fadeOut();
+                }, 3000);
+              }
               } else {
                   infiniteList.innerHTML = "<div style='text-align:center;margin-top:40px;'><i class='far fa-surprise' style='color:chocolate;'></i> Not Found !!</div>"
               }
@@ -472,7 +457,7 @@
       document
         .querySelector('ons-carousel')
         .addEventListener('postchange', function() {
-          if (carousel.getActiveIndex() == 1) {
+          if (carousel.getActiveIndex() === 1) {
             goTop();
           }
         });
