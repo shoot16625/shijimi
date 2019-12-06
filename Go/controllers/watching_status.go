@@ -35,21 +35,23 @@ func (c *WatchingStatusController) Post() {
 	var v models.WatchingStatus
 	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 	session := c.StartSession()
-	c.Data["json"] = nil
 	if session.Get("UserId") != nil {
-		if _, err := models.AddWatchingStatus(&v); err == nil {
-			c.Ctx.Output.SetStatus(201)
-			c.Data["json"] = v
-		} else {
-			c.Data["json"] = err.Error()
+		u, _ := models.GetWatchingStatusByUserAndTvProgram(v.UserId, v.TvProgramId)
+		if u == nil {
+			if _, err := models.AddWatchingStatus(&v); err == nil {
+				c.Ctx.Output.SetStatus(201)
+				c.Data["json"] = v
+			} else {
+				c.Data["json"] = err.Error()
+			}
+			w, _ := models.GetTvProgramById(v.TvProgramId)
+			if v.Watched {
+				w.CountWatched++
+			} else {
+				w.CountWantToWatch++
+			}
+			_ = models.UpdateTvProgramById(w)
 		}
-		w, _ := models.GetTvProgramById(v.TvProgramId)
-		if v.Watched {
-			w.CountWatched++
-		} else {
-			w.CountWantToWatch++
-		}
-		_ = models.UpdateTvProgramById(w)
 	}
 	c.ServeJSON()
 }
