@@ -372,7 +372,12 @@ func (c *TvProgramController) EditPage() {
 // トップページの処理
 func (c *TvProgramController) Get() {
 	session := c.StartSession()
-	c.Data["UserId"] = session.Get("UserId")
+	// c.Data["UserId"] = session.Get("UserId")
+	if session.Get("UserId") != nil {
+		userID := session.Get("UserId").(int64)
+		w, _ := models.GetUserById(userID)
+		c.Data["User"] = w
+	}
 	var fields []string
 	var sortby []string
 	var order []string
@@ -598,30 +603,10 @@ func (c *TvProgramController) SearchTvProgram() {
 		Sortby:    c.GetString("sortby"),
 	}
 	c.Data["SearchWords"] = s
-	session := c.StartSession()
-	// if session.Get("UserId") != nil {
-	// 	var u models.SearchHistory
-	// 	searchWords := []string{s.Title, s.Staff, s.Themesong}
-	// 	searchWord := strings.Join(searchWords, ",")
-	// 	searchWord = strings.Trim(searchWord, ",")
-	// 	searchWord = strings.Replace(searchWord, ",,", ",", 1)
-	// 	u = models.SearchHistory{
-	// 		UserId:   session.Get("UserId").(int64),
-	// 		Word:     searchWord,
-	// 		Year:     s.Year,
-	// 		Season:   s.Season,
-	// 		Week:     s.Week,
-	// 		Hour:     s.Hour,
-	// 		Category: s.Category,
-	// 		Limit:    s.Limit,
-	// 		Sortby:   s.Sortby,
-	// 		Item:     "tv",
-	// 	}
-	// 	_, _ = models.AddSearchHistory(&u)
-	// }
 
 	l, _ := models.SearchTvProgram(query, fields, sortby, order, offset, limit)
 	c.Data["TvProgram"] = l
+	session := c.StartSession()
 	if session.Get("UserId") != nil {
 		userID := session.Get("UserId").(int64)
 		var u models.SearchHistory
@@ -672,10 +657,13 @@ func (c *TvProgramController) SearchTvProgram() {
 // 新規テレビ登録ページへ移動
 func (c *TvProgramController) CreatePage() {
 	session := c.StartSession()
-	if session.Get("UserId") == nil {
-		c.Redirect("/", 302)
-	} else {
+	if session.Get("UserId") != nil {
+		userID := session.Get("UserId").(int64)
+		w, _ := models.GetUserById(userID)
+		c.Data["User"] = w
 		c.TplName = "tv_program/create.tpl"
+	} else {
+		c.Redirect("/", 302)
 	}
 }
 
@@ -692,6 +680,9 @@ func (c *TvProgramController) GetTvProgramWikiInfo() {
 	tvProgram := db.GetTvProgramInformationByURL(wikiReference)
 	c.Data["TvProgram"] = tvProgram
 	c.Data["GetWikiInfo"] = true
+	userID := session.Get("UserId").(int64)
+	w, _ := models.GetUserById(userID)
+	c.Data["User"] = w
 	c.TplName = "tv_program/create.tpl"
 }
 
@@ -708,5 +699,8 @@ func (c *TvProgramController) GetMovieWikiInfo() {
 	tvProgram := db.GetMovieInformationByURL(wikiReference)
 	c.Data["TvProgram"] = tvProgram
 	c.Data["GetWikiInfo"] = true
+	userID := session.Get("UserId").(int64)
+	w, _ := models.GetUserById(userID)
+	c.Data["User"] = w
 	c.TplName = "tv_program/create.tpl"
 }

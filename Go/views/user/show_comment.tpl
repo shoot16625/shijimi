@@ -13,12 +13,25 @@
       <ons-list class="list-margin">
         <ons-lazy-repeat id="comments"></ons-lazy-repeat>
       </ons-list>
-      <ons-toast id="mypageToast" animation="ascend">
+      <div class="floating-bottom">
+        <div class="toast">
+          <div class="toast__message">
+            {{.Status}}
+            <button
+              class="toast-hide-button"
+              onclick="hideToast('.floating-bottom')"
+            >
+              ok
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- <ons-toast id="mypageToast" animation="ascend">
         {{.Status}}
         <button onclick="mypageToast.hide()">
           ok
         </button></ons-toast
-      >
+      > -->
     </ons-page>
     {{ template "/common/js.tpl" . }}
     <script>
@@ -65,10 +78,14 @@
     </script>
     <script>
       if ({{.Status}}) {
-        document.querySelector('ons-toast').show();
-        setTimeout(function() {
-          document.querySelector('ons-toast').hide();
-        }, 3000);
+        $(".floating-bottom").fadeIn();
+          setTimeout(function() {
+            $(".floating-bottom").fadeOut();
+          }, 3000);
+        // document.querySelector('ons-toast').show();
+        // setTimeout(function() {
+        //   document.querySelector('ons-toast').hide();
+        // }, 3000);
       }
     </script>
   </body>

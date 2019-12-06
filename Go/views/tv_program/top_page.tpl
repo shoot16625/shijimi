@@ -12,8 +12,6 @@
   </head>
   <body>
     <ons-page id="top-page">
-      <!-- <div class="background" style="background-color: white;"></div> -->
-      <!-- <ons-toolbar class="toolbar" id="my-toolbar"></ons-toolbar> -->
       {{ template "/common/toolbar.tpl" . }}
       <ons-pull-hook id="pull-hook"></ons-pull-hook>
       {{ template "/common/alert.tpl" . }}
@@ -54,7 +52,7 @@
             <p>
               <ons-button
                 modifier="quiet"
-                onclick="goOtherPage({{.UserId}}, 0, 'tv/tv_program/create_page')"
+                onclick="goOtherPage({{.User.Id}}, 0, 'tv/tv_program/create_page')"
                 >ドラマ・映画をつくる</ons-button
               >
             </p>
@@ -70,7 +68,7 @@
             <p>
               <ons-button
                 modifier="quiet"
-                onclick="location.href='tv/user/create'"
+                onclick="goOtherPage({{.User.Id}}, 0,'tv/user/create')"
                 >新規登録</ons-button
               >
             </p>
@@ -91,317 +89,23 @@
           </ons-col>
         </ons-row>
 
-        <ons-toast id="loginErrorToast" animation="ascend"
-          >ログインに失敗しました <i class="far fa-sad-tear"></i
-          ><button onclick="loginErrorToast.hide()">
-            ok
-          </button></ons-toast
-        >
-        <div class="on-air-drama">
-          <h2>
-            <i class="fas fa-tv" style="color: skyblue;"></i> 現在放送中のドラマ
-          </h2>
+        <div class="on-air-drama" id="on-air-drama"></div>
+        <div class="on-air-movie" id="on-air-movie"></div>
 
-          <p class="drama-on-air-carousel">
-            <i class="far fa-moon" style="color:rgb(235, 200, 3);"></i> 月
-          </p>
-          <ons-carousel
-            id="carousel01"
-            auto-refresh
-            auto-scroll
-            auto-scroll-ratio="0.15"
-            swipeable
-            overscrollable
-            item-width="200px"
-            class="dramas-on-air"
-          >
-            {{ range.TvProgramMon }}
-            <ons-carousel-item
-              modifier="nodivider"
-              id="{{.Id}}"
-              name="{{.Title}}"
-            >
-              <div class="area-center drama-on-air-carousel-padding">
-                <div class="thumbnail">
-                  <img
-                    src="{{.ImageUrl}}"
-                    alt="{{.Title}}"
-                    class="image-carousel"
-                    onerror="this.src='/static/img/tv_img/hanko_02.png'"
-                  />
-                  <a href="/tv/tv_program/comment/{{.Id}}"></a>
-                </div>
-                {{if .ImageUrlReference}}
-                <div class="reference">From:{{.ImageUrlReference}}</div>
-                {{ end }}
-                <div>{{.Title}}</div>
-              </div>
-            </ons-carousel-item>
-            {{ end }}
-          </ons-carousel>
-          <p class="drama-on-air-carousel">
-            <i class="fas fa-fire" style="color:rgb(235, 30, 30);"></i> 火
-          </p>
-          <ons-carousel
-            id="carousel02"
-            auto-refresh
-            auto-scroll
-            auto-scroll-ratio="0.15"
-            swipeable
-            overscrollable
-            item-width="200px"
-            class="dramas-on-air"
-          >
-            {{ range.TvProgramTue }}
-            <ons-carousel-item
-              modifier="nodivider"
-              id="{{.Id}}"
-              name="{{.Title}}"
-            >
-              <div class="area-center drama-on-air-carousel-padding">
-                <div class="thumbnail">
-                  <img
-                    src="{{.ImageUrl}}"
-                    alt="{{.Title}}"
-                    class="image-carousel"
-                    onerror="this.src='/static/img/tv_img/hanko_02.png'"
-                  />
-                  <a href="/tv/tv_program/comment/{{.Id}}"></a>
-                </div>
-                {{if .ImageUrlReference}}
-                <div class="reference">From:{{.ImageUrlReference}}</div>
-                {{ end }}
-                <div>{{.Title}}</div>
-              </div>
-            </ons-carousel-item>
-            {{ end }}
-          </ons-carousel>
-          <p class="drama-on-air-carousel">
-            <i class="fas fa-tint" style="color:rgb(95, 149, 231);"></i> 水
-          </p>
-          <ons-carousel
-            id="carousel03"
-            auto-refresh
-            auto-scroll
-            auto-scroll-ratio="0.15"
-            swipeable
-            overscrollable
-            item-width="200px"
-            class="dramas-on-air"
-          >
-            {{ range.TvProgramWed }}
-            <ons-carousel-item
-              modifier="nodivider"
-              id="{{.Id}}"
-              name="{{.Title}}"
-            >
-              <div class="area-center drama-on-air-carousel-padding">
-                <div class="thumbnail">
-                  <img
-                    src="{{.ImageUrl}}"
-                    alt="{{.Title}}"
-                    class="image-carousel"
-                    onerror="this.src='/static/img/tv_img/hanko_02.png'"
-                  />
-                  <a href="/tv/tv_program/comment/{{.Id}}"></a>
-                </div>
-                {{if .ImageUrlReference}}
-                <div class="reference">From:{{.ImageUrlReference}}</div>
-                {{ end }}
-                <div>{{.Title}}</div>
-              </div>
-            </ons-carousel-item>
-            {{ end }}
-          </ons-carousel>
-          <p class="drama-on-air-carousel">
-            <i class="fas fa-tree" style="color:green;"></i> 木
-          </p>
-          <ons-carousel
-            id="carousel04"
-            auto-refresh
-            auto-scroll
-            auto-scroll-ratio="0.15"
-            swipeable
-            overscrollable
-            item-width="200px"
-            class="dramas-on-air"
-          >
-            {{ range.TvProgramThu }}
-            <ons-carousel-item
-              modifier="nodivider"
-              id="{{.Id}}"
-              name="{{.Title}}"
-            >
-              <div class="area-center drama-on-air-carousel-padding">
-                <div class="thumbnail">
-                  <img
-                    src="{{.ImageUrl}}"
-                    alt="{{.Title}}"
-                    class="image-carousel"
-                    onerror="this.src='/static/img/tv_img/hanko_02.png'"
-                  />
-                  <a href="/tv/tv_program/comment/{{.Id}}"></a>
-                </div>
-                {{if .ImageUrlReference}}
-                <div class="reference">From:{{.ImageUrlReference}}</div>
-                {{ end }}
-                <div>{{.Title}}</div>
-              </div>
-            </ons-carousel-item>
-            {{ end }}
-          </ons-carousel>
-          <p class="drama-on-air-carousel">
-            <i class="fas fa-coins" style="color:rgb(187, 162, 24);"></i> 金
-          </p>
-          <ons-carousel
-            id="carousel05"
-            auto-refresh
-            auto-scroll
-            auto-scroll-ratio="0.15"
-            swipeable
-            overscrollable
-            item-width="200px"
-            class="dramas-on-air"
-          >
-            {{ range.TvProgramFri }}
-            <ons-carousel-item
-              modifier="nodivider"
-              id="{{.Id}}"
-              name="{{.Title}}"
-            >
-              <div class="area-center drama-on-air-carousel-padding">
-                <div class="thumbnail">
-                  <img
-                    src="{{.ImageUrl}}"
-                    alt="{{.Title}}"
-                    class="image-carousel"
-                    onerror="this.src='/static/img/tv_img/hanko_02.png'"
-                  />
-                  <a href="/tv/tv_program/comment/{{.Id}}"></a>
-                </div>
-                {{if .ImageUrlReference}}
-                <div class="reference">From:{{.ImageUrlReference}}</div>
-                {{ end }}
-                <div>{{.Title}}</div>
-              </div>
-            </ons-carousel-item>
-            {{ end }}
-          </ons-carousel>
-          <p class="drama-on-air-carousel">
-            <i class="fas fa-globe" style="color:rgb(138, 193, 219);"></i> 土
-          </p>
-          <ons-carousel
-            id="carousel06"
-            auto-refresh
-            auto-scroll
-            auto-scroll-ratio="0.15"
-            swipeable
-            overscrollable
-            item-width="200px"
-            class="dramas-on-air"
-          >
-            {{ range.TvProgramSat }}
-            <ons-carousel-item
-              modifier="nodivider"
-              id="{{.Id}}"
-              name="{{.Title}}"
-            >
-              <div class="area-center drama-on-air-carousel-padding">
-                <div class="thumbnail">
-                  <img
-                    src="{{.ImageUrl}}"
-                    alt="{{.Title}}"
-                    class="image-carousel"
-                    onerror="this.src='/static/img/tv_img/hanko_02.png'"
-                  />
-                  <a href="/tv/tv_program/comment/{{.Id}}"></a>
-                </div>
-                {{if .ImageUrlReference}}
-                <div class="reference">From:{{.ImageUrlReference}}</div>
-                {{ end }}
-                <div>{{.Title}}</div>
-              </div>
-            </ons-carousel-item>
-            {{ end }}
-          </ons-carousel>
-          <p class="drama-on-air-carousel">
-            <i class="fas fa-sun" style="color:rgb(255, 166, 0);"></i> 日
-          </p>
-          <ons-carousel
-            id="carousel07"
-            auto-refresh
-            auto-scroll
-            auto-scroll-ratio="0.15"
-            swipeable
-            overscrollable
-            item-width="200px"
-            class="dramas-on-air"
-          >
-            {{ range.TvProgramSun }}
-            <ons-carousel-item
-              modifier="nodivider"
-              id="{{.Id}}"
-              name="{{.Title}}"
-            >
-              <div class="area-center drama-on-air-carousel-padding">
-                <div class="thumbnail">
-                  <img
-                    src="{{.ImageUrl}}"
-                    alt="{{.Title}}"
-                    class="image-carousel"
-                    onerror="this.src='/static/img/tv_img/hanko_02.png'"
-                  />
-                  <a href="/tv/tv_program/comment/{{.Id}}"></a>
-                </div>
-                {{if .ImageUrlReference}}
-                <div class="reference">From:{{.ImageUrlReference}}</div>
-                {{ end }}
-                <div>{{.Title}}</div>
-              </div>
-            </ons-carousel-item>
-            {{ end }}
-          </ons-carousel>
+        <div class="floating-bottom">
+          <div class="toast">
+            <div class="toast__message">
+              ログインに失敗しました <i class="far fa-sad-tear"></i>
+              <button
+                class="toast-hide-button"
+                onclick="hideToast('.floating-bottom')"
+              >
+                ok
+              </button>
+            </div>
+          </div>
         </div>
-        <div class="on-air-movie">
-          <h2>
-            <i class="fas fa-film" style="color:chocolate;"></i> 最近の映画
-          </h2>
-          <p class="drama-on-air-carousel"></p>
-          <ons-carousel
-            id="carousel10"
-            auto-refresh
-            auto-scroll
-            auto-scroll-ratio="0.15"
-            swipeable
-            overscrollable
-            item-width="200px"
-            class="dramas-on-air"
-          >
-            {{ range.TvProgramMovie }}
-            <ons-carousel-item
-              modifier="nodivider"
-              id="{{.Id}}"
-              name="{{.Title}}"
-            >
-              <div class="area-center drama-on-air-carousel-padding">
-                <div class="thumbnail">
-                  <img
-                    src="{{.ImageUrl}}"
-                    alt="{{.Title}}"
-                    class="image-carousel"
-                    onerror="this.src='/static/img/tv_img/hanko_02.png'"
-                  />
-                  <a href="/tv/tv_program/comment/{{.Id}}"></a>
-                </div>
-                {{if .ImageUrlReference}}
-                <div class="reference">From:{{.ImageUrlReference}}</div>
-                {{ end }}
-                <div>{{.Title}}</div>
-              </div>
-            </ons-carousel-item>
-            {{ end }}
-          </ons-carousel>
-        </div>
+
         <ons-button
           modifier="quiet"
           class="add-button comment-list-content-font"
@@ -621,44 +325,89 @@
       </ons-dialog>
     </template>
     {{ template "/common/js.tpl" . }}
-    <script type="text/javascript">
-      if({{.TvProgramMon}}){
-        autoScroll(carousel01, {{.TvProgramMon}}.length);
-      }
-      if ({{.TvProgramTue}}) {
-        autoScroll(carousel02, {{.TvProgramTue}}.length);
-      }
-      if ({{.TvProgramWed}}) {
-        autoScroll(carousel03, {{.TvProgramWed}}.length);
-      }
-      if({{.TvProgramThu}}){
-        autoScroll(carousel04, {{.TvProgramThu}}.length);
-      }
-      if ({{.TvProgramFri}}) {
-        autoScroll(carousel05, {{.TvProgramFri}}.length);
-      }
-      if ({{.TvProgramSat}}) {
-        autoScroll(carousel06, {{.TvProgramSat}}.length);
-      }
-      if ({{.TvProgramSun}}) {
-        autoScroll(carousel07, {{.TvProgramSun}}.length);
-      }
-      if ({{.TvProgramMovie}}) {
-        autoScroll(carousel10, {{.TvProgramMovie}}.length);
-      }
 
-      // ツイッターガジェット
-      !(function(d, s, id) {
-        var js,
-          fjs = d.getElementsByTagName(s)[0],
-          p = /^http:/.test(d.location) ? 'http' : 'https';
-        if (!d.getElementById(id)) {
-          js = d.createElement(s);
-          js.id = id;
-          js.src = p + '://platform.twitter.com/widgets.js';
-          fjs.parentNode.insertBefore(js, fjs);
+    <script>
+      let elem = document.getElementById('on-air-drama');
+      let text =
+        '<h2><i class="fas fa-tv" style="color: skyblue;"></i> 現在放送中のドラマ</h2>';
+
+      let subHeader = ['<i class="far fa-moon" style="color:rgb(235, 200, 3);"></i> 月','<i class="fas fa-fire" style="color:rgb(235, 30, 30);"></i> 火','<i class="fas fa-tint" style="color:rgb(95, 149, 231);"></i> 水','<i class="fas fa-tree" style="color:green;"></i> 木','<i class="fas fa-coins" style="color:rgb(187, 162, 24);"></i> 金','<i class="fas fa-globe" style="color:rgb(138, 193, 219);"></i> 土','<i class="fas fa-sun" style="color:rgb(255, 166, 0);"></i> 日'];
+
+      let tvPrograms = [{{ .TvProgramMon }}, {{ .TvProgramTue }}, {{ .TvProgramWed }}, {{ .TvProgramThu }}, {{ .TvProgramFri }}, {{ .TvProgramSat }}, {{ .TvProgramSun }}];
+
+      for (let index = 0; index < tvPrograms.length; index++) {
+        text += '<p class="drama-on-air-carousel">'+subHeader[index]+'</p>';
+        if (tvPrograms[index]) {
+          text += '<ons-carousel id="carousel0' + String(index+1) + '" auto-refresh auto-scroll auto-scroll-ratio="0.15" swipeable overscrollable item-width="200px" class="dramas-on-air">';
+          for (let i = 0; i < tvPrograms[index].length; i++) {
+            let imageUrlReference = "";
+            if (tvPrograms[index][i].ImageUrlReference) {
+              imageUrlReference = '<div class="reference">From:' + tvPrograms[index][i].ImageUrlReference + '</div>';
+            }
+
+            text += '<ons-carousel-item modifier="nodivider" id="' + tvPrograms[index][i].Id + '" name="' + tvPrograms[index][i].Title + '"><div class="area-center drama-on-air-carousel-padding"><div class="thumbnail"><img src="' + tvPrograms[index][i].ImageUrl + '" alt="' + tvPrograms[index][i].Title + '" class="image-carousel" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'"/><a href="/tv/tv_program/comment/' + tvPrograms[index][i].Id + '"></a></div>' + imageUrlReference + '<div>' + tvPrograms[index][i].Title + '</div></div></ons-carousel-item>';
+          }
+          text += '</ons-carousel>';
         }
-      })(document, 'script', 'twitter-wjs');
+      }
+      elem.innerHTML = text;
+
+      elem = document.getElementById('on-air-movie');
+      text = '<h2><i class="fas fa-film" style="color:chocolate;"></i> 最近の映画</h2>';
+      let tvProgram = {{ .TvProgramMovie }};
+      if (tvProgram) {
+        text += '<ons-carousel id="carousel10" auto-refresh auto-scroll auto-scroll-ratio="0.15" swipeable overscrollable item-width="200px" class="dramas-on-air">';
+        for (let i = 0; i < tvProgram.length; i++) {
+          let imageUrlReference = "";
+          if (tvProgram[i].ImageUrlReference) {
+            imageUrlReference = '<div class="reference">From:' + tvProgram[i].ImageUrlReference + '</div>';
+          }
+
+          text += '<ons-carousel-item modifier="nodivider" id="' + tvProgram[i].Id + '" name="' + tvProgram[i].Title + '"><div class="area-center drama-on-air-carousel-padding"><div class="thumbnail"><img src="' + tvProgram[i].ImageUrl + '" alt="' + tvProgram[i].Title + '" class="image-carousel" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'"/><a href="/tv/tv_program/comment/' + tvProgram[i].Id + '"></a></div>' + imageUrlReference + '<div>' + tvProgram[i].Title + '</div></div></ons-carousel-item>';
+        }
+        text += '</ons-carousel>';
+      }
+      elem.innerHTML = text;
+
+      ons.ready(function() {
+        if({{.TvProgramMon}}){
+          autoScroll(carousel01, {{.TvProgramMon}}.length);
+        }
+        if ({{.TvProgramTue}}) {
+          autoScroll(carousel02, {{.TvProgramTue}}.length);
+        }
+        if ({{.TvProgramWed}}) {
+          autoScroll(carousel03, {{.TvProgramWed}}.length);
+        }
+        if({{.TvProgramThu}}){
+          autoScroll(carousel04, {{.TvProgramThu}}.length);
+        }
+        if ({{.TvProgramFri}}) {
+          autoScroll(carousel05, {{.TvProgramFri}}.length);
+        }
+        if ({{.TvProgramSat}}) {
+          autoScroll(carousel06, {{.TvProgramSat}}.length);
+        }
+        if ({{.TvProgramSun}}) {
+          autoScroll(carousel07, {{.TvProgramSun}}.length);
+        }
+        if ({{.TvProgramMovie}}) {
+          autoScroll(carousel10, {{.TvProgramMovie}}.length);
+        }
+      });
+
+        // ツイッターガジェット
+        !(function(d, s, id) {
+          var js,
+            fjs = d.getElementsByTagName(s)[0],
+            p = /^http:/.test(d.location) ? 'http' : 'https';
+          if (!d.getElementById(id)) {
+            js = d.createElement(s);
+            js.id = id;
+            js.src = p + '://platform.twitter.com/widgets.js';
+            fjs.parentNode.insertBefore(js, fjs);
+          }
+        })(document, 'script', 'twitter-wjs');
     </script>
     <div id="fb-root"></div>
     <script
@@ -668,18 +417,12 @@
       src="https://connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v4.0"
     ></script>
 
-    <!-- 保留 -->
-    <!-- <script>
-      ons.ready(function(){
-        document.getElementById("my-toolbar").innerHTML= '<div class="left" id="mypage-toolbar"><ons-toolbar-button icon="md-face" style="font-size:24px;" onclick="location.href=\'/tv/user/show\'"></ons-toolbar-button></div><div class="center" id="image-toolbar"><div class="area-center"><img src="/static/img/shijimi-transparence.png" alt="shijimi" height="42px;" onclick="location.href=\'/\'"/></div></div><div class="right"><ons-toolbar-button icon="fa-search" onclick="dialogBoxEveryone(\'search-toolbar\')"></ons-toolbar-button></div>';
-      })
-    </script> -->
     <script>
         // ログイン失敗ポップアップ
         if ({{.LoginError}}) {
-          document.querySelector('ons-toast').show();
+          $(".floating-bottom").fadeIn();
           setTimeout(function() {
-            document.querySelector('ons-toast').hide();
+            $(".floating-bottom").fadeOut();
           }, 4000);
         }
 

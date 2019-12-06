@@ -548,7 +548,9 @@ func (c *UserController) Login() {
 		c.TplName = "user/show_comment.tpl"
 	} else {
 		c.Data["LoginError"] = true
-		c.Data["UserId"] = session.Get("UserId")
+		// c.Data["User"] = session.Get("UserId")
+		session.Delete("UserId")
+		session.Delete("Username")
 		var fields []string
 		var sortby []string
 		var order []string

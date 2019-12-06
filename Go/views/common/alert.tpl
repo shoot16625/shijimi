@@ -14,6 +14,22 @@
   </ons-alert-dialog>
 </template>
 
+<template id="alert-only-not-user-dialog.html">
+  <ons-alert-dialog id="alert-only-not-user-dialog" modifier="rowfooter">
+    <div class="alert-dialog-title">Alert</div>
+    <div class="alert-dialog-content">
+      <span>非ログインユーザーのみ</span
+      ><span class="new-line">利用できます。</span>
+    </div>
+    <div class="alert-dialog-footer">
+      <ons-alert-dialog-button
+        onclick="hideAlertDialog('alert-only-not-user-dialog')"
+        >OK</ons-alert-dialog-button
+      >
+    </div>
+  </ons-alert-dialog>
+</template>
+
 <template id="alert-only-admin-dialog.html">
   <ons-alert-dialog id="alert-only-admin-dialog" modifier="rowfooter">
     <div class="alert-dialog-title">Alert</div>

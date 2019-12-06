@@ -388,7 +388,7 @@
         browsingCount = ""
       }
       let text = "";
-      let headerColor = ["lightpink","seashell","lavenderblush","antiquewhite","azure"];
+      let headerColor = ["mistyrose","seashell","lavenderblush","antiquewhite","azure"];
       for (let i = 0; i < browsingCount.length; i++) {
         let time = reshapeHour(String(browsingCount[i].hour));
         text += '<ons-list-header style="background-color:'+ headerColor[i] +';"><div class="area-left">' + browsingCount[i].year + '年 ' + browsingCount[i].season_id + '（' + browsingCount[i].week_id + time + '）</div><div class="area-right list-margin"><i class="fas fa-eye"></i>：' + browsingCount[i].Num + '</div></ons-list-header><ons-list-item><div class="left">'+(i+1)+'</div><div class="center tv-program-list-content-font"><a href="/tv/tv_program/comment/' + browsingCount[i].id + '">' + browsingCount[i].title + '</a></div></ons-list-item>';
@@ -402,7 +402,7 @@
         starCount = "";
       }
       text = "";
-      headerColor = ["lightpink","seashell","lavenderblush","antiquewhite","azure"];
+      headerColor = ["mistyrose","seashell","lavenderblush","antiquewhite","azure"];
       for (let i = 0; i < starCount.length; i++) {
         let seasonName = avoidStructNameError(starCount[i].Season);
         let weekName = avoidStructNameError(starCount[i].Week);

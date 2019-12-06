@@ -59,6 +59,9 @@ img {
   font-size: 8px;
   color: rgb(156, 149, 149);
 }
+
+
+
 /* dialog box */
 .dialog {
   width: 100%;
@@ -134,6 +137,8 @@ label {
 .new-line {
   display: inline-block;
 }
+
+
 
 /* text-area */
 
@@ -216,6 +221,8 @@ li {
   margin-top: 5px;
 }
 
+
+
 /* padding */
 .list-header--material {
   padding: 5px;
@@ -229,6 +236,8 @@ li {
 .drama-on-air-carousel-padding{
  padding: 3px;
 }
+
+
 
 /* font-size */
 .comment-list-header-font {
@@ -247,6 +256,8 @@ li {
   font-size: 16px;
 }
 
+
+
 /* color */
 .flag-color {
   color: rgb(213, 236, 6);
@@ -260,6 +271,8 @@ li {
   text-align: right;
 }
 
+
+
 /* animation */
 @keyframes bounce_animation{
   0% {transform: translateY(0px);}
@@ -269,4 +282,35 @@ li {
 
 .bounce-animation {
   animation: bounce_animation 0.3s;
+}
+
+
+
+/* floating box */
+.floating-bottom {
+  position: fixed;
+  width: 95%;
+  margin:0 10px 0 5px;
+  text-align: center;
+  bottom: 10px;
+  display: none;
+}
+
+/* .floating-top {
+  position: absolute;
+  width: 95%;
+  margin:0 10px 0 5px;
+  text-align: center;
+  top: 100px;
+  display: none;
+  z-index: 10002;
+} */
+
+
+.toast-hide-button {
+  float: right;
+  border: none;
+  background: none;
+  color: white;
+  font-size: 12px;
 }

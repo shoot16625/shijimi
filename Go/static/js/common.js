@@ -5,18 +5,27 @@ const URL = 'http://192.168.2.174:8080';
 // const URL = "https://shijimi.herokuapp.com";
 
 // 自動スクロール
-function autoScroll(varName, len) {
+function autoScroll(varName, itemLen) {
   let indexState = -1;
+  let flag = 0;
   setInterval(function() {
     let activeIndex = varName.getActiveIndex();
     if (indexState === activeIndex) {
-      varName.first();
-      indexState = -1;
+      flag++;
+      if (flag === 3) {
+        varName.first();
+        indexState = -1;
+        flag = 0;
+      } else if (flag === 2) {
+        varName.next();
+        indexState = activeIndex;
+      }
     } else {
       varName.next();
       indexState = activeIndex;
+      flag = 0;
     }
-  }, 2000);
+  }, 2100);
 }
 
 // toolbarを隠す
@@ -57,6 +66,11 @@ $(function() {
 // アラートを閉じる
 var hideAlertDialog = function(elem) {
   document.getElementById(elem).hide();
+};
+
+// 通知を閉じる
+var hideToast = function(elem) {
+  $(elem).fadeOut();
 };
 
 // ツイートボックス
@@ -287,6 +301,15 @@ function goAnotherCarousel(index) {
 
 // pathのページへ移動
 function goOtherPage(userID, tvProgramID, path) {
+  if (path === 'tv/user/create') {
+    if (userID != null) {
+      return dialogBoxEveryone('alert-only-not-user-dialog');
+    } else {
+      window.location.href = path;
+      return;
+    }
+  }
+
   if (userID == null) {
     return dialogBoxEveryone('alert-only-user-dialog');
   } else if (path == 'delete-tvprogram') {
@@ -296,6 +319,7 @@ function goOtherPage(userID, tvProgramID, path) {
       return dialogBoxEveryone('tvprogram-delete-dialog');
     }
   } else if (userID != 1 && tvProgramID === 1) {
+    // お問い合わせページの編集権限
     return dialogBoxEveryone('alert-only-admin-dialog');
   } else {
     window.location.href = path;

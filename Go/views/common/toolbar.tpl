@@ -2,11 +2,20 @@
 
 <ons-toolbar class="toolbar">
   <div class="left" id="mypage-toolbar">
-    <ons-toolbar-button
+    <!-- <ons-toolbar-button
       icon="md-face"
       style="font-size:24px;"
       onclick="location.href='/tv/user/show'"
-    ></ons-toolbar-button>
+    ></ons-toolbar-button> -->
+    <img
+      src="{{.User.IconUrl}}"
+      alt="mypage"
+      title="mypage-icon"
+      height="30px;"
+      style="margin: 7px;"
+      onerror="this.src='/static/img/user_img/mypage-icon.png'"
+      onclick="location.href='/tv/user/show'"
+    />
   </div>
   <div class="center" id="image-toolbar">
     <!-- androidだとtext-aline:leftのため -->

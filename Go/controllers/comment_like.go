@@ -37,20 +37,23 @@ func (c *CommentLikeController) Post() {
 	if session.Get("UserId") != nil {
 		var v models.CommentLike
 		json.Unmarshal(c.Ctx.Input.RequestBody, &v)
-		if _, err := models.AddCommentLike(&v); err == nil {
-			c.Ctx.Output.SetStatus(201)
-			c.Data["json"] = v
-		} else {
-			c.Data["json"] = err.Error()
-		}
-		w, err := models.GetCommentById(v.CommentId)
-		if err == nil {
-			if v.Like {
-				w.CountLike++
+		u, _ := models.GetCommentLikeByCommentAndUser(v.CommentId, v.UserId)
+		if u == nil {
+			if _, err := models.AddCommentLike(&v); err == nil {
+				c.Ctx.Output.SetStatus(201)
+				c.Data["json"] = v
 			} else {
-				w.CountLike--
+				c.Data["json"] = err.Error()
 			}
-			_ = models.UpdateCommentById(w)
+			w, err := models.GetCommentById(v.CommentId)
+			if err == nil {
+				if v.Like {
+					w.CountLike++
+				} else {
+					w.CountLike--
+				}
+				_ = models.UpdateCommentById(w)
+			}
 		}
 	}
 	c.ServeJSON()

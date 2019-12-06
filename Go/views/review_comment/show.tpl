@@ -543,7 +543,7 @@
           fprank = "";
         }
         text = "";
-        headerColor = ["lightpink","seashell","lavenderblush","antiquewhite","azure"];
+        headerColor = ["mistyrose","seashell","lavenderblush","antiquewhite","azure"];
         for (let i = 0; i < fprank.length; i++) {
           text += '<ons-list-item style="background:'+headerColor[i]+'"><div class="left">'+fprank[i].Name+'</div><div class="center tv-program-list-content-font">' + fprank[i].Value + '</div></ons-list-item>';
         }

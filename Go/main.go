@@ -87,7 +87,7 @@ func init() {
 	// クッキーを使えるようにする
 	sessionconf := &session.ManagerConfig{
 		CookieName:      "ShiJimi_Cookie",
-		Gclifetime:      7200,
+		Gclifetime:      8640000,
 		Secure:          true,
 		EnableSetCookie: true,
 	}

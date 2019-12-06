@@ -37,20 +37,23 @@ func (c *ReviewCommentLikeController) Post() {
 	if session.Get("UserId") != nil {
 		var v models.ReviewCommentLike
 		json.Unmarshal(c.Ctx.Input.RequestBody, &v)
-		if _, err := models.AddReviewCommentLike(&v); err == nil {
-			c.Ctx.Output.SetStatus(201)
-			c.Data["json"] = v
-		} else {
-			c.Data["json"] = err.Error()
-		}
-		w, err := models.GetReviewCommentById(v.ReviewCommentId)
-		if err == nil {
-			if v.Like {
-				w.CountLike++
+		u, _ := models.GetReviewCommentLikeByCommentAndUser(v.ReviewCommentId, v.UserId)
+		if u == nil {
+			if _, err := models.AddReviewCommentLike(&v); err == nil {
+				c.Ctx.Output.SetStatus(201)
+				c.Data["json"] = v
 			} else {
-				w.CountLike--
+				c.Data["json"] = err.Error()
 			}
-			_ = models.UpdateReviewCommentById(w)
+			w, err := models.GetReviewCommentById(v.ReviewCommentId)
+			if err == nil {
+				if v.Like {
+					w.CountLike++
+				} else {
+					w.CountLike--
+				}
+				_ = models.UpdateReviewCommentById(w)
+			}
 		}
 	}
 	c.ServeJSON()
