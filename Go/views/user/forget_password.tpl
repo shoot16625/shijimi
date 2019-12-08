@@ -69,7 +69,7 @@
     </ons-page>
     {{ template "/common/js.tpl" . }}
     <script type="text/javascript">
-      if ({{.User}} != null){
+      if ({{.User.Id}} === 0){
         dialogBoxEveryone('alert-username-not-found');
       }
     </script>

@@ -194,9 +194,11 @@ func (c *UserController) Put() {
 	v := *oldUserInfo
 	// hashPass := v.Password
 	if c.GetString("password") != "" {
+		// パスワードリセットページ
 		hashPass, _ := models.PasswordHash(c.GetString("password"))
 		v.Password = hashPass
 	} else {
+		// 編集ページ
 		v.Username = c.GetString("username")
 		v.Age = c.GetString("age")
 		v.Address = c.GetString("address")
@@ -604,8 +606,14 @@ func (c *UserController) ForgetUsernamePage() {
 }
 
 func (c *UserController) ForgetPasswordPage() {
+	// session := c.StartSession()
+	// session.Delete("UserId")
 	session := c.StartSession()
-	session.Delete("UserId")
+	if session.Get("UserId") != nil {
+		userID := session.Get("UserId").(int64)
+		v, _ := models.GetUserById(userID)
+		c.Data["User"] = v
+	}
 	c.TplName = "user/forget_password.tpl"
 }
 
@@ -622,14 +630,16 @@ func (c *UserController) ForgetUsername() {
 }
 
 func (c *UserController) ForgetPassword() {
-	session := c.StartSession()
-	session.Delete("UserId")
+	// session.Delete("UserId")
 	v, _ := models.GetUserByUsernameAndPassword(c.GetString("username"), c.GetString("age"), c.GetString("SecondPassword"))
 	if v == nil {
 		c.Data["User"] = new(models.User)
 		c.TplName = "user/forget_password.tpl"
 	} else {
-		v.SecondPassword = c.GetString("SecondPassword")
+		// v.SecondPassword = c.GetString("SecondPassword")
+		session := c.StartSession()
+		// userID := session.Get("UserId").(int64)
+		session.Set("UserId", v.Id)
 		c.Data["User"] = v
 		c.TplName = "user/reset_password.tpl"
 	}

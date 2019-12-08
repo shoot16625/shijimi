@@ -31,17 +31,16 @@
 />
 <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script> -->
 
-<!-- <link
+<link
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/onsen/2.10.10/css/onsenui.min.css"
 />
-
 <link
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/onsen/2.10.10/css/onsen-css-components.min.css"
-/> -->
+/>
 
-<link
+<!-- <link
   rel="stylesheet"
   type="text/css"
   href="/static/css/onsenui-2.10.10/onsenui.min.css"
@@ -50,9 +49,8 @@
   rel="stylesheet"
   type="text/css"
   href="/static/css/onsenui-2.10.10/onsen-css-components.css"
-/>
+/> -->
 
 <link rel="stylesheet" type="text/css" href="/static/css/common.css" />
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/onsen/2.10.10/js/onsenui.min.js"></script> -->
 
 <link rel="manifest" href="/manifest.json" />

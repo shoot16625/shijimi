@@ -321,9 +321,11 @@ func FavoritePointRankingByTvProgramId(id int64) (fpCountSort List) {
 	fpCountSort = List{}
 	if _, err := o.QueryTable(new(ReviewComment)).Filter("TvProgramId", id).All(&v); err == nil {
 		for _, w := range v {
-			tag := strings.Split(w.FavoritePoint, ",")
-			for _, x := range tag {
-				fpCountMap[x]++
+			if w.FavoritePoint != "" {
+				tag := strings.Split(w.FavoritePoint, ",")
+				for _, x := range tag {
+					fpCountMap[x]++
+				}
 			}
 		}
 		for k, v := range fpCountMap {
@@ -339,6 +341,7 @@ type FavoritePointEntry struct {
 	Name  string
 	Value int
 }
+
 type List []FavoritePointEntry
 
 func (l List) Len() int {
