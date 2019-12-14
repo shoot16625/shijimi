@@ -26,7 +26,23 @@ services:
       - "8080:8080"
     tty: true
     depends_on:
-      - db
+    - db
+  metabase:
+    container_name: go_metabase
+    image: metabase/metabase:v0.33.7.1
+    environment:
+      - MB_DB_TYPE=mysql
+      - MB_DB_PORT=3306
+      - MB_DB_HOST=go_db
+    env_file:
+      - dev.env
+    volumes:
+      - "./metabase/metabase-data:/metabase-data"
+    ports:
+      - "3000:3000"
+    tty: true
+    depends_on:
+    - db
   phpmyadmin:
     container_name: go_phpmyadmin
     image: phpmyadmin/phpmyadmin:4.8

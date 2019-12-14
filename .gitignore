@@ -4,5 +4,6 @@
 /.vscode/
 /MySQL/mysql_data/
 /MySQL/init_data/
-/prod.env
 /phpmyadmin/
+/metabase/
+/prod.env
