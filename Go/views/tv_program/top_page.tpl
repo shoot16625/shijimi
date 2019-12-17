@@ -23,7 +23,13 @@
           ドラマ・映画の情報共有SNS
         </ons-card>
         <ons-row class="create-top-margin-20">
-          <ons-col width="15%"></ons-col>
+          <ons-col width="15%" class="area-center">
+            <ons-button
+              modifier="quiet"
+              onclick="location.href='tv/tv_program/comment/2'"
+              ><i class="far fa-envelope" style="color: darkgray;"></i
+            ></ons-button>
+          </ons-col>
           <ons-col width="70%" style="text-align: center;">
             <form id="search_form" action="/tv/tv_program/search" method="post">
               <ons-search-input

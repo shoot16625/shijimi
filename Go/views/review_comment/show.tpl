@@ -192,7 +192,7 @@
           });
         </script>
         <script>
-          hideSwipeToolbar("tweet-hide-swipe", "tweet-dialog");
+          hideSwipeToolbar('tweet-hide-swipe', 'tweet-dialog');
         </script>
       </ons-dialog>
     </template>
@@ -345,7 +345,7 @@
           }
         </script>
         <script>
-          hideSwipeToolbar("search-hide-swipe", "search-dialog");
+          hideSwipeToolbar('search-hide-swipe', 'search-dialog');
         </script>
       </ons-dialog>
     </template>
@@ -372,7 +372,7 @@
           </div>
         </ons-page>
         <script>
-          hideSwipeToolbar("hint-hide-swipe", "hint-dialog");
+          hideSwipeToolbar('hint-hide-swipe', 'hint-dialog');
         </script>
       </ons-dialog>
     </template>
@@ -449,7 +449,7 @@
       function postComment() {
         const text_length = document.getElementById("tweet-dialog-content").value.length;
         if (text_length < 5){
-          return dialogBox('alert-min-length', {{.User.Id}});
+          return dialogBox('alert-min-length', {{.User.Id}}, 0);
         }
         let url = URL+"/tv/review_comment/";
         let data = {};
@@ -515,7 +515,7 @@
         }
       }
         dial.innerHTML =
-          "<ons-fab><ons-icon icon='md-share'></ons-icon></ons-fab><ons-speed-dial-item><ons-icon icon='md-comment-dots' onclick='dialogBox(\"tweet-dialog\", "+userID+")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-search' onclick='dialogBoxEveryone(\"search-dialog\")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-chart' onclick='goAnotherCarousel(1)'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><i class='fas fa-arrow-up' onclick='goTop()'></i></ons-speed-dial-item>";
+          "<ons-fab><ons-icon icon='md-share'></ons-icon></ons-fab><ons-speed-dial-item><ons-icon icon='md-comment-dots' onclick='dialogBox(\"tweet-dialog\", "+userID+", {{.TvProgram.Id}})'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-search' onclick='dialogBoxEveryone(\"search-dialog\")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-chart' onclick='goAnotherCarousel(1)'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><i class='fas fa-arrow-up' onclick='goTop()'></i></ons-speed-dial-item>";
     </script>
     <script>
       document.getElementById('tv-program-hour').innerHTML = reshapeHour(String({{.TvProgram.Hour}}))+"）";

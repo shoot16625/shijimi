@@ -74,13 +74,17 @@ var hideToast = function(elem) {
 };
 
 // ツイートボックス
-var dialogBox = function(elemID, userID) {
+var dialogBox = function(elemID, userID, tvProgramID) {
   ons.ready(function() {
-    var dialog = document.getElementById(elemID);
+    let dialog = document.getElementById(elemID);
     // == でないとダメ
     if (userID == null) {
       return dialogBoxEveryone('alert-only-user-dialog');
+    } else if (tvProgramID === 2 && userID != 1) {
+      // お知らせページ投稿権限
+      return dialogBoxEveryone('alert-only-admin-dialog');
     } else if (userID === -1) {
+      // 2度目のレビュー権限
       return dialogBoxEveryone('alert-review-twice');
     }
     if (dialog) {
@@ -320,6 +324,9 @@ function goOtherPage(userID, tvProgramID, path) {
     }
   } else if (userID != 1 && tvProgramID === 1) {
     // お問い合わせページの編集権限
+    return dialogBoxEveryone('alert-only-admin-dialog');
+  } else if (userID != 1 && tvProgramID === 2) {
+    // おしらせページの編集権限
     return dialogBoxEveryone('alert-only-admin-dialog');
   } else {
     window.location.href = path;

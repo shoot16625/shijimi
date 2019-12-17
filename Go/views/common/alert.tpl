@@ -138,7 +138,7 @@
 <template id="search-toolbar.html">
   <ons-dialog id="search-toolbar" modifier="large" cancelable fullscreen>
     <ons-page>
-      <ons-toolbar>
+      <ons-toolbar id="search-hide-swipe">
         <div class="left">
           <ons-button
             id="cancel-button"
@@ -168,5 +168,8 @@
         </div>
       </form>
     </ons-page>
+    <script>
+      hideSwipeToolbar('search-hide-swipe', 'search-toolbar');
+    </script>
   </ons-dialog>
 </template>

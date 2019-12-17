@@ -28,13 +28,15 @@ func ExecInitSQL() {
 		o.Insert(v)
 	}
 	// 管理者用 ID：1
-	UserSQL("doramaba-admin", "doramaba-password", "1995-05-06", "男性", "愛知県", "学生", "doramaba-password", "/static/img/shijimi-transparence.png", "未婚", "A型", 500, "1")
+	UserSQL("しじみ", "doramaba-password", "1995-05-06", "男性", "愛知県", "学生", "doramaba-password", "/static/img/shijimi-transparence.png", "未婚", "A型", 500, "1")
 
 	// uchida用 ID：2
 	UserSQL("ちゃお倉木", "password", "1995-05-06", "男性", "愛知県", "学生", "乃木小学校", "https://avatars2.githubusercontent.com/u/24419610?s=460&v=4", "未婚", "A型", 500, "1")
 
 	// お問い合わせ用 ID：1
-	TvProgramSQL("お問い合わせ専用", "サービス改善のため、忌憚のないご意見・ご感想をお待ちしております。3回に1回くらい褒めていただけると幸いです。", "/static/img/shijimi-transparence.png", "", "", "", "こんにちは", "", "松江が好き", "音楽って大事", "日記感覚でいこう", "Shiny & Jiminy", 2019, "夏", "miletが好き", "日", 100, 5, 0, 0, 0)
+	TvProgramSQL("お問い合わせ専用", "サービス改善のため、忌憚のないご意見・ご感想をお待ちしております。3回に1回くらい褒めていただけると幸いです。", "/static/img/shijimi-transparence.png", "", "", "", "しじみ", "", "松江が好き", "音楽って大事", "日記感覚で", "Shiny & Jiminy", 2019, "夏", "milet", "スペシャル", 100, 5, 0, 0, 0)
+	// おしらせ用 ID：2
+	TvProgramSQL("運営からのお知らせ", "おしらせはタイムラインにて", "/static/img/shijimi-transparence.png", "", "", "", "しじみ", "", "", "", "", "", 2019, "夏", "", "スペシャル", 100, 5, 0, 0, 0)
 }
 
 func ExecTestSQL() {
