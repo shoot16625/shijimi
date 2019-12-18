@@ -79,7 +79,7 @@
           </li>
           <li class="list-item hint-list-dialog">
             <div class="list-item__center">
-              レビュー：100件が表示されます。(デフォルト)
+              Re：100件が表示されます。(デフォルト)
             </div>
           </li>
           <li class="list-item hint-list-dialog">

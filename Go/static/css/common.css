@@ -167,6 +167,7 @@ label {
 .hint-position-relative {
   position: relative;
   bottom: 70px;
+  margin: -6px;
 }
 
 .hint-list-dialog {
