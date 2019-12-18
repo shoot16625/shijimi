@@ -177,7 +177,7 @@
           <p class="area-right">
             <ons-button
               modifier="quiet"
-              onclick="dialogBox('unsubscribe-dialog',{{.User.Id}}, 0)"
+              onclick="dialogBox('unsubscribe-dialog',{{.User.Id}}, 'delete-user')"
               >退会はこちら</ons-button
             >
           </p>

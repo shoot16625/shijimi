@@ -16,20 +16,19 @@
       <ons-pull-hook id="pull-hook"></ons-pull-hook>
       {{ template "/common/alert.tpl" . }}
       <div class="list-margin">
-        <ons-card
-          style="text-align: center;background-color:linen;margin:10px;"
-        >
-          「ShiJimi」<br />
-          ドラマ・映画の情報共有SNS
-        </ons-card>
-        <ons-row class="create-top-margin-20">
-          <ons-col width="15%" class="area-center">
+        <ons-card style="background-color:linen;padding: 10px;">
+          <p>「ShiJimi」</p>
+          <p>ドラマ・映画の情報共有SNS</p>
+          <div class="area-right-float hint-position-relative">
             <ons-button
               modifier="quiet"
-              onclick="location.href='tv/tv_program/comment/2'"
-              ><i class="far fa-envelope" style="color: darkgray;"></i
+              onclick="dialogBoxEveryone('hint-dialog')"
+              ><i class="far fa-question-circle hint-icon-right"></i
             ></ons-button>
-          </ons-col>
+          </div>
+        </ons-card>
+        <ons-row>
+          <ons-col width="15%" class="area-center"> </ons-col>
           <ons-col width="70%" style="text-align: center;">
             <form id="search_form" action="/tv/tv_program/search" method="post">
               <ons-search-input
@@ -41,8 +40,8 @@
           <ons-col>
             <ons-button
               modifier="quiet"
-              onclick="dialogBoxEveryone('hint-dialog')"
-              ><i class="far fa-question-circle hint-icon-right"></i
+              onclick="location.href='tv/tv_program/comment/2'"
+              ><i class="far fa-envelope buruburu" style="color: darkgray;"></i
             ></ons-button>
           </ons-col>
         </ons-row>
@@ -307,22 +306,67 @@
             </div>
           </ons-toolbar>
           <div class="scroller list-margin">
-            <ol>
-              <li>
-                ツールバーの<b>しじみ</b>をクリックすると、<br />トップページへ移動できます。
+            <ul class="list">
+              <li class="list-header">
+                ShiJimiの使い方
               </li>
-              <li>
-                <b>しじみ</b>の周辺をクリックすると、<br />上部へ移動できます。
+              <li class="list-item hint-list-dialog">
+                <div class="list-item__center">
+                  ユーザー登録をすることで、作品登録・ブックマーク・ツイートなどの機能が利用できるようになります。
+                </div>
               </li>
-              <li>ユーザ登録をすれば、<br />誰でも番組の作成・編集が可能。</li>
-              <li>
-                検索：複数のキーワードで指定したいときは、スペースで区切ってください。
+              <li class="list-item hint-list-dialog">
+                <div class="list-item__center">
+                  日記感覚で利用することをおすすめいたします。
+                </div>
               </li>
-              <li>機能は今後も追加していく予定です。</li>
-              <li>バグ：→ お問い合わせへポスト</li>
-              <li>アドレスバーの消し方(iphone)：アドレスバーを上スワイプ</li>
-              <li>ツールバーを横スワイプ：ダイアログが隠れます。</li>
-            </ol>
+              <li class="list-item">
+                <div class="list-item__center hint-list-dialog">
+                  順次、機能を追加していきますので、気長にお待ち下さい。
+                </div>
+              </li>
+            </ul>
+            <ul class="list">
+              <li class="list-header">
+                ツールバー
+              </li>
+              <li class="list-item hint-list-dialog">
+                <div class="list-item__center">
+                  しじみをクリック → 最初のページへ
+                </div>
+              </li>
+              <li class="list-item">
+                <div class="list-item__center hint-list-dialog">
+                  しじみの周辺をクリック → 上部へスクロール移動
+                </div>
+              </li>
+              <li class="list-item">
+                <div class="list-item__center hint-list-dialog">
+                  横スワイプ → ダイアログを閉じる
+                </div>
+              </li>
+            </ul>
+            <ul class="list">
+              <li class="list-header">
+                機能
+              </li>
+              <li class="list-item">
+                <div class="list-item__center hint-list-dialog">
+                  検索：複数のキーワード指定 → スペース区切り
+                </div>
+              </li>
+              <li class="list-item">
+                <div class="list-item__center hint-list-dialog">
+                  バグ：<a href="tv/tv_program/comment/1"> お問い合わせ</a
+                  >へポストお願いします。
+                </div>
+              </li>
+              <li class="list-item">
+                <div class="list-item__center hint-list-dialog">
+                  アドレスバーの消し方(iphone)：アドレスバーを上スワイプ
+                </div>
+              </li>
+            </ul>
           </div>
         </ons-page>
         <script>

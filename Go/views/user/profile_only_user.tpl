@@ -58,18 +58,51 @@
         </div>
       </ons-toolbar>
       <div class="scroller list-margin">
-        <ol>
-          <li>
-            ログインごとにポイントが貯まります。<br />ポイントは機能のカスタマイズに利用できるようにします。
+        <ul class="list">
+          <li class="list-header">
+            一覧
           </li>
-          <li>バッジ：ときどき付与されます。</li>
-          <li>TM：1000件が表示されます。(初期状態)</li>
-          <li>レビュー：100件が表示されます。(初期状態)</li>
-          <li>見た：1000件が表示されます。(初期状態)</li>
-          <li>見たい：1000件が表示されます。(初期状態)</li>
-          <li>見たログが5つ以上たまると、番組のおすすめ機能が発動します。</li>
-          <li>過去のコメントの編集はできません。</li>
-        </ol>
+          <li class="list-item hint-list-dialog">
+            <div class="list-item__center">
+              ログインごとにポイントが貯まります。ポイントは今後、機能のカスタマイズに利用できるようになります。
+            </div>
+          </li>
+          <li class="list-item hint-list-dialog">
+            <div class="list-item__center">
+              バッジ：ときどき付与されます。
+            </div>
+          </li>
+          <li class="list-item hint-list-dialog">
+            <div class="list-item__center">
+              TM：1000件が表示されます。(デフォルト)
+            </div>
+          </li>
+          <li class="list-item hint-list-dialog">
+            <div class="list-item__center">
+              レビュー：100件が表示されます。(デフォルト)
+            </div>
+          </li>
+          <li class="list-item hint-list-dialog">
+            <div class="list-item__center">
+              見た：1000件が表示されます。(デフォルト)
+            </div>
+          </li>
+          <li class="list-item hint-list-dialog">
+            <div class="list-item__center">
+              見たい：1000件が表示されます。(デフォルト)
+            </div>
+          </li>
+          <li class="list-item hint-list-dialog">
+            <div class="list-item__center">
+              過去のツイートの編集はできません。
+            </div>
+          </li>
+          <li class="list-item hint-list-dialog">
+            <div class="list-item__center">
+              見たログが5つ以上たまると、番組のおすすめ機能が発動します。
+            </div>
+          </li>
+        </ul>
       </div>
     </ons-page>
     <script>

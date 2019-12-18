@@ -366,9 +366,16 @@
             </div>
           </ons-toolbar>
           <div class="scroller list-margin">
-            <ol>
-              <li>複数選択方法(PC)→ctrlを押しながらクリック</li>
-            </ol>
+            <ul class="list">
+              <li class="list-header">
+                検索
+              </li>
+              <li class="list-item hint-list-dialog">
+                <div class="list-item__center">
+                  複数選択方法(PC)：ctrlを押しながらクリック
+                </div>
+              </li>
+            </ul>
           </div>
         </ons-page>
         <script>
@@ -510,7 +517,7 @@
         if (comments != null){
         for (let index = 0; index < comments.length; index++) {
           if (comments[index].UserId === userID) {
-            userID = -1
+            userID = -2;
           }
         }
       }

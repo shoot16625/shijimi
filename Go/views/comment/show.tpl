@@ -287,12 +287,21 @@
             </div>
           </ons-toolbar>
           <div class="scroller list-margin">
-            <ol>
-              <li>ユーザーを指定：OR検索です。</li>
-              <li>
-                時間帯を設定することで、いつでもリアルタイムにタイムラインを眺めることができます。
+            <ul class="list">
+              <li class="list-header">
+                検索
               </li>
-            </ol>
+              <li class="list-item hint-list-dialog">
+                <div class="list-item__center">
+                  ユーザーを指定：OR検索です（スペース区切り）
+                </div>
+              </li>
+              <li class="list-item">
+                <div class="list-item__center hint-list-dialog">
+                  時間帯指定と古い順を組み合わせれば、いつでもリアルタイムにタイムラインを眺めることができます。
+                </div>
+              </li>
+            </ul>
           </div>
         </ons-page>
         <script>

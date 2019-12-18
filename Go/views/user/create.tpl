@@ -346,16 +346,31 @@
             </div>
           </ons-toolbar>
           <div class="scroller list-margin">
-            <ol>
-              <li>ユーザ名：文字種制限なし</li>
-              <li>パスワード：ハッシュ化して保存しています</li>
-              <li>
-                androidの場合：生年月日入力にカレンダーが出現します。上部の年をクリックすると変更が可能です。
+            <ul class="list">
+              <li class="list-header">
+                ユーザ登録のすすめ
               </li>
-              <li>
-                プロフィール画像：URLで指定(http://の場合、表示されない場合があります)。<br />なお、指定しない場合はランダムに設定されます。
+              <li class="list-item hint-list-dialog">
+                <div class="list-item__center">
+                  ユーザ名：文字種制限はありません
+                </div>
               </li>
-            </ol>
+              <li class="list-item hint-list-dialog">
+                <div class="list-item__center">
+                  パスワード：ハッシュ化して保存しています
+                </div>
+              </li>
+              <li class="list-item">
+                <div class="list-item__center hint-list-dialog">
+                  生年月日(android)：カレンダーが出現します。上部の年をクリックすると変更が可能です。
+                </div>
+              </li>
+              <li class="list-item">
+                <div class="list-item__center hint-list-dialog">
+                  プロフィール画像：画像アドレスで指定（http://の場合、表示されない場合があります）。正方形が良！。なお、指定しない場合はランダムに設定されます。
+                </div>
+              </li>
+            </ul>
           </div>
         </ons-page>
         <script>

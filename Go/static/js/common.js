@@ -83,9 +83,12 @@ var dialogBox = function(elemID, userID, tvProgramID) {
     } else if (tvProgramID === 2 && userID != 1) {
       // お知らせページ投稿権限
       return dialogBoxEveryone('alert-only-admin-dialog');
-    } else if (userID === -1) {
+    } else if (userID === -2) {
       // 2度目のレビュー権限
       return dialogBoxEveryone('alert-review-twice');
+    } else if (userID === 1 && tvProgramID === 'delete-user') {
+      // 2度目のレビュー権限
+      return dialogBoxEveryone('alert-only-user-dialog');
     }
     if (dialog) {
       dialog.show();

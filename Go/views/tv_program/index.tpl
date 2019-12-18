@@ -306,10 +306,26 @@
             </div>
           </ons-toolbar>
           <div class="scroller list-margin">
-            <ol>
-              <li>基本的にAND検索です。</li>
-              <li>動画はピンチアウトすると、フルスクリーンになります。</li>
-            </ol>
+            <ul class="list">
+              <li class="list-header">
+                検索
+              </li>
+              <li class="list-item hint-list-dialog">
+                <div class="list-item__center">
+                  基本的にAND検索です。
+                </div>
+              </li>
+            </ul>
+            <ul class="list">
+              <li class="list-header">
+                一覧
+              </li>
+              <li class="list-item hint-list-dialog">
+                <div class="list-item__center">
+                  動画はピンチアウトすると、フルスクリーンになります。
+                </div>
+              </li>
+            </ul>
           </div>
         </ons-page>
         <script>

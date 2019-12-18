@@ -23,7 +23,6 @@
     zoom:1;/*IE*/
 }
 
-
 a {
   text-decoration: none;
 }
@@ -165,11 +164,24 @@ label {
   margin-left: 5px;
 }
 
+.hint-position-relative {
+  position: relative;
+  bottom: 70px;
+}
 
+.hint-list-dialog {
+  /* text-align: left;
+  float: right; */
+  line-height: 20px;
+  font-size: 14px;
+  word-break: break-word;
+  /* margin-right: 10px; */
+  /* padding: 10px; */
+}
 
 /* margin */
 .list-margin {
-  margin: 0px 5px 0px 3px;
+  margin: 0px 3px 0px 3px;
 }
 .list-margin-bottom {
   margin-bottom: 5px;
@@ -182,7 +194,6 @@ label {
 }
 .hint-icon-right {
   margin-right: 5px;
-  color: chocolate;
 }
 
 .create-top-bottom-margin {
@@ -271,20 +282,62 @@ li {
   text-align: right;
 }
 
-
+.fa-question-circle {
+  color: chocolate;
+}
 
 /* animation */
+
+.bounce-animation {
+  animation: bounce_animation 0.3s;
+}
+
 @keyframes bounce_animation{
   0% {transform: translateY(0px);}
   50% {transform: translateY(-6px);}
   100% {transform: translateY(0px);}
 }
 
-.bounce-animation {
-  animation: bounce_animation 0.3s;
+.buruburu {
+  display: inline-block;
+  animation: hurueru 2.2s  infinite;
 }
 
-
+@keyframes hurueru {
+    0% {
+        transform: translate(0px, 0px) rotateZ(0deg)
+    }
+    2% {
+        transform: translate(2px, 2px) rotateZ(2deg)
+    }
+    4% {
+        transform: translate(0px, 2px) rotateZ(0deg)
+    }
+    6% {
+        transform: translate(2px, 0px) rotateZ(-2deg)
+    }
+    8% {
+        transform: translate(0px, 0px) rotateZ(0deg)
+    }
+    10% {
+        transform: translate(2px, 2px) rotateZ(2deg)
+    }
+    12% {
+        transform: translate(0px, 0px) rotateZ(0deg)
+    }
+    14% {
+        transform: translate(2px, 0px) rotateZ(-2deg)
+    }
+    16% {
+        transform: translate(0px, 2px) rotateZ(0deg)
+    }
+    18% {
+        transform: translate(0px, 0px) rotateZ(0deg)
+    }
+    100% {
+        transform: translate(0px, 0px) rotateZ(0deg)
+    }
+}
 
 /* floating box */
 .floating-bottom {
