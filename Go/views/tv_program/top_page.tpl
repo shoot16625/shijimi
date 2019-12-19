@@ -40,7 +40,7 @@
           <ons-col>
             <ons-button
               modifier="quiet"
-              onclick="location.href='tv/tv_program/comment/2'"
+              onclick="location.href='/tv/tv_program/comment/2'"
               ><i class="far fa-envelope buruburu" style="color: darkgray;"></i
             ></ons-button>
           </ons-col>
@@ -50,21 +50,21 @@
             <p>
               <ons-button
                 modifier="quiet"
-                onclick="location.href='tv/tv_program/index'"
+                onclick="location.href='/tv/tv_program/index'"
                 >あなたにおすすめ</ons-button
               >
             </p>
             <p>
               <ons-button
                 modifier="quiet"
-                onclick="goOtherPage({{.User.Id}}, 0, 'tv/tv_program/create_page')"
+                onclick="goOtherPage({{.User.Id}}, 0, '/tv/tv_program/create_page')"
                 >ドラマ・映画をつくる</ons-button
               >
             </p>
             <p>
               <ons-button
                 modifier="quiet"
-                onclick="location.href='tv/tv_program/comment/1'"
+                onclick="location.href='/tv/tv_program/comment/1'"
                 >お問い合わせ</ons-button
               >
             </p>
@@ -73,7 +73,7 @@
             <p>
               <ons-button
                 modifier="quiet"
-                onclick="goOtherPage({{.User.Id}}, 0,'tv/user/create')"
+                onclick="goOtherPage({{.User.Id}}, 0,'/tv/user/create')"
                 >新規登録</ons-button
               >
             </p>
@@ -87,7 +87,7 @@
             <p>
               <ons-button
                 modifier="quiet"
-                onclick="location.href='tv/user/logout'"
+                onclick="location.href='/tv/user/logout'"
                 >ログアウト</ons-button
               >
             </p>

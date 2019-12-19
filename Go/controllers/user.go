@@ -576,7 +576,7 @@ func (c *UserController) Login() {
 		lastLoginTime := session.Get("LoginErrorTime").(time.Time)
 		t := time.Now()
 		duration := t.Sub(lastLoginTime)
-		fmt.Println(duration)
+		fmt.Println(duration.Minutes())
 		if duration.Minutes() > 10 {
 			session.Delete("LoginErrorNum")
 			session.Delete("LoginErrorTime")
@@ -585,7 +585,7 @@ func (c *UserController) Login() {
 
 	if session.Get("LoginErrorTime") != nil {
 		c.Data["LoginError"] = true
-		c.Data["LoginErrorStatus"] = "10分間ログインできなくなりました。"
+		c.Data["LoginErrorStatus"] = "10分間ログインできません。"
 	} else {
 		v, err := models.GetUserByUsername(c.GetString("username"))
 		if err == nil && models.UserPassMach(v.Password, c.GetString("password")) {
@@ -634,7 +634,6 @@ func (c *UserController) Login() {
 			var loginErrorNum int
 			// ログイン失敗回数の記録
 			if session.Get("LoginErrorNum") == nil {
-				session.Set("LoginErrorNum", 1)
 				loginErrorNum = 1
 			} else {
 				loginErrorNum = session.Get("LoginErrorNum").(int)
@@ -642,8 +641,8 @@ func (c *UserController) Login() {
 					session.Set("LoginErrorTime", time.Now())
 				}
 				loginErrorNum++
-				session.Set("LoginErrorNum", loginErrorNum)
 			}
+			session.Set("LoginErrorNum", loginErrorNum)
 			c.Data["LoginErrorStatus"] = "ログインに" + strconv.Itoa(loginErrorNum) + "回失敗しました。"
 		}
 	}
