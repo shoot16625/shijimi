@@ -14,7 +14,7 @@ doramaba とかテレビバって考えてたけど，ShiJimi にしよっかな
 1. metabase
 
 ## その他
-1. ホーム画面に登録（serviceworker(chrome/firefox/androidのみ動作中)）
+1. ホーム画面に登録ポップアップ（serviceworker(chrome/firefox/androidのみ動作中)）
 1. おすすめページでデータ数が40超えてくると，2重に繰り返される（表示側の問題/chromeのみ）
 1. スクロールポジションがコメントリロード時にも固定される（表示側の問題/firefoxのみ）
 1. 時間指定検索で9時間のズレ（herokuのみ）
@@ -46,7 +46,6 @@ doramaba とかテレビバって考えてたけど，ShiJimi にしよっかな
 1. 各ユーザへの管理側からのメッセージ
 1. カテゴリクリック・キャストクリックで検索
 1. 寄付マーククリックアクション
-1. お知らせブログ・「機能追加しました！」
 1. 同一ユーザで複数ログイン時，いいね同時クリックで複数カウントされる．
 1. googleアナリティクス
 1. google広告挿入(すぐにしない)
@@ -70,6 +69,10 @@ doramaba とかテレビバって考えてたけど，ShiJimi にしよっかな
 1. javascript 内で cookie が使えません！
 1. 今どきの javascript の書き方
 1. shijimi.com/tv/〇〇の tv を別サイトの場合は変えたいのだが，それって別の go を起動してもいける？
+
+# 機能構成
+1. admin用ログインページ tv/user/login_admin_page
+
 
 # 知識いろいろ
 1. vscode が便利
@@ -131,9 +134,6 @@ docker, docker-composeが必要
     1. テレビ閲覧
     1. テレビ投稿
     1. テレビ検索
-1. 
-1. 
-1. 
 
 # herokuへのアップ方法
 ```

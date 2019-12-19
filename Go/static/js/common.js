@@ -75,6 +75,7 @@ var hideToast = function(elem) {
 
 // ツイートボックス
 var dialogBox = function(elemID, userID, tvProgramID) {
+  // console.log(userID, tvProgramID);
   ons.ready(function() {
     let dialog = document.getElementById(elemID);
     // == でないとダメ

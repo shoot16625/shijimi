@@ -16,6 +16,8 @@ func init() {
 			beego.NSRouter("/create", &controllers.UserController{}, "*:Create"),
 			beego.NSRouter("/index", &controllers.UserController{}, "*:Index"),
 			beego.NSRouter("/login", &controllers.UserController{}, "*:Login"),
+			beego.NSRouter("/login_admin_page", &controllers.UserController{}, "*:LoginAdminPage"),
+			beego.NSRouter("/login_admin", &controllers.UserController{}, "*:LoginAdmin"),
 			beego.NSRouter("/logout", &controllers.UserController{}, "*:Logout"),
 			beego.NSRouter("/forget_username_page", &controllers.UserController{}, "*:ForgetUsernamePage"),
 			beego.NSRouter("/forget_username", &controllers.UserController{}, "*:ForgetUsername"),

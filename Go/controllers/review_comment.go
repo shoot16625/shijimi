@@ -63,6 +63,7 @@ func (c *ReviewCommentController) Post() {
 					}
 				} else {
 					c.Redirect("/", 302)
+					return
 				}
 			}
 		}
@@ -205,6 +206,7 @@ func (c *ReviewCommentController) Show() {
 	v, err := models.GetTvProgramById(tvProgramID)
 	if err != nil {
 		c.Redirect("/", 302)
+		return
 	} else {
 		c.Data["TvProgram"] = v
 	}
@@ -270,6 +272,7 @@ func (c *ReviewCommentController) SearchComment() {
 	v, err := models.GetTvProgramById(tvProgramID)
 	if err != nil {
 		c.Redirect("/", 302)
+		return
 	} else {
 		c.Data["TvProgram"] = v
 	}

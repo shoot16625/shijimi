@@ -44,6 +44,7 @@ func (c *TvProgramController) Post() {
 	session := c.StartSession()
 	if session.Get("UserId") == nil {
 		c.Redirect("/", 302)
+		return
 	}
 	// ログインユーザのみ作成（html側でも縛りあり）
 	// if session.Get("UserId") != nil {
@@ -196,6 +197,7 @@ func (c *TvProgramController) Put() {
 	session := c.StartSession()
 	if session.Get("UserId") == nil {
 		c.Redirect("/", 302)
+		return
 	}
 	// if session.Get("UserId") != nil {
 	idStr := c.Ctx.Input.Param(":id")
@@ -358,6 +360,7 @@ func (c *TvProgramController) EditPage() {
 		v, err := models.GetTvProgramById(id)
 		if err != nil {
 			c.Redirect("/", 302)
+			return
 		}
 		c.Data["TvProgram"] = v
 		userID := session.Get("UserId").(int64)
@@ -672,6 +675,7 @@ func (c *TvProgramController) GetTvProgramWikiInfo() {
 	session := c.StartSession()
 	if session.Get("UserId") == nil {
 		c.Redirect("/", 302)
+		return
 	}
 	wikiReference := c.GetString("wikiReference")
 	if !strings.Contains(wikiReference, "wikipedia") {
@@ -691,6 +695,7 @@ func (c *TvProgramController) GetMovieWikiInfo() {
 	session := c.StartSession()
 	if session.Get("UserId") == nil {
 		c.Redirect("/", 302)
+		return
 	}
 	wikiReference := c.GetString("wikiReference")
 	if !strings.Contains(wikiReference, "wikipedia") {

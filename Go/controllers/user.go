@@ -3,6 +3,7 @@ package controllers
 import (
 	"app/models"
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -30,6 +31,8 @@ func (c *UserController) URLMapping() {
 	c.Mapping("ShowWtwTv", c.ShowWtwTv)
 	c.Mapping("Edit", c.Edit)
 	c.Mapping("Login", c.Login)
+	c.Mapping("LoginAdminPage", c.LoginAdminPage)
+	c.Mapping("LoginAdmin", c.LoginAdmin)
 	c.Mapping("Logout", c.Logout)
 	c.Mapping("ForgetUsernamePage", c.ForgetUsernamePage)
 	c.Mapping("ForgetPasswordPage", c.ForgetPasswordPage)
@@ -181,6 +184,7 @@ func (c *UserController) Put() {
 	session := c.StartSession()
 	if session.Get("UserId") == nil {
 		c.Redirect("/", 302)
+		return
 	}
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
@@ -229,6 +233,7 @@ func (c *UserController) Delete() {
 	session := c.StartSession()
 	if session.Get("UserId") == nil {
 		c.Redirect("/", 302)
+		return
 	}
 	id := session.Get("UserId").(int64)
 	if err := models.DeleteUser(id); err == nil {
@@ -356,6 +361,7 @@ func (c *UserController) ShowReview() {
 		if err != nil {
 			// ユーザが退会したとき
 			c.Redirect("/", 302)
+			return
 		}
 		c.Data["User"] = v
 		w, _ := models.GetReviewCommentByUserId(id, 100)
@@ -396,6 +402,7 @@ func (c *UserController) ShowReview() {
 	} else {
 		if session.Get("UserId") == nil {
 			c.Redirect("/", 302)
+			return
 		} else {
 			userID := session.Get("UserId").(int64)
 			v, _ := models.GetUserById(userID)
@@ -435,6 +442,7 @@ func (c *UserController) ShowWatchedTv() {
 	session := c.StartSession()
 	if session.Get("UserId") == nil {
 		c.Redirect("/", 302)
+		return
 	}
 	userID := session.Get("UserId").(int64)
 
@@ -471,6 +479,7 @@ func (c *UserController) ShowWtwTv() {
 	session := c.StartSession()
 	if session.Get("UserId") == nil {
 		c.Redirect("/", 302)
+		return
 	}
 	userID := session.Get("UserId").(int64)
 
@@ -500,6 +509,7 @@ func (c *UserController) Edit() {
 	session := c.StartSession()
 	if session.Get("UserId") == nil {
 		c.Redirect("/", 302)
+		return
 	}
 	userID := session.Get("UserId").(int64)
 	v, _ := models.GetUserById(userID)
@@ -507,78 +517,162 @@ func (c *UserController) Edit() {
 	c.TplName = "user/edit.tpl"
 }
 
+func (c *UserController) LoginAdminPage() {
+	c.TplName = "user/login_admin_page.tpl"
+}
+
+func (c *UserController) LoginAdmin() {
+	session := c.StartSession()
+	adminName := "しじみ"
+	key := "$2a$10$869FdgX6e0beX8jK5YaBKumT6yOh.aldJ8EA7zx8fPkkjYpPhEwzq"
+	if c.GetString("username") == adminName {
+		v, err := models.GetUserByUsername(c.GetString("username"))
+		if err == nil && models.UserPassMach(v.Password, c.GetString("password")) {
+			if models.UserPassMach(key, c.GetString("key")) {
+				session.Set("UserId", v.Id)
+
+				UserID := v.Id
+				v, _ := models.GetUserById(UserID)
+				c.Data["User"] = v
+				w, _ := models.GetCommentByUserId(UserID, 1000)
+				c.Data["Comment"] = w
+
+				var commentLikes []models.CommentLike
+				var tvPrograms []models.TvProgram
+				for _, comment := range w {
+					u, err := models.GetCommentLikeByCommentAndUser(comment.Id, UserID)
+					if err != nil {
+						u = new(models.CommentLike)
+					}
+					commentLikes = append(commentLikes, *u)
+					v, err := models.GetTvProgramById(comment.TvProgramId)
+					if err != nil {
+						v = new(models.TvProgram)
+					}
+					tvPrograms = append(tvPrograms, *v)
+				}
+				// fmt.Println(commentLikes)
+				c.Data["CommentLike"] = commentLikes
+				c.Data["TvProgram"] = tvPrograms
+				c.TplName = "user/show_comment.tpl"
+				return
+			}
+		}
+	}
+	c.Redirect("/tv/user/login_admin_page", 302)
+}
+
 func (c *UserController) Login() {
 	session := c.StartSession()
-	v, err := models.GetUserByUsername(c.GetString("username"))
-	if err == nil && models.UserPassMach(v.Password, c.GetString("password")) {
-		// session.Set("username", c.GetString("username"))
-		session.Set("UserId", v.Id)
-		firstLoginToday := models.AddLoginPoint(v.Id)
-		if firstLoginToday {
-			c.Data["Status"] = "1ポイント獲得しました!!"
-		} else {
-			c.Data["Status"] = "ログインしました!!"
-		}
-		z := models.LoginHistory{
-			UserId: v.Id,
-		}
-		_, _ = models.AddLoginHistory(&z)
 
-		UserID := v.Id
-		v, _ := models.GetUserById(UserID)
-		c.Data["User"] = v
-		w, _ := models.GetCommentByUserId(UserID, 1000)
-		c.Data["Comment"] = w
+	if c.GetString("username") == "しじみ" {
+		// 管理者は別URLよりログイン
+		c.Redirect("/", 302)
+		return
+	}
 
-		var commentLikes []models.CommentLike
-		var tvPrograms []models.TvProgram
-		for _, comment := range w {
-			u, err := models.GetCommentLikeByCommentAndUser(comment.Id, UserID)
-			if err != nil {
-				u = new(models.CommentLike)
-			}
-			commentLikes = append(commentLikes, *u)
-			v, err := models.GetTvProgramById(comment.TvProgramId)
-			if err != nil {
-				v = new(models.TvProgram)
-			}
-			tvPrograms = append(tvPrograms, *v)
+	// ログインエラー処理
+	if session.Get("LoginErrorTime") != nil {
+		lastLoginTime := session.Get("LoginErrorTime").(time.Time)
+		t := time.Now()
+		duration := t.Sub(lastLoginTime)
+		fmt.Println(duration)
+		if duration.Minutes() > 10 {
+			session.Delete("LoginErrorNum")
+			session.Delete("LoginErrorTime")
 		}
-		// fmt.Println(commentLikes)
-		c.Data["CommentLike"] = commentLikes
-		c.Data["TvProgram"] = tvPrograms
-		c.TplName = "user/show_comment.tpl"
-	} else {
+	}
+
+	if session.Get("LoginErrorTime") != nil {
 		c.Data["LoginError"] = true
-		// c.Data["User"] = session.Get("UserId")
-		session.Delete("UserId")
-		// session.Delete("Username")
-		var fields []string
-		var sortby []string
-		var order []string
-		var limit int64 = 100
-		var offset int64
-		var query = make(map[string]string)
-		sortby = append(sortby, "Hour")
-		order = append(order, "asc")
-		query["Year"] = strconv.Itoa(time.Now().Year())
-		query["Season"] = models.GetOnAirSeason()
-		week := [7]string{"月", "火", "水", "木", "金", "土", "日"}
-		weekName := [7]string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"}
-		for i, v := range week {
-			query["Week.Name"] = v
-			w, err := models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
-			if err == nil {
-				c.Data["TvProgram"+weekName[i]] = w
+		c.Data["LoginErrorStatus"] = "10分間ログインできなくなりました。"
+	} else {
+		v, err := models.GetUserByUsername(c.GetString("username"))
+		if err == nil && models.UserPassMach(v.Password, c.GetString("password")) {
+			// session.Set("username", c.GetString("username"))
+			session.Set("UserId", v.Id)
+			session.Delete("LoginErrorNum")
+			firstLoginToday := models.AddLoginPoint(v.Id)
+			if firstLoginToday {
+				c.Data["Status"] = "1ポイント獲得しました!!"
+			} else {
+				c.Data["Status"] = "ログインしました!!"
 			}
+			z := models.LoginHistory{
+				UserId: v.Id,
+			}
+			_, _ = models.AddLoginHistory(&z)
+
+			UserID := v.Id
+			// v, _ := models.GetUserById(UserID)
+			c.Data["User"] = v
+			w, _ := models.GetCommentByUserId(UserID, 1000)
+			c.Data["Comment"] = w
+
+			var commentLikes []models.CommentLike
+			var tvPrograms []models.TvProgram
+			for _, comment := range w {
+				u, err := models.GetCommentLikeByCommentAndUser(comment.Id, UserID)
+				if err != nil {
+					u = new(models.CommentLike)
+				}
+				commentLikes = append(commentLikes, *u)
+				v, err := models.GetTvProgramById(comment.TvProgramId)
+				if err != nil {
+					v = new(models.TvProgram)
+				}
+				tvPrograms = append(tvPrograms, *v)
+			}
+			// fmt.Println(commentLikes)
+			c.Data["CommentLike"] = commentLikes
+			c.Data["TvProgram"] = tvPrograms
+			c.TplName = "user/show_comment.tpl"
+			return
+		} else {
+			c.Data["LoginError"] = true
+			session.Delete("UserId")
+			var loginErrorNum int
+			// ログイン失敗回数の記録
+			if session.Get("LoginErrorNum") == nil {
+				session.Set("LoginErrorNum", 1)
+				loginErrorNum = 1
+			} else {
+				loginErrorNum = session.Get("LoginErrorNum").(int)
+				if loginErrorNum == 9 {
+					session.Set("LoginErrorTime", time.Now())
+				}
+				loginErrorNum++
+				session.Set("LoginErrorNum", loginErrorNum)
+			}
+			c.Data["LoginErrorStatus"] = "ログインに" + strconv.Itoa(loginErrorNum) + "回失敗しました。"
 		}
-		query["Week.Name"] = "映画"
+	}
+
+	var fields []string
+	var sortby []string
+	var order []string
+	var limit int64 = 100
+	var offset int64
+	var query = make(map[string]string)
+	sortby = append(sortby, "Hour")
+	order = append(order, "asc")
+	query["Year"] = strconv.Itoa(time.Now().Year())
+	query["Season"] = models.GetOnAirSeason()
+	week := [7]string{"月", "火", "水", "木", "金", "土", "日"}
+	weekName := [7]string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"}
+	for i, v := range week {
+		query["Week.Name"] = v
 		w, err := models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
 		if err == nil {
-			c.Data["TvProgramMovie"] = w
+			c.Data["TvProgram"+weekName[i]] = w
 		}
-		c.TplName = "tv_program/top_page.tpl"
 	}
+	query["Week.Name"] = "映画"
+	w, err := models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
+	if err == nil {
+		c.Data["TvProgramMovie"] = w
+	}
+	c.TplName = "tv_program/top_page.tpl"
 }
 
 func (c *UserController) Logout() {

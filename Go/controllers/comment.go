@@ -48,6 +48,7 @@ func (c *CommentController) Post() {
 				w, err := models.GetTvProgramById(v.TvProgramId)
 				if err != nil {
 					c.Redirect("/", 302)
+					return
 				}
 				w.CountComment++
 				_ = models.UpdateTvProgramById(w)
@@ -240,6 +241,7 @@ func (c *CommentController) Show() {
 	v, err := models.GetTvProgramById(tvProgramID)
 	if err != nil {
 		c.Redirect("/", 302)
+		return
 	} else {
 		c.Data["TvProgram"] = v
 	}
@@ -350,6 +352,7 @@ func (c *CommentController) SearchComment() {
 	v, err := models.GetTvProgramById(tvProgramID)
 	if err != nil {
 		c.Redirect("/", 302)
+		return
 	} else {
 		c.Data["TvProgram"] = v
 	}

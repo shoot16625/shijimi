@@ -100,7 +100,7 @@
         <div class="floating-bottom">
           <div class="toast">
             <div class="toast__message">
-              ログインに失敗しました <i class="far fa-sad-tear"></i>
+              {{ .LoginErrorStatus }} <i class="far fa-sad-tear"></i>
               <button
                 class="toast-hide-button"
                 onclick="hideToast('.floating-bottom')"
