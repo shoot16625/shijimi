@@ -185,6 +185,7 @@ func GetUserByPasswords(password string, age string, SecondPassword string) (v *
 				}
 			}
 		}
+		// 万が一，複数ユーザがヒットしたら，通知しないようにする．
 		if num == 1 {
 			return &d, nil
 		}
@@ -229,6 +230,7 @@ func GetUserCount() (cnt int64) {
 	return cnt
 }
 
+// 今日初めてのログイン時にポイント付与
 func AddLoginPoint(userID int64) bool {
 	flag := GetLoginHistoryByUserId(userID)
 	if flag {

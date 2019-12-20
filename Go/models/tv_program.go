@@ -481,6 +481,8 @@ func RegexpWords(str string, word string, repWord string) (res string) {
 	res = rep.ReplaceAllString(str, repWord)
 	return res
 }
+
+// 全角・半角スペース区切りはカンマに
 func ReshapeWordsA(str string) (res string) {
 	str = strings.Replace(str, "　", ",", -1)
 	res = strings.Replace(str, " ", ",", -1)

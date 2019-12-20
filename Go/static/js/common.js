@@ -88,7 +88,7 @@ var dialogBox = function(elemID, userID, tvProgramID) {
       // 2度目のレビュー権限
       return dialogBoxEveryone('alert-review-twice');
     } else if (userID === 1 && tvProgramID === 'delete-user') {
-      // 2度目のレビュー権限
+      // 管理者の削除禁止
       return dialogBoxEveryone('alert-only-user-dialog');
     }
     if (dialog) {
@@ -309,7 +309,7 @@ function goAnotherCarousel(index) {
 
 // pathのページへ移動
 function goOtherPage(userID, tvProgramID, path) {
-  if (path === 'tv/user/create') {
+  if (path === '/tv/user/create') {
     if (userID != null) {
       return dialogBoxEveryone('alert-only-not-user-dialog');
     } else {
