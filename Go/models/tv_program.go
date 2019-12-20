@@ -439,7 +439,7 @@ func GetRecommendTvProgramsByUser(userID int64) (ml []interface{}) {
 				// 見たブックマークが無ければ
 				r, _ := GetTvProgramById(recommendPoint.Index)
 				// シーズンかぶりをある程度除外
-				titles := strings.Split(r.Title, " ")
+				titles := strings.Split(r.Title, "（")
 				if len(titles) == 2 {
 					title := titles[0]
 					for _, tvProgram := range ml {
@@ -456,7 +456,7 @@ func GetRecommendTvProgramsByUser(userID int64) (ml []interface{}) {
 			}
 		} else {
 			r, _ := GetTvProgramById(recommendPoint.Index)
-			titles := strings.Split(r.Title, " ")
+			titles := strings.Split(r.Title, "（")
 			if len(titles) == 2 {
 				title := titles[0]
 				for _, tvProgram := range ml {

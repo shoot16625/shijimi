@@ -585,7 +585,7 @@ func (c *UserController) Login() {
 
 	if session.Get("LoginErrorTime") != nil {
 		c.Data["LoginError"] = true
-		c.Data["LoginErrorStatus"] = "10分間ログインできません。"
+		c.Data["LoginErrorStatus"] = "10分間ログインできません"
 	} else {
 		v, err := models.GetUserByUsername(c.GetString("username"))
 		if err == nil && models.UserPassMach(v.Password, c.GetString("password")) {
@@ -643,7 +643,7 @@ func (c *UserController) Login() {
 				loginErrorNum++
 			}
 			session.Set("LoginErrorNum", loginErrorNum)
-			c.Data["LoginErrorStatus"] = "ログインに" + strconv.Itoa(loginErrorNum) + "回失敗しました。"
+			c.Data["LoginErrorStatus"] = "ログインに" + strconv.Itoa(loginErrorNum) + "回失敗しました"
 		}
 	}
 
