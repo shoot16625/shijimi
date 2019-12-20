@@ -389,12 +389,12 @@ func GetRecommendTvProgramsByUser(userID int64) (ml []interface{}) {
 	var offset int64
 	var BookmarkLow int = 5
 	w, _ := GetAllTvProgram(query, fields, sortby, order, offset, limit)
-	var watchingStatuslimit int64 = 10
+	var watchingStatusLimit int64 = 10
 	sortby = append(sortby, "Updated")
 	order = append(order, "desc")
 	query["Watched"] = "1"
 	query["UserId"] = strconv.FormatInt(userID, 10)
-	v, _ := GetAllWatchingStatus(query, fields, sortby, order, offset, watchingStatuslimit)
+	v, _ := GetAllWatchingStatus(query, fields, sortby, order, offset, watchingStatusLimit)
 	// 最低ブックマーク数
 	if len(v) < BookmarkLow {
 		return nil
@@ -427,19 +427,49 @@ func GetRecommendTvProgramsByUser(userID int64) (ml []interface{}) {
 	sort.Slice(Points, func(i, j int) bool {
 		return Points[i].Point > Points[j].Point
 	})
+	// 表示上限
 	var displayNum int = 100
 	if len(Points) < displayNum {
 		displayNum = len(Points)
 	}
 	for _, recommendPoint := range Points[:displayNum] {
+		duplicateFlag := false
 		if v, err := GetWatchingStatusByUserAndTvProgram(userID, recommendPoint.Index); err == nil {
 			if !v.Watched {
+				// 見たブックマークが無ければ
 				r, _ := GetTvProgramById(recommendPoint.Index)
-				ml = append(ml, *r)
+				// シーズンかぶりをある程度除外
+				titles := strings.Split(r.Title, " ")
+				if len(titles) == 2 {
+					title := titles[0]
+					for _, tvProgram := range ml {
+						if strings.Contains(tvProgram.(TvProgram).Title, title) {
+							duplicateFlag = true
+						}
+					}
+					if !duplicateFlag {
+						ml = append(ml, *r)
+					}
+				} else {
+					ml = append(ml, *r)
+				}
 			}
 		} else {
 			r, _ := GetTvProgramById(recommendPoint.Index)
-			ml = append(ml, *r)
+			titles := strings.Split(r.Title, " ")
+			if len(titles) == 2 {
+				title := titles[0]
+				for _, tvProgram := range ml {
+					if strings.Contains(tvProgram.(TvProgram).Title, title) {
+						duplicateFlag = true
+					}
+				}
+				if !duplicateFlag {
+					ml = append(ml, *r)
+				}
+			} else {
+				ml = append(ml, *r)
+			}
 		}
 	}
 	return ml
