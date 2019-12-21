@@ -99,6 +99,11 @@ func init() {
 				&controllers.FootPrintToUserController{},
 			),
 		),
+		beego.NSNamespace("/point_history",
+			beego.NSInclude(
+				&controllers.PointHistoryController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }

@@ -168,3 +168,9 @@ heroku logs --tail
 
 Top@1060..cd
 ```
+
+# scafold
+
+```
+bee generate scaffold PointHistory -fields="UserId:int64,MoneyPoint:int" -driver=mysql -conn="test:test_pass@tcp(db:3306)/test_db"
+```

@@ -7,141 +7,6 @@ import (
 
 func init() {
 
-    beego.GlobalControllerRouter["app/controllers:FootPrintToUserController"] = append(beego.GlobalControllerRouter["app/controllers:FootPrintToUserController"],
-        beego.ControllerComments{
-            Method: "Post",
-            Router: `/`,
-            AllowHTTPMethods: []string{"post"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["app/controllers:FootPrintToUserController"] = append(beego.GlobalControllerRouter["app/controllers:FootPrintToUserController"],
-        beego.ControllerComments{
-            Method: "GetAll",
-            Router: `/`,
-            AllowHTTPMethods: []string{"get"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["app/controllers:FootPrintToUserController"] = append(beego.GlobalControllerRouter["app/controllers:FootPrintToUserController"],
-        beego.ControllerComments{
-            Method: "GetOne",
-            Router: `/:id`,
-            AllowHTTPMethods: []string{"get"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["app/controllers:FootPrintToUserController"] = append(beego.GlobalControllerRouter["app/controllers:FootPrintToUserController"],
-        beego.ControllerComments{
-            Method: "Put",
-            Router: `/:id`,
-            AllowHTTPMethods: []string{"put"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["app/controllers:FootPrintToUserController"] = append(beego.GlobalControllerRouter["app/controllers:FootPrintToUserController"],
-        beego.ControllerComments{
-            Method: "Delete",
-            Router: `/:id`,
-            AllowHTTPMethods: []string{"delete"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["app/controllers:TvProgramUpdateHistoryController"] = append(beego.GlobalControllerRouter["app/controllers:TvProgramUpdateHistoryController"],
-        beego.ControllerComments{
-            Method: "Post",
-            Router: `/`,
-            AllowHTTPMethods: []string{"post"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["app/controllers:TvProgramUpdateHistoryController"] = append(beego.GlobalControllerRouter["app/controllers:TvProgramUpdateHistoryController"],
-        beego.ControllerComments{
-            Method: "GetAll",
-            Router: `/`,
-            AllowHTTPMethods: []string{"get"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["app/controllers:TvProgramUpdateHistoryController"] = append(beego.GlobalControllerRouter["app/controllers:TvProgramUpdateHistoryController"],
-        beego.ControllerComments{
-            Method: "GetOne",
-            Router: `/:id`,
-            AllowHTTPMethods: []string{"get"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["app/controllers:TvProgramUpdateHistoryController"] = append(beego.GlobalControllerRouter["app/controllers:TvProgramUpdateHistoryController"],
-        beego.ControllerComments{
-            Method: "Put",
-            Router: `/:id`,
-            AllowHTTPMethods: []string{"put"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["app/controllers:TvProgramUpdateHistoryController"] = append(beego.GlobalControllerRouter["app/controllers:TvProgramUpdateHistoryController"],
-        beego.ControllerComments{
-            Method: "Delete",
-            Router: `/:id`,
-            AllowHTTPMethods: []string{"delete"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["app/controllers:SearchHistoryController"] = append(beego.GlobalControllerRouter["app/controllers:SearchHistoryController"],
-        beego.ControllerComments{
-            Method: "Post",
-            Router: `/`,
-            AllowHTTPMethods: []string{"post"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["app/controllers:SearchHistoryController"] = append(beego.GlobalControllerRouter["app/controllers:SearchHistoryController"],
-        beego.ControllerComments{
-            Method: "GetAll",
-            Router: `/`,
-            AllowHTTPMethods: []string{"get"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["app/controllers:SearchHistoryController"] = append(beego.GlobalControllerRouter["app/controllers:SearchHistoryController"],
-        beego.ControllerComments{
-            Method: "GetOne",
-            Router: `/:id`,
-            AllowHTTPMethods: []string{"get"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["app/controllers:SearchHistoryController"] = append(beego.GlobalControllerRouter["app/controllers:SearchHistoryController"],
-        beego.ControllerComments{
-            Method: "Put",
-            Router: `/:id`,
-            AllowHTTPMethods: []string{"put"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["app/controllers:SearchHistoryController"] = append(beego.GlobalControllerRouter["app/controllers:SearchHistoryController"],
-        beego.ControllerComments{
-            Method: "Delete",
-            Router: `/:id`,
-            AllowHTTPMethods: []string{"delete"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
     beego.GlobalControllerRouter["app/controllers:BrowsingHistoryController"] = append(beego.GlobalControllerRouter["app/controllers:BrowsingHistoryController"],
         beego.ControllerComments{
             Method: "Post",
@@ -277,6 +142,51 @@ func init() {
             Filters: nil,
             Params: nil})
 
+    beego.GlobalControllerRouter["app/controllers:FootPrintToUserController"] = append(beego.GlobalControllerRouter["app/controllers:FootPrintToUserController"],
+        beego.ControllerComments{
+            Method: "Post",
+            Router: `/`,
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["app/controllers:FootPrintToUserController"] = append(beego.GlobalControllerRouter["app/controllers:FootPrintToUserController"],
+        beego.ControllerComments{
+            Method: "GetAll",
+            Router: `/`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["app/controllers:FootPrintToUserController"] = append(beego.GlobalControllerRouter["app/controllers:FootPrintToUserController"],
+        beego.ControllerComments{
+            Method: "GetOne",
+            Router: `/:id`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["app/controllers:FootPrintToUserController"] = append(beego.GlobalControllerRouter["app/controllers:FootPrintToUserController"],
+        beego.ControllerComments{
+            Method: "Put",
+            Router: `/:id`,
+            AllowHTTPMethods: []string{"put"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["app/controllers:FootPrintToUserController"] = append(beego.GlobalControllerRouter["app/controllers:FootPrintToUserController"],
+        beego.ControllerComments{
+            Method: "Delete",
+            Router: `/:id`,
+            AllowHTTPMethods: []string{"delete"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
     beego.GlobalControllerRouter["app/controllers:LoginHistoryController"] = append(beego.GlobalControllerRouter["app/controllers:LoginHistoryController"],
         beego.ControllerComments{
             Method: "Post",
@@ -322,51 +232,6 @@ func init() {
             Filters: nil,
             Params: nil})
 
-    beego.GlobalControllerRouter["app/controllers:RatingTvProgramController"] = append(beego.GlobalControllerRouter["app/controllers:RatingTvProgramController"],
-        beego.ControllerComments{
-            Method: "Post",
-            Router: `/`,
-            AllowHTTPMethods: []string{"post"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["app/controllers:RatingTvProgramController"] = append(beego.GlobalControllerRouter["app/controllers:RatingTvProgramController"],
-        beego.ControllerComments{
-            Method: "GetAll",
-            Router: `/`,
-            AllowHTTPMethods: []string{"get"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["app/controllers:RatingTvProgramController"] = append(beego.GlobalControllerRouter["app/controllers:RatingTvProgramController"],
-        beego.ControllerComments{
-            Method: "GetOne",
-            Router: `/:id`,
-            AllowHTTPMethods: []string{"get"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["app/controllers:RatingTvProgramController"] = append(beego.GlobalControllerRouter["app/controllers:RatingTvProgramController"],
-        beego.ControllerComments{
-            Method: "Put",
-            Router: `/:id`,
-            AllowHTTPMethods: []string{"put"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["app/controllers:RatingTvProgramController"] = append(beego.GlobalControllerRouter["app/controllers:RatingTvProgramController"],
-        beego.ControllerComments{
-            Method: "Delete",
-            Router: `/:id`,
-            AllowHTTPMethods: []string{"delete"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
     beego.GlobalControllerRouter["app/controllers:ReviewCommentController"] = append(beego.GlobalControllerRouter["app/controllers:ReviewCommentController"],
         beego.ControllerComments{
             Method: "Post",
@@ -457,6 +322,51 @@ func init() {
             Filters: nil,
             Params: nil})
 
+    beego.GlobalControllerRouter["app/controllers:SearchHistoryController"] = append(beego.GlobalControllerRouter["app/controllers:SearchHistoryController"],
+        beego.ControllerComments{
+            Method: "Post",
+            Router: `/`,
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["app/controllers:SearchHistoryController"] = append(beego.GlobalControllerRouter["app/controllers:SearchHistoryController"],
+        beego.ControllerComments{
+            Method: "GetAll",
+            Router: `/`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["app/controllers:SearchHistoryController"] = append(beego.GlobalControllerRouter["app/controllers:SearchHistoryController"],
+        beego.ControllerComments{
+            Method: "GetOne",
+            Router: `/:id`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["app/controllers:SearchHistoryController"] = append(beego.GlobalControllerRouter["app/controllers:SearchHistoryController"],
+        beego.ControllerComments{
+            Method: "Put",
+            Router: `/:id`,
+            AllowHTTPMethods: []string{"put"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["app/controllers:SearchHistoryController"] = append(beego.GlobalControllerRouter["app/controllers:SearchHistoryController"],
+        beego.ControllerComments{
+            Method: "Delete",
+            Router: `/:id`,
+            AllowHTTPMethods: []string{"delete"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
     beego.GlobalControllerRouter["app/controllers:TvProgramController"] = append(beego.GlobalControllerRouter["app/controllers:TvProgramController"],
         beego.ControllerComments{
             Method: "Post",
@@ -494,6 +404,51 @@ func init() {
             Params: nil})
 
     beego.GlobalControllerRouter["app/controllers:TvProgramController"] = append(beego.GlobalControllerRouter["app/controllers:TvProgramController"],
+        beego.ControllerComments{
+            Method: "Delete",
+            Router: `/:id`,
+            AllowHTTPMethods: []string{"delete"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["app/controllers:TvProgramUpdateHistoryController"] = append(beego.GlobalControllerRouter["app/controllers:TvProgramUpdateHistoryController"],
+        beego.ControllerComments{
+            Method: "Post",
+            Router: `/`,
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["app/controllers:TvProgramUpdateHistoryController"] = append(beego.GlobalControllerRouter["app/controllers:TvProgramUpdateHistoryController"],
+        beego.ControllerComments{
+            Method: "GetAll",
+            Router: `/`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["app/controllers:TvProgramUpdateHistoryController"] = append(beego.GlobalControllerRouter["app/controllers:TvProgramUpdateHistoryController"],
+        beego.ControllerComments{
+            Method: "GetOne",
+            Router: `/:id`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["app/controllers:TvProgramUpdateHistoryController"] = append(beego.GlobalControllerRouter["app/controllers:TvProgramUpdateHistoryController"],
+        beego.ControllerComments{
+            Method: "Put",
+            Router: `/:id`,
+            AllowHTTPMethods: []string{"put"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["app/controllers:TvProgramUpdateHistoryController"] = append(beego.GlobalControllerRouter["app/controllers:TvProgramUpdateHistoryController"],
         beego.ControllerComments{
             Method: "Delete",
             Router: `/:id`,

@@ -47,7 +47,6 @@ func (c *TvProgramController) Post() {
 		return
 	}
 	// ログインユーザのみ作成（html側でも縛りあり）
-	// if session.Get("UserId") != nil {
 	year, _ := c.GetInt("year")
 	season := *new(models.Season)
 	season.Name = models.RegexpWords(c.GetString("season"), `\(.+\)`, "")
@@ -94,11 +93,10 @@ func (c *TvProgramController) Post() {
 	} else {
 		c.Data["TvProgram"] = v
 		c.Data["GetWikiInfo"] = false
+		v, _ := models.GetUserById(session.Get("UserId").(int64))
+		c.Data["User"] = v
 		c.TplName = "tv_program/create.tpl"
 	}
-	// } else {
-	// 	c.Redirect("/", 302)
-	// }
 }
 
 // GetOne ...

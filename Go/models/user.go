@@ -231,16 +231,16 @@ func GetUserCount() (cnt int64) {
 }
 
 // 今日初めてのログイン時にポイント付与
-func AddLoginPoint(userID int64) bool {
-	flag := GetLoginHistoryByUserId(userID)
-	if flag {
-		v, _ := GetUserById(userID)
-		v.MoneyPoint += 1
-		_ = UpdateUserById(v)
-		fmt.Println("first login today!!")
-		return true
-	}
-	return false
+func AddLoginPoint(userID int64) {
+	v, _ := GetUserById(userID)
+	v.MoneyPoint += 1
+	_ = UpdateUserById(v)
+
+	var w PointHistory
+	w.UserId = userID
+	w.MoneyPoint = 1
+	AddPointHistory(&w)
+	fmt.Println("first login today!!")
 }
 
 // イメージ画像をランダムに選ぶ

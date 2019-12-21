@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"app/models"
-	"encoding/json"
 	"errors"
 	"strconv"
 	"strings"
@@ -32,15 +31,15 @@ func (c *SearchHistoryController) URLMapping() {
 // @Failure 403 body is empty
 // @router / [post]
 func (c *SearchHistoryController) Post() {
-	var v models.SearchHistory
-	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
-	if _, err := models.AddSearchHistory(&v); err == nil {
-		c.Ctx.Output.SetStatus(201)
-		c.Data["json"] = v
-	} else {
-		c.Data["json"] = err.Error()
-	}
-	c.ServeJSON()
+	// var v models.SearchHistory
+	// json.Unmarshal(c.Ctx.Input.RequestBody, &v)
+	// if _, err := models.AddSearchHistory(&v); err == nil {
+	// 	c.Ctx.Output.SetStatus(201)
+	// 	c.Data["json"] = v
+	// } else {
+	// 	c.Data["json"] = err.Error()
+	// }
+	// c.ServeJSON()
 }
 
 // GetOne ...

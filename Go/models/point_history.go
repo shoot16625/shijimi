@@ -10,41 +10,42 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
-type LoginHistory struct {
-	Id      int64 `orm:"auto"`
-	UserId  int64
-	Created time.Time `orm:"auto_now_add;type(datetime)"`
+type PointHistory struct {
+	Id         int64 `orm:"auto"`
+	UserId     int64
+	MoneyPoint int
+	Created    time.Time `orm:"auto_now_add;type(datetime)"`
 }
 
 func init() {
-	orm.RegisterModel(new(LoginHistory))
+	orm.RegisterModel(new(PointHistory))
 }
 
-// AddLoginHistory insert a new LoginHistory into database and returns
+// AddPointHistory insert a new PointHistory into database and returns
 // last inserted Id on success.
-func AddLoginHistory(m *LoginHistory) (id int64, err error) {
+func AddPointHistory(m *PointHistory) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetLoginHistoryById retrieves LoginHistory by Id. Returns error if
+// GetPointHistoryById retrieves PointHistory by Id. Returns error if
 // Id doesn't exist
-func GetLoginHistoryById(id int64) (v *LoginHistory, err error) {
+func GetPointHistoryById(id int64) (v *PointHistory, err error) {
 	o := orm.NewOrm()
-	v = &LoginHistory{Id: id}
-	if err = o.QueryTable(new(LoginHistory)).Filter("Id", id).RelatedSel().One(v); err == nil {
+	v = &PointHistory{Id: id}
+	if err = o.QueryTable(new(PointHistory)).Filter("Id", id).RelatedSel().One(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// GetAllLoginHistory retrieves all LoginHistory matches certain condition. Returns empty list if
+// GetAllPointHistory retrieves all PointHistory matches certain condition. Returns empty list if
 // no records exist
-func GetAllLoginHistory(query map[string]string, fields []string, sortby []string, order []string,
+func GetAllPointHistory(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(LoginHistory))
+	qs := o.QueryTable(new(PointHistory))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
@@ -90,7 +91,7 @@ func GetAllLoginHistory(query map[string]string, fields []string, sortby []strin
 		}
 	}
 
-	var l []LoginHistory
+	var l []PointHistory
 	qs = qs.OrderBy(sortFields...).RelatedSel()
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -113,11 +114,11 @@ func GetAllLoginHistory(query map[string]string, fields []string, sortby []strin
 	return nil, err
 }
 
-// UpdateLoginHistory updates LoginHistory by Id and returns error if
+// UpdatePointHistory updates PointHistory by Id and returns error if
 // the record to be updated doesn't exist
-func UpdateLoginHistoryById(m *LoginHistory) (err error) {
+func UpdatePointHistoryById(m *PointHistory) (err error) {
 	o := orm.NewOrm()
-	v := LoginHistory{Id: m.Id}
+	v := PointHistory{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -128,17 +129,48 @@ func UpdateLoginHistoryById(m *LoginHistory) (err error) {
 	return
 }
 
-// DeleteLoginHistory deletes LoginHistory by Id and returns error if
+// DeletePointHistory deletes PointHistory by Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteLoginHistory(id int64) (err error) {
+func DeletePointHistory(id int64) (err error) {
 	o := orm.NewOrm()
-	v := LoginHistory{Id: id}
+	v := PointHistory{Id: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&LoginHistory{Id: id}); err == nil {
+		if num, err = o.Delete(&PointHistory{Id: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}
 	return
+}
+
+// 最新のログインポイント付与履歴
+func GetLoginPointHistoryByUserId(id int64) (v []PointHistory, err error) {
+	limit := 1
+	o := orm.NewOrm()
+	if _, err = o.QueryTable(new(PointHistory)).Filter("UserId", id).Filter("MoneyPoint", 1).OrderBy("-Id").Limit(limit).All(&v); err == nil {
+		// fmt.Println(v)
+		return v, nil
+	}
+	return nil, err
+}
+
+// 本日初めてのログインかどうかチェック
+func TodayFirstLoginCheck(userID int64) bool {
+	flag := false
+	v, _ := GetLoginPointHistoryByUserId(userID)
+	if len(v) == 0 {
+		flag = true
+	} else {
+		lastLoginPointAddTime := v[0].Created
+		t := time.Now()
+		u := time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, time.Local)
+		durationA := u.Sub(lastLoginPointAddTime)
+		durationB := t.Sub(u)
+		// fmt.Println(durationA, durationB)
+		if durationA > 0 && durationB > 0 {
+			flag = true
+		}
+	}
+	return flag
 }

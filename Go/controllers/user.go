@@ -3,7 +3,6 @@ package controllers
 import (
 	"app/models"
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -48,21 +47,12 @@ func (c *UserController) URLMapping() {
 // @Failure 403 body is empty
 // @router / [post]
 func (c *UserController) Post() {
-	// var v models.User
-	// age, _ := c.GetInt("age")
-	// fmt.Println(c.GetString("age"))
 	hashPass, _ := models.PasswordHash(c.GetString("password"))
 	hashSecondpass, _ := models.PasswordHash(c.GetString("SecondPassword"))
 	IconURL := c.GetString("IconURL")
 	if !strings.Contains(IconURL, "http") {
-		// rand.Seed(time.Now().UnixNano())
-		// r := strconv.Itoa(rand.Intn(13) + 1)
-		// if len(r) == 1 {
-		// 	r = "0" + r
-		// }
 		IconURL = models.SetRandomImageUser()
 	}
-	// json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 	v := models.User{
 		Username:       c.GetString("username"),
 		Password:       hashPass,
@@ -188,7 +178,6 @@ func (c *UserController) Put() {
 	}
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
-	// age, _ := c.GetInt("age")
 
 	IconURL := c.GetString("IconURL")
 	if !strings.Contains(IconURL, "http") && !strings.Contains(IconURL, "/static/img") {
@@ -196,7 +185,6 @@ func (c *UserController) Put() {
 	}
 	oldUserInfo, _ := models.GetUserById(id)
 	v := *oldUserInfo
-	// hashPass := v.Password
 	if c.GetString("password") != "" {
 		// パスワードリセットページ
 		hashPass, _ := models.PasswordHash(c.GetString("password"))
@@ -213,7 +201,6 @@ func (c *UserController) Put() {
 		v.BloodType = c.GetString("bloodType")
 	}
 	if err := models.UpdateUserById(&v); err == nil {
-		// c.Data["json"] = "OK"
 		c.Redirect("show", 302)
 	} else {
 		c.Data["User"] = v
@@ -257,6 +244,7 @@ func (c *UserController) Delete() {
 	c.TplName = "user/logout.tpl"
 }
 
+// 新規作成ページへ遷移
 func (c *UserController) Create() {
 	c.TplName = "user/create.tpl"
 }
@@ -265,6 +253,7 @@ func (c *UserController) Index() {
 	// c.TplName = "user/index.tpl"
 }
 
+// マイページ：コメント
 func (c *UserController) Show() {
 	session := c.StartSession()
 	idStr := c.Ctx.Input.Param(":id")
@@ -275,6 +264,7 @@ func (c *UserController) Show() {
 		if err != nil {
 			// ユーザが退会したとき
 			c.Redirect("/", 302)
+			return
 		}
 		c.Data["User"] = v
 		w, _ := models.GetCommentByUserId(id, 1000)
@@ -325,6 +315,10 @@ func (c *UserController) Show() {
 			c.Redirect("/", 302)
 		} else {
 			UserID := session.Get("UserId").(int64)
+			if models.TodayFirstLoginCheck(UserID) {
+				models.AddLoginPoint(UserID)
+				c.Data["Status"] = "1ポイント獲得しました!!"
+			}
 			v, _ := models.GetUserById(UserID)
 			c.Data["User"] = v
 			w, _ := models.GetCommentByUserId(UserID, 1000)
@@ -346,11 +340,12 @@ func (c *UserController) Show() {
 			}
 			c.Data["CommentLike"] = commentLikes
 			c.Data["TvProgram"] = tvPrograms
+			c.TplName = "user/show_comment.tpl"
 		}
-		c.TplName = "user/show_comment.tpl"
 	}
 }
 
+// マイページ：レビュー
 func (c *UserController) ShowReview() {
 	session := c.StartSession()
 	idStr := c.Ctx.Input.Param(":id")
@@ -431,6 +426,7 @@ func (c *UserController) ShowReview() {
 	}
 }
 
+// マイページ：見た
 func (c *UserController) ShowWatchedTv() {
 	var fields []string
 	var sortby []string
@@ -468,6 +464,7 @@ func (c *UserController) ShowWatchedTv() {
 	c.TplName = "user/show_watched.tpl"
 }
 
+// マイページ：みたい
 func (c *UserController) ShowWtwTv() {
 	var fields []string
 	var sortby []string
@@ -551,7 +548,6 @@ func (c *UserController) LoginAdmin() {
 					}
 					tvPrograms = append(tvPrograms, *v)
 				}
-				// fmt.Println(commentLikes)
 				c.Data["CommentLike"] = commentLikes
 				c.Data["TvProgram"] = tvPrograms
 				c.TplName = "user/show_comment.tpl"
@@ -576,7 +572,6 @@ func (c *UserController) Login() {
 		lastLoginTime := session.Get("LoginErrorTime").(time.Time)
 		t := time.Now()
 		duration := t.Sub(lastLoginTime)
-		fmt.Println(duration.Minutes())
 		if duration.Minutes() > 10 {
 			session.Delete("LoginErrorNum")
 			session.Delete("LoginErrorTime")
@@ -589,11 +584,10 @@ func (c *UserController) Login() {
 	} else {
 		v, err := models.GetUserByUsername(c.GetString("username"))
 		if err == nil && models.UserPassMach(v.Password, c.GetString("password")) {
-			// session.Set("username", c.GetString("username"))
 			session.Set("UserId", v.Id)
 			session.Delete("LoginErrorNum")
-			firstLoginToday := models.AddLoginPoint(v.Id)
-			if firstLoginToday {
+			if models.TodayFirstLoginCheck(v.Id) {
+				models.AddLoginPoint(v.Id)
 				c.Data["Status"] = "1ポイント獲得しました!!"
 			} else {
 				c.Data["Status"] = "ログインしました!!"
@@ -604,7 +598,8 @@ func (c *UserController) Login() {
 			_, _ = models.AddLoginHistory(&z)
 
 			UserID := v.Id
-			// v, _ := models.GetUserById(UserID)
+			// 更新後のデータを取得
+			v, _ := models.GetUserById(UserID)
 			c.Data["User"] = v
 			w, _ := models.GetCommentByUserId(UserID, 1000)
 			c.Data["Comment"] = w
@@ -623,7 +618,6 @@ func (c *UserController) Login() {
 				}
 				tvPrograms = append(tvPrograms, *v)
 			}
-			// fmt.Println(commentLikes)
 			c.Data["CommentLike"] = commentLikes
 			c.Data["TvProgram"] = tvPrograms
 			c.TplName = "user/show_comment.tpl"
@@ -676,11 +670,7 @@ func (c *UserController) Login() {
 
 func (c *UserController) Logout() {
 	session := c.StartSession()
-	// userID := session.Get("UserId")
-	// if userID != nil {
 	session.Delete("UserId")
-	// session.Delete("Username")
-	// }
 	c.Data["Status"] = "ログアウトしました"
 	var Info struct {
 		CntUsers      int64
@@ -699,8 +689,6 @@ func (c *UserController) ForgetUsernamePage() {
 }
 
 func (c *UserController) ForgetPasswordPage() {
-	// session := c.StartSession()
-	// session.Delete("UserId")
 	session := c.StartSession()
 	if session.Get("UserId") != nil {
 		userID := session.Get("UserId").(int64)
@@ -710,6 +698,7 @@ func (c *UserController) ForgetPasswordPage() {
 	c.TplName = "user/forget_password.tpl"
 }
 
+// ユーザ名を忘れたら
 func (c *UserController) ForgetUsername() {
 	session := c.StartSession()
 	session.Delete("UserId")
@@ -722,16 +711,14 @@ func (c *UserController) ForgetUsername() {
 	c.TplName = "user/forget_username.tpl"
 }
 
+// パスワード再設定する前
 func (c *UserController) ForgetPassword() {
-	// session.Delete("UserId")
 	v, _ := models.GetUserByUsernameAndPassword(c.GetString("username"), c.GetString("age"), c.GetString("SecondPassword"))
 	if v == nil {
 		c.Data["User"] = new(models.User)
 		c.TplName = "user/forget_password.tpl"
 	} else {
-		// v.SecondPassword = c.GetString("SecondPassword")
 		session := c.StartSession()
-		// userID := session.Get("UserId").(int64)
 		session.Set("UserId", v.Id)
 		c.Data["User"] = v
 		c.TplName = "user/reset_password.tpl"
