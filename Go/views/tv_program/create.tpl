@@ -285,7 +285,7 @@
     <template id="preview-dialog.html">
       <ons-dialog id="preview-dialog" modifier="large" cancelable fullscreen>
         <ons-page>
-          <ons-toolbar id="hint-hide-swipe">
+          <ons-toolbar id="preview-hide-swipe">
             <div class="left">
               <ons-button
                 id="cancel-button"
@@ -369,14 +369,14 @@
             </ons-list>
           </div>
         </ons-page>
+        <script>
+          hideSwipeToolbar('preview-hide-swipe', 'preview-dialog');
+        </script>
       </ons-dialog>
     </template>
     <template id="hint-dialog.html">
       <ons-dialog id="hint-dialog" modifier="large" cancelable fullscreen>
         <ons-page>
-          <script>
-          hideSwipeToolbar('hint-hide-swipe', 'hint-dialog');
-        </script>
           <ons-toolbar id="hint-hide-swipe">
             <div class="left">
               <ons-button
