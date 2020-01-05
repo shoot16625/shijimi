@@ -145,8 +145,7 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 		if tableNum == 0 {
 			newTvProgram = *new(models.TvProgram)
 		}
-		newTvProgram.Title = doc.Find("h1").Text()
-		newTvProgram.Title = ReshapeTitle(newTvProgram.Title)
+		newTvProgram.Title = ReshapeTitle(doc.Find("h1").Text())
 		newTvProgram.Star = 5
 		newTvProgram.WikiReference = tvProgram.WikiReference
 		// newTvProgram.ImageUrl = SetRandomImageURL()
@@ -191,8 +190,7 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 				newTvProgram.Themesong = ""
 				newTvProgram.Cast = topCast
 				newTvProgram.Star = 5
-				newTvProgram.Title = doc.Find("h1").Text()
-				newTvProgram.Title = ReshapeTitle(newTvProgram.Title)
+				newTvProgram.Title = ReshapeTitle(doc.Find("h1").Text())
 				if strings.Contains(th, newTvProgram.Title) {
 					newTvProgram.Title = th
 				} else if strings.Contains(newTvProgram.Title, th) {
@@ -523,8 +521,7 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (newTvProgram models.
 		if dramaFlag {
 		} else {
 			newTvProgram = *new(models.TvProgram)
-			newTvProgram.Title = doc.Find("h1").Text()
-			newTvProgram.Title = ReshapeTitle(newTvProgram.Title)
+			newTvProgram.Title = ReshapeTitle(doc.Find("h1").Text())
 			newTvProgram.WikiReference = wikiReferenceURL
 			// newTvProgram.ImageUrl = SetRandomImageURL()
 			newTvProgram.ImageUrl = GetImageURL(newTvProgram.Title)
@@ -661,8 +658,7 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 		if tableNum == 0 {
 			newTvProgram = *new(models.TvProgram)
 		}
-		newTvProgram.Title = doc.Find("h1").Text()
-		newTvProgram.Title = ReshapeTitle(newTvProgram.Title)
+		newTvProgram.Title = ReshapeTitle(doc.Find("h1").Text())
 		newTvProgram.Star = 5
 		newTvProgram.WikiReference = wikiReferenceURL
 		u.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
@@ -694,7 +690,7 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 				newTvProgram.Themesong = ""
 				newTvProgram.Cast = topCast
 				newTvProgram.Star = 5
-				newTvProgram.Title = doc.Find("h1").Text()
+				newTvProgram.Title = ReshapeTitle(doc.Find("h1").Text())
 				if strings.Contains(th, newTvProgram.Title) {
 					newTvProgram.Title = th
 				} else if strings.Contains(newTvProgram.Title, th) {
@@ -966,6 +962,7 @@ func ReshapeText(str string) string {
 // サーバ側でデータ投入
 func AddRecentTvInfo() {
 	wikiTitles := []string{"4分間のマリーゴールド", "モトカレマニア", "G線上のあなたと私", "同期のサクラ", "時効警察はじめました", "俺の話は長い", "グランメゾン東京", "ニッポンノワール-刑事Yの反乱-", "チート〜詐欺師の皆さん、ご注意ください〜", "リカ (小説)", "スカーレット (テレビドラマ)", "ブラック校則 (2019年の映画)", "左ききのエレン", "結婚できない男", "シャーロック_(テレビドラマ)", "絶対零度_(テレビドラマ)", "病室で念仏を唱えないでください", "やめるときも、すこやかなるときも", "10の秘密", "恋はつづくよどこまでも", "知らなくていいコト", "僕はどこから", "来世ではちゃんとします", "ケイジとケンジ〜所轄と地検の24時〜", "アライブ_がん専門医のカルテ", "ゆるキャン△", "駐在刑事", "女子高生の無駄づかい", "絶メシロード", "トップナイフ_(小説)", "アリバイ崩し承ります", "麒麟がくる", "テセウスの船", "シロでもクロでもない世界で、パンダは笑う。"}
+	// wikiTitles := []string{"絶対零度_(テレビドラマ)"}
 	for _, v := range wikiTitles {
 		url := "https://ja.wikipedia.org/wiki/" + v
 		GetTvProgramInformationByURLOnGo(url)

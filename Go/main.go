@@ -103,5 +103,4 @@ func init() {
 	// db.GetMovieWalkers()
 	// db.ExecDemoSQL()
 	// db.ExecDemoHerokuSQL()
-	// fmt.Println(db.GetTvProgramInformationByURL("https://ja.wikipedia.org/wiki/%E3%82%B3%E3%83%BC%E3%83%89%E3%83%BB%E3%83%96%E3%83%AB%E3%83%BC_-%E3%83%89%E3%82%AF%E3%82%BF%E3%83%BC%E3%83%98%E3%83%AA%E7%B7%8A%E6%80%A5%E6%95%91%E5%91%BD-"))
 }
