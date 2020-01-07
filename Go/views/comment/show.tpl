@@ -420,8 +420,8 @@
         }
       }
       };
-      setInterval(getNewComment, 30000);
-      // setInterval(getNewComment, 10000);
+      // setInterval(getNewComment, 30000);
+      setInterval(getNewComment, 10000);
     </script>
 
     <script type="text/javascript">

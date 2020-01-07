@@ -9,6 +9,7 @@ services:
     ports:
       - "3306:3306"
     tty: true
+    restart: always
     volumes:
       - ./MySQL/mysql_init:/docker-entrypoint-initdb.d
       - ./MySQL/mysql_data:/var/lib/mysql
@@ -25,8 +26,25 @@ services:
     ports:
       - "8080:8080"
     tty: true
+    restart: always
     depends_on:
     - db
+  https-portal:
+    image: steveltn/https-portal:1
+    container_name: https_portal
+    ports:
+      - "80:80"
+      - "443:443"
+    tty: true
+    restart: always
+    volumes:
+      - ./Certs/:/var/lib/https-portal/
+    environment:
+      DOMAINS: '192.168.2.174 -> http://app:8080'
+      STAGE: "local"
+      # FORCE_RENEW: 'true'
+    links:
+      - app
   metabase:
     container_name: go_metabase
     image: metabase/metabase:v0.33.7.1
@@ -41,6 +59,7 @@ services:
     ports:
       - "3000:3000"
     tty: true
+    restart: always
     depends_on:
     - db
   phpmyadmin:

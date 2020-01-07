@@ -16,7 +16,6 @@ RUN apk update && \
 
 ADD . /go/src/app
 WORKDIR /go/src/app
-
 RUN go build -o app main.go
 
 FROM alpine:3.9

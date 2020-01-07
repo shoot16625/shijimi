@@ -174,3 +174,9 @@ Top@1060..cd
 ```
 bee generate scaffold PointHistory -fields="UserId:int64,MoneyPoint:int" -driver=mysql -conn="test:test_pass@tcp(db:3306)/test_db"
 ```
+
+# metabase
+
+```
+ホスト：go_db
+```
