@@ -20,16 +20,16 @@ import (
 const location = "Asia/Tokyo"
 
 func main() {
-	if beego.BConfig.RunMode == "dev" {
-		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
-	}
-	if beego.BConfig.RunMode == "prod" {
-		// heroku
-		// port, _ := strconv.Atoi(os.Getenv("PORT"))
-		// fmt.Println(port)
-		// beego.BConfig.Listen.HTTPPort = port
-		// beego.BConfig.Listen.HTTPSPort = port
-	}
+	//if beego.BConfig.RunMode == "dev" {
+	//	beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
+	//}
+	//if beego.BConfig.RunMode == "prod" {
+	// heroku
+	// port, _ := strconv.Atoi(os.Getenv("PORT"))
+	// fmt.Println(port)
+	// beego.BConfig.Listen.HTTPPort = port
+	// beego.BConfig.Listen.HTTPSPort = port
+	//}
 	beego.BConfig.WebConfig.StaticDir["/manifest.json"] = "manifest.json"
 	beego.BConfig.WebConfig.StaticDir["/serviceWorker.js"] = "serviceWorker.js"
 	beego.Run()

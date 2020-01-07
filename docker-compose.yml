@@ -33,8 +33,8 @@ services:
     image: steveltn/https-portal:1
     container_name: https_portal
     ports:
-      - "80:80"
-      - "443:443"
+      - "8000:80"
+      - "443s:443"
     tty: true
     restart: always
     volumes:
@@ -57,7 +57,7 @@ services:
     volumes:
       - "./metabase/metabase-data:/metabase-data"
     ports:
-      - "3000:3000"
+      - "30001:3000"
     tty: true
     restart: always
     depends_on:
@@ -69,7 +69,7 @@ services:
     - PMA_ARBITRARY=1
     - PMA_HOSTS=db
     ports:
-    - 8000:80
+    - 30002:80
     volumes:
       - ./phpmyadmin/sessions:/sessions
     tty: true

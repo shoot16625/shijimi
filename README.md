@@ -5,6 +5,7 @@ doramaba とかテレビバって考えてたけど，ShiJimi にしよっかな
 
 # To Do List
 ## ますと
+1. GOOGLE analyticsとサーチ
 1. バグ探し（だいたいちゃんと動くように，エラー画面が出ないように）
 1. ヒントボタンかいてく
 1. ポイント利用する
@@ -179,4 +180,56 @@ bee generate scaffold PointHistory -fields="UserId:int64,MoneyPoint:int" -driver
 
 ```
 ホスト：go_db
+```
+
+# phpmyadmin
+
+```
+データベース：go_db
+```
+
+
+# conoha vps
+
+```
+dockerテンプレートを利用
+ドメインの設定(お名前ドットコム)：shijimi.work
+DNSの所
+githubと接続
+ssh 接続 root禁止
+useradd uchida
+passwd uchida
+vim /etc/ssh/sshd_config (PermitRootLogin no)
+systemctl restart sshd
+
+ポート変更
+vim /etc/ssh/sshd_config (Port)
+36912
+systemctl restart sshd
+
+ufw enable
+ufw allow https/tcp
+ufw allow http/tcp
+ufw allow ftp
+ufw status verbose
+
+ban
+apt-get install fail2ban
+/etc/init.d/fail2ban start
+
+
+
+```
+
+```
+/root/shijimiとする
+devファイル・Procは削除してよい
+
+変更する点
+Go/conf/appconf(やらなくてもよくなった)
+Go/static/js/common.js(URL)
+Go/main.prod(いい感じにする)
+
+普段はphpmyadmin・metabaseコンテナストップ
+
 ```
