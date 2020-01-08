@@ -508,6 +508,9 @@ func ReshapeMovieURL(str string) (res string) {
 // イメージ画像URLのチェック
 func CheckImageURL(str string) (res string) {
 	res = str
+	if res == "" {
+		return res
+	}
 	if !strings.Contains(str, "/static/img/tv_img") {
 		resp, err := http.Get(str)
 		if err != nil || resp.Status == "404 Not Found" {

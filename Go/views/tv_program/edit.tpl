@@ -272,7 +272,7 @@
     <template id="preview-dialog.html">
       <ons-dialog id="preview-dialog" modifier="large" cancelable fullscreen>
         <ons-page>
-          <ons-toolbar>
+          <ons-toolbar id="preview-hide-swipe">
             <div class="left">
               <ons-button
                 id="cancel-button"
@@ -356,6 +356,9 @@
             </ons-list>
           </div>
         </ons-page>
+        <script>
+          hideSwipeToolbar('preview-hide-swipe', 'preview-dialog');
+        </script>
       </ons-dialog>
     </template>
     <template id="tvprogram-delete-dialog.html">
