@@ -121,7 +121,7 @@
             <a
               href="https://twitter.com/share"
               class="twitter-share-button"
-              data-url="https://shijimi.herokuapp.com/"
+              data-url="https://www.shijimi.work/"
               data-text="ドラマ・映画の情報共有SNS"
               data-hashtags="shijimi"
               >Tweet</a
@@ -130,7 +130,7 @@
           <ons-col>
             <div
               class="fb-share-button"
-              data-href="https://shijimi.herokuapp.com/"
+              data-href="https://www.shijimi.work/"
               data-layout="button_count"
               data-size="small"
             >
