@@ -53,7 +53,7 @@ func (c *CommentController) Post() {
 				w.CountComment++
 				_ = models.UpdateTvProgramById(w)
 				z, err := models.GetUserById(v.UserId)
-				if err != nil {
+				if err == nil {
 					z.CountComment++
 					_ = models.UpdateUserById(z)
 				}
