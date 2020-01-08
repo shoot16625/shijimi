@@ -245,6 +245,9 @@
         </div>
       </form>
     </ons-page>
+
+    {{ template "/common/js.tpl" . }}
+
     <template id="terms-of-service.html">
       <ons-dialog id="terms-of-service" modifier="large" cancelable fullscreen>
         <ons-page>
@@ -378,7 +381,6 @@
         </script>
       </ons-dialog>
     </template>
-    {{ template "/common/js.tpl" . }}
     <script type="text/javascript">
       var previewUser = function(elemID) {
         ons.ready(function() {

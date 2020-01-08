@@ -3,6 +3,8 @@ package controllers
 import (
 	"app/models"
 	"errors"
+
+	// "math/rand"
 	"strconv"
 	"strings"
 	"time"
@@ -644,7 +646,7 @@ func (c *UserController) Login() {
 	var fields []string
 	var sortby []string
 	var order []string
-	var limit int64 = 100
+	var limit int64 = 30
 	var offset int64
 	var query = make(map[string]string)
 	sortby = append(sortby, "Hour")
@@ -661,6 +663,8 @@ func (c *UserController) Login() {
 		}
 	}
 	query["Week.Name"] = "映画"
+	// rand.Seed(time.Now().UnixNano())
+	// offset = int64(rand.Intn(30))
 	w, err := models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
 	if err == nil {
 		c.Data["TvProgramMovie"] = w

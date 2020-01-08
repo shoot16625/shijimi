@@ -252,6 +252,9 @@
         </div>
       </form>
     </ons-page>
+
+    {{ template "/common/js.tpl" . }}
+
     <template id="alert-tv-title.html">
       <ons-alert-dialog id="alert-tv-title" modifier="rowfooter">
         <div class="alert-dialog-title">Alert</div>
@@ -386,8 +389,6 @@
         </div>
       </ons-alert-dialog>
     </template>
-
-    {{ template "/common/js.tpl" . }}
 
     <script>
       let textTop = '<option>指定なし</option>';

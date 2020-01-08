@@ -268,6 +268,8 @@
       </form>
     </ons-page>
 
+    {{ template "/common/js.tpl" . }}
+
     <template id="alert-tv-title.html">
       <ons-alert-dialog id="alert-tv-title" modifier="rowfooter">
         <div class="alert-dialog-title">Alert</div>
@@ -398,7 +400,7 @@
               <li class="list-item hint-list-dialog">
                 <div class="list-item__center">
                   Wikiデータ取得：ページタイトルのみでも取得できます。(ex.
-                アンナチュラル)
+                  アンナチュラル)
                 </div>
               </li>
               <li class="list-item hint-list-dialog">
@@ -450,7 +452,6 @@
         </script>
       </ons-dialog>
     </template>
-    {{ template "/common/js.tpl" . }}
 
     <script>
       let textTop = '<option>指定なし</option>';

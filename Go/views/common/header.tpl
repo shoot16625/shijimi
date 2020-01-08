@@ -24,13 +24,6 @@
 
 <title>ShiJimi</title>
 
-<!-- <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css" />
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/onsenui/css/onsen-css-components.min.css"
-/>
-<script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script> -->
-
 <link
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/onsen/2.10.10/css/onsenui.min.css"
@@ -40,17 +33,21 @@
   href="https://cdnjs.cloudflare.com/ajax/libs/onsen/2.10.10/css/onsen-css-components.min.css"
 />
 
-<!-- <link
-  rel="stylesheet"
-  type="text/css"
-  href="/static/css/onsenui-2.10.10/onsenui.min.css"
-/>
-<link
-  rel="stylesheet"
-  type="text/css"
-  href="/static/css/onsenui-2.10.10/onsen-css-components.css"
-/> -->
-
 <link rel="stylesheet" type="text/css" href="/static/css/common.css" />
 
 <link rel="manifest" href="/manifest.json" />
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script
+  async
+  src="https://www.googletagmanager.com/gtag/js?id=UA-155730691-1"
+></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag('js', new Date());
+
+  gtag('config', 'UA-155730691-1');
+</script>

@@ -43,6 +43,9 @@
         </ons-carousel-item>
       </ons-carousel>
     </ons-page>
+
+    {{ template "/common/js.tpl" . }}
+
     <template id="tweet-dialog.html">
       <ons-dialog id="tweet-dialog" modifier="large" cancelable fullscreen>
         <ons-page>
@@ -309,7 +312,6 @@
         </script>
       </ons-dialog>
     </template>
-    {{ template "/common/js.tpl" . }}
     <script>
       ons.ready(function() {
         pullHook();

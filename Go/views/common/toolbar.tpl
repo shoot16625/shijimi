@@ -2,12 +2,8 @@
 
 <ons-toolbar class="toolbar">
   <div class="left" id="mypage-toolbar">
-    <!-- <ons-toolbar-button
-      icon="md-face"
-      style="font-size:24px;"
-      onclick="location.href='/tv/user/show'"
-    ></ons-toolbar-button> -->
     <img
+      class="toolbar-image"
       src="{{.User.IconUrl}}"
       alt="mypage"
       title="mypage-icon"
@@ -21,6 +17,7 @@
     <!-- androidだとtext-aline:leftのため -->
     <div class="area-center">
       <img
+        class="toolbar-image"
         src="/static/img/shijimi-transparence.png"
         alt="shijimi"
         height="42px;"
@@ -30,6 +27,7 @@
   </div>
   <div class="right">
     <ons-toolbar-button
+      class="toolbar-image"
       icon="fa-search"
       onclick="dialogBoxEveryone('search-toolbar')"
     ></ons-toolbar-button>

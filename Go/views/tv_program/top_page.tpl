@@ -143,6 +143,7 @@
             </div>
           </ons-col>
         </ons-row>
+
         <div class="area-right">
           <ons-button
             modifier="quiet"
@@ -167,6 +168,7 @@
         </div>
       </div>
     </ons-page>
+    {{ template "/common/js.tpl" . }}
     <template id="terms-of-service.html">
       <ons-dialog id="terms-of-service" modifier="large" cancelable fullscreen>
         <ons-page>
@@ -374,50 +376,52 @@
         </script>
       </ons-dialog>
     </template>
-    {{ template "/common/js.tpl" . }}
 
     <script>
-      let elem = document.getElementById('on-air-drama');
-      let text =
-        '<h2><i class="fas fa-tv" style="color: skyblue;"></i> 現在放送中のドラマ</h2>';
+      ons.ready(function() {
+        let elem = document.getElementById('on-air-drama');
+        let text =
+          '<h2><i class="fas fa-tv" style="color: skyblue;"></i> 現在放送中のドラマ</h2>';
 
-      let subHeader = ['<i class="far fa-moon" style="color:rgb(235, 200, 3);"></i> 月','<i class="fas fa-fire" style="color:rgb(235, 30, 30);"></i> 火','<i class="fas fa-tint" style="color:rgb(95, 149, 231);"></i> 水','<i class="fas fa-tree" style="color:green;"></i> 木','<i class="fas fa-coins" style="color:rgb(187, 162, 24);"></i> 金','<i class="fas fa-globe" style="color:rgb(138, 193, 219);"></i> 土','<i class="fas fa-sun" style="color:rgb(255, 166, 0);"></i> 日'];
+        let subHeader = ['<i class="far fa-moon" style="color:rgb(235, 200, 3);"></i> 月','<i class="fas fa-fire" style="color:rgb(235, 30, 30);"></i> 火','<i class="fas fa-tint" style="color:rgb(95, 149, 231);"></i> 水','<i class="fas fa-tree" style="color:green;"></i> 木','<i class="fas fa-coins" style="color:rgb(187, 162, 24);"></i> 金','<i class="fas fa-globe" style="color:rgb(138, 193, 219);"></i> 土','<i class="fas fa-sun" style="color:rgb(255, 166, 0);"></i> 日'];
 
-      let tvPrograms = [{{ .TvProgramMon }}, {{ .TvProgramTue }}, {{ .TvProgramWed }}, {{ .TvProgramThu }}, {{ .TvProgramFri }}, {{ .TvProgramSat }}, {{ .TvProgramSun }}];
+        let tvPrograms = [{{ .TvProgramMon }}, {{ .TvProgramTue }}, {{ .TvProgramWed }}, {{ .TvProgramThu }}, {{ .TvProgramFri }}, {{ .TvProgramSat }}, {{ .TvProgramSun }}];
 
-      for (let index = 0; index < tvPrograms.length; index++) {
-        text += '<p class="drama-on-air-carousel">'+subHeader[index]+'</p>';
-        if (tvPrograms[index]) {
-          text += '<ons-carousel id="carousel0' + String(index+1) + '" auto-refresh auto-scroll auto-scroll-ratio="0.15" swipeable overscrollable item-width="200px" class="dramas-on-air">';
-          for (let i = 0; i < tvPrograms[index].length; i++) {
-            let imageUrlReference = "";
-            if (tvPrograms[index][i].ImageUrlReference) {
-              imageUrlReference = '<div class="reference">From:' + tvPrograms[index][i].ImageUrlReference + '</div>';
+        for (let index = 0; index < tvPrograms.length; index++) {
+          text += '<p class="drama-on-air-carousel">'+subHeader[index]+'</p>';
+          if (tvPrograms[index]) {
+            text += '<ons-carousel id="carousel0' + String(index+1) + '" auto-refresh auto-scroll auto-scroll-ratio="0.15" swipeable overscrollable item-width="200px" class="dramas-on-air">';
+            for (let i = 0; i < tvPrograms[index].length; i++) {
+              let imageUrlReference = "";
+              if (tvPrograms[index][i].ImageUrlReference) {
+                imageUrlReference = '<div class="reference">From:' + tvPrograms[index][i].ImageUrlReference + '</div>';
+              }
+
+              text += '<ons-carousel-item modifier="nodivider" id="' + tvPrograms[index][i].Id + '" name="' + tvPrograms[index][i].Title + '"><div class="area-center drama-on-air-carousel-padding"><div class="thumbnail"><img data-src="' + tvPrograms[index][i].ImageUrl + '" alt="' + tvPrograms[index][i].Title + '" class="image-carousel lazyload" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'"/><a href="/tv/tv_program/comment/' + tvPrograms[index][i].Id + '"></a></div>' + imageUrlReference + '<div>' + tvPrograms[index][i].Title + '</div></div></ons-carousel-item>';
             }
+            text += '</ons-carousel>';
+          }
+        }
+        elem.innerHTML = text;
 
-            text += '<ons-carousel-item modifier="nodivider" id="' + tvPrograms[index][i].Id + '" name="' + tvPrograms[index][i].Title + '"><div class="area-center drama-on-air-carousel-padding"><div class="thumbnail"><img src="' + tvPrograms[index][i].ImageUrl + '" alt="' + tvPrograms[index][i].Title + '" class="image-carousel" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'"/><a href="/tv/tv_program/comment/' + tvPrograms[index][i].Id + '"></a></div>' + imageUrlReference + '<div>' + tvPrograms[index][i].Title + '</div></div></ons-carousel-item>';
+        elem = document.getElementById('on-air-movie');
+        text = '<h2><i class="fas fa-film" style="color:chocolate;"></i> 最近の映画</h2>';
+        let tvProgram = {{ .TvProgramMovie }};
+        if (tvProgram) {
+          text += '<ons-carousel id="carousel10" auto-refresh auto-scroll auto-scroll-ratio="0.15" swipeable overscrollable item-width="200px" class="dramas-on-air">';
+          for (let i = 0; i < tvProgram.length; i++) {
+            let imageUrlReference = "";
+            if (tvProgram[i].ImageUrlReference) {
+              imageUrlReference = '<div class="reference">From:' + tvProgram[i].ImageUrlReference + '</div>';
+            }
+            let imageURL = tvProgram[i].ImageUrl;
+            imageURL = imageURL.replace("w=300", "w=200");
+            text += '<ons-carousel-item modifier="nodivider" id="' + tvProgram[i].Id + '" name="' + tvProgram[i].Title + '"><div class="area-center drama-on-air-carousel-padding"><div class="thumbnail"><img data-src="' + imageURL + '" alt="' + tvProgram[i].Title + '" class="image-carousel lazyload" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'"/><a href="/tv/tv_program/comment/' + tvProgram[i].Id + '"></a></div>' + imageUrlReference + '<div>' + tvProgram[i].Title + '</div></div></ons-carousel-item>';
           }
           text += '</ons-carousel>';
         }
-      }
-      elem.innerHTML = text;
-
-      elem = document.getElementById('on-air-movie');
-      text = '<h2><i class="fas fa-film" style="color:chocolate;"></i> 最近の映画</h2>';
-      let tvProgram = {{ .TvProgramMovie }};
-      if (tvProgram) {
-        text += '<ons-carousel id="carousel10" auto-refresh auto-scroll auto-scroll-ratio="0.15" swipeable overscrollable item-width="200px" class="dramas-on-air">';
-        for (let i = 0; i < tvProgram.length; i++) {
-          let imageUrlReference = "";
-          if (tvProgram[i].ImageUrlReference) {
-            imageUrlReference = '<div class="reference">From:' + tvProgram[i].ImageUrlReference + '</div>';
-          }
-
-          text += '<ons-carousel-item modifier="nodivider" id="' + tvProgram[i].Id + '" name="' + tvProgram[i].Title + '"><div class="area-center drama-on-air-carousel-padding"><div class="thumbnail"><img src="' + tvProgram[i].ImageUrl + '" alt="' + tvProgram[i].Title + '" class="image-carousel" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'"/><a href="/tv/tv_program/comment/' + tvProgram[i].Id + '"></a></div>' + imageUrlReference + '<div>' + tvProgram[i].Title + '</div></div></ons-carousel-item>';
-        }
-        text += '</ons-carousel>';
-      }
-      elem.innerHTML = text;
+        elem.innerHTML = text;
+      });
 
       ons.ready(function() {
         if({{.TvProgramMon}}){

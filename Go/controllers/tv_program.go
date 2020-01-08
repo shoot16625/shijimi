@@ -382,7 +382,7 @@ func (c *TvProgramController) Get() {
 	var fields []string
 	var sortby []string
 	var order []string
-	var limit int64 = 100
+	var limit int64 = 30
 	var offset int64
 	var query = make(map[string]string)
 	sortby = append(sortby, "Hour")
@@ -399,6 +399,10 @@ func (c *TvProgramController) Get() {
 		}
 	}
 	query["Week.Name"] = "映画"
+	// rand.Seed(time.Now().UnixNano())
+	// offset = int64(rand.Intn(30))
+	// fmt.Println(offset)
+	// offset = 0
 	w, err := models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
 	if err == nil {
 		c.Data["TvProgramMovie"] = w
