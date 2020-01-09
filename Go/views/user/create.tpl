@@ -370,7 +370,16 @@
               </li>
               <li class="list-item">
                 <div class="list-item__center hint-list-dialog">
-                  プロフィール画像：画像アドレスで指定（http://の場合、表示されない場合があります）。正方形が良！。なお、指定しない場合はランダムに設定されます。
+                  プロフィール画像：画像アドレスで指定。正方形が良！。なお、指定しない場合はランダムに設定されます。（http://の場合、表示されない場合があります）
+                </div>
+              </li>
+              <li class="list-item hint-list-dialog">
+                <div class="list-item__center">
+                  プロフィール画像には、<a
+                    href="https://lab.syncer.jp/Tool/Twitter-Profile-Image/"
+                    target="_blank"
+                    >Twitterのプロフィール画像ゲッター</a
+                  >が便利です。
                 </div>
               </li>
             </ul>

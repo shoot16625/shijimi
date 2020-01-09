@@ -69,6 +69,15 @@
           </li>
           <li class="list-item hint-list-dialog">
             <div class="list-item__center">
+              プロフィール画像には、<a
+                href="https://lab.syncer.jp/Tool/Twitter-Profile-Image/"
+                target="_blank"
+                >Twitterのプロフィール画像ゲッター</a
+              >が便利です。
+            </div>
+          </li>
+          <li class="list-item hint-list-dialog">
+            <div class="list-item__center">
               バッジ：ときどき付与されます。
             </div>
           </li>

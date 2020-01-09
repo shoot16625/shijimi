@@ -379,6 +379,7 @@
 
     <script>
       ons.ready(function() {
+        // drama-carousel
         let elem = document.getElementById('on-air-drama');
         let text =
           '<h2><i class="fas fa-tv" style="color: skyblue;"></i> 現在放送中のドラマ</h2>';
@@ -396,14 +397,16 @@
               if (tvPrograms[index][i].ImageUrlReference) {
                 imageUrlReference = '<div class="reference">From:' + tvPrograms[index][i].ImageUrlReference + '</div>';
               }
+              let onAirTime = reshapeHour(String(tvPrograms[index][i].Hour));
 
-              text += '<ons-carousel-item modifier="nodivider" id="' + tvPrograms[index][i].Id + '" name="' + tvPrograms[index][i].Title + '"><div class="area-center drama-on-air-carousel-padding"><div class="thumbnail"><img data-src="' + tvPrograms[index][i].ImageUrl + '" alt="' + tvPrograms[index][i].Title + '" class="image-carousel lazyload" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'"/><a href="/tv/tv_program/comment/' + tvPrograms[index][i].Id + '"></a></div>' + imageUrlReference + '<div>' + tvPrograms[index][i].Title + '</div></div></ons-carousel-item>';
+              text += '<ons-carousel-item modifier="nodivider" id="' + tvPrograms[index][i].Id + '" name="' + tvPrograms[index][i].Title + '"><div class="area-center drama-on-air-carousel-padding"><div style="font-size:12px; text-align:left;">'  +  onAirTime + '～</div><div class="thumbnail"><img data-src="' + tvPrograms[index][i].ImageUrl + '" alt="' + tvPrograms[index][i].Title + '" class="image-carousel lazyload" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'"/><a href="/tv/tv_program/comment/' + tvPrograms[index][i].Id + '"></a></div>' + imageUrlReference + '<div class="tv-program-top-carousel-title-font">' + tvPrograms[index][i].Title + '</div></div></ons-carousel-item>';
             }
             text += '</ons-carousel>';
           }
         }
         elem.innerHTML = text;
 
+        // movie-carousel
         elem = document.getElementById('on-air-movie');
         text = '<h2><i class="fas fa-film" style="color:chocolate;"></i> 最近の映画</h2>';
         let tvProgram = {{ .TvProgramMovie }};
@@ -416,7 +419,7 @@
             }
             let imageURL = tvProgram[i].ImageUrl;
             imageURL = imageURL.replace("w=300", "w=200");
-            text += '<ons-carousel-item modifier="nodivider" id="' + tvProgram[i].Id + '" name="' + tvProgram[i].Title + '"><div class="area-center drama-on-air-carousel-padding"><div class="thumbnail"><img data-src="' + imageURL + '" alt="' + tvProgram[i].Title + '" class="image-carousel lazyload" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'"/><a href="/tv/tv_program/comment/' + tvProgram[i].Id + '"></a></div>' + imageUrlReference + '<div>' + tvProgram[i].Title + '</div></div></ons-carousel-item>';
+            text += '<ons-carousel-item modifier="nodivider" id="' + tvProgram[i].Id + '" name="' + tvProgram[i].Title + '"><div class="area-center drama-on-air-carousel-padding"><div class="thumbnail"><img data-src="' + imageURL + '" alt="' + tvProgram[i].Title + '" class="image-carousel lazyload" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'"/><a href="/tv/tv_program/comment/' + tvProgram[i].Id + '"></a></div>' + imageUrlReference + '<div class="tv-program-top-carousel-title-font">' + tvProgram[i].Title + '</div></div></ons-carousel-item>';
           }
           text += '</ons-carousel>';
         }
