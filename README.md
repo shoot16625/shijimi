@@ -232,3 +232,23 @@ Go/main.prod(いい感じにする)
 普段はphpmyadmin・metabaseコンテナストップ
 
 ```
+
+# conohaへのアップ方法
+```
+
+rootへ接続
+cd shijimi
+git fetch origin master
+git reset --hard origin/master
+rm docker-compose.yml dev.env Go/main.go Go/Procfile Go/Dockerfile Go/Dockerfile.dev
+mv docker-compose-prod.yml docker-compose.yml
+mv Go/main.prod Go/main.go
+
+URL部分
+nano Go/static/js/common.js
+devでもprodでもポートは同じ
+(nano Go/conf/app.conf)
+
+docker-compose up -d --build
+docker-compose stop phpmyadmin
+```
