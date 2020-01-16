@@ -87,10 +87,12 @@ func init() {
 
 	// クッキーを使えるようにする
 	sessionconf := &session.ManagerConfig{
-		CookieName:      "ShiJimi_Cookie",
+		CookieName:      "ShiJimiCookie",
 		Gclifetime:      8640000,
 		Secure:          true,
 		EnableSetCookie: true,
+		Maxlifetime:     8640000,
+		CookieLifeTime:  8640000,
 	}
 	beego.GlobalSessions, _ = session.NewManager("memory", sessionconf)
 	go beego.GlobalSessions.GC()

@@ -12,12 +12,12 @@
   name="description"
   content="ドラマ・映画の情報共有SNS。リアルタイムにコメントを投稿したり、お気に入りの番組を保存することができます。さらに、あなたのログからおすすめの作品を表示します。あなたにぴったりの作品が見つかるかも？"
 />
-<meta name="keywords" content="レビュー,映画,ドラマ,ツイート,おすすめ" />
+<meta name="keywords" content="レビュー,映画,ドラマ,ツイート,しじみ" />
 <meta property="og:title" content="ShiJimi" />
 <meta property="og:type" content="SNS" />
 <meta
   property="og:description"
-  content="ドラマ・映画の情報共有SNS。リアルタイムにコメントを投稿したり、お気に入りの番組を保存することができます。さらに、あなたのログからおすすめの作品を表示します。あなたにぴったりの作品が見つかるかも？"
+  content="ドラマ・映画のレビューSNS。リアルタイムにツイートを投稿したり、お気に入りの番組を保存することができます。さらに、あなたのログからおすすめの作品を表示します。あなたにぴったりの作品が見つかるかも？"
 />
 
 <link rel="shijimi icon" href="/static/img/shijimi-48x48.ico" />
