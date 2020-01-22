@@ -336,7 +336,7 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 // Add drama information in wiki lists.
 // change here
 func AddTvProgramsInformation() {
-	wikis := []string{"日本のテレビドラマ一覧_(2010年代)", "日本のテレビドラマ一覧_(2000年代)"}
+	wikis := []string{"日本のテレビドラマ一覧_(2020年代)", "日本のテレビドラマ一覧_(2010年代)", "日本のテレビドラマ一覧_(2000年代)"}
 	// wikis := []string{"日本のテレビドラマ一覧_(2010年代)"}
 	for _, v := range wikis {
 		GetWikiDoramas("https://ja.wikipedia.org/wiki/" + v)

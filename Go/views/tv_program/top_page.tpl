@@ -269,10 +269,10 @@
             </div>
           </form>
           <p class="area-right">
-            <a href="tv/user/forget_username_page">ユーザー名を忘れたら...</a>
+            <a href="/tv/user/forget_username_page">ユーザー名を忘れたら...</a>
           </p>
           <p class="area-right">
-            <a href="tv/user/forget_password_page">パスワードを忘れたら...</a>
+            <a href="/tv/user/forget_password_page">パスワードを忘れたら...</a>
           </p>
         </ons-page>
         <script type="text/javascript">

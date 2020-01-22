@@ -5,7 +5,8 @@ doramaba とかテレビバって考えてたけど，ShiJimi にしよっかな
 
 # To Do List
 ## ますと
-1. GOOGLE analyticsとサーチコンソールの連携
+1. ログイン状態保てない
+1. リロードすると投稿できない
 1. 表示の遅延なおす
 1. js読み込み()
 1. トップページ映画ランダムに表示
@@ -164,7 +165,7 @@ heroku container:release web -a shijimi
 heroku open
 heroku logs --tail
 
-
+tv/user/login_admin_page
 Top@1060..cd
 ```
 
