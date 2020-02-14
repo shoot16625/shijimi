@@ -52,9 +52,9 @@ func init() {
 	// orm.RegisterDataBase("default", beego.AppConfig.String("driver"), beego.AppConfig.String("sqlconn")+"?charset=utf8mb4&loc=Asia%2FTokyo")
 
 	// データを初期化して起動
-	err := orm.RunSyncdb("default", true, false)
+	// err := orm.RunSyncdb("default", true, false)
 	// データの変更点を追加して起動
-	// err := orm.RunSyncdb("default", false, false)
+	err := orm.RunSyncdb("default", false, false)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -91,10 +91,18 @@ func init() {
 	// 初期データの投入
 	db.EmptyInitSQL()
 
-	db.ExecInitSQL()
-	// db.AddRecentTvInfo()
-	db.AddTvProgramsInformation()
-	db.GetMovieWalkers()
+	// db.ExecInitSQL()
+
+	// wikiTitles := []string{"左ききのエレン"}
+	// db.AddRecentTvInfo(wikiTitles)
+	// wikis := []string{"日本のテレビドラマ一覧_(2010年代)"}
+	// wikis := []string{"日本のテレビドラマ一覧_(2020年代)", "日本のテレビドラマ一覧_(2010年代)", "日本のテレビドラマ一覧_(2000年代)"}
+	// db.AddTvProgramsInformation(wikis)
+
+	// db.GetMovieWalkers(2020, time.Now().Year())
+	// prod
+	// db.GetMovieWalkers(2000, time.Now().Year())
+
 	// db.ExecDemoSQL()
 	// db.ExecDemoHerokuSQL()
 }

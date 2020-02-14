@@ -100,8 +100,7 @@
               }
             );
           });
-        </script>
-        <script>
+
           hideSwipeToolbar('tweet-hide-swipe', 'tweet-dialog');
         </script>
       </ons-dialog>
@@ -242,8 +241,7 @@
           if ({{.SearchWords.Sortby}} != null){
             document.getElementById('sortby').value = {{.SearchWords.Sortby}};
           }
-        </script>
-        <script>
+
           let today = new Date();
           today.setDate(today.getDate());
           let yyyy = today.getFullYear();
@@ -267,8 +265,7 @@
           if({{.SearchWords.AfterTime}}===null||{{.SearchWords.AfterTime}}===""){
             document.getElementById('after-time').value = time;
           }
-        </script>
-        <script>
+
           hideSwipeToolbar('search-hide-swipe', 'search-dialog');
         </script>
       </ons-dialog>
@@ -354,7 +351,7 @@
         };
         infiniteList.refresh();
         } else {
-            infiniteList.innerHTML = "<div style='text-align:center;margin-top:40px;'><i class='far fa-surprise' style='color:chocolate;'></i> Not Found !!</div>"
+          infiniteList.innerHTML = "<div style='text-align:center;margin-top:40px;'><i class='far fa-surprise' style='color:chocolate;'></i> Not Found !!</div>";
         }
       });
     </script>
@@ -409,8 +406,6 @@
                   $(".floating-top").fadeOut();
                 }, 3000);
               }
-              } else {
-                  infiniteList.innerHTML = "<div style='text-align:center;margin-top:40px;'><i class='far fa-surprise' style='color:chocolate;'></i> Not Found !!</div>"
               }
               let firstOldCommentId = comments[newComments.length].Id;
               let firstNewCommentId = newComments[0].Id;
@@ -433,8 +428,8 @@
       setWatchStatus("check-wtw", "lightseagreen", {{.WatchStatus.WantToWatch}});
     </script>
 
-    <!-- ツイートを保存する -->
     <script type="text/javascript">
+      // ツイートを保存する
       function postComment() {
         const textLength = document.getElementById("tweet-dialog-content").value.length;
         if (textLength < 5){
@@ -452,19 +447,21 @@
         request.open('POST', url, true);
         request.setRequestHeader('Content-type','application/json; charset=utf-8');
         request.send(json);
-        request.onload = function () {
-          var x = JSON.parse(request.responseText);
-          if (request.readyState == 4 && request.status == "200") {
-            // console.table(x);
-          } else {
-            // console.error(x);
-          }
-        }
+        // request.onload = function () {
+        //   console.log(request.responseText);
+        //   var x = JSON.parse(request.responseText);
+        //   if (request.readyState == 4 && request.status == "200") {
+        //     console.table(x);
+        //   } else {
+        //     console.error(x);
+        //   }
+        // }
+        $('#tweet-dialog-content').val("");
         hideAlertDialog('tweet-dialog');
+        document.querySelector('ons-speed-dial').hideItems();
         setTimeout(window.location.reload(false), 1000);
       };
-    </script>
-    <script type="text/javascript">
+
       document
         .querySelector('ons-carousel')
         .addEventListener('postchange', function() {
@@ -472,8 +469,7 @@
             goTop();
           }
         });
-    </script>
-    <script type="text/javascript">
+
       function resetSelect() {
         document.search_comment.reset();
         document.getElementById('word').value = '';
@@ -484,14 +480,12 @@
         document.getElementById('after-time').value = '';
         document.getElementById('limit').value = '';
       }
-    </script>
-    <script>
+
       var dial = document.getElementById('speed-dial');
       let userID = {{.User.Id}};
       dial.innerHTML =
         "<ons-fab><ons-icon icon='md-share'></ons-icon></ons-fab><ons-speed-dial-item><ons-icon icon='md-comment-dots' onclick='dialogBox(\"tweet-dialog\", " + userID + ", {{.TvProgram.Id}})'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-search' onclick='dialogBoxEveryone(\"search-dialog\")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-chart' onclick='goAnotherCarousel(1)'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><i class='fas fa-arrow-up' onclick='goTop()'></i></ons-speed-dial-item>";
-    </script>
-    <script>
+
       document.getElementById('tv-program-hour').innerHTML = reshapeHour(String({{.TvProgram.Hour}}))+"）";
       let seasonName = avoidStructNameError({{.TvProgram.Season}});
       let weekName = avoidStructNameError({{.TvProgram.Week}});
@@ -502,14 +496,14 @@
       document.getElementById("tv-dramatist").innerHTML = reshapeContent({{.TvProgram.Dramatist}});
       document.getElementById("tv-director").innerHTML = reshapeContent({{.TvProgram.Director}});
       document.getElementById("tv-production").innerHTML = reshapeContent({{.TvProgram.Production}});
+      document.getElementById("tv-image").innerHTML = reshapeMovieCode({{ .TvProgram }});
+      document.getElementById("tv-reference").innerHTML = reshapeReferenceSite({{ .TvProgram }});
       let categories = {{.TvProgram.Category}}.split(',');
       if ({{.TvProgram.Category}} === ""){
         categories = [];
       }
       let category = reshapeCategory(categories);
       document.getElementById("tv-category").innerHTML = category;
-      document.getElementById("tv-image").innerHTML = reshapeMovieCode({{ .TvProgram }});
-      document.getElementById("tv-reference").innerHTML = reshapeReferenceSite({{ .TvProgram }});
     </script>
   </body>
 </html>

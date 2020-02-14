@@ -91,7 +91,7 @@
               modifier="underbar"
               placeholder="放送年(ex.2012)"
               min="1900"
-              max="2100"
+              max="2030"
               float
               required
             ></ons-input>

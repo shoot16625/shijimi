@@ -9,8 +9,7 @@
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
 
-      <ons-pull-hook id="pull-hook">
-      </ons-pull-hook>
+      <ons-pull-hook id="pull-hook"> </ons-pull-hook>
 
       <ons-speed-dial
         id="speed-dial"
@@ -109,7 +108,9 @@
                   ></ons-icon>
                 </ons-col>
                 <ons-col>
-                  <div id="star-display" class="area-center"><i class="fas fa-star"></i>： 5</div>
+                  <div id="star-display" class="area-center">
+                    <i class="fas fa-star"></i>： 5
+                  </div>
                   <ons-range
                     id="star-point"
                     name="star-point"
@@ -425,7 +426,7 @@
           };
           infiniteList.refresh();
           } else {
-                  infiniteList.innerHTML = "<div style='text-align:center;margin-top:40px;'><i class='far fa-surprise' style='color:chocolate;'></i> Not Found !!</div>"
+                  infiniteList.innerHTML = "<div style='text-align:center;margin-top:40px;'><i class='far fa-surprise' style='color:chocolate;'></i> Not Found !!</div>";
               }
       });
     </script>
@@ -466,15 +467,17 @@
         request.open('POST', url, true);
         request.setRequestHeader('Content-type','application/json; charset=utf-8');
         request.send(json);
-        request.onload = function () {
-          var x = JSON.parse(request.responseText);
-          if (request.readyState == 4 && request.status == "200") {
-            // console.table(x);
-          } else {
-            // console.error(x);
-          }
-        }
+        // request.onload = function () {
+        //   var x = JSON.parse(request.responseText);
+        //   if (request.readyState == 4 && request.status == "200") {
+        //     console.table(x);
+        //   } else {
+        //     console.error(x);
+        //   }
+        // }
+        $('#tweet-dialog-content').val("");
         hideAlertDialog('tweet-dialog');
+        document.querySelector('ons-speed-dial').hideItems();
         setTimeout(window.location.reload(false), 1000);
       };
     </script>
@@ -486,16 +489,14 @@
             goTop();
           }
         });
-    </script>
-    <script type="text/javascript">
+
       // 選択の削除機能
       function resetSelect() {
         document.search_comment.reset();
         document.getElementById('word').value = '';
         document.getElementById('limit').value = '';
       }
-    </script>
-    <script type="text/javascript">
+
         // スピードダイアルの表示
         var dial = document.getElementById('speed-dial');
         let userID = {{.User.Id}};

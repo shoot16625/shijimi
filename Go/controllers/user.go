@@ -52,7 +52,7 @@ func (c *UserController) Post() {
 	hashPass, _ := models.PasswordHash(c.GetString("password"))
 	hashSecondpass, _ := models.PasswordHash(c.GetString("SecondPassword"))
 	IconURL := c.GetString("IconURL")
-	if !strings.Contains(IconURL, "http") {
+	if !strings.Contains(IconURL, "http") && !strings.Contains(IconURL, "/static/img/") {
 		IconURL = models.SetRandomImageUser()
 	}
 	v := models.User{
@@ -182,7 +182,7 @@ func (c *UserController) Put() {
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 
 	IconURL := c.GetString("IconURL")
-	if !strings.Contains(IconURL, "http") && !strings.Contains(IconURL, "/static/img") {
+	if !strings.Contains(IconURL, "http") && !strings.Contains(IconURL, "/static/img/") {
 		IconURL = models.SetRandomImageUser()
 	}
 	oldUserInfo, _ := models.GetUserById(id)

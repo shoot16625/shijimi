@@ -17,6 +17,7 @@
       <form id="create-user" action="/tv/user/" method="post">
         <div class="input-table">
           <p>
+            <i class="fas fa-flag flag-color"></i>
             <ons-input
               name="username"
               modifier="underbar"
@@ -29,6 +30,7 @@
             ></ons-input>
           </p>
           <p>
+            <i class="fas fa-flag flag-color"></i>
             <ons-input
               name="password"
               modifier="underbar"
@@ -51,6 +53,7 @@
             </label>
           </p>
           <p>
+            <i class="fas fa-flag flag-color"></i>
             <select
               name="gender"
               id="gender"
@@ -63,6 +66,7 @@
             </select>
           </p>
           <p>
+            <i class="fas fa-flag flag-color"></i>
             <select
               class="select-input select-input--underbar select-search-table"
               name="marital"
@@ -74,6 +78,7 @@
             </select>
           </p>
           <p>
+            <i class="fas fa-flag flag-color"></i>
             <select
               class="select-input select-input--underbar select-search-table"
               id="bloodType"
@@ -86,6 +91,7 @@
             </select>
           </p>
           <p>
+            <i class="fas fa-flag flag-color"></i>
             <label for="address" class="label-margin">＜居住地＞</label>
             <select
               class="select-input select-input--underbar select-search-table"
@@ -144,6 +150,7 @@
             </select>
           </p>
           <p>
+            <i class="fas fa-flag flag-color"></i>
             <label for="job" class="label-margin">＜職業＞</label>
             <select
               class="select-input select-input--underbar select-search-table"
@@ -165,6 +172,7 @@
             </select>
           </p>
           <p>
+            <i class="fas fa-flag flag-color"></i>
             <label for="age" class="label-margin">＜生年月日＞</label>
             <ons-input
               type="date"
@@ -173,7 +181,7 @@
               value="{{.User.Age}}"
               modifier="underbar"
               min="1920-01-01"
-              max="2020-01-01"
+              max="2030-01-01"
               float
               required
             ></ons-input>
@@ -193,6 +201,7 @@
             ></ons-input>
           </p>
           <p>
+            <i class="fas fa-flag flag-color"></i>
             <label for="SecondPassword" class="label-margin"
               >＜第2パスワードの設定＞</label
             >

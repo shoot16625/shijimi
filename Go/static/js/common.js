@@ -288,6 +288,7 @@ function goTop() {
     swingSpeed = limit;
   }
   $('.page__content').animate({ scrollTop: 0 }, swingSpeed, 'swing');
+  document.querySelector('ons-speed-dial').hideItems();
 }
 
 // ツールバークリックで上部へ移動
@@ -306,6 +307,7 @@ function goAnotherCarousel(index) {
     carousel.setActiveIndex(index);
     goTop();
   });
+  document.querySelector('ons-speed-dial').hideItems();
 }
 
 // pathのページへ移動

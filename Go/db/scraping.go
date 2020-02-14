@@ -6,7 +6,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"time"
 	"unicode/utf8"
 
 	"github.com/PuerkitoBio/goquery"
@@ -332,11 +331,11 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 
 // Add drama information in wiki lists.
 // change here
-func AddTvProgramsInformation() {
+func AddTvProgramsInformation(wikis []string) {
 	// prod
 	// wikis := []string{"日本のテレビドラマ一覧_(2020年代)", "日本のテレビドラマ一覧_(2010年代)", "日本のテレビドラマ一覧_(2000年代)"}
 	// dev
-	wikis := []string{"日本のテレビドラマ一覧_(2010年代)"}
+	// wikis := []string{"日本のテレビドラマ一覧_(2010年代)"}
 	for _, v := range wikis {
 		GetWikiDoramas("https://ja.wikipedia.org/wiki/" + v)
 	}
@@ -480,12 +479,12 @@ func GetMovieWalker(year string, month string) {
 
 // Get movies.
 // change here
-func GetMovieWalkers() {
+func GetMovieWalkers(start int, end int) {
 	// dev
-	var start int = 2020
+	// var start int = 2020
 	// prod
 	// var start int = 2000
-	var end int = time.Now().Year()
+	// var end int = time.Now().Year()
 	y := 0
 	for {
 		year := strconv.Itoa(start + y)
@@ -497,10 +496,10 @@ func GetMovieWalkers() {
 			fmt.Println(year, month)
 			GetMovieWalker(year, month)
 		}
-		y++
-		if (end - start + 1) == y {
+		if (end - start) == y {
 			break
 		}
+		y++
 	}
 }
 
@@ -915,9 +914,9 @@ func ReshapeText(str string) string {
 }
 
 // サーバ側でデータ投入
-func AddRecentTvInfo() {
-	wikiTitles := []string{"4分間のマリーゴールド", "モトカレマニア", "G線上のあなたと私", "同期のサクラ", "時効警察はじめました", "俺の話は長い", "グランメゾン東京", "ニッポンノワール-刑事Yの反乱-", "チート〜詐欺師の皆さん、ご注意ください〜", "リカ (小説)", "スカーレット (テレビドラマ)", "ブラック校則 (2019年の映画)", "左ききのエレン", "結婚できない男", "シャーロック_(テレビドラマ)", "絶対零度_(テレビドラマ)", "病室で念仏を唱えないでください", "やめるときも、すこやかなるときも", "10の秘密", "恋はつづくよどこまでも", "知らなくていいコト", "僕はどこから", "来世ではちゃんとします", "ケイジとケンジ〜所轄と地検の24時〜", "アライブ_がん専門医のカルテ", "ゆるキャン△", "駐在刑事", "女子高生の無駄づかい", "絶メシロード", "トップナイフ_(小説)", "アリバイ崩し承ります", "麒麟がくる", "テセウスの船", "シロでもクロでもない世界で、パンダは笑う。", "心の傷を癒すということ_(テレビドラマ)", "パパがも一度恋をした"}
-	// wikiTitles := []string{"絶対零度_(テレビドラマ)"}
+func AddRecentTvInfo(wikiTitles []string) {
+	// wikiTitles := []string{"4分間のマリーゴールド", "モトカレマニア", "G線上のあなたと私", "同期のサクラ", "時効警察はじめました", "俺の話は長い", "グランメゾン東京", "ニッポンノワール-刑事Yの反乱-", "チート〜詐欺師の皆さん、ご注意ください〜", "リカ (小説)", "スカーレット (テレビドラマ)", "ブラック校則 (2019年の映画)", "左ききのエレン", "結婚できない男", "シャーロック_(テレビドラマ)", "絶対零度_(テレビドラマ)", "病室で念仏を唱えないでください", "やめるときも、すこやかなるときも", "10の秘密", "恋はつづくよどこまでも", "知らなくていいコト", "僕はどこから", "来世ではちゃんとします", "ケイジとケンジ〜所轄と地検の24時〜", "アライブ_がん専門医のカルテ", "ゆるキャン△", "駐在刑事", "女子高生の無駄づかい", "絶メシロード", "トップナイフ_(小説)", "アリバイ崩し承ります", "麒麟がくる", "テセウスの船", "シロでもクロでもない世界で、パンダは笑う。", "心の傷を癒すということ_(テレビドラマ)", "パパがも一度恋をした"}
+	// wikiTitles := []string{"左ききのエレン", "10の秘密", "恋はつづくよどこまでも"}
 	for _, v := range wikiTitles {
 		url := "https://ja.wikipedia.org/wiki/" + v
 		GetTvProgramInformationByURLOnGo(url)

@@ -3,6 +3,7 @@ package controllers
 import (
 	"app/db"
 	"app/models"
+	"math/rand"
 
 	"errors"
 	"strconv"
@@ -385,7 +386,7 @@ func (c *TvProgramController) Get() {
 	var fields []string
 	var sortby []string
 	var order []string
-	var limit int64 = 30
+	var limit int64 = 20
 	var offset int64
 	var query = make(map[string]string)
 	sortby = append(sortby, "Hour")
@@ -401,14 +402,17 @@ func (c *TvProgramController) Get() {
 			c.Data["TvProgram"+weekName[i]] = w
 		}
 	}
+	limit = 200
 	query["Week.Name"] = "映画"
-	// rand.Seed(time.Now().UnixNano())
-	// offset = int64(rand.Intn(30))
-	// fmt.Println(offset)
-	// offset = 0
 	w, err := models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
 	if err == nil {
-		c.Data["TvProgramMovie"] = w
+		rand.Seed(time.Now().UnixNano())
+		n := rand.Intn(len(w))
+		ran := 15
+		if len(w) <= n+ran {
+			n = len(w) - ran
+		}
+		c.Data["TvProgramMovie"] = w[n : n+ran]
 	}
 	c.TplName = "tv_program/top_page.tpl"
 }

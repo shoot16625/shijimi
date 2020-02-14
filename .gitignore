@@ -4,6 +4,7 @@
 /.vscode/
 /MySQL/mysql_data/
 /MySQL/init_data/
+/mysqldump/dumpfiles/
 /phpmyadmin/
 /metabase/
 /prod.env
