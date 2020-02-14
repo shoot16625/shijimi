@@ -26,7 +26,7 @@ function autoScroll(varName, itemLen) {
       indexState = activeIndex;
       flag = 0;
     }
-  }, 2100);
+  }, 2400);
 }
 
 // toolbarを隠す
@@ -425,6 +425,7 @@ function reshapeContents(elements) {
   }
   return text;
 }
+
 // コンテンツの整形用
 function reshapeContent(element) {
   let text = '';
@@ -459,6 +460,7 @@ function reshapeMovieCode(tvProgram) {
   }
   return moviePosition;
 }
+
 // 出典の所
 function reshapeReferenceSite(tvProgram) {
   let referenceSite = '';
@@ -470,8 +472,8 @@ function reshapeReferenceSite(tvProgram) {
       tvProgram.ImageUrlReference +
       '</a>';
   } else if (tvProgram.MovieUrl != '') {
-    referenceSite =
-      '<a href=' + tvProgram.MovieUrl + " target='_blank'>出典:Youtube</a>";
+    let movieURL = tvProgram.MovieUrl.replace('embed/', 'watch?v=');
+    referenceSite = '<a href=' + movieURL + " target='_blank'>出典:Youtube</a>";
   }
   return referenceSite;
 }
@@ -686,6 +688,7 @@ function reviewCommentLikeStatus(elem, checkFlag, userID, comments) {
   var request = new XMLHttpRequest();
   request.open(method, url, true);
   request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+  request.send(json);
   request.onload = function() {
     var x = JSON.parse(request.responseText);
     if (request.readyState == 4 && request.status == '200') {
@@ -697,7 +700,6 @@ function reviewCommentLikeStatus(elem, checkFlag, userID, comments) {
       // console.log(globalCommentLikeStatus);
     }
   };
-  request.send(json);
 }
 
 // 非同期通信で見たボタン更新
@@ -767,6 +769,7 @@ function tvPageWatchStatusUpdate(elem, checkFlag, userID, tvProgram) {
   var request = new XMLHttpRequest();
   request.open(method, url, true);
   request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+  request.send(json);
   request.onload = function() {
     var x = JSON.parse(request.responseText);
     if (request.readyState == 4 && request.status == '200') {
@@ -777,9 +780,9 @@ function tvPageWatchStatusUpdate(elem, checkFlag, userID, tvProgram) {
       }
     }
   };
-  request.send(json);
 }
 
+// スワイプでツイートボックスを閉じる
 function hideSwipeToolbar(elemID, dialog) {
   let elem = document.getElementById(elemID);
   let ham = new Hammer(elem);

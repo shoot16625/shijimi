@@ -12,6 +12,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/PuerkitoBio/goquery"
 	"github.com/astaxie/beego/orm"
 )
 
@@ -506,7 +507,7 @@ func ReshapeMovieURL(str string) (res string) {
 }
 
 // イメージ画像URLのチェック
-func CheckImageURL(str string) (res string) {
+func CheckImageURL(str string, title string) (res string) {
 	res = str
 	if res == "" {
 		return res
@@ -514,17 +515,68 @@ func CheckImageURL(str string) (res string) {
 	if !strings.Contains(str, "/static/img/tv_img") {
 		resp, err := http.Get(str)
 		if err != nil || resp.Status == "404 Not Found" {
-			rand.Seed(time.Now().UnixNano())
-			r := strconv.Itoa(rand.Intn(10) + 1)
-			if len(r) == 1 {
-				r = "0" + r
-			}
-			res = "/static/img/tv_img/hanko_" + r + ".png"
+			// rand.Seed(time.Now().UnixNano())
+			// r := strconv.Itoa(rand.Intn(10) + 1)
+			// if len(r) == 1 {
+			// 	r = "0" + r
+			// }
+			res = GetImageURL(title)
+			// res = "/static/img/tv_img/hanko_" + r + ".png"
 		} else {
 			defer resp.Body.Close()
 		}
 	}
 	return res
+}
+
+func GetImageURL(str string) (URL string) {
+	str = strings.Replace(str, " ", "", -1)
+	query := "https://search.yahoo.co.jp/image/search?p=" + str
+	doc, err := goquery.NewDocument(query)
+	if err != nil {
+		fmt.Print("URL scarapping failed\n")
+		return
+	}
+	s := doc.Find("#gridlist > div > div > p.tb")
+	flag := true
+
+	s.Each(func(_ int, u *goquery.Selection) {
+		var x int = 1
+		var y int = 1
+		if flag {
+			URL, _ = u.Find("img").Attr("src")
+			urls := strings.Split(URL, "&")
+			for _, v := range urls {
+				if strings.Contains(v, "x=") {
+					v = strings.Replace(v, "x=", "", 1)
+					x, _ = strconv.Atoi(v)
+				} else if strings.Contains(v, "y=") {
+					v = strings.Replace(v, "y=", "", 1)
+					y, _ = strconv.Atoi(v)
+				}
+			}
+			ratio := float32(x) / float32(y)
+			// 縦長の写真は却下
+			if len(URL) < 480 && ratio > 0.85 {
+				flag = false
+			}
+		}
+	})
+	if URL == "" {
+		URL = SetRandomImageURL()
+	}
+	return URL
+}
+
+// イメージ画像をランダムに選ぶ
+func SetRandomImageURL() (url string) {
+	rand.Seed(time.Now().UnixNano())
+	r := strconv.Itoa(rand.Intn(10) + 1)
+	if len(r) == 1 {
+		r = "0" + r
+	}
+	url = "/static/img/tv_img/hanko_" + r + ".png"
+	return url
 }
 
 // イメージ画像の出典整形

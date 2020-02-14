@@ -35,7 +35,22 @@
 
 <link rel="stylesheet" type="text/css" href="/static/css/common.css" />
 
+<!-- サービスワーカー -->
 <link rel="manifest" href="/manifest.json" />
+
+<!-- ツイッターカード -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@playtag551" />
+<meta property="og:url" content="https://www.shijimi.work" />
+<meta property="og:title" content="ShiJimi" />
+<meta
+  property="og:description"
+  content="ドラマ・映画に特化したSNS。あなたにぴったりの作品が見つかるかも！！"
+/>
+<meta
+  property="og:image"
+  content="https://www.shijimi.work/static/img/shijimi-transparence.png"
+/>
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script

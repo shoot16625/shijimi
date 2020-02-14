@@ -3,7 +3,6 @@ package db
 import (
 	"app/models"
 	"fmt"
-	"math/rand"
 	"regexp"
 	"strconv"
 	"strings"
@@ -73,7 +72,7 @@ func GetWikiDoramas(referencePath string) {
 				tvProgram.Category = CategoryReshape(category)
 				tvProgram.Production = data[2]
 				tvProgram.Cast = data[4]
-				tvProgram.ImageUrl = SetRandomImageURL()
+				tvProgram.ImageUrl = models.SetRandomImageURL()
 				tvProgram.ImageUrlReference = ""
 				tvProgram.WikiReference = "https://ja.wikipedia.org" + wikiURL
 				weekStruct := *new(models.Week)
@@ -148,7 +147,6 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 		newTvProgram.Title = ReshapeTitle(doc.Find("h1").Text())
 		newTvProgram.Star = 5
 		newTvProgram.WikiReference = tvProgram.WikiReference
-		// newTvProgram.ImageUrl = SetRandomImageURL()
 		u.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
 			c, _ := t.Find("td").Attr("class")
 			if c == "category" {
@@ -176,9 +174,8 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 					seasonNum += 1
 				}
 				if seasonNum != 1 {
-					// fmt.Println("there\n", newTvProgram)
 					dataAddFlag = true
-					newTvProgram.ImageUrl = GetImageURL(newTvProgram.Title)
+					newTvProgram.ImageUrl = models.GetImageURL(newTvProgram.Title)
 					newTvProgram.ImageUrlReference = models.ReshapeImageURLReference(newTvProgram.ImageUrl)
 					newTvProgram.MovieUrl = GetYoutubeURL(newTvProgram.Title)
 					fmt.Println(newTvProgram.Title)
@@ -311,7 +308,7 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 		})
 
 		if dramaFlag {
-			newTvProgram.ImageUrl = GetImageURL(newTvProgram.Title)
+			newTvProgram.ImageUrl = models.GetImageURL(newTvProgram.Title)
 			newTvProgram.ImageUrlReference = models.ReshapeImageURLReference(newTvProgram.ImageUrl)
 			newTvProgram.MovieUrl = GetYoutubeURL(newTvProgram.Title)
 			fmt.Println(newTvProgram.Title)
@@ -323,7 +320,7 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 	})
 	if !dataAddFlag {
 		// fmt.Println("---------------", tvProgram.Title)
-		tvProgram.ImageUrl = GetImageURL(tvProgram.Title)
+		tvProgram.ImageUrl = models.GetImageURL(tvProgram.Title)
 		tvProgram.ImageUrlReference = models.ReshapeImageURLReference(tvProgram.ImageUrl)
 		tvProgram.MovieUrl = GetYoutubeURL(tvProgram.Title)
 		fmt.Println(tvProgram.Title)
@@ -336,8 +333,10 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 // Add drama information in wiki lists.
 // change here
 func AddTvProgramsInformation() {
-	wikis := []string{"日本のテレビドラマ一覧_(2020年代)", "日本のテレビドラマ一覧_(2010年代)", "日本のテレビドラマ一覧_(2000年代)"}
-	// wikis := []string{"日本のテレビドラマ一覧_(2010年代)"}
+	// prod
+	// wikis := []string{"日本のテレビドラマ一覧_(2020年代)", "日本のテレビドラマ一覧_(2010年代)", "日本のテレビドラマ一覧_(2000年代)"}
+	// dev
+	wikis := []string{"日本のテレビドラマ一覧_(2010年代)"}
 	for _, v := range wikis {
 		GetWikiDoramas("https://ja.wikipedia.org/wiki/" + v)
 	}
@@ -376,7 +375,7 @@ func GetMovieInformationByURL(wikiReferenceURL string) (newTvProgram models.TvPr
 			html, _ := u.Find("tbody > tr > th").First().Html()
 			newTvProgram.Title = strings.Replace(p.Sanitize(html), "<br/>", " ", -1)
 			newTvProgram.WikiReference = wikiReferenceURL
-			newTvProgram.ImageUrl = GetImageURL(newTvProgram.Title)
+			newTvProgram.ImageUrl = models.GetImageURL(newTvProgram.Title)
 			u.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
 				th := t.Find("th").Text()
 				html, _ := t.Find("td").Html()
@@ -439,7 +438,6 @@ func GetMovieWalker(year string, month string) {
 		return
 	}
 	yearInt, _ := strconv.Atoi(year)
-	// seasonName := ""
 	monthInt, _ := strconv.Atoi(month)
 	seasonName := ReshapeHour(monthInt)
 	var floatHour float32 = 100
@@ -458,7 +456,7 @@ func GetMovieWalker(year string, month string) {
 		id = strings.Replace(id, "/", "", -1)
 		id = strings.Replace(id, "mv", "", -1)
 		imageURL := "https://movie.walkerplus.com/api/resizeimage/content/" + id + "?w=300"
-		imageURL = models.CheckImageURL(imageURL)
+		imageURL = models.CheckImageURL(imageURL, tvProgram.Title)
 		tvProgram.ImageUrl = imageURL
 		tvProgram.ImageUrlReference = models.ReshapeImageURLReference(imageURL)
 		tvProgram.MovieUrl = GetYoutubeURL(tvProgram.Title)
@@ -483,7 +481,9 @@ func GetMovieWalker(year string, month string) {
 // Get movies.
 // change here
 func GetMovieWalkers() {
+	// dev
 	var start int = 2020
+	// prod
 	// var start int = 2000
 	var end int = time.Now().Year()
 	y := 0
@@ -524,7 +524,7 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (newTvProgram models.
 			newTvProgram.Title = ReshapeTitle(doc.Find("h1").Text())
 			newTvProgram.WikiReference = wikiReferenceURL
 			// newTvProgram.ImageUrl = SetRandomImageURL()
-			newTvProgram.ImageUrl = GetImageURL(newTvProgram.Title)
+			newTvProgram.ImageUrl = models.GetImageURL(newTvProgram.Title)
 			u.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
 				c, _ := t.Find("td").Attr("class")
 				if c == "category" {
@@ -678,7 +678,7 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 					seasonNum += 1
 				}
 				if seasonNum != 1 {
-					newTvProgram.ImageUrl = GetImageURL(newTvProgram.Title)
+					newTvProgram.ImageUrl = models.GetImageURL(newTvProgram.Title)
 					newTvProgram.ImageUrlReference = models.ReshapeImageURLReference(newTvProgram.ImageUrl)
 					newTvProgram.MovieUrl = GetYoutubeURL(newTvProgram.Title)
 					fmt.Println(newTvProgram.Title)
@@ -804,7 +804,7 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 			}
 		})
 		if dramaFlag {
-			newTvProgram.ImageUrl = GetImageURL(newTvProgram.Title)
+			newTvProgram.ImageUrl = models.GetImageURL(newTvProgram.Title)
 			newTvProgram.ImageUrlReference = models.ReshapeImageURLReference(newTvProgram.ImageUrl)
 			newTvProgram.MovieUrl = GetYoutubeURL(newTvProgram.Title)
 			fmt.Println(newTvProgram.Title)
@@ -853,62 +853,14 @@ func GetYoutubeURL(str string) (URL string) {
 	return URL
 }
 
-func GetImageURL(str string) (URL string) {
-	str = strings.Replace(str, " ", "", -1)
-	query := "https://search.yahoo.co.jp/image/search?p=" + str
-	doc, err := goquery.NewDocument(query)
-	if err != nil {
-		fmt.Print("URL scarapping failed\n")
-		return
-	}
-	s := doc.Find("#gridlist > div > div > p.tb")
-	flag := true
-
-	s.Each(func(_ int, u *goquery.Selection) {
-		var x int = 1
-		var y int = 1
-		if flag {
-			URL, _ = u.Find("img").Attr("src")
-			urls := strings.Split(URL, "&")
-			for _, v := range urls {
-				if strings.Contains(v, "x=") {
-					v = strings.Replace(v, "x=", "", 1)
-					x, _ = strconv.Atoi(v)
-				} else if strings.Contains(v, "y=") {
-					v = strings.Replace(v, "y=", "", 1)
-					y, _ = strconv.Atoi(v)
-				}
-			}
-			ratio := float32(x) / float32(y)
-			// 縦長の写真は却下
-			if len(URL) < 480 && ratio > 0.85 {
-				flag = false
-			}
-		}
-	})
-	if URL == "" {
-		URL = SetRandomImageURL()
-	}
-	return URL
-}
-
-// イメージ画像をランダムに選ぶ
-func SetRandomImageURL() (url string) {
-	rand.Seed(time.Now().UnixNano())
-	r := strconv.Itoa(rand.Intn(10) + 1)
-	if len(r) == 1 {
-		r = "0" + r
-	}
-	url = "/static/img/tv_img/hanko_" + r + ".png"
-	return url
-}
-
+// タイトルの整形
 func ReshapeTitle(str string) string {
 	content := models.RegexpWords(str, ` *[\(|（].*[テレビドラマ|連続ドラマ|時代劇|漫画|小説][\)|）]`, "")
 	content = strings.Replace(content, "　", " ", -1)
 	return content
 }
 
+// 曜日
 func ReshapeWeek(str string) []string {
 	content := strings.Replace(str, "毎週", "", -1)
 	content = strings.Replace(content, "曜日", "曜", -1)
@@ -917,6 +869,7 @@ func ReshapeWeek(str string) []string {
 	return contents
 }
 
+// 放送時間
 func ReshapeHour(month int) string {
 	seasonName := ""
 	if month <= 3 {
@@ -931,6 +884,7 @@ func ReshapeHour(month int) string {
 	return seasonName
 }
 
+// 主題歌
 func ReshapeThemesong(str string) string {
 	content := strings.Replace(str, "『", "「", -1)
 	content = strings.Replace(content, "』", "」", -1)
@@ -938,6 +892,7 @@ func ReshapeThemesong(str string) string {
 	return content
 }
 
+// 内容
 func ReshapeText(str string) string {
 	content := strings.Replace(str, "\n", "", -1)
 	content = strings.Replace(content, ",（", "（", -1)
@@ -969,6 +924,7 @@ func AddRecentTvInfo() {
 	}
 }
 
+// カテゴリー
 func CategoryReshape(category string) (newCategory string) {
 	switch category {
 	case "刑事", "検事", "スピンオフ刑事", "刑事ミステリー", "刑事コメディー", "刑事推理", "警察学園":

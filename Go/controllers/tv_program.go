@@ -63,10 +63,7 @@ func (c *TvProgramController) Post() {
 	if movieURL == "" {
 		movieURL = db.GetYoutubeURL(c.GetString("title"))
 	}
-	imageURL := models.CheckImageURL(c.GetString("ImageURL"))
-	if imageURL == "" {
-		imageURL = db.GetImageURL(c.GetString("title"))
-	}
+	imageURL := models.CheckImageURL(c.GetString("ImageURL"), c.GetString("title"))
 	imageURLReference := models.ReshapeImageURLReference(imageURL)
 
 	var v models.TvProgram
@@ -219,7 +216,7 @@ func (c *TvProgramController) Put() {
 		hour, _ = strconv.ParseFloat(hourString, 32)
 	}
 	movieURL := models.ReshapeMovieURL(c.GetString("MovieURL"))
-	imageURL := models.CheckImageURL(c.GetString("ImageURL"))
+	imageURL := models.CheckImageURL(c.GetString("ImageURL"), c.GetString("title"))
 	imageURLReference := models.ReshapeImageURLReference(imageURL)
 	oldTvInfo, _ := models.GetTvProgramById(id)
 	v := *oldTvInfo

@@ -13,7 +13,7 @@ services:
     volumes:
       - ./MySQL/mysql_init:/docker-entrypoint-initdb.d
       - ./MySQL/mysql_data:/var/lib/mysql
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin --skip-character-set-client-handshake --lower_case_table_names=1
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --skip-character-set-client-handshake --lower_case_table_names=1
   app:
     build:
       context: ./Go
@@ -62,16 +62,16 @@ services:
     restart: always
     depends_on:
     - db
-  phpmyadmin:
-    container_name: go_phpmyadmin
-    image: phpmyadmin/phpmyadmin:4.8
-    environment:
-    - PMA_ARBITRARY=1
-    - PMA_HOSTS=db
-    ports:
-    - 30002:80
-    volumes:
-      - ./phpmyadmin/sessions:/sessions
-    tty: true
-    depends_on:
-      - db
+  # phpmyadmin:
+  #   container_name: go_phpmyadmin
+  #   image: phpmyadmin/phpmyadmin:4.8
+  #   environment:
+  #   - PMA_ARBITRARY=1
+  #   - PMA_HOSTS=db
+  #   ports:
+  #   - 30002:80
+  #   volumes:
+  #     - ./phpmyadmin/sessions:/sessions
+  #   tty: true
+  #   depends_on:
+  #     - db

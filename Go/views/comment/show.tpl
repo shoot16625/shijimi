@@ -66,7 +66,7 @@
                 id="post_button"
                 onclick="postComment()"
                 style="color:chocolate;background:left;"
-                ><i class="fas fa-book"></i
+                ><i class="fas fa-paper-plane"></i
               ></ons-button>
             </div>
           </ons-toolbar>

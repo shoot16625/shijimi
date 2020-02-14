@@ -10,7 +10,6 @@
       {{ template "/common/alert.tpl" . }}
 
       <ons-pull-hook id="pull-hook">
-        <!-- Pull to refresh -->
       </ons-pull-hook>
 
       <ons-speed-dial
@@ -75,7 +74,7 @@
                 id="post-button"
                 onclick="postComment()"
                 style="color:chocolate;background:left;"
-                ><i class="fas fa-book"></i
+                ><i class="fas fa-paper-plane"></i
               ></ons-button>
             </div>
           </ons-toolbar>
@@ -110,7 +109,7 @@
                   ></ons-icon>
                 </ons-col>
                 <ons-col>
-                  <label for="star-point">＜おすすめ度＞</label>
+                  <div id="star-display" class="area-center"><i class="fas fa-star"></i>： 5</div>
                   <ons-range
                     id="star-point"
                     name="star-point"
@@ -121,7 +120,6 @@
                     step="1"
                     required
                   ></ons-range>
-                  <div id="star-display" class="area-center">score： 5</div>
                 </ons-col>
                 <ons-col
                   width="40px"
@@ -161,7 +159,7 @@
         </ons-page>
         <script type="text/javascript">
           $(function() {
-            var text_max = 400;
+            let text_max = 400;
             $('.count').text(
               text_max - $('#tweet-dialog-content').val().length
             );
@@ -169,32 +167,29 @@
             $('#tweet-dialog-content').on(
               'keydown keyup keypress change',
               function() {
-                var text_length = $(this).val().length;
-                var countdown = text_max - text_length;
+                let text_length = $(this).val().length;
+                let countdown = text_max - text_length;
                 $('.count').text(countdown);
               }
             );
           });
-        </script>
-        <script type="text/javascript">
+
           $('.restrict').change(function() {
-            var count = $('.restrict option:selected').length;
-            var not = $('.restrict option').not(':selected');
+            let count = $('.restrict option:selected').length;
+            let not = $('.restrict option').not(':selected');
             if (count >= 3) {
               not.attr('disabled', true);
             } else {
               not.attr('disabled', false);
             }
           });
-        </script>
-        <script type="text/javascript">
+
           $('#star-point').change(function() {
-            var star = $('#star-point').val();
+            let star = $('#star-point').val();
             document.getElementById('star-display').innerHTML =
-              'score：' + star;
+              '<i class="fas fa-star"></i>： ' + star;
           });
-        </script>
-        <script>
+
           hideSwipeToolbar('tweet-hide-swipe', 'tweet-dialog');
         </script>
       </ons-dialog>
@@ -336,8 +331,7 @@
             text += '<option>' + i + '</option>';
           }
           target.innerHTML = text;
-        </script>
-        <script type="text/javascript">
+
           if ({{.SearchWords}} != null){
             setMultipleSelection("favorite-point", {{.SearchWords.Category}});
             setMultipleSelection("spoiler", {{.SearchWords.Spoiler}});
@@ -346,8 +340,7 @@
           if ({{.SearchWords.Sortby}} != null){
             document.getElementById('sortby').value = {{.SearchWords.Sortby}};
           }
-        </script>
-        <script>
+
           hideSwipeToolbar('search-hide-swipe', 'search-dialog');
         </script>
       </ons-dialog>
@@ -402,7 +395,6 @@
         }
         const users = {{.Users}};
         let commentLikes;
-        // console.log({{.CommentLike}},comments)
         if ({{.CommentLike}} === null && comments != null){
           // ログインしていない場合
           commentLikes = [comments.length];
@@ -445,14 +437,6 @@
       setWatchStatus("check-wtw", "lightseagreen", {{.WatchStatus.WantToWatch}});
     </script>
 
-    <!-- <script>
-      globalCommentLikeStatus = {{.CommentLike}};
-    </script> -->
-    <!-- 
-    <script type="text/javascript">
-      globalWatchStatus = {{.WatchStatus}};
-    </script> -->
-
     <!-- ツイートを保存する -->
     <script type="text/javascript">
       function postComment() {
@@ -481,6 +465,7 @@
         var request = new XMLHttpRequest();
         request.open('POST', url, true);
         request.setRequestHeader('Content-type','application/json; charset=utf-8');
+        request.send(json);
         request.onload = function () {
           var x = JSON.parse(request.responseText);
           if (request.readyState == 4 && request.status == "200") {
@@ -489,14 +474,10 @@
             // console.error(x);
           }
         }
-        request.send(json);
-        hideAlertDialog('tweet-dialog')
+        hideAlertDialog('tweet-dialog');
         setTimeout(window.location.reload(false), 1000);
       };
     </script>
-    <!-- <script>
-      document.getElementById('tv-program-hour').innerHTML = reshapeHour(String({{.TvProgram.Hour}}));
-    </script> -->
     <script type="text/javascript">
       document
         .querySelector('ons-carousel')
@@ -507,13 +488,15 @@
         });
     </script>
     <script type="text/javascript">
+      // 選択の削除機能
       function resetSelect() {
         document.search_comment.reset();
         document.getElementById('word').value = '';
         document.getElementById('limit').value = '';
       }
     </script>
-    <script>
+    <script type="text/javascript">
+        // スピードダイアルの表示
         var dial = document.getElementById('speed-dial');
         let userID = {{.User.Id}};
         if (comments != null){
@@ -547,7 +530,7 @@
       document.getElementById("tv-reference").innerHTML = reshapeReferenceSite({{ .TvProgram }});
     </script>
     <script>
-          let fprank = {{ .FavoritePointRanking }};
+        let fprank = {{ .FavoritePointRanking }};
         if (fprank === null) {
           fprank = "";
         }

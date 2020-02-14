@@ -13,7 +13,6 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/orm"
-	"github.com/astaxie/beego/session"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -49,11 +48,13 @@ func init() {
 	dbName := os.Getenv("MYSQL_DATABASE")
 	sqlconn := user + ":" + pass + "@tcp(db:3306)/" + dbName
 	orm.RegisterDataBase("default", beego.AppConfig.String("driver"), sqlconn+"?charset=utf8mb4&loc=Asia%2FTokyo")
+	// heroku
 	// orm.RegisterDataBase("default", beego.AppConfig.String("driver"), beego.AppConfig.String("sqlconn")+"?charset=utf8mb4&loc=Asia%2FTokyo")
+
 	// データを初期化して起動
-	// err := orm.RunSyncdb("default", true, false)
+	err := orm.RunSyncdb("default", true, false)
 	// データの変更点を追加して起動
-	err := orm.RunSyncdb("default", false, false)
+	// err := orm.RunSyncdb("default", false, false)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -63,6 +64,7 @@ func init() {
 	beego.AddFuncMap("dateformatJst", func(in time.Time) string {
 		return in.Format("2006-01-02 15:04:05")
 	})
+
 	// 年齢計算
 	beego.AddFuncMap("birthday2Age", func(birthday string) (age string) {
 		t := time.Now()
@@ -83,27 +85,16 @@ func init() {
 			ctx.Request.Method = strings.ToUpper(ctx.Input.Query("_method"))
 		}
 	}
-	beego.InsertFilter("*", beego.BeforeRouter, FilterMethod)
 
-	// クッキーを使えるようにする
-	sessionconf := &session.ManagerConfig{
-		CookieName:      "ShiJimiCookie",
-		Gclifetime:      8640000,
-		Secure:          true,
-		EnableSetCookie: true,
-		Maxlifetime:     8640000,
-		CookieLifeTime:  8640000,
-	}
-	beego.GlobalSessions, _ = session.NewManager("memory", sessionconf)
-	go beego.GlobalSessions.GC()
+	beego.InsertFilter("*", beego.BeforeRouter, FilterMethod)
 
 	// 初期データの投入
 	db.EmptyInitSQL()
 
-	// db.ExecInitSQL()
+	db.ExecInitSQL()
 	// db.AddRecentTvInfo()
-	// db.AddTvProgramsInformation()
-	// db.GetMovieWalkers()
+	db.AddTvProgramsInformation()
+	db.GetMovieWalkers()
 	// db.ExecDemoSQL()
 	// db.ExecDemoHerokuSQL()
 }
