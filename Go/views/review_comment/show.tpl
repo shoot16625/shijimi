@@ -505,9 +505,9 @@
           $(".floating-top").fadeOut();
         }, 3000);
 
-        // setTimeout(function() {
-        //   window.location.reload(false);
-        // }, 1000);
+        setTimeout(function() {
+          window.location.reload(false);
+        }, 1000);
         // setTimeout(window.location.reload(false), 1000);
       };
     </script>
