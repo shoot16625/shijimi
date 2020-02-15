@@ -2,7 +2,6 @@
 <html lang="ja">
   <head>
     {{ template "/common/header.tpl" . }}
-    <link rel="stylesheet" href="/static/js/star-raty/jquery.raty.css" />
   </head>
 
   <body>
@@ -64,6 +63,7 @@
         $('#average-star').raty({
           number: 10,
           readOnly: true,
+          precision: true,
           score: {{ .TvProgram.Star}},
         });
       });

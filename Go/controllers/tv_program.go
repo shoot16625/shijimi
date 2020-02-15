@@ -303,7 +303,7 @@ func (c *TvProgramController) Index() {
 		l = models.GetRecommendTvProgramsByUser(userID)
 	}
 	// fmt.Println(l)
-	// おすすめTV取得できなかったら，最新順
+	// おすすめTV取得できなかったら，放送中順
 	if l == nil {
 
 		var fields []string
@@ -321,6 +321,8 @@ func (c *TvProgramController) Index() {
 		order = append(order, "desc")
 		order = append(order, "asc")
 		order = append(order, "asc")
+		query["Year"] = strconv.Itoa(time.Now().Year())
+		query["Season"] = models.GetOnAirSeason()
 		l, _ = models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
 	}
 	c.Data["TvProgram"] = l

@@ -169,6 +169,10 @@
       </div>
     </ons-page>
     {{ template "/common/js.tpl" . }}
+    <script src="/static/js/star-raty/jquery.raty.js"></script>
+    <script>
+      $.fn.raty.defaults.path = '/static/js/star-raty/images';
+    </script>
     <template id="terms-of-service.html">
       <ons-dialog id="terms-of-service" modifier="large" cancelable fullscreen>
         <ons-page>
@@ -398,8 +402,16 @@
                 imageUrlReference = '<div class="reference">From:' + tvPrograms[index][i].ImageUrlReference + '</div>';
               }
               let onAirTime = reshapeHour(String(tvPrograms[index][i].Hour));
-
-              text += '<ons-carousel-item modifier="nodivider" id="' + tvPrograms[index][i].Id + '" name="' + tvPrograms[index][i].Title + '"><div class="area-center drama-on-air-carousel-padding"><div style="font-size:12px; text-align:left;">'  +  onAirTime + '～</div><div class="thumbnail"><img data-src="' + tvPrograms[index][i].ImageUrl + '" alt="' + tvPrograms[index][i].Title + '" class="image-carousel lazyload" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'"/><a href="/tv/tv_program/comment/' + tvPrograms[index][i].Id + '"></a></div>' + imageUrlReference + '<div class="tv-program-top-carousel-title-font">' + tvPrograms[index][i].Title + '</div></div></ons-carousel-item>';
+              $(function raty() {
+                $('#tv-star-' + tvPrograms[index][i].Id).raty({
+                  number: 5,
+                  readOnly: true,
+                  harf: true,
+                  precision: true,
+                  score: tvPrograms[index][i].Star/2,
+                });
+              });
+              text += '<ons-carousel-item modifier="nodivider" id="' + tvPrograms[index][i].Id + '" name="' + tvPrograms[index][i].Title + '"><div class="area-center drama-on-air-carousel-padding"><div class="area-left" style="font-size:12px;">'  +  onAirTime + '～</div><div id="tv-star-' + tvPrograms[index][i].Id + '"></div><div class="thumbnail"><img data-src="' + tvPrograms[index][i].ImageUrl + '" alt="' + tvPrograms[index][i].Title + '" class="image-carousel lazyload" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'"/><a href="/tv/tv_program/comment/' + tvPrograms[index][i].Id + '"></a></div>' + imageUrlReference + '<div class="tv-program-top-carousel-title-font">' + tvPrograms[index][i].Title + '</div></div></ons-carousel-item>';
             }
             text += '</ons-carousel>';
           }
@@ -419,7 +431,17 @@
             }
             let imageURL = tvProgram[i].ImageUrl;
             imageURL = imageURL.replace("w=300", "w=200");
-            text += '<ons-carousel-item modifier="nodivider" id="' + tvProgram[i].Id + '" name="' + tvProgram[i].Title + '"><div class="area-center drama-on-air-carousel-padding"><div class="thumbnail"><img data-src="' + imageURL + '" alt="' + tvProgram[i].Title + '" class="image-carousel lazyload" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'"/><a href="/tv/tv_program/comment/' + tvProgram[i].Id + '"></a></div>' + imageUrlReference + '<div class="tv-program-top-carousel-title-font">' + tvProgram[i].Title + '</div></div></ons-carousel-item>';
+            $(function raty() {
+              $('#movie-star-' + tvProgram[i].Id).raty({
+                number: 5,
+                readOnly: true,
+                harf: true,
+                precision: true,
+                score: tvProgram[i].Star/2,
+              });
+            });
+
+            text += '<ons-carousel-item modifier="nodivider" id="' + tvProgram[i].Id + '" name="' + tvProgram[i].Title + '"><div class="area-center drama-on-air-carousel-padding"><div id="movie-star-' + tvProgram[i].Id + '"></div><div class="thumbnail"><img data-src="' + imageURL + '" alt="' + tvProgram[i].Title + '" class="image-carousel lazyload" onerror="this.src=\'/static/img/tv_img/hanko_02.png\'"/><a href="/tv/tv_program/comment/' + tvProgram[i].Id + '"></a></div>' + imageUrlReference + '<div class="tv-program-top-carousel-title-font">' + tvProgram[i].Title + '</div></div></ons-carousel-item>';
           }
           text += '</ons-carousel>';
         }

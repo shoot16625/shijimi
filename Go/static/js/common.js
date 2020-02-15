@@ -26,7 +26,7 @@ function autoScroll(varName, itemLen) {
       indexState = activeIndex;
       flag = 0;
     }
-  }, 2400);
+  }, 3300);
 }
 
 // toolbarを隠す

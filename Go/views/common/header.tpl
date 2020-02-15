@@ -35,6 +35,8 @@
 
 <link rel="stylesheet" type="text/css" href="/static/css/common.css" />
 
+<link rel="stylesheet" href="/static/js/star-raty/jquery.raty.css" />
+
 <!-- サービスワーカー -->
 <link rel="manifest" href="/manifest.json" />
 

@@ -52,7 +52,7 @@ func (c *ReviewCommentController) Post() {
 							n += z.Star
 						}
 						w.Star = float32(n / w.CountStar)
-						w.CountReviewComment++
+						w.CountReviewComment = w.CountStar
 						if err := models.UpdateTvProgramById(w); err != nil {
 							fmt.Println(err)
 						}
