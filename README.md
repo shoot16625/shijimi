@@ -214,6 +214,22 @@ vim /etc/ssh/sshd_config (Port)
 36912
 systemctl restart sshd
 
+鍵作成
+クライアントPC
+ssh-keygen -t rsa -b 2048
+mv id_rsa.pub authorized_keys
+chmod 600 authorized_keys
+sudo scp -P 36912 ./authorized_keys uchida@118.27.19.113:/home/uchida/.ssh
+sudo ssh -l uchida -i shijimi_rsa -p 36912 118.27.19.113
+
+サーバ
+mkdir /home/uchida/.ssh
+chown uchida -R /home/uchida/.ssh
+
+RSAAuthentication yes
+PubkeyAuthentication yes
+AuthorizedKeysFile      .ssh/authorized_keys
+PasswordAuthentication no
 
 連続接続禁止
 ban
@@ -225,12 +241,19 @@ clamav
 apt install clamav clamav-daemon
 freshclam
 
-error
+errorの場合
 rm /var/log/clamav/freshclam.log
 touch /var/log/clamav/freshclam.log
 chown clamav:clamav /var/log/clamav/freshclam.log
 nano /etc/logrotate.d/clamav-freshclam
+adm → clamav
 service clamav-freshclam status
+
+nano /etc/clamav/freshclam.conf
+checks 24 → 1
+
+crontab -e
+MAILTO=commentspace.app@gmail.com                                                                                       00 04 * * 1 /root/shijimi/mysqldump/exec_dump.sh
 
 
 ```
@@ -262,9 +285,13 @@ mv Go/main.prod Go/main.go
 
 URL部分
 nano Go/static/js/common.js
-devでもprodでもポートは同じ
-(nano Go/conf/app.conf)
 
 docker-compose up -d --build
 docker-compose stop phpmyadmin
+
+ssh -l uchida -p 36912 118.27.19.113 -L 53389:127.0.0.1:30001
+
+sudo scp -P 36912 ./shijimi_rsa.pub uchida@118.27.19.113:/home/uchida/.ssh
+
+
 ```

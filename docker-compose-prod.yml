@@ -9,7 +9,7 @@ services:
       - MYSQLDUMP_OPTIONS=--quick --single-transaction
     container_name: go_db
     ports:
-      - "3306:3306"
+      - "127.0.0.1:3306:3306"
     tty: true
     restart: always
     volumes:
@@ -28,7 +28,7 @@ services:
     env_file:
       - prod.env
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     tty: true
     restart: always
     depends_on:
@@ -60,7 +60,7 @@ services:
     volumes:
       - "./metabase/metabase-data:/metabase-data"
     ports:
-      - "30001:3000"
+      - "127.0.0.1:30001:3000"
     tty: true
     restart: always
     depends_on:
@@ -72,7 +72,7 @@ services:
   #   - PMA_ARBITRARY=1
   #   - PMA_HOSTS=db
   #   ports:
-  #   - 30002:80
+  #   - 127.0.0.1:30002:80
   #   volumes:
   #     - ./phpmyadmin/sessions:/sessions
   #   tty: true

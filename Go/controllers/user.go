@@ -315,6 +315,7 @@ func (c *UserController) Show() {
 	} else {
 		if session.Get("UserId") == nil {
 			c.Redirect("/", 302)
+			return
 		} else {
 			UserID := session.Get("UserId").(int64)
 			if models.TodayFirstLoginCheck(UserID) {

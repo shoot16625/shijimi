@@ -38,13 +38,12 @@ func (c *CommentController) URLMapping() {
 // @Failure 403 body is empty
 // @router / [post]
 func (c *CommentController) Post() {
-	session := c.StartSession()
 	var v models.Comment
 	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
+	session := c.StartSession()
 	if session.Get("UserId") != nil {
 		if v.Content != "" && v.UserId != 0 {
 			if _, err := models.AddComment(&v); err == nil {
-				// c.Data["json"] = v
 				w, err := models.GetTvProgramById(v.TvProgramId)
 				if err != nil {
 					c.Redirect("/", 302)
@@ -62,8 +61,7 @@ func (c *CommentController) Post() {
 			fmt.Println("正常なデータでない")
 		}
 	}
-	c.Redirect("/tv/tv_program/comment/"+strconv.FormatInt(v.TvProgramId, 10), 302)
-	// }
+	c.Redirect("/tv/tv_program/comment/"+strconv.FormatInt(v.TvProgramId, 10), 200)
 }
 
 // GetOne ...
@@ -343,8 +341,10 @@ func (c *CommentController) SearchComment() {
 		Sortby:     c.GetString("sortby"),
 	}
 	// ゴミ箱ボタンを押下した場合はリダイレクト
+	// 効いていない
 	if s.BeforeDate == "" && s.BeforeTime == "" && s.AfterDate == "" && s.AfterTime == "" {
 		c.Redirect("/tv/tv_program/comment/"+idStr, 302)
+		return
 	}
 
 	c.Data["SearchWords"] = s

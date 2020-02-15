@@ -447,19 +447,21 @@
         request.open('POST', url, true);
         request.setRequestHeader('Content-type','application/json; charset=utf-8');
         request.send(json);
-        // request.onload = function () {
-        //   console.log(request.responseText);
-        //   var x = JSON.parse(request.responseText);
-        //   if (request.readyState == 4 && request.status == "200") {
-        //     console.table(x);
-        //   } else {
-        //     console.error(x);
-        //   }
-        // }
+        request.onload = function () {
+          // console.log(request.responseText);
+          // var x = JSON.parse(request.responseText);
+          if (request.readyState == 4 && request.status == "200") {
+            // setTimeout(window.location.reload(false), 6000);
+            // console.log("here");
+            // window.location.reload(false);
+          } else {
+            // console.error(x);
+          }
+        }
         $('#tweet-dialog-content').val("");
         hideAlertDialog('tweet-dialog');
         document.querySelector('ons-speed-dial').hideItems();
-        setTimeout(window.location.reload(false), 1000);
+        // setTimeout(window.location.reload(false), 16000);
       };
 
       document

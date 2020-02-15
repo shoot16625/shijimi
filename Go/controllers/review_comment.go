@@ -68,7 +68,7 @@ func (c *ReviewCommentController) Post() {
 			}
 		}
 	}
-	c.Redirect("/tv/tv_program/review/"+strconv.FormatInt(v.TvProgramId, 10), 302)
+	c.Redirect("/tv/tv_program/review/"+strconv.FormatInt(v.TvProgramId, 10), 200)
 }
 
 // GetOne ...
