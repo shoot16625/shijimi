@@ -80,6 +80,15 @@ func AddSeason(m *Season) (id int64, err error) {
 	return
 }
 
+func GetSeasonByName(seasonName string) (v *Season, err error) {
+	o := orm.NewOrm()
+	v = &Season{Name: seasonName}
+	if err = o.QueryTable(new(Season)).Filter("Name", seasonName).RelatedSel().One(v); err == nil {
+		return v, nil
+	}
+	return nil, err
+}
+
 func AddWeek(m *Week) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
@@ -515,13 +524,7 @@ func CheckImageURL(str string, title string) (res string) {
 	if !strings.Contains(str, "/static/img/tv_img") {
 		resp, err := http.Get(str)
 		if err != nil || resp.Status == "404 Not Found" {
-			// rand.Seed(time.Now().UnixNano())
-			// r := strconv.Itoa(rand.Intn(10) + 1)
-			// if len(r) == 1 {
-			// 	r = "0" + r
-			// }
 			res = GetImageURL(title)
-			// res = "/static/img/tv_img/hanko_" + r + ".png"
 		} else {
 			defer resp.Body.Close()
 		}

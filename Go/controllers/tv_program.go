@@ -322,8 +322,18 @@ func (c *TvProgramController) Index() {
 		order = append(order, "asc")
 		order = append(order, "asc")
 		query["Year"] = strconv.Itoa(time.Now().Year())
-		query["Season"] = models.GetOnAirSeason()
+		season := models.GetOnAirSeason()
+		v, _ := models.GetSeasonByName(season)
+		query["Season__Id__lte"] = strconv.Itoa(v.Id)
 		l, _ = models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
+		if len(l) < int(limit) {
+			query = make(map[string]string)
+			query["Year__lt"] = strconv.Itoa(time.Now().Year())
+			m, err := models.GetAllTvProgram(query, fields, sortby, order, offset, limit-int64(len(l)))
+			if err == nil {
+				l = append(l, m...)
+			}
+		}
 	}
 	c.Data["TvProgram"] = l
 
@@ -393,6 +403,7 @@ func (c *TvProgramController) Get() {
 	var query = make(map[string]string)
 	sortby = append(sortby, "Hour")
 	order = append(order, "asc")
+	// 現在放送中のドラマ
 	query["Year"] = strconv.Itoa(time.Now().Year())
 	query["Season"] = models.GetOnAirSeason()
 	week := [7]string{"月", "火", "水", "木", "金", "土", "日"}
@@ -404,17 +415,54 @@ func (c *TvProgramController) Get() {
 			c.Data["TvProgram"+weekName[i]] = w
 		}
 	}
+	// 現在放送中の映画
 	limit = 200
 	query["Week.Name"] = "映画"
 	w, err := models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
-	if err == nil {
+	if err == nil && len(w) >= 1 {
 		rand.Seed(time.Now().UnixNano())
 		n := rand.Intn(len(w))
 		ran := 15
 		if len(w) <= n+ran {
 			n = len(w) - ran
 		}
+		if n <= 0 {
+			n = 0
+		}
+		if ran > len(w) {
+			ran = len(w)
+		}
 		c.Data["TvProgramMovie"] = w[n : n+ran]
+	}
+
+	// 公開予定の映画
+	limit = 400
+	query = make(map[string]string)
+	query["Week.Name"] = "映画"
+	year := time.Now().Year()
+	season := models.GetOnAirSeason()
+	if season == "秋" {
+		query["Year"] = strconv.Itoa(year + 1)
+	} else {
+		query["Year"] = strconv.Itoa(year)
+		v, _ := models.GetSeasonByName(season)
+		query["Season__Id__gt"] = strconv.Itoa(v.Id)
+	}
+	w, err = models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
+	if err == nil && len(w) >= 1 {
+		rand.Seed(time.Now().UnixNano())
+		n := rand.Intn(len(w))
+		ran := 15
+		if len(w) <= n+ran {
+			n = len(w) - ran
+		}
+		if n <= 0 {
+			n = 0
+		}
+		if ran > len(w) {
+			ran = len(w)
+		}
+		c.Data["TvProgramNewMovie"] = w[n : n+ran]
 	}
 	c.TplName = "tv_program/top_page.tpl"
 }

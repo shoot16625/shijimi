@@ -214,11 +214,6 @@ vim /etc/ssh/sshd_config (Port)
 36912
 systemctl restart sshd
 
-ufw enable
-ufw allow https/tcp
-ufw allow http/tcp
-ufw allow ftp
-ufw status verbose
 
 連続接続禁止
 ban
@@ -226,18 +221,29 @@ apt-get install fail2ban
 /etc/init.d/fail2ban start
 (再起動でもactive)
 
+clamav
+apt install clamav clamav-daemon
+freshclam
+
+error
+rm /var/log/clamav/freshclam.log
+touch /var/log/clamav/freshclam.log
+chown clamav:clamav /var/log/clamav/freshclam.log
+nano /etc/logrotate.d/clamav-freshclam
+service clamav-freshclam status
 
 
 ```
 
 ```
+git clone https://github.com/shoot16625/shijimi.git
+
 /root/shijimiとする
 devファイル・Procは削除してよい
 
 変更する点
-Go/conf/appconf(やらなくてもよくなった)
 Go/static/js/common.js(URL)
-Go/main.prod(いい感じにする)
+Go/main.prod(いい感じにする main.goに)
 
 普段はphpmyadmin・metabaseコンテナストップ
 
