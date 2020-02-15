@@ -2,6 +2,7 @@
 <html lang="ja">
   <head>
     {{ template "/common/header.tpl" . }}
+    <link rel="stylesheet" href="/static/js/star-raty/jquery.raty.css" />
   </head>
 
   <body>
@@ -38,9 +39,10 @@
         <ons-carousel-item>
           <ons-list>
             <ons-list-item>総レビュー数：{{ .CommentNum}}</ons-list-item>
-            <ons-list-item
-              ><i class="fas fa-star"></i>：{{ .TvProgram.Star}}</ons-list-item
-            >
+            <ons-list-item>
+              <div id="average-star"></div id="average-star">
+              <!-- <i class="fas fa-star"></i>：{{ .TvProgram.Star}} -->
+            </ons-list-item>
             <ons-list-item id="favorite-point-ranking-expandable" expandable>
               おすすめポイントランキング
               <div class="expandable-content">
@@ -54,6 +56,18 @@
     </ons-page>
 
     {{ template "/common/js.tpl" . }}
+    <script src="/static/js/star-raty/jquery.raty.js"></script>
+    <script>
+      $.fn.raty.defaults.path = '/static/js/star-raty/images';
+
+      $(function raty() {
+        $('#average-star').raty({
+          number: 10,
+          readOnly: true,
+          score: {{ .TvProgram.Star}},
+        });
+      });
+    </script>
 
     <template id="tweet-dialog.html">
       <ons-dialog id="tweet-dialog" modifier="large" cancelable fullscreen>
@@ -96,12 +110,8 @@
               <ons-switch id="check-spoiler"> </ons-switch>
             </div>
             <div style="text-align: center;">
-              <ons-row style="margin-top: 20px;">
-                <ons-col
-                  width="40px"
-                  class="area-center"
-                  style="line-height: 31px;"
-                >
+              <ons-row style="margin: 20px 0 20px 0;">
+                <ons-col width="40px" class="area-center">
                   <ons-icon
                     icon="md-thumb-down"
                     style="color:rgb(71, 119, 121);"
@@ -109,9 +119,9 @@
                 </ons-col>
                 <ons-col>
                   <div id="star-display" class="area-center">
-                    <i class="fas fa-star"></i>： 5
+                    <!-- <i class="fas fa-star"></i>： 5 -->
                   </div>
-                  <ons-range
+                  <!-- <ons-range
                     id="star-point"
                     name="star-point"
                     style="width: 100%;"
@@ -120,13 +130,9 @@
                     max="10"
                     step="1"
                     required
-                  ></ons-range>
+                  ></ons-range> -->
                 </ons-col>
-                <ons-col
-                  width="40px"
-                  class="area-center"
-                  style="line-height: 31px;"
-                >
+                <ons-col width="40px" class="area-center">
                   <ons-icon
                     icon="md-thumb-up"
                     style="color:rgb(241, 161, 86);"
@@ -185,11 +191,22 @@
             }
           });
 
-          $('#star-point').change(function() {
-            let star = $('#star-point').val();
-            document.getElementById('star-display').innerHTML =
-              '<i class="fas fa-star"></i>： ' + star;
+          $(function raty() {
+            $('#star-display').raty({
+              number: 10,
+              score: 5,
+              hints: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+              click: function(score, evt) {
+                starScore = score;
+              }
+            });
           });
+
+          // $('#star-point').change(function() {
+          //   let star = $('#star-point').val();
+          //   document.getElementById('star-display').innerHTML =
+          //     '<i class="fas fa-star"></i>： ' + star;
+          // });
 
           hideSwipeToolbar('tweet-hide-swipe', 'tweet-dialog');
         </script>
@@ -461,7 +478,7 @@
           }
         }
         data.FavoritePoint = fps.join(",");
-        data.Star = Number(document.getElementById("star-point").value);
+        data.Star = starScore;
         var json = JSON.stringify(data);
         var request = new XMLHttpRequest();
         request.open('POST', url, true);

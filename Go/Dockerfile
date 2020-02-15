@@ -1,3 +1,4 @@
+# heroku
 FROM golang:1.12.12-alpine3.9 AS build
 
 ENV GOPATH $GOPATH:/go
