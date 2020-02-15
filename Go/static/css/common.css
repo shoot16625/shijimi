@@ -364,6 +364,7 @@ li {
   text-align: center;
   bottom: 10px;
   display: none;
+  z-index: 10002;
 }
 
 .floating-top {

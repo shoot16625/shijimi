@@ -5,11 +5,12 @@
   </head>
 
   <body>
+    <div class="floating-top"></div>
     <ons-page>
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
 
-      <ons-pull-hook id="pull-hook"> </ons-pull-hook>
+      <ons-pull-hook id="pull-hook"></ons-pull-hook>
 
       <ons-speed-dial
         id="speed-dial"
@@ -478,6 +479,9 @@
           }
         }
         data.FavoritePoint = fps.join(",");
+        if (typeof starScore === "undefined") {
+          starScore = 5;
+        }
         data.Star = starScore;
         var json = JSON.stringify(data);
         var request = new XMLHttpRequest();
@@ -495,7 +499,16 @@
         $('#tweet-dialog-content').val("");
         hideAlertDialog('tweet-dialog');
         document.querySelector('ons-speed-dial').hideItems();
-        setTimeout(window.location.reload(false), 1000);
+        $(".floating-top").html('<div class="toast"><div class="toast__message">リロードして反映してね <i class="fas fa-thumbs-up"></i></div></div>');
+        $(".floating-top").fadeIn();
+        setTimeout(function() {
+          $(".floating-top").fadeOut();
+        }, 3000);
+
+        // setTimeout(function() {
+        //   window.location.reload(false);
+        // }, 1000);
+        // setTimeout(window.location.reload(false), 1000);
       };
     </script>
     <script type="text/javascript">

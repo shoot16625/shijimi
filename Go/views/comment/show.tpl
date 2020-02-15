@@ -6,6 +6,7 @@
 
   <body>
     <div class="floating-top"></div>
+    <div class="floating-bottom"></div>
     <ons-page id="tv-comments">
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
@@ -447,20 +448,29 @@
         request.open('POST', url, true);
         request.setRequestHeader('Content-type','application/json; charset=utf-8');
         request.send(json);
-        request.onload = function () {
-          // console.log(request.responseText);
-          // var x = JSON.parse(request.responseText);
-          if (request.readyState == 4 && request.status == "200") {
-            // setTimeout(window.location.reload(false), 6000);
-            // console.log("here");
-            // window.location.reload(false);
-          } else {
-            // console.error(x);
-          }
-        }
+        // request.onload = function () {
+        //   var x = JSON.parse(request.responseText);
+        //   if (request.readyState == 4 && request.status == "200") {
+        //     setTimeout(window.location.reload(false), 6000);
+        //     console.log("here");
+        //     window.location.reload(false);
+        //   } else {
+        //     console.error(x);
+        //   }
+        // }
         $('#tweet-dialog-content').val("");
         hideAlertDialog('tweet-dialog');
         document.querySelector('ons-speed-dial').hideItems();
+
+        $(".floating-bottom").html('<div class="toast" style="width:10%;background:darkgray;"><div class="toast__message"><i class="fas fa-thumbs-up"></i></div></div>');
+        $(".floating-bottom").fadeIn();
+        setTimeout(function() {
+          $(".floating-bottom").fadeOut();
+        }, 1500);
+
+          // setTimeout(function() {
+          //   window.location.reload(false);
+          // }, 1000);
         // setTimeout(window.location.reload(false), 16000);
       };
 
