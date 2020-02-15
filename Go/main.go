@@ -19,16 +19,6 @@ import (
 const location = "Asia/Tokyo"
 
 func main() {
-	//if beego.BConfig.RunMode == "dev" {
-	//	beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
-	//}
-	//if beego.BConfig.RunMode == "prod" {
-	// heroku
-	// port, _ := strconv.Atoi(os.Getenv("PORT"))
-	// fmt.Println(port)
-	// beego.BConfig.Listen.HTTPPort = port
-	// beego.BConfig.Listen.HTTPSPort = port
-	//}
 	beego.BConfig.WebConfig.StaticDir["/manifest.json"] = "manifest.json"
 	beego.BConfig.WebConfig.StaticDir["/serviceWorker.js"] = "serviceWorker.js"
 	beego.Run()
@@ -46,7 +36,8 @@ func init() {
 	user := os.Getenv("MYSQL_USER")
 	pass := os.Getenv("MYSQL_PASSWORD")
 	dbName := os.Getenv("MYSQL_DATABASE")
-	sqlconn := user + ":" + pass + "@tcp(db:3306)/" + dbName
+	port := os.Getenv("MYSQL_PORT")
+	sqlconn := user + ":" + pass + "@tcp(db:" + port + ")/" + dbName
 	orm.RegisterDataBase("default", beego.AppConfig.String("driver"), sqlconn+"?charset=utf8mb4&loc=Asia%2FTokyo")
 	// heroku
 	// orm.RegisterDataBase("default", beego.AppConfig.String("driver"), beego.AppConfig.String("sqlconn")+"?charset=utf8mb4&loc=Asia%2FTokyo")
@@ -91,10 +82,10 @@ func init() {
 	// 初期データの投入
 	db.EmptyInitSQL()
 
-	// db.ExecInitSQL()
+	db.ExecInitSQL()
 
-	// wikiTitles := []string{"左ききのエレン"}
-	// db.AddRecentTvInfo(wikiTitles)
+	wikiTitles := []string{"左ききのエレン"}
+	db.AddRecentTvInfo(wikiTitles)
 	// wikis := []string{"日本のテレビドラマ一覧_(2010年代)"}
 	// wikis := []string{"日本のテレビドラマ一覧_(2020年代)", "日本のテレビドラマ一覧_(2010年代)", "日本のテレビドラマ一覧_(2000年代)"}
 	// db.AddTvProgramsInformation(wikis)

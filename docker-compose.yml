@@ -54,7 +54,6 @@ services:
     image: metabase/metabase:v0.33.7.1
     environment:
       - MB_DB_TYPE=mysql
-      - MB_DB_PORT=3306
       - MB_DB_HOST=go_db
     env_file:
       - dev.env
@@ -76,7 +75,6 @@ services:
   #     - dev.env
   #   environment:
   #     - MYSQL_HOST=go_db
-  #     - MYSQL_PORT=3306
   #     - MYSQLDUMP_OPTIONS=--quick --single-transaction
   #   tty: true
   #   restart: always

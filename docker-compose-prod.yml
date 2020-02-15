@@ -9,7 +9,7 @@ services:
       - MYSQLDUMP_OPTIONS=--quick --single-transaction
     container_name: go_db
     ports:
-      - "33066:3306"
+      - "3306:3306"
     tty: true
     restart: always
     volumes:
@@ -54,7 +54,6 @@ services:
     image: metabase/metabase:v0.33.7.1
     environment:
       - MB_DB_TYPE=mysql
-      - MB_DB_PORT=33066
       - MB_DB_HOST=go_db
     env_file:
       - prod.env

@@ -192,11 +192,23 @@ dockerテンプレートを利用
 DNSの所
 githubと接続
 ssh 接続 root禁止
-useradd uchida
+
+ファイアウォール
+firewall-cmd --list-all
+systemctl start firewalld.service
+systemctl enable firewalld.service
+firewall-cmd --remove-service=ssh
+firewall-cmd --permanent --zone=public --remove-service=ssh
+firewall-cmd --permanent --add-port=36912/tcp
+firewall-cmd --permanent --zone=public --add-service=http
+firewall-cmd --permanent --zone=public --add-service=https
+firewall-cmd --reload
+
+rootログイン禁止
+useradd -m uchida
 passwd uchida
 vim /etc/ssh/sshd_config (PermitRootLogin no)
 systemctl restart sshd
-
 ポート変更
 vim /etc/ssh/sshd_config (Port)
 36912
@@ -208,6 +220,7 @@ ufw allow http/tcp
 ufw allow ftp
 ufw status verbose
 
+連続接続禁止
 ban
 apt-get install fail2ban
 /etc/init.d/fail2ban start
