@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	// "math/rand"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -523,8 +524,10 @@ func (c *UserController) LoginAdminPage() {
 
 func (c *UserController) LoginAdmin() {
 	session := c.StartSession()
-	adminName := "しじみ"
-	key := "$2a$10$869FdgX6e0beX8jK5YaBKumT6yOh.aldJ8EA7zx8fPkkjYpPhEwzq"
+	adminName := os.Getenv("ADMIN_NAME")
+	// adminName := "しじみ"
+	key := os.Getenv("ADMIN_KEY")
+	// key := "$2a$10$869FdgX6e0beX8jK5YaBKumT6yOh.aldJ8EA7zx8fPkkjYpPhEwzq"
 	if c.GetString("username") == adminName {
 		v, err := models.GetUserByUsername(c.GetString("username"))
 		if err == nil && models.UserPassMach(v.Password, c.GetString("password")) {
@@ -564,7 +567,7 @@ func (c *UserController) LoginAdmin() {
 func (c *UserController) Login() {
 	session := c.StartSession()
 
-	if c.GetString("username") == "しじみ" {
+	if c.GetString("username") == os.Getenv("ADMIN_NAME") {
 		// 管理者は別URLよりログイン
 		c.Redirect("/", 302)
 		return
@@ -664,8 +667,6 @@ func (c *UserController) Login() {
 		}
 	}
 	query["Week.Name"] = "映画"
-	// rand.Seed(time.Now().UnixNano())
-	// offset = int64(rand.Intn(30))
 	w, err := models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
 	if err == nil {
 		c.Data["TvProgramMovie"] = w

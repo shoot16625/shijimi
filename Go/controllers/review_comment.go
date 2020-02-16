@@ -220,10 +220,11 @@ func (c *ReviewCommentController) Show() {
 	cnt := models.CountAllReviewCommentNumByTvProgramId(tvProgramID)
 	c.Data["CommentNum"] = cnt
 
+	displayLimit := 3
 	fpRanking := models.FavoritePointRankingByTvProgramId(tvProgramID)
-	if len(fpRanking) > 3 {
+	if len(fpRanking) > displayLimit {
 		// お気に入りポイントトップ3を抽出
-		fpRanking = fpRanking[:3]
+		fpRanking = fpRanking[:displayLimit]
 	} else if fpRanking[0].Value == 0 {
 		fpRanking = nil
 	}
@@ -280,9 +281,10 @@ func (c *ReviewCommentController) SearchComment() {
 	c.Data["CommentNum"] = cnt
 
 	fpRanking := models.FavoritePointRankingByTvProgramId(tvProgramID)
-	if len(fpRanking) > 3 {
+	displayLimit := 3
+	if len(fpRanking) > displayLimit {
 		// お気に入りポイントトップ3を抽出
-		fpRanking = fpRanking[:3]
+		fpRanking = fpRanking[:displayLimit]
 	} else if fpRanking[0].Value == 0 {
 		fpRanking = nil
 	}

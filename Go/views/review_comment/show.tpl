@@ -5,7 +5,7 @@
   </head>
 
   <body>
-    <div class="floating-top"></div>
+    <!-- <div class="floating-top"></div> -->
     <ons-page>
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
@@ -499,15 +499,16 @@
         $('#tweet-dialog-content').val("");
         hideAlertDialog('tweet-dialog');
         document.querySelector('ons-speed-dial').hideItems();
-        $(".floating-top").html('<div class="toast"><div class="toast__message">リロードして反映してね <i class="fas fa-thumbs-up"></i></div></div>');
-        $(".floating-top").fadeIn();
-        setTimeout(function() {
-          $(".floating-top").fadeOut();
-        }, 3000);
+
+        // $(".floating-top").html('<div class="toast"><div class="toast__message">リロードして反映してね <i class="fas fa-thumbs-up"></i></div></div>');
+        // $(".floating-top").fadeIn();
+        // setTimeout(function() {
+        //   $(".floating-top").fadeOut();
+        // }, 3000);
 
         setTimeout(function() {
           window.location.reload(false);
-        }, 1000);
+        }, 500);
         // setTimeout(window.location.reload(false), 1000);
       };
     </script>

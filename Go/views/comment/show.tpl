@@ -6,7 +6,7 @@
 
   <body>
     <div class="floating-top"></div>
-    <div class="floating-bottom"></div>
+    <!-- <div class="floating-bottom"></div> -->
     <ons-page id="tv-comments">
       {{ template "/common/toolbar.tpl" . }}
       {{ template "/common/alert.tpl" . }}
@@ -462,15 +462,15 @@
         hideAlertDialog('tweet-dialog');
         document.querySelector('ons-speed-dial').hideItems();
 
-        $(".floating-bottom").html('<div class="toast" style="width:10%;background:darkgray;"><div class="toast__message"><i class="fas fa-thumbs-up"></i></div></div>');
-        $(".floating-bottom").fadeIn();
-        setTimeout(function() {
-          $(".floating-bottom").fadeOut();
-        }, 1500);
+        // $(".floating-bottom").html('<div class="toast" style="width:10%;background:darkgray;"><div class="toast__message"><i class="fas fa-thumbs-up"></i></div></div>');
+        // $(".floating-bottom").fadeIn();
+        // setTimeout(function() {
+        //   $(".floating-bottom").fadeOut();
+        // }, 1500);
 
           setTimeout(function() {
             window.location.reload(false);
-          }, 1000);
+          }, 500);
         // setTimeout(window.location.reload(false), 16000);
       };
 

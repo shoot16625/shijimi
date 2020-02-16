@@ -18,7 +18,7 @@
       <div class="list-margin">
         <ons-card style="background-color:linen;padding: 10px;">
           <p>「ShiJimi」</p>
-          <p>ドラマ・映画の情報共有SNS</p>
+          <p>ドラマ・映画のレビューSNS</p>
           <div class="area-right-float hint-position-relative">
             <ons-button
               modifier="quiet"

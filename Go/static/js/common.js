@@ -1,7 +1,7 @@
 // 定数
-//const URL = 'http://192.168.2.174:8080';
-//const URL = "http://192.168.2.174:8081";
-//const URL = "localhost:8080";
+// const URL = 'http://192.168.2.174:8080';
+// const URL = "http://192.168.2.174:8081";
+// const URL = "localhost:8080";
 // const URL = "https://shijimi.herokuapp.com";
 const URL = 'https://www.shijimi.work';
 

@@ -12,7 +12,7 @@
   name="description"
   content="ドラマ・映画の情報共有SNS。リアルタイムにコメントを投稿したり、お気に入りの番組を保存することができます。さらに、あなたのログからおすすめの作品を表示します。あなたにぴったりの作品が見つかるかも？"
 />
-<meta name="keywords" content="レビュー,映画,ドラマ,ツイート,しじみ" />
+<meta name="keywords" content="レビュー,映画,ドラマ,ツイート,おすすめ" />
 <meta property="og:title" content="ShiJimi" />
 <meta property="og:type" content="SNS" />
 <meta
@@ -21,6 +21,21 @@
 />
 
 <link rel="shijimi icon" href="/static/img/shijimi-48x48.ico" />
+<!-- スマホ用アイコン -->
+<link
+  rel="apple-touch-icon"
+  sizes="180x180"
+  href="/static/img/shijimi-192x192.png"
+/>
+<link
+  rel="icon"
+  type="image/png"
+  href="/static/img/shijimi-192x192.png"
+  sizes="192x192"
+/>
+
+<!-- ホーム画面に表示されるアプリ名 -->
+<meta name="apple-mobile-web-app-title" content="ShiJimi" />
 
 <title>ShiJimi</title>
 
@@ -37,9 +52,6 @@
 
 <link rel="stylesheet" href="/static/js/star-raty/jquery.raty.css" />
 
-<!-- サービスワーカー -->
-<link rel="manifest" href="/manifest.json" />
-
 <!-- ツイッターカード -->
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:site" content="@playtag551" />
@@ -53,6 +65,9 @@
   property="og:image"
   content="https://www.shijimi.work/static/img/shijimi-transparence.png"
 />
+
+<!-- サービスワーカー -->
+<link rel="manifest" href="/manifest.json" />
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script

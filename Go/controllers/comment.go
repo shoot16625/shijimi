@@ -4,11 +4,10 @@ import (
 	"app/models"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 
-	// "time"
+	"time"
 
 	"github.com/astaxie/beego"
 )
@@ -57,8 +56,6 @@ func (c *CommentController) Post() {
 					_ = models.UpdateUserById(z)
 				}
 			}
-		} else {
-			fmt.Println("正常なデータでない")
 		}
 	}
 	c.Redirect("/tv/tv_program/comment/"+strconv.FormatInt(v.TvProgramId, 10), 200)
@@ -264,8 +261,15 @@ func (c *CommentController) Show() {
 	}
 	c.Data["Users"] = users
 	session := c.StartSession()
+
 	// 閲覧数カウント
-	if session.Get(tvProgramID) == nil {
+	var browsingLog time.Time
+	tmp := browsingLog
+	timeLag := 30 * time.Minute
+	if session.Get("tvBrowsingLog-"+idStr) != nil {
+		browsingLog = session.Get("tvBrowsingLog-" + idStr).(time.Time)
+	}
+	if browsingLog == tmp || time.Since(browsingLog.Add(timeLag)) >= 0 {
 		var userID int64 = 0
 		if session.Get("UserId") != nil {
 			userID = session.Get("UserId").(int64)
@@ -279,7 +283,7 @@ func (c *CommentController) Show() {
 
 		v.CountClicked++
 		_ = models.UpdateTvProgramById(v)
-		session.Set(tvProgramID, true)
+		session.Set("tvBrowsingLog-"+idStr, time.Now())
 	}
 
 	if session.Get("UserId") != nil {
