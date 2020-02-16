@@ -178,7 +178,6 @@
               type="date"
               name="age"
               id="age"
-              value="{{.User.Age}}"
               modifier="underbar"
               min="1920-01-01"
               max="2030-01-01"
@@ -458,13 +457,14 @@
     </script>
     <script>
       if ({{.User}} === null) {
-        ;
+        document.getElementById('age').value = "2000-01-01";
       } else {
         document.getElementById('gender').value = {{.User.Gender}};
         document.getElementById('marital').value = {{.User.Marital}};
         document.getElementById('job').value = {{.User.Job}};
         document.getElementById('address').value = {{.User.Address}};
         document.getElementById('bloodType').value = {{.User.BloodType}};
+        document.getElementById('age').value = {{.User.Age}};
       }
     </script>
   </body>
