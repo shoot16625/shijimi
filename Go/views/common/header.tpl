@@ -20,12 +20,13 @@
   content="ドラマ・映画のレビューSNS。リアルタイムにツイートを投稿したり、お気に入りの番組を保存することができます。さらに、あなたのログからおすすめの作品を表示します。あなたにぴったりの作品が見つかるかも？"
 />
 
-<link rel="shijimi icon" href="/static/img/shijimi-48x48.ico" />
+<link rel="icon" href="/static/img/shijimi-48x48.ico" />
+
 <!-- スマホ用アイコン -->
 <link
   rel="apple-touch-icon"
   sizes="180x180"
-  href="/static/img/shijimi-192x192.png"
+  href="/static/img/shijimi-nomal.png"
 />
 <link
   rel="icon"

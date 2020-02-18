@@ -443,6 +443,10 @@
       // スピードダイアルは後から表示（表示バグ回避）
       document.getElementById('speed-dial').innerHTML =
         "<ons-fab><ons-icon icon='md-share'></ons-icon></ons-fab><ons-speed-dial-item><ons-icon icon='md-search' onclick='dialogBoxEveryone(\"search-dialog\")'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><ons-icon icon='md-chart' onclick='goAnotherCarousel(1)'></ons-icon></ons-speed-dial-item><ons-speed-dial-item><i class='fas fa-arrow-up' onclick='goTop()'></i></ons-speed-dial-item>";
+
+      ons.ready(function() {
+        pullHook();
+      });
     </script>
   </body>
 </html>
