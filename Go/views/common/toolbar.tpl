@@ -18,7 +18,7 @@
     <div class="area-center">
       <img
         class="toolbar-image"
-        src="/static/img/shijimi-transparence.png"
+        src="/static/img/shijimi-192x192-transparence.png"
         alt="shijimi"
         height="42px;"
         onclick="location.href='/'"

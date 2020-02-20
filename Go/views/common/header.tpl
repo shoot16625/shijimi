@@ -64,7 +64,7 @@
 />
 <meta
   property="og:image"
-  content="https://www.shijimi.work/static/img/shijimi-transparence.png"
+  content="https://www.shijimi.work/static/img/shijimi-192x192-transparence.png"
 />
 
 <!-- サービスワーカー -->
