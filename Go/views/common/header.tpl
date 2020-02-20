@@ -26,7 +26,7 @@
 <link
   rel="apple-touch-icon"
   sizes="180x180"
-  href="/static/img/shijimi-nomal.png"
+  href="/static/img/shijimi-180x180.png"
 />
 <link
   rel="icon"
