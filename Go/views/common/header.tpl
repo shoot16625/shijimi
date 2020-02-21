@@ -22,12 +22,6 @@
 
 <link rel="icon" href="/static/img/shijimi-48x48.ico" />
 
-<!-- スマホ用アイコン -->
-<link
-  rel="apple-touch-icon"
-  sizes="180x180"
-  href="/static/img/shijimi-180x180.png"
-/>
 <link
   rel="icon"
   type="image/png"
@@ -37,6 +31,54 @@
 
 <!-- ホーム画面に表示されるアプリ名 -->
 <meta name="apple-mobile-web-app-title" content="ShiJimi" />
+
+<!-- スマホ用アイコン -->
+<link
+  rel="apple-touch-icon"
+  sizes="120x120"
+  href="/static/img/shijimi-120x120.png"
+/>
+<link
+  rel="apple-touch-icon"
+  sizes="144x144"
+  href="/static/img/shijimi-144x144.png"
+/>
+<link
+  rel="apple-touch-icon"
+  sizes="152x152"
+  href="/static/img/shijimi-152x152.png"
+/>
+<link
+  rel="apple-touch-icon"
+  sizes="180x180"
+  href="/static/img/shijimi-180x180.png"
+/>
+<link
+  rel="apple-touch-startup-image"
+  href="/static/img/shijimi-640x1136.png"
+  media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+/>
+<link
+  rel="apple-touch-startup-image"
+  href="/static/img/shijimi-750x1334.png"
+  media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+/>
+<link
+  rel="apple-touch-startup-image"
+  href="/static/img/shijimi-1242x2208.png"
+  media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+/>
+<link
+  rel="apple-touch-startup-image"
+  href="/static/img/shijimi-1125x2436.png"
+  media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
+/>
+<link
+  rel="apple-touch-startup-image"
+  href="/static/img/shijimi-828x1792.png"
+  media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
+/>
+<meta name="apple-mobile-web-app-capable" content="yes" />
 
 <title>ShiJimi</title>
 
