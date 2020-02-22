@@ -241,10 +241,28 @@ func (c *CommentController) Show() {
 		c.Data["TvProgram"] = v
 	}
 
-	l, err := models.GetCommentByTvProgramId(tvProgramID, 200)
+	var limit int64 = 200
+
+	l, err := models.GetCommentByTvProgramId(tvProgramID, limit)
 	if err != nil {
 		c.Data["Comment"] = nil
 	} else {
+		c.Data["Comment"] = l
+	}
+	// twitterからツイートを拝借
+	if len(l) < int(limit) {
+		var keyword string
+		keyword = strings.Split(v.Title, "（")[0]
+		keyword = strings.Split(keyword, "〜")[0]
+		res := models.GetTwitter(keyword)
+		res_norm := models.NormalizeTwitter(res)
+		searchResult := models.ReshapeTweetJson(res_norm, tvProgramID)
+		searchResultLen := int(limit) - len(l)
+		if len(searchResult) >= searchResultLen {
+			l = append(l, searchResult[:searchResultLen]...)
+		} else {
+			l = append(l, searchResult...)
+		}
 		c.Data["Comment"] = l
 	}
 

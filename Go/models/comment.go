@@ -3,10 +3,13 @@ package models
 import (
 	"errors"
 	"fmt"
+	"net/url"
 	"reflect"
 	"strings"
 	"time"
 
+	"github.com/ChimeraCoder/anaconda"
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 )
 
@@ -296,4 +299,41 @@ func DeleteCommentsByUserId(id int64) {
 	num, _ := o.QueryTable(new(Comment)).Filter("UserId", id).Delete()
 	// いいね情報も同時に削除する
 	fmt.Println("delete comment", num)
+}
+
+func GetTwitter(keyword string) anaconda.SearchResponse {
+	api := GetTwitterApi()
+	v := url.Values{}
+	v.Set("count", "1000")
+	searchResult, _ := api.GetSearch(keyword, v)
+	return searchResult
+}
+
+func GetTwitterApi() *anaconda.TwitterApi {
+	api := anaconda.NewTwitterApiWithCredentials(beego.AppConfig.String("twitter-your-access-token"), beego.AppConfig.String("twitter-your-access-token-secret"), beego.AppConfig.String("twitter-your-consumer-key"), beego.AppConfig.String("twitter-your-consumer-secret"))
+	return api
+}
+
+func NormalizeTwitter(searchResult anaconda.SearchResponse) (res []anaconda.Tweet) {
+	for _, tweet := range searchResult.Statuses {
+		if tweet.RetweetedStatus == nil {
+			res = append(res, tweet)
+		}
+	}
+	return res
+}
+
+func ReshapeTweetJson(searchResult []anaconda.Tweet, tvProgramId int64) (res []Comment) {
+	for index, tweet := range searchResult {
+		var t Comment
+		t.Content = tweet.FullText
+		t.TvProgramId = tvProgramId
+		t.UserId = 1
+		t.Id = -int64(index)
+		c, _ := time.Parse("Mon Jan 2 15:04:05 -0700 2006", tweet.CreatedAt)
+		c = c.In(time.Local)
+		t.Created = c
+		res = append(res, t)
+	}
+	return res
 }
