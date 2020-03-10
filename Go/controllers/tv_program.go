@@ -30,6 +30,7 @@ func (c *TvProgramController) URLMapping() {
 	c.Mapping("Search", c.Search)
 	c.Mapping("SearchTvProgram", c.SearchTvProgram)
 	c.Mapping("CreatePage", c.CreatePage)
+	c.Mapping("CreateTvProgramAuto", c.CreateTvProgramAuto)
 	c.Mapping("GetTvProgramWikiInfo", c.GetTvProgramWikiInfo)
 	c.Mapping("GetMovieWikiInfo", c.GetMovieWikiInfo)
 }
@@ -724,6 +725,26 @@ func (c *TvProgramController) CreatePage() {
 		w, _ := models.GetUserById(userID)
 		c.Data["User"] = w
 		c.TplName = "tv_program/create.tpl"
+	} else {
+		c.Redirect("/", 302)
+	}
+}
+
+// 番組一括登録
+func (c *TvProgramController) CreateTvProgramAuto() {
+	session := c.StartSession()
+	if session.Get("UserId") != nil {
+		userID := session.Get("UserId").(int64)
+		if userID == 1 {
+			w, _ := models.GetUserById(userID)
+			c.Data["User"] = w
+			wikis := []string{"日本のテレビドラマ一覧_(2020年代)"}
+			db.AddTvProgramsInformation(wikis)
+			db.GetMovieWalkers(time.Now().Year(), time.Now().Year())
+			c.TplName = "tv_program/create_tvprogram_auto_result.tpl"
+		} else {
+			c.Redirect("/", 302)
+		}
 	} else {
 		c.Redirect("/", 302)
 	}

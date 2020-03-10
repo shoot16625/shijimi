@@ -316,7 +316,9 @@ func GetTwitterApi() *anaconda.TwitterApi {
 
 func NormalizeTwitter(searchResult anaconda.SearchResponse) (res []anaconda.Tweet) {
 	for _, tweet := range searchResult.Statuses {
-		if tweet.RetweetedStatus == nil {
+		// リツイートは除外
+		// 宛先が指定されているtweetは除外
+		if tweet.RetweetedStatus == nil && !(strings.HasPrefix(tweet.FullText, "@")) {
 			res = append(res, tweet)
 		}
 	}

@@ -233,7 +233,7 @@ func GetUserCount() (cnt int64) {
 // 今日初めてのログイン時にポイント付与
 func AddLoginPoint(userID int64) {
 	v, _ := GetUserById(userID)
-	v.MoneyPoint += 1
+	v.MoneyPoint++
 	_ = UpdateUserById(v)
 
 	var w PointHistory

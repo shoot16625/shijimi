@@ -1,8 +1,6 @@
 // 定数
 // const URL = 'http://192.168.2.174:8080';
-// const URL = "http://192.168.2.174:8081";
-// const URL = "localhost:8080";
-// const URL = "https://shijimi.herokuapp.com";
+// const URL = 'http://localhost:8080';
 const URL = 'https://www.shijimi.work';
 
 // 自動スクロール
@@ -293,7 +291,13 @@ function goTop() {
 
 // ツールバークリックで上部へ移動
 document.getElementById('image-toolbar').onclick = function() {
-  goTop();
+  let limit = 500;
+  let pos = $('.page__content').scrollTop();
+  let swingSpeed = pos / 20;
+  if (swingSpeed < limit) {
+    swingSpeed = limit;
+  }
+  $('.page__content').animate({ scrollTop: 0 }, swingSpeed, 'swing');
 };
 
 // 指定位置へスクロール
@@ -324,6 +328,7 @@ function goOtherPage(userID, tvProgramID, path) {
   if (userID == null) {
     return dialogBoxEveryone('alert-only-user-dialog');
   } else if (path == 'delete-tvprogram') {
+    // 番組の削除
     if (userID != 1) {
       return dialogBoxEveryone('alert-only-admin-dialog');
     } else {

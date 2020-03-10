@@ -41,8 +41,6 @@ func init() {
 	orm.RegisterDataBase("default", beego.AppConfig.String("driver"), sqlconn+"?charset=utf8mb4&loc=Asia%2FTokyo")
 	// heroku
 	// orm.RegisterDataBase("default", beego.AppConfig.String("driver"), beego.AppConfig.String("sqlconn")+"?charset=utf8mb4&loc=Asia%2FTokyo")
-	// データを初期化して起動
-	// err := orm.RunSyncdb("default", true, false)
 	// データの変更点を追加して起動
 	err := orm.RunSyncdb("default", false, false)
 	if err != nil {

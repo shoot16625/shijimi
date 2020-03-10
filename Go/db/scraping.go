@@ -22,7 +22,6 @@ func GetWikiDoramas(referencePath string) {
 	var year []string
 	doc.Find("span.mw-headline").Each(func(_ int, s *goquery.Selection) {
 		text, _ := s.Attr("id")
-		text = text
 		if len(year) < 10 {
 			year = append(year, text[:4])
 		}
@@ -332,10 +331,6 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 // Add drama information in wiki lists.
 // change here
 func AddTvProgramsInformation(wikis []string) {
-	// prod
-	// wikis := []string{"日本のテレビドラマ一覧_(2020年代)", "日本のテレビドラマ一覧_(2010年代)", "日本のテレビドラマ一覧_(2000年代)"}
-	// dev
-	// wikis := []string{"日本のテレビドラマ一覧_(2010年代)"}
 	for _, v := range wikis {
 		GetWikiDoramas("https://ja.wikipedia.org/wiki/" + v)
 	}
@@ -480,11 +475,6 @@ func GetMovieWalker(year string, month string) {
 // Get movies.
 // change here
 func GetMovieWalkers(start int, end int) {
-	// dev
-	// var start int = 2020
-	// prod
-	// var start int = 2000
-	// var end int = time.Now().Year()
 	y := 0
 	for {
 		year := strconv.Itoa(start + y)

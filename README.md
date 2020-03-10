@@ -110,6 +110,7 @@ docker, docker-composeが必要
 1. ローカルPCからリクエストが投げられない．クロスドメインエラー
     1. https://qiita.com/growsic/items/a919a7e2a665557d9cf4
     1. または，common.jsのURLがおかしい
+    1. google-chrome --disable-web-security --user-data-dir="/tmp/chrome"
 1. herokuにあげたアプリにリクエスト投げられない
     1. httpではだめ．https
 1. c.Dataで引き継げない
@@ -159,7 +160,12 @@ heroku container:release web -a shijimi
 heroku open
 heroku logs --tail
 
-tv/user/login_admin_page
+データ更新（admin必要）
+ドラマは常に2020年代
+映画はその年すべて
+/tv/tv_program/create_tvprogram_auto
+
+/tv/user/login_admin_page
 Top@1060..cd
 ```
 
