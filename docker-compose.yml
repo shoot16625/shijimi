@@ -28,7 +28,7 @@ services:
     env_file:
       - dev.env
     ports:
-      - "127.0.0.1:8080:8080"
+      - "8080:8080"
     tty: true
     restart: always
     depends_on:
@@ -44,7 +44,7 @@ services:
     volumes:
       - ./Certs/:/var/lib/https-portal/
     environment:
-      DOMAINS: 'localhost:8080 -> http://app:8080'
+      DOMAINS: '192.168.3.3 -> http://app:8080'
       STAGE: "local"
       # FORCE_RENEW: 'true'
     links:

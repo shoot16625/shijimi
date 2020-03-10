@@ -282,6 +282,7 @@ Go/main.prod(いい感じにする main.goに)
 rootへ接続
 cd shijimi
 git fetch origin master
+
 git reset --hard origin/master
 rm docker-compose.yml dev.env Go/main.go Go/Procfile Go/Dockerfile Go/Dockerfile.dev
 mv docker-compose-prod.yml docker-compose.yml
