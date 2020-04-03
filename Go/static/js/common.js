@@ -1,6 +1,6 @@
 // 定数
-const URL = 'http://192.168.0.148:8080';
-// const URL = 'http://localhost:8080';
+// const URL = 'http://192.168.0.148:8080';
+const URL = 'http://localhost:8080';
 // const URL = 'https://www.shijimi.work';
 
 // 自動スクロール
