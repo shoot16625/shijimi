@@ -263,7 +263,7 @@
             <div class="left"></div>
             <div class="center">利用規約</div>
           </ons-toolbar>
-          <div class="scroller list-margin" style="height:85%;">
+          <div class="scroller list-margin" style="height: 85%;">
             {{ template "/common/terms_of_service.tpl" . }}
           </div>
           <p class="area-center create-top-margin-5">
@@ -284,7 +284,7 @@
             <div class="left"></div>
             <div class="center">プライバシーポリシー</div>
           </ons-toolbar>
-          <div class="scroller list-margin" style="height:85%;">
+          <div class="scroller list-margin" style="height: 85%;">
             {{ template "/common/privacy_policy.tpl" . }}
           </div>
           <p class="area-center create-top-margin-5">
@@ -306,7 +306,7 @@
               <ons-button
                 id="cancel-button"
                 onclick="hideAlertDialog('preview-dialog')"
-                style="background:left;color: grey;"
+                style="background: left; color: grey;"
                 ><i class="fas fa-window-close"></i
               ></ons-button>
             </div>
@@ -324,7 +324,9 @@
                   <ons-col>
                     <div class="title" id="preview-username"></div>
                     <div class="content" id="preview-contents"></div>
-                    <div>※年齢・居住地・アイコンのみ公開されます。</div>
+                    <div>
+                      ※年齢・居住地・アイコンのみ公開されます。
+                    </div>
                   </ons-col>
                   <ons-col width="50%">
                     <div class="profile-image" id="preview-image"></div>
@@ -353,7 +355,8 @@
               </ons-button>
             </div>
             <div class="center">
-              ヒント <i class="far fa-question-circle hint-font-size"></i>
+              ヒント
+              <i class="far fa-question-circle hint-font-size"></i>
             </div>
           </ons-toolbar>
           <div class="scroller list-margin">
@@ -399,8 +402,8 @@
       </ons-dialog>
     </template>
     <script type="text/javascript">
-      var previewUser = function(elemID) {
-        ons.ready(function() {
+      var previewUser = function (elemID) {
+        ons.ready(function () {
           var dialog = document.getElementById(elemID);
           // 同じページで2度目以降のプレビュークリック時発動
           if (dialog) {
@@ -408,8 +411,10 @@
             dialog.show();
           } else {
             ons
-              .createElement(elemID + '.html', { append: true })
-              .then(function(dialog) {
+              .createElement(elemID + '.html', {
+                append: true,
+              })
+              .then(function (dialog) {
                 inputPreviewUserData();
                 dialog.show();
               });
@@ -419,13 +424,13 @@
     </script>
     <script type="text/javascript">
       let consentFlag = false;
-      $(function() {
-        $('#consent-button').click(function() {
+      $(function () {
+        $('#consent-button').click(function () {
           consentFlag = true;
         });
       });
-      $(function() {
-        $('#consent-checkbox').change(function() {
+      $(function () {
+        $('#consent-checkbox').change(function () {
           if (consentFlag) {
           } else {
             $('#consent-checkbox').prop('checked', false);
@@ -435,13 +440,13 @@
     </script>
     <script type="text/javascript">
       let privacyFlag = false;
-      $(function() {
-        $('#privacy-button').click(function() {
+      $(function () {
+        $('#privacy-button').click(function () {
           privacyFlag = true;
         });
       });
-      $(function() {
-        $('#privacy-checkbox').change(function() {
+      $(function () {
+        $('#privacy-checkbox').change(function () {
           if (privacyFlag) {
           } else {
             $('#privacy-checkbox').prop('checked', false);
