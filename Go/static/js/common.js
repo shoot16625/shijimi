@@ -1,13 +1,13 @@
 // 定数
 // const URL = 'http://192.168.0.148:8080';
-const URL = 'http://localhost:8080';
-// const URL = 'https://www.shijimi.work';
+// const URL = 'http://localhost:8080';
+const URL = 'https://www.shijimi.work';
 
 // 自動スクロール
 function autoScroll(varName, itemLen) {
   let indexState = -1;
   let flag = 0;
-  setInterval(function() {
+  setInterval(function () {
     let activeIndex = varName.getActiveIndex();
     if (indexState === activeIndex) {
       flag++;
@@ -28,13 +28,13 @@ function autoScroll(varName, itemLen) {
 }
 
 // toolbarを隠す
-$(function() {
+$(function () {
   let pos = 0;
   let diff = 0;
   const topThreshold = 100;
   const scrollSpeedTop = 100;
   const scrollSpeedBottom = 12;
-  $('.page__content').on('scroll', function() {
+  $('.page__content').on('scroll', function () {
     diff = pos - $(this).scrollTop();
     if (-scrollSpeedTop < diff && diff < scrollSpeedTop) {
       if ($(this).scrollTop() < topThreshold) {
@@ -52,8 +52,8 @@ $(function() {
 });
 
 // パスワードを表示するチェックボックス
-$(function() {
-  $('#password-check').change(function() {
+$(function () {
+  $('#password-check').change(function () {
     if ($(this).prop('checked')) {
       $('#password').attr('type', 'text');
     } else {
@@ -63,19 +63,19 @@ $(function() {
 });
 
 // アラートを閉じる
-var hideAlertDialog = function(elem) {
+var hideAlertDialog = function (elem) {
   document.getElementById(elem).hide();
 };
 
 // 通知を閉じる
-var hideToast = function(elem) {
+var hideToast = function (elem) {
   $(elem).fadeOut();
 };
 
 // ツイートボックス
-var dialogBox = function(elemID, userID, tvProgramID) {
+var dialogBox = function (elemID, userID, tvProgramID) {
   // console.log(userID, tvProgramID);
-  ons.ready(function() {
+  ons.ready(function () {
     let dialog = document.getElementById(elemID);
     // == でないとダメ
     if (userID == null) {
@@ -95,7 +95,7 @@ var dialogBox = function(elemID, userID, tvProgramID) {
     } else {
       ons
         .createElement(elemID + '.html', { append: true })
-        .then(function(dialog) {
+        .then(function (dialog) {
           dialog.show();
         });
     }
@@ -103,15 +103,15 @@ var dialogBox = function(elemID, userID, tvProgramID) {
 };
 
 // not-userも許可するダイアログボックス
-var dialogBoxEveryone = function(elemID) {
-  ons.ready(function() {
+var dialogBoxEveryone = function (elemID) {
+  ons.ready(function () {
     var dialog = document.getElementById(elemID);
     if (dialog) {
       dialog.show();
     } else {
       ons
         .createElement(elemID + '.html', { append: true })
-        .then(function(dialog) {
+        .then(function (dialog) {
           dialog.show();
         });
     }
@@ -119,10 +119,10 @@ var dialogBoxEveryone = function(elemID) {
 };
 
 // プルフック
-var pullHook = function() {
+var pullHook = function () {
   var pullHook = document.getElementById('pull-hook');
   if (pullHook != null) {
-    pullHook.addEventListener('changestate', function(event) {
+    pullHook.addEventListener('changestate', function (event) {
       let message = '';
       switch (event.state) {
         case 'initial':
@@ -137,7 +137,7 @@ var pullHook = function() {
       }
       pullHook.innerHTML = message;
     });
-    pullHook.onAction = function(done) {
+    pullHook.onAction = function (done) {
       setTimeout(window.location.reload(false), 2000);
     };
   }
@@ -290,7 +290,7 @@ function goTop() {
 }
 
 // ツールバークリックで上部へ移動
-document.getElementById('image-toolbar').onclick = function() {
+document.getElementById('image-toolbar').onclick = function () {
   let limit = 500;
   let pos = $('.page__content').scrollTop();
   let swingSpeed = pos / 20;
@@ -307,7 +307,7 @@ function scrollToTarget(pos) {
 
 // カルーセルを移動してページのトップへ移動
 function goAnotherCarousel(index) {
-  ons.ready(function() {
+  ons.ready(function () {
     carousel.setActiveIndex(index);
     goTop();
   });
@@ -588,14 +588,14 @@ function inputPreviewUserData() {
   document.getElementById(
     'preview-username'
   ).innerHTML = document.getElementsByName('username')[0].value;
-  let births = document.getElementsByName('age')[0].value.split('-');
-  let contents =
-    '<p>年齢　：' +
-    getAge(births[0], births[1], births[2]) +
-    '</p><p>居住地：' +
-    document.getElementsByName('address')[0].value +
-    '</p>';
-  document.getElementById('preview-contents').innerHTML = contents;
+  // let births = document.getElementsByName('age')[0].value.split('-');
+  // let contents =
+  //   '<p>年齢　：' +
+  //   getAge(births[0], births[1], births[2]) +
+  //   '</p><p>居住地：' +
+  //   document.getElementsByName('address')[0].value +
+  //   '</p>';
+  // document.getElementById('preview-contents').innerHTML = contents;
   let iconURL = document.getElementsByName('IconURL')[0].value;
   if (iconURL === '') {
     iconURL = '/static/img/user_img/s256_f_01.png';
@@ -659,7 +659,7 @@ function commentLikeStatus(elem, checkFlag, userID, comments) {
   var request = new XMLHttpRequest();
   request.open(method, url, true);
   request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-  request.onload = function() {
+  request.onload = function () {
     var x = JSON.parse(request.responseText);
     if (request.readyState == 4 && request.status == '200') {
       // console.table(x);
@@ -696,7 +696,7 @@ function reviewCommentLikeStatus(elem, checkFlag, userID, comments) {
   request.open(method, url, true);
   request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
   request.send(json);
-  request.onload = function() {
+  request.onload = function () {
     var x = JSON.parse(request.responseText);
     if (request.readyState == 4 && request.status == '200') {
       // console.table(x);
@@ -736,7 +736,7 @@ function commentPageWatchStatusUpdate(elem, checkFlag, userID, tvProgramId) {
   var request = new XMLHttpRequest();
   request.open(method, url, true);
   request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-  request.onload = function() {
+  request.onload = function () {
     var x = JSON.parse(request.responseText);
     if (request.readyState == 4 && request.status == '200') {
     } else {
@@ -777,7 +777,7 @@ function tvPageWatchStatusUpdate(elem, checkFlag, userID, tvProgram) {
   request.open(method, url, true);
   request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
   request.send(json);
-  request.onload = function() {
+  request.onload = function () {
     var x = JSON.parse(request.responseText);
     if (request.readyState == 4 && request.status == '200') {
       // // console.table(x);
@@ -793,7 +793,7 @@ function tvPageWatchStatusUpdate(elem, checkFlag, userID, tvProgram) {
 function hideSwipeToolbar(elemID, dialog) {
   let elem = document.getElementById(elemID);
   let ham = new Hammer(elem);
-  ham.on('swipe', function(event) {
+  ham.on('swipe', function (event) {
     hideAlertDialog(dialog);
   });
 }

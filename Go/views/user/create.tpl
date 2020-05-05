@@ -65,7 +65,7 @@
               <option>LGBT</option>
             </select>
           </p>
-          <p>
+          <!-- <p>
             <i class="fas fa-flag flag-color"></i>
             <select
               class="select-input select-input--underbar select-search-table"
@@ -184,7 +184,7 @@
               float
               required
             ></ons-input>
-          </p>
+          </p> -->
           <p>
             <label for="IconURL" class="label-margin"
               >＜プロフィール画像のURL＞</label
@@ -324,9 +324,9 @@
                   <ons-col>
                     <div class="title" id="preview-username"></div>
                     <div class="content" id="preview-contents"></div>
-                    <div>
+                    <!-- <div>
                       ※年齢・居住地・アイコンのみ公開されます。
-                    </div>
+                    </div> -->
                   </ons-col>
                   <ons-col width="50%">
                     <div class="profile-image" id="preview-image"></div>
@@ -374,11 +374,11 @@
                   パスワード：ハッシュ化して保存しています
                 </div>
               </li>
-              <li class="list-item">
+              <!-- <li class="list-item">
                 <div class="list-item__center hint-list-dialog">
                   生年月日(android)：カレンダーが出現します。上部の年をクリックすると変更が可能です。
                 </div>
-              </li>
+              </li> -->
               <li class="list-item">
                 <div class="list-item__center hint-list-dialog">
                   プロフィール画像：画像アドレスで指定。正方形が良！。なお、指定しない場合はランダムに設定されます。（http://の場合、表示されない場合があります）
@@ -462,14 +462,14 @@
     </script>
     <script>
       if ({{.User}} === null) {
-        document.getElementById('age').value = "2000-01-01";
+        // document.getElementById('age').value = "2000-01-01";
       } else {
         document.getElementById('gender').value = {{.User.Gender}};
-        document.getElementById('marital').value = {{.User.Marital}};
-        document.getElementById('job').value = {{.User.Job}};
-        document.getElementById('address').value = {{.User.Address}};
-        document.getElementById('bloodType').value = {{.User.BloodType}};
-        document.getElementById('age').value = {{.User.Age}};
+        // document.getElementById('marital').value = {{.User.Marital}};
+        // document.getElementById('job').value = {{.User.Job}};
+        // document.getElementById('address').value = {{.User.Address}};
+        // document.getElementById('bloodType').value = {{.User.BloodType}};
+        // document.getElementById('age').value = {{.User.Age}};
       }
     </script>
   </body>
