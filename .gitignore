@@ -1,7 +1,6 @@
 # shijimi
 /Go/swagger/
 /Go/app
-/.vscode/
 /MySQL/mysql_data/
 /MySQL/init_data/
 /mysqldump/dumpfiles/
@@ -9,3 +8,4 @@
 /metabase/
 /prod.env
 /Certs/
+node_modules

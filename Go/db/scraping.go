@@ -250,17 +250,19 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 						dramaFlag = false
 					}
 				case "放送期間":
-					re := regexp.MustCompile("(\\d{4})")
-					contents := strings.Split(content, "年")
-					year, _ := strconv.Atoi(re.FindStringSubmatch(contents[0])[0])
-					newTvProgram.Year = year
+					if content != "未定" {
+						re := regexp.MustCompile("(\\d{4})")
+						contents := strings.Split(content, "年")
+						year, _ := strconv.Atoi(re.FindStringSubmatch(contents[0])[0])
+						newTvProgram.Year = year
 
-					contents = strings.Split(contents[1], "月")
-					month, _ := strconv.Atoi(contents[0])
-					seasonName := ReshapeHour(month)
-					seasonStruct := *new(models.Season)
-					seasonStruct.Name = seasonName
-					newTvProgram.Season = &seasonStruct
+						contents = strings.Split(contents[1], "月")
+						month, _ := strconv.Atoi(contents[0])
+						seasonName := ReshapeHour(month)
+						seasonStruct := *new(models.Season)
+						seasonStruct.Name = seasonName
+						newTvProgram.Season = &seasonStruct
+					}
 				case "放送時間":
 					if content != "同上" {
 						contents := ReshapeWeek(content)
@@ -563,17 +565,19 @@ func GetTvProgramInformationByURL(wikiReferenceURL string) (newTvProgram models.
 							dramaFlag = false
 						}
 					case "放送期間":
-						re := regexp.MustCompile("(\\d{4})")
-						contents := strings.Split(content, "年")
-						year, _ := strconv.Atoi(re.FindStringSubmatch(contents[0])[0])
-						newTvProgram.Year = year
+						if content != "未定" {
+							re := regexp.MustCompile("(\\d{4})")
+							contents := strings.Split(content, "年")
+							year, _ := strconv.Atoi(re.FindStringSubmatch(contents[0])[0])
+							newTvProgram.Year = year
 
-						contents = strings.Split(contents[1], "月")
-						month, _ := strconv.Atoi(contents[0])
-						seasonName := ReshapeHour(month)
-						seasonStruct := *new(models.Season)
-						seasonStruct.Name = seasonName
-						newTvProgram.Season = &seasonStruct
+							contents = strings.Split(contents[1], "月")
+							month, _ := strconv.Atoi(contents[0])
+							seasonName := ReshapeHour(month)
+							seasonStruct := *new(models.Season)
+							seasonStruct.Name = seasonName
+							newTvProgram.Season = &seasonStruct
+						}
 					case "放送時間":
 						if content != "同上" {
 							contents := ReshapeWeek(content)
@@ -737,17 +741,19 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 						dramaFlag = false
 					}
 				case "放送期間":
-					re := regexp.MustCompile("(\\d{4})")
-					contents := strings.Split(content, "年")
-					year, _ := strconv.Atoi(re.FindStringSubmatch(contents[0])[0])
-					newTvProgram.Year = year
+					if content != "未定" {
+						re := regexp.MustCompile("(\\d{4})")
+						contents := strings.Split(content, "年")
+						year, _ := strconv.Atoi(re.FindStringSubmatch(contents[0])[0])
+						newTvProgram.Year = year
 
-					contents = strings.Split(contents[1], "月")
-					month, _ := strconv.Atoi(contents[0])
-					seasonName := ReshapeHour(month)
-					seasonStruct := *new(models.Season)
-					seasonStruct.Name = seasonName
-					newTvProgram.Season = &seasonStruct
+						contents = strings.Split(contents[1], "月")
+						month, _ := strconv.Atoi(contents[0])
+						seasonName := ReshapeHour(month)
+						seasonStruct := *new(models.Season)
+						seasonStruct.Name = seasonName
+						newTvProgram.Season = &seasonStruct
+					}
 				case "放送時間":
 					if content != "同上" {
 						contents := ReshapeWeek(content)

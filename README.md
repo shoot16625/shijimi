@@ -12,6 +12,9 @@ doramaba とかテレビバって考えてたけど，ShiJimi にしよっかな
 1. コード埋め込み用script（サイトの拡散にむけて）
 1. ポイントのこと規約で設定
 1. ポイント利用する
+1. コメントをURL化
+1. user登録情報減らす
+1. セッション情報
 1. 季節ごとの自分的ランキング（コミュニティを作る？（キャストの部屋・今季の部屋（プロフィールでは，自分のだけ見れる）））
 
 ## その他
@@ -282,6 +285,7 @@ Go/main.prod(いい感じにする main.goに)
 rootへ接続
 cd shijimi
 git fetch origin master
+
 git reset --hard origin/master
 rm docker-compose.yml dev.env Go/main.go Go/Procfile Go/Dockerfile Go/Dockerfile.dev
 mv docker-compose-prod.yml docker-compose.yml

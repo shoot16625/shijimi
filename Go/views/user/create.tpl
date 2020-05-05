@@ -65,7 +65,7 @@
               <option>LGBT</option>
             </select>
           </p>
-          <p>
+          <!-- <p>
             <i class="fas fa-flag flag-color"></i>
             <select
               class="select-input select-input--underbar select-search-table"
@@ -184,7 +184,7 @@
               float
               required
             ></ons-input>
-          </p>
+          </p> -->
           <p>
             <label for="IconURL" class="label-margin"
               >＜プロフィール画像のURL＞</label
@@ -263,7 +263,7 @@
             <div class="left"></div>
             <div class="center">利用規約</div>
           </ons-toolbar>
-          <div class="scroller list-margin" style="height:85%;">
+          <div class="scroller list-margin" style="height: 85%;">
             {{ template "/common/terms_of_service.tpl" . }}
           </div>
           <p class="area-center create-top-margin-5">
@@ -284,7 +284,7 @@
             <div class="left"></div>
             <div class="center">プライバシーポリシー</div>
           </ons-toolbar>
-          <div class="scroller list-margin" style="height:85%;">
+          <div class="scroller list-margin" style="height: 85%;">
             {{ template "/common/privacy_policy.tpl" . }}
           </div>
           <p class="area-center create-top-margin-5">
@@ -306,7 +306,7 @@
               <ons-button
                 id="cancel-button"
                 onclick="hideAlertDialog('preview-dialog')"
-                style="background:left;color: grey;"
+                style="background: left; color: grey;"
                 ><i class="fas fa-window-close"></i
               ></ons-button>
             </div>
@@ -324,7 +324,9 @@
                   <ons-col>
                     <div class="title" id="preview-username"></div>
                     <div class="content" id="preview-contents"></div>
-                    <div>※年齢・居住地・アイコンのみ公開されます。</div>
+                    <!-- <div>
+                      ※年齢・居住地・アイコンのみ公開されます。
+                    </div> -->
                   </ons-col>
                   <ons-col width="50%">
                     <div class="profile-image" id="preview-image"></div>
@@ -353,7 +355,8 @@
               </ons-button>
             </div>
             <div class="center">
-              ヒント <i class="far fa-question-circle hint-font-size"></i>
+              ヒント
+              <i class="far fa-question-circle hint-font-size"></i>
             </div>
           </ons-toolbar>
           <div class="scroller list-margin">
@@ -371,11 +374,11 @@
                   パスワード：ハッシュ化して保存しています
                 </div>
               </li>
-              <li class="list-item">
+              <!-- <li class="list-item">
                 <div class="list-item__center hint-list-dialog">
                   生年月日(android)：カレンダーが出現します。上部の年をクリックすると変更が可能です。
                 </div>
-              </li>
+              </li> -->
               <li class="list-item">
                 <div class="list-item__center hint-list-dialog">
                   プロフィール画像：画像アドレスで指定。正方形が良！。なお、指定しない場合はランダムに設定されます。（http://の場合、表示されない場合があります）
@@ -399,8 +402,8 @@
       </ons-dialog>
     </template>
     <script type="text/javascript">
-      var previewUser = function(elemID) {
-        ons.ready(function() {
+      var previewUser = function (elemID) {
+        ons.ready(function () {
           var dialog = document.getElementById(elemID);
           // 同じページで2度目以降のプレビュークリック時発動
           if (dialog) {
@@ -408,8 +411,10 @@
             dialog.show();
           } else {
             ons
-              .createElement(elemID + '.html', { append: true })
-              .then(function(dialog) {
+              .createElement(elemID + '.html', {
+                append: true,
+              })
+              .then(function (dialog) {
                 inputPreviewUserData();
                 dialog.show();
               });
@@ -419,13 +424,13 @@
     </script>
     <script type="text/javascript">
       let consentFlag = false;
-      $(function() {
-        $('#consent-button').click(function() {
+      $(function () {
+        $('#consent-button').click(function () {
           consentFlag = true;
         });
       });
-      $(function() {
-        $('#consent-checkbox').change(function() {
+      $(function () {
+        $('#consent-checkbox').change(function () {
           if (consentFlag) {
           } else {
             $('#consent-checkbox').prop('checked', false);
@@ -435,13 +440,13 @@
     </script>
     <script type="text/javascript">
       let privacyFlag = false;
-      $(function() {
-        $('#privacy-button').click(function() {
+      $(function () {
+        $('#privacy-button').click(function () {
           privacyFlag = true;
         });
       });
-      $(function() {
-        $('#privacy-checkbox').change(function() {
+      $(function () {
+        $('#privacy-checkbox').change(function () {
           if (privacyFlag) {
           } else {
             $('#privacy-checkbox').prop('checked', false);
@@ -457,14 +462,14 @@
     </script>
     <script>
       if ({{.User}} === null) {
-        document.getElementById('age').value = "2000-01-01";
+        // document.getElementById('age').value = "2000-01-01";
       } else {
         document.getElementById('gender').value = {{.User.Gender}};
-        document.getElementById('marital').value = {{.User.Marital}};
-        document.getElementById('job').value = {{.User.Job}};
-        document.getElementById('address').value = {{.User.Address}};
-        document.getElementById('bloodType').value = {{.User.BloodType}};
-        document.getElementById('age').value = {{.User.Age}};
+        // document.getElementById('marital').value = {{.User.Marital}};
+        // document.getElementById('job').value = {{.User.Job}};
+        // document.getElementById('address').value = {{.User.Address}};
+        // document.getElementById('bloodType').value = {{.User.BloodType}};
+        // document.getElementById('age').value = {{.User.Age}};
       }
     </script>
   </body>
