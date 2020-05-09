@@ -98,6 +98,8 @@ func init() {
 	// prod
 	// db.GetMovieWalkers(2000, time.Now().Year())
 
+	// db.UpdateMovieInfo()
+
 	// db.ExecDemoSQL()
 	// db.ExecDemoHerokuSQL()
 }

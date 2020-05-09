@@ -355,11 +355,9 @@ func GetMovieInformationByURL(wikiReferenceURL string) (newTvProgram models.TvPr
 
 	s.Each(func(_ int, u *goquery.Selection) {
 		c, _ := u.Attr("style")
-		fmt.Println(c)
 		if c == "width:22em; width:20em" {
 			tmp := len(u.Find("tbody > tr > td").Text())
 			if contentVolume < tmp {
-				fmt.Println(contentVolume, tmp)
 				contentVolume = tmp
 				dramaFlag = true
 			} else {
@@ -395,24 +393,26 @@ func GetMovieInformationByURL(wikiReferenceURL string) (newTvProgram models.TvPr
 					content = ReshapeThemesong(content)
 					newTvProgram.Themesong = content
 				case "公開":
-					contents := strings.Split(content, ",")
-					content = contents[0]
-					re := regexp.MustCompile("(\\d{4})")
-					contents = strings.Split(content, "年")
-					year, _ := strconv.Atoi(re.FindStringSubmatch(contents[0])[0])
-					newTvProgram.Year = year
-					contents = strings.Split(contents[1], "月")
-					month, _ := strconv.Atoi(contents[0])
-					seasonName := ReshapeHour(month)
-					seasonStruct := *new(models.Season)
-					seasonStruct.Name = seasonName
-					newTvProgram.Season = &seasonStruct
-					weekStruct := *new(models.Week)
-					weekStruct.Name = "映画"
-					newTvProgram.Week = &weekStruct
-					var floatHour float32 = 100
-					newTvProgram.Hour = floatHour
+					if content != "未定" {
+						contents := strings.Split(content, ",")
+						content = contents[0]
+						re := regexp.MustCompile("(\\d{4})")
+						contents = strings.Split(content, "年")
+						year, _ := strconv.Atoi(re.FindStringSubmatch(contents[0])[0])
+						newTvProgram.Year = year
+						contents = strings.Split(contents[1], "月")
+						month, _ := strconv.Atoi(contents[0])
+						seasonName := ReshapeHour(month)
+						seasonStruct := *new(models.Season)
+						seasonStruct.Name = seasonName
+						newTvProgram.Season = &seasonStruct
+					}
 				}
+				weekStruct := *new(models.Week)
+				weekStruct.Name = "映画"
+				newTvProgram.Week = &weekStruct
+				var floatHour float32 = 100
+				newTvProgram.Hour = floatHour
 			})
 		}
 	})
@@ -810,6 +810,72 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 	})
 }
 
+// 映画情報の更新 in main.go
+func GetMovieInformationByURLOnGo(wikiReferenceURL string, newTvProgram models.TvProgram) {
+	newTvProgram.MovieUrl = GetYoutubeURL(newTvProgram.Title)
+	if newTvProgram.ImageUrl == "" {
+		newTvProgram.ImageUrl = models.GetImageURL(newTvProgram.Title)
+	}
+	doc, err := goquery.NewDocument(wikiReferenceURL)
+	if err != nil {
+		fmt.Print("URL scarapping failed\n")
+	} else {
+		p := bluemonday.NewPolicy()
+		p.AllowElements("br").AllowElements("td")
+		p.AllowElements("br").AllowElements("th")
+		s := doc.Find("table.infobox")
+		dramaFlag := false
+		contentVolume := 0
+
+		s.Each(func(_ int, u *goquery.Selection) {
+			c, _ := u.Attr("style")
+			if c == "width:22em; width:20em" {
+				tmp := len(u.Find("tbody > tr > td").Text())
+				if contentVolume < tmp {
+					contentVolume = tmp
+					dramaFlag = true
+				} else {
+					dramaFlag = false
+				}
+			}
+			if dramaFlag {
+				newTvProgram.WikiReference = wikiReferenceURL
+				newTvProgram.ImageUrl = models.GetImageURL(newTvProgram.Title)
+				u.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
+					th := t.Find("th").Text()
+					html, _ := t.Find("td").Html()
+					content := strings.Replace(p.Sanitize(html), "<br/>", ",", -1)
+					content = ReshapeText(content)
+					switch th {
+					case "ジャンル":
+						content = strings.Replace(content, "ドラマ", "", -1)
+						newTvProgram.Category = CategoryReshape(content)
+					case "脚本":
+						newTvProgram.Dramatist = content
+					case "演出":
+						newTvProgram.Director = content
+					case "監督":
+						newTvProgram.Supervisor = content
+					case "出演者":
+						newTvProgram.Cast = content
+					case "制作会社", "製作会社":
+						if len(content) < 32 {
+							newTvProgram.Production = content
+						}
+					case "主題歌":
+						content = ReshapeThemesong(content)
+						newTvProgram.Themesong = content
+					}
+				})
+			}
+		})
+	}
+	// fmt.Println(newTvProgram)
+	if err := models.UpdateTvProgramById(&newTvProgram); err != nil {
+		fmt.Println(err)
+	}
+}
+
 func GetYoutubeURL(str string) (URL string) {
 	str = strings.Replace(str, " ", "", -1)
 	query := "https://www.youtube.com/results?search_query=" + str
@@ -916,6 +982,23 @@ func AddRecentTvInfo(wikiTitles []string) {
 	for _, v := range wikiTitles {
 		url := "https://ja.wikipedia.org/wiki/" + v
 		GetTvProgramInformationByURLOnGo(url)
+	}
+}
+
+// サーバ側でデータ投入
+func UpdateMovieInfo() {
+	var fields []string
+	var sortby []string
+	var order []string
+	var query = make(map[string]string)
+	var limit int64
+	var offset int64
+	query["Week.Name"] = "映画"
+	tvPrograms, _ := models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
+	for _, tvProgram := range tvPrograms {
+		url := "https://ja.wikipedia.org/wiki/" + tvProgram.(models.TvProgram).Title
+		fmt.Println(tvProgram.(models.TvProgram).Title)
+		GetMovieInformationByURLOnGo(url, tvProgram.(models.TvProgram))
 	}
 }
 
