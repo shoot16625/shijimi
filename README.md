@@ -13,7 +13,6 @@ doramaba とかテレビバって考えてたけど，ShiJimi にしよっかな
 1. ポイントのこと規約で設定
 1. ポイント利用する
 1. コメントをURL化
-1. user登録情報減らす
 1. セッション情報
 1. 季節ごとの自分的ランキング（コミュニティを作る？（キャストの部屋・今季の部屋（プロフィールでは，自分のだけ見れる）））
 
@@ -285,6 +284,7 @@ Go/main.prod(いい感じにする main.goに)
 rootへ接続
 cd shijimi
 git fetch origin master
+5642ae401c59da4cf8db1fcb692aa7ef7dff28a2
 
 git reset --hard origin/master
 rm docker-compose.yml dev.env Go/main.go Go/Procfile Go/Dockerfile Go/Dockerfile.dev
@@ -296,6 +296,7 @@ nano Go/static/js/common.js
 
 docker-compose up -d --build
 docker-compose stop phpmyadmin
+docker-compose stop metabase
 
 ssh -l uchida -p 36912 118.27.19.113 -L 53389:127.0.0.1:30001
 
