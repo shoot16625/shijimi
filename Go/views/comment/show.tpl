@@ -55,7 +55,7 @@
               <ons-button
                 id="cancel-button"
                 onclick="hideAlertDialog('tweet-dialog')"
-                style="background:left;color: grey;"
+                style="background: left; color: grey;"
                 ><i class="fas fa-window-close"></i
               ></ons-button>
             </div>
@@ -66,7 +66,7 @@
               <ons-button
                 id="post_button"
                 onclick="postComment()"
-                style="color:chocolate;background:left;"
+                style="color: chocolate; background: left;"
                 ><i class="fas fa-paper-plane"></i
               ></ons-button>
             </div>
@@ -86,7 +86,7 @@
           <div class="area-right">あと<span class="count"></span>文字</div>
         </ons-page>
         <script type="text/javascript">
-          $(function() {
+          $(function () {
             const textMax = 180;
             let textLength;
             let countdown;
@@ -94,7 +94,7 @@
 
             $('#tweet-dialog-content').on(
               'keydown keyup keypress change',
-              function() {
+              function () {
                 textLength = $(this).val().length;
                 countdown = textMax - textLength;
                 $('.count').text(countdown);
@@ -115,7 +115,7 @@
               <ons-button
                 id="cancel-button"
                 onclick="hideAlertDialog('search-dialog')"
-                style="background:left;color: grey;"
+                style="background: left; color: grey;"
                 ><i class="fas fa-window-close"></i
               ></ons-button>
             </div>
@@ -126,7 +126,7 @@
               <ons-button
                 id="reset-button"
                 onclick="resetSelect()"
-                style="color:chocolate;background:left;"
+                style="color: chocolate; background: left;"
                 ><i class="far fa-trash-alt"></i
               ></ons-button>
             </div>
@@ -311,7 +311,7 @@
       </ons-dialog>
     </template>
     <script>
-      ons.ready(function() {
+      ons.ready(function () {
         pullHook();
       });
     </script>
@@ -450,16 +450,26 @@
         data.UserId = {{.User.Id}};
         data.TvProgramId  = {{.TvProgram.Id}};
         data.Content = document.getElementById("tweet-dialog-content").value;
-        data.CountLike  = 0;
+        data.CountLike = 0;
         var json = JSON.stringify(data);
         var request = new XMLHttpRequest();
         request.open('POST', url, true);
         request.setRequestHeader('Content-type','application/json; charset=utf-8');
         request.send(json);
+        request.onload = function () {
+        var x = JSON.parse(request.responseText);
+        if (request.readyState == 4 && request.status == '200') {
+          $('#tweet-dialog-content').val("");
+          hideAlertDialog('tweet-dialog');
+          document.querySelector('ons-speed-dial').hideItems();
+          setTimeout(function() {
+            window.location.reload(false);
+          }, 300);
+        } else {
+        }
+      };
 
-        $('#tweet-dialog-content').val("");
-        hideAlertDialog('tweet-dialog');
-        document.querySelector('ons-speed-dial').hideItems();
+
 
         // $(".floating-bottom").html('<div class="toast" style="width:10%;background:darkgray;"><div class="toast__message"><i class="fas fa-thumbs-up"></i></div></div>');
         // $(".floating-bottom").fadeIn();
@@ -467,9 +477,7 @@
         //   $(".floating-bottom").fadeOut();
         // }, 1500);
 
-          setTimeout(function() {
-            window.location.reload(false);
-          }, 500);
+
       };
 
       document

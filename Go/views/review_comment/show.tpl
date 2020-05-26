@@ -488,10 +488,17 @@
         request.open('POST', url, true);
         request.setRequestHeader('Content-type','application/json; charset=utf-8');
         request.send(json);
-
-        $('#tweet-dialog-content').val("");
-        hideAlertDialog('tweet-dialog');
-        document.querySelector('ons-speed-dial').hideItems();
+        request.onload = function () {
+        var x = JSON.parse(request.responseText);
+        if (request.readyState == 4 && request.status == '200') {
+          $('#tweet-dialog-content').val("");
+          hideAlertDialog('tweet-dialog');
+          document.querySelector('ons-speed-dial').hideItems();
+          setTimeout(function() {
+            window.location.reload(false);
+          }, 300);
+        } else {
+        }
 
         // $(".floating-top").html('<div class="toast"><div class="toast__message">リロードして反映してね <i class="fas fa-thumbs-up"></i></div></div>');
         // $(".floating-top").fadeIn();
@@ -499,9 +506,6 @@
         //   $(".floating-top").fadeOut();
         // }, 3000);
 
-        setTimeout(function() {
-          window.location.reload(false);
-        }, 500);
       };
     </script>
     <script type="text/javascript">
