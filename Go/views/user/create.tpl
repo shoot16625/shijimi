@@ -62,7 +62,7 @@
             >
               <option>男性</option>
               <option>女性</option>
-              <option>LGBT</option>
+              <!-- <option>LGBT</option> -->
             </select>
           </p>
           <!-- <p>
@@ -185,7 +185,7 @@
               required
             ></ons-input>
           </p> -->
-          <p>
+          <!-- <p>
             <label for="IconURL" class="label-margin"
               >＜プロフィール画像のURL＞</label
             >
@@ -198,7 +198,7 @@
               maxlength="400"
               float
             ></ons-input>
-          </p>
+          </p> -->
           <p>
             <i class="fas fa-flag flag-color"></i>
             <label for="SecondPassword" class="label-margin"
@@ -379,7 +379,7 @@
                   生年月日(android)：カレンダーが出現します。上部の年をクリックすると変更が可能です。
                 </div>
               </li> -->
-              <li class="list-item">
+              <!-- <li class="list-item">
                 <div class="list-item__center hint-list-dialog">
                   プロフィール画像：画像アドレスで指定。正方形が良！。なお、指定しない場合はランダムに設定されます。（http://の場合、表示されない場合があります）
                 </div>
@@ -392,7 +392,7 @@
                     >Twitterのプロフィール画像ゲッター</a
                   >が便利です。
                 </div>
-              </li>
+              </li> -->
             </ul>
           </div>
         </ons-page>

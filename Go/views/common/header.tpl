@@ -126,3 +126,9 @@
 
   gtag('config', 'UA-155730691-1');
 </script>
+
+<script
+  data-ad-client="ca-pub-8705154506641571"
+  async
+  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+></script>
