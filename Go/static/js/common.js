@@ -596,10 +596,10 @@ function inputPreviewUserData() {
   //   document.getElementsByName('address')[0].value +
   //   '</p>';
   // document.getElementById('preview-contents').innerHTML = contents;
-  let iconURL = document.getElementsByName('IconURL')[0].value;
-  if (iconURL === '') {
-    iconURL = '/static/img/user_img/s256_f_01.png';
-  }
+  // let iconURL = document.getElementsByName('IconURL')[0].value;
+  // if (iconURL === '') {
+  let iconURL = '/static/img/user_img/s256_f_01.png';
+  // }
   document.getElementById('preview-image').innerHTML =
     '<img src="' +
     iconURL +

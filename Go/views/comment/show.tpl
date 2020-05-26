@@ -456,20 +456,10 @@
         request.open('POST', url, true);
         request.setRequestHeader('Content-type','application/json; charset=utf-8');
         request.send(json);
-        request.onload = function () {
-        var x = JSON.parse(request.responseText);
-        if (request.readyState == 4 && request.status == '200') {
-          $('#tweet-dialog-content').val("");
-          hideAlertDialog('tweet-dialog');
-          document.querySelector('ons-speed-dial').hideItems();
-          setTimeout(function() {
-            window.location.reload(false);
-          }, 300);
-        } else {
-        }
-      };
 
-
+        $('#tweet-dialog-content').val("");
+        hideAlertDialog('tweet-dialog');
+        document.querySelector('ons-speed-dial').hideItems();
 
         // $(".floating-bottom").html('<div class="toast" style="width:10%;background:darkgray;"><div class="toast__message"><i class="fas fa-thumbs-up"></i></div></div>');
         // $(".floating-bottom").fadeIn();
@@ -477,7 +467,9 @@
         //   $(".floating-bottom").fadeOut();
         // }, 1500);
 
-
+          setTimeout(function() {
+            window.location.reload(false);
+          }, 500);
       };
 
       document
