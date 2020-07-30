@@ -59,7 +59,6 @@ func init() {
 	// 年齢計算
 	beego.AddFuncMap("birthday2Age", func(birthday string) (age string) {
 		t := time.Now()
-		fmt.Println(birthday)
 		if birthday == "" {
 			return ""
 		}
