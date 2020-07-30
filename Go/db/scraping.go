@@ -2,7 +2,11 @@ package db
 
 import (
 	"app/models"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
 	"regexp"
 	"strconv"
 	"strings"
@@ -877,40 +881,25 @@ func GetMovieInformationByURLOnGo(wikiReferenceURL string, newTvProgram models.T
 }
 
 func GetYoutubeURL(str string) (URL string) {
-	str = strings.Replace(str, " ", "", -1)
-	query := "https://www.youtube.com/results?search_query=" + str
-	doc, err := goquery.NewDocument(query)
+	title := strings.Replace(str, " ", "", -1)
+	resp, err := http.Get("https://www.googleapis.com/youtube/v3/search?type=video&part=snippet&maxResults=1&order=viewCount&videoDuration=short&q=" + title + "&key=AIzaSyDLMdI5jTIltQGXcB3vR9O_jDK8ZL4Xmw8")
 	if err != nil {
-		fmt.Print("URL scarapping failed\n")
-		return
+		log.Fatal(err)
 	}
-	s := doc.Find("h3")
-	flag := true
-	s.Each(func(_ int, u *goquery.Selection) {
-		id, _ := u.Find("a").Attr("href")
-		movieTime := u.Find(".accessible-description").Text()
-		if flag {
-			var times []string
-			if strings.Contains(movieTime, "長さ") {
-				times = strings.Split(movieTime, "長さ:")
-			} else if strings.Contains(movieTime, "Duration") {
-				times = strings.Split(movieTime, "Duration:")
-			}
-			if len(times) == 2 {
-				t := strings.TrimSpace(times[1])
-				t = strings.Replace(t, "。", "", -1)
-				times = strings.Split(t, ":")
-				if len(times) == 2 {
-					h, _ := strconv.Atoi(times[0])
-					// 10分以内の動画に絞る
-					if h < 10 {
-						URL = strings.Replace(id, "/watch?v=", "https://www.youtube.com/embed/", -1)
-						flag = false
-					}
-				}
-			}
-		}
-	})
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	data := make(map[string]interface{})
+	if err := json.Unmarshal(body, &data); err != nil {
+		log.Fatal(err)
+	}
+	youtubeId := ""
+	for _, item := range data["items"].([]interface{}) {
+		youtubeId = item.(map[string]interface{})["id"].(map[string]interface{})["videoId"].(string)
+	}
+	URL = "https://www.youtube.com/embed/" + youtubeId
 	return URL
 }
 
