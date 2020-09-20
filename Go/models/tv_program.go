@@ -532,17 +532,17 @@ func CheckImageURL(str string, title string) (res string) {
 	return res
 }
 
+// imageの取得
 func GetImageURL(str string) (URL string) {
 	str = strings.Replace(str, " ", "", -1)
 	query := "https://search.yahoo.co.jp/image/search?p=" + str
 	doc, err := goquery.NewDocument(query)
 	if err != nil {
 		fmt.Print("URL scarapping failed\n")
-		return
+		return SetRandomImageURL()
 	}
 	s := doc.Find("#gridlist > div > div > p.tb")
 	flag := true
-
 	s.Each(func(_ int, u *goquery.Selection) {
 		var x int = 1
 		var y int = 1
