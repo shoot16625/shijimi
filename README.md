@@ -92,12 +92,6 @@ docker, docker-composeが必要
 1. docker-compose down (コンテナの停止・削除)
 1. sudo chown 自分 -R . (MySQLフォルダの権限エラーを防ぐ)
 
-# 外部公開
-1. CDNのバージョンを固定する
-1. 開発モードやめる
-1. prod に変更
-1. パスワードをprod版にする
-
 ## herokuの場合
 1. https://qiita.com/pitcher292/items/1ca39c7b0dbd79298c0b
 1. 30分でスタンバイ状態：再起動時にきどうしなおしちゃう
@@ -161,14 +155,6 @@ heroku container:push web -a shijimi
 heroku container:release web -a shijimi
 heroku open
 heroku logs --tail
-
-データ更新（admin必要）
-ドラマは常に2020年代
-映画はその年すべて
-/tv/tv_program/create_tvprogram_auto
-
-/tv/user/login_admin_page
-Top@1060..cd
 ```
 
 # scafold
@@ -298,9 +284,28 @@ docker-compose up -d --build
 docker-compose stop phpmyadmin
 docker-compose stop metabase
 
+metabase接続
 ssh -l uchida -p 36912 118.27.19.113 -L 53389:127.0.0.1:30001
 
+rsaとってくる
 sudo scp -P 36912 ./shijimi_rsa.pub uchida@118.27.19.113:/home/uchida/.ssh
 
 
+```
+
+# データ更新方法
+```
+
+データ更新（admin必要）
+/tv/tv_program/create_tvprogram_auto　にアクセスすると自動でデータが更新されていく
+ドラマは常に2020年代
+映画はその年すべて
+
+adminのなり方
+/tv/user/login_admin_page
+Top@1060..cd
+
+main.goからやる方法
+コメントアウトをいい感じにする（その間サーバーはアクセスできなくなる）
+docker-compose up -d --build
 ```
