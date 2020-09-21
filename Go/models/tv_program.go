@@ -539,7 +539,8 @@ func GetImageURL(str string) (URL string) {
 	doc, err := goquery.NewDocument(query)
 	if err != nil {
 		fmt.Print("URL scarapping failed\n")
-		return SetRandomImageURL()
+		URL = SetRandomImageURL()
+		return URL
 	}
 	s := doc.Find("#gridlist > div > div > p.tb")
 	flag := true
