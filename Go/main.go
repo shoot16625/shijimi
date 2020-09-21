@@ -87,7 +87,7 @@ func init() {
 
 	// db.ExecInitSQL()
 
-	// wikiTitles := []string{"左ききのエレン"}
+	// wikiTitles := []string{"家政夫のナギサさん"}
 	// db.AddRecentTvInfo(wikiTitles)
 	// wikis := []string{"日本のテレビドラマ一覧_(2020年代)"}
 	// wikis := []string{"日本のテレビドラマ一覧_(2020年代)", "日本のテレビドラマ一覧_(2010年代)", "日本のテレビドラマ一覧_(2000年代)"}

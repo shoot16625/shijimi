@@ -880,6 +880,8 @@ func GetMovieInformationByURLOnGo(wikiReferenceURL string, newTvProgram models.T
 	}
 }
 
+// TODO
+// 割当制限にすぐ引っかかるので、回避したい
 func GetYoutubeURL(str string) (URL string) {
 	title := strings.Replace(str, " ", "", -1)
 	resp, err := http.Get("https://www.googleapis.com/youtube/v3/search?type=video&part=snippet&maxResults=1&order=viewCount&videoDuration=short&q=" + title + "&key=AIzaSyDLMdI5jTIltQGXcB3vR9O_jDK8ZL4Xmw8")
@@ -895,11 +897,11 @@ func GetYoutubeURL(str string) (URL string) {
 	if err := json.Unmarshal(body, &data); err != nil {
 		log.Fatal(err)
 	}
-	youtubeId := ""
+	youtubeID := ""
 	for _, item := range data["items"].([]interface{}) {
-		youtubeId = item.(map[string]interface{})["id"].(map[string]interface{})["videoId"].(string)
+		youtubeID = item.(map[string]interface{})["id"].(map[string]interface{})["videoId"].(string)
 	}
-	URL = "https://www.youtube.com/embed/" + youtubeId
+	URL = "https://www.youtube.com/embed/" + youtubeID
 	return URL
 }
 
