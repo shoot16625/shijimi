@@ -92,8 +92,7 @@ func init() {
 	// db.GetMovieWalkers(2020, time.Now().Year())
 	// prod
 	//db.GetMovieWalkers(2000, time.Now().Year())
+	// wiki情報・動画を取得する
 	//db.UpdateMovieInfo()
 
-	// db.ExecDemoSQL()
-	// db.ExecDemoHerokuSQL()
 }
