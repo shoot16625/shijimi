@@ -7,6 +7,7 @@
 /phpmyadmin/
 /metabase/
 /prod.env
+/dev.env
 /Certs/
 node_modules
 session.tmp
