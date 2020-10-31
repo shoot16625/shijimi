@@ -16,8 +16,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-const location = "Asia/Tokyo"
-
 func main() {
 	beego.BConfig.WebConfig.StaticDir["/manifest.json"] = "manifest.json"
 	beego.BConfig.WebConfig.StaticDir["/serviceWorker.js"] = "serviceWorker.js"
@@ -26,12 +24,8 @@ func main() {
 
 func init() {
 	// タイムゾーンを日本に設定
-	loc, e := time.LoadLocation(location)
-	if e != nil {
-		fmt.Println(e)
-		loc = time.FixedZone(location, 9*60*60)
-	}
-	time.Local = loc
+	// alpineの場合
+	time.Local = time.FixedZone("JST", 9*60*60)
 	orm.RegisterDriver(beego.AppConfig.String("driver"), orm.DRMySQL)
 	user := os.Getenv("MYSQL_USER")
 	pass := os.Getenv("MYSQL_PASSWORD")
