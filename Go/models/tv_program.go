@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math/rand"
 	"net/http"
+	"net/url"
 	"reflect"
 	"regexp"
 	"sort"
@@ -533,37 +534,23 @@ func CheckImageURL(str string, title string) (res string) {
 }
 
 // imageの取得
+// yahooからとれなくなったので、フィルマークスから取る
 func GetImageURL(str string) (URL string) {
 	str = strings.Replace(str, " ", "", -1)
-	query := "https://search.yahoo.co.jp/image/search?p=" + str
+	str = url.QueryEscape(str)
+	query := "https://filmarks.com/search/dramas?q=" + str
 	doc, err := goquery.NewDocument(query)
 	if err != nil {
 		fmt.Print("URL scarapping failed\n")
 		URL = SetRandomImageURL()
 		return URL
 	}
-	s := doc.Find("#gridlist > div > div > p.tb")
+	s := doc.Find(".p-content-cassette__jacket")
 	flag := true
 	s.Each(func(_ int, u *goquery.Selection) {
-		var x int = 1
-		var y int = 1
 		if flag {
 			URL, _ = u.Find("img").Attr("src")
-			urls := strings.Split(URL, "&")
-			for _, v := range urls {
-				if strings.Contains(v, "x=") {
-					v = strings.Replace(v, "x=", "", 1)
-					x, _ = strconv.Atoi(v)
-				} else if strings.Contains(v, "y=") {
-					v = strings.Replace(v, "y=", "", 1)
-					y, _ = strconv.Atoi(v)
-				}
-			}
-			ratio := float32(x) / float32(y)
-			// 縦長の写真は却下
-			if len(URL) < 480 && ratio > 0.85 {
-				flag = false
-			}
+			flag = false
 		}
 	})
 	if URL == "" {
@@ -595,6 +582,8 @@ func ReshapeImageURLReference(str string) (res string) {
 			res = "Yahoo"
 		} else if strings.Contains(str, "/static/img") {
 			res = ""
+		} else if strings.Contains(str, "d2ueuvlup6lbue.cloudfront.net") {
+			res = "Filmarks"
 		} else {
 			imageURLs := strings.Split(str, "/")
 			res = imageURLs[2]

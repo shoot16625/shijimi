@@ -9,3 +9,4 @@
 /prod.env
 /Certs/
 node_modules
+session.tmp

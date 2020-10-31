@@ -731,6 +731,8 @@ func (c *TvProgramController) CreatePage() {
 }
 
 // 番組一括登録
+// dramaはその年の1-12すべてを探索
+// 映画はその年（３ヶ月後の年）の１年分を探索する
 func (c *TvProgramController) CreateTvProgramAuto() {
 	session := c.StartSession()
 	if session.Get("UserId") != nil {
@@ -740,7 +742,11 @@ func (c *TvProgramController) CreateTvProgramAuto() {
 			c.Data["User"] = w
 			wikis := []string{"日本のテレビドラマ一覧_(2020年代)"}
 			db.AddTvProgramsInformation(wikis)
-			db.GetMovieWalkers(time.Now().Year(), time.Now().Year())
+			year := time.Now().Year()
+			if time.Now().Month() > 9 {
+				year++
+			}
+			db.GetMovieWalkers(year, year, 1, 12)
 			c.TplName = "tv_program/create_tvprogram_auto_result.tpl"
 		} else {
 			c.Redirect("/", 302)
