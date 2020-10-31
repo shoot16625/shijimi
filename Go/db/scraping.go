@@ -5,11 +5,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
+	"math/rand"
 	"net/http"
+	"net/url"
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 	"unicode/utf8"
 
 	"github.com/PuerkitoBio/goquery"
@@ -474,17 +476,16 @@ func GetMovieWalker(year string, month string) {
 		if _, err := models.AddTvProgram(&tvProgram); err != nil {
 			fmt.Println(err)
 		}
-		// fmt.Println(tvProgram.Title)
 	})
 }
 
 // Get movies.
-// change here
-func GetMovieWalkers(start int, end int) {
+// ex. 2020, 2020, 3, 6 -> 2020/03-2020/06
+func GetMovieWalkers(start_year, end_year, start_month, end_month int) {
 	y := 0
 	for {
-		year := strconv.Itoa(start + y)
-		for m := 1; m <= 12; m++ {
+		year := strconv.Itoa(start_year + y)
+		for m := start_month; m <= end_month; m++ {
 			month := strconv.Itoa(m)
 			if len(month) == 1 {
 				month = "0" + month
@@ -492,7 +493,7 @@ func GetMovieWalkers(start int, end int) {
 			fmt.Println(year, month)
 			GetMovieWalker(year, month)
 		}
-		if (end - start) == y {
+		if (end_year - start_year) == y {
 			break
 		}
 		y++
@@ -816,7 +817,9 @@ func GetTvProgramInformationByURLOnGo(wikiReferenceURL string) {
 
 // 映画情報の更新 in main.go
 func GetMovieInformationByURLOnGo(wikiReferenceURL string, newTvProgram models.TvProgram) {
-	newTvProgram.MovieUrl = GetYoutubeURL(newTvProgram.Title)
+	if newTvProgram.MovieUrl == "" {
+		newTvProgram.MovieUrl = GetYoutubeURL(newTvProgram.Title)
+	}
 	if newTvProgram.ImageUrl == "" {
 		newTvProgram.ImageUrl = models.GetImageURL(newTvProgram.Title)
 	}
@@ -880,28 +883,56 @@ func GetMovieInformationByURLOnGo(wikiReferenceURL string, newTvProgram models.T
 	}
 }
 
-// TODO
-// 割当制限にすぐ引っかかるので、回避したい
+// https://developers.google.com/youtube/v3/determine_quota_cost
 func GetYoutubeURL(str string) (URL string) {
 	title := strings.Replace(str, " ", "", -1)
-	resp, err := http.Get("https://www.googleapis.com/youtube/v3/search?type=video&part=snippet&maxResults=1&order=viewCount&videoDuration=short&q=" + title + "&key=AIzaSyDLMdI5jTIltQGXcB3vR9O_jDK8ZL4Xmw8")
+	title = url.QueryEscape(title)
+	keyNum := 10
+	apikey := ""
+	rand.Seed(time.Now().UnixNano())
+	if rand.Intn(keyNum) == 0 {
+		apikey = "AIzaSyDLMdI5jTIltQGXcB3vR9O_jDK8ZL4Xmw8"
+	} else if rand.Intn(keyNum) == 1 {
+		apikey = "AIzaSyCI8_6ssMS1m03n-CLMogO8dUFQgNP4ARY"
+	} else if rand.Intn(keyNum) == 2 {
+		apikey = "AIzaSyDvFk0vNTmMcK9ygr-6vo4b0bns5C3Bw-o"
+	} else if rand.Intn(keyNum) == 3 {
+		apikey = "AIzaSyAJE1vk6VGzcGWJG1O_e2rjGmoxl609PFA"
+	} else if rand.Intn(keyNum) == 4 {
+		apikey = "AIzaSyBfQgty439DfCTH5ouRUKmk83Q9i8ortZs"
+	} else if rand.Intn(keyNum) == 5 {
+		apikey = "AIzaSyA9UkHSHKgkxxxbKm34TBrBPsnPwWs5nXA"
+	} else if rand.Intn(keyNum) == 6 {
+		apikey = "AIzaSyChKciG-0rhzzHDCUPbz-gDrOje_oqehJI"
+	} else if rand.Intn(keyNum) == 7 {
+		apikey = "AIzaSyASXBukW8dA20xnnqs_3zbwQjXEGWK3ENY"
+	} else if rand.Intn(keyNum) == 8 {
+		apikey = "AIzaSyCHbCgKdM_sA3epdztY1Z8_sH7IJaWKlwU"
+	} else if rand.Intn(keyNum) >= 9 {
+		apikey = "AIzaSyCFiKSNa7IPf3ev-nlTgkvHmRKUApNnRHU"
+	}
+	query := "https://www.googleapis.com/youtube/v3/search?type=video&part=snippet&maxResults=1&order=viewCount&videoDuration=short&q=" + title + "&key=" + apikey
+	resp, err := http.Get(query)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("youtube api error")
+		return URL
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("youtube api error")
+		return URL
 	}
 	data := make(map[string]interface{})
-	if err := json.Unmarshal(body, &data); err != nil {
-		log.Fatal(err)
+	if err := json.Unmarshal(body, &data); err == nil {
+		// quotaが制限を超えていなかったら結果を抽出
+		if _, ok := data["items"]; ok {
+			for _, item := range data["items"].([]interface{}) {
+				youtubeID := item.(map[string]interface{})["id"].(map[string]interface{})["videoId"].(string)
+				URL = "https://www.youtube.com/embed/" + youtubeID
+			}
+		}
 	}
-	youtubeID := ""
-	for _, item := range data["items"].([]interface{}) {
-		youtubeID = item.(map[string]interface{})["id"].(map[string]interface{})["videoId"].(string)
-	}
-	URL = "https://www.youtube.com/embed/" + youtubeID
 	return URL
 }
 
@@ -977,7 +1008,7 @@ func AddRecentTvInfo(wikiTitles []string) {
 }
 
 // サーバ側でデータ投入
-func UpdateMovieInfo() {
+func UpdateMovieInfo(year int) {
 	var fields []string
 	var sortby []string
 	var order []string
@@ -985,6 +1016,9 @@ func UpdateMovieInfo() {
 	var limit int64
 	var offset int64
 	query["Week.Name"] = "映画"
+	if year != 0 {
+		query["Year"] = strconv.Itoa(year)
+	}
 	tvPrograms, _ := models.GetAllTvProgram(query, fields, sortby, order, offset, limit)
 	for _, tvProgram := range tvPrograms {
 		url := "https://ja.wikipedia.org/wiki/" + tvProgram.(models.TvProgram).Title

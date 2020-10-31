@@ -85,6 +85,8 @@ func init() {
 	// 初期データの投入
 	db.EmptyInitSQL()
 
+	// fmt.Println(db.GetYoutubeURL("アンナチュラル"))
+
 	// db.ExecInitSQL()
 
 	// wikiTitles := []string{"家政夫のナギサさん"}
@@ -93,11 +95,12 @@ func init() {
 	// wikis := []string{"日本のテレビドラマ一覧_(2020年代)", "日本のテレビドラマ一覧_(2010年代)", "日本のテレビドラマ一覧_(2000年代)"}
 	// db.AddTvProgramsInformation(wikis)
 
-	// db.GetMovieWalkers(2020, time.Now().Year())
+	// db.GetMovieWalkers(2021, 2021, 1, 2)
 	// prod
-	// db.GetMovieWalkers(2000, time.Now().Year())
+	// db.GetMovieWalkers(2000, time.Now().Year(), 1, 12)
 
-	// db.UpdateMovieInfo()
+	// 既に保存済みの映画情報をwikiで更新する
+	// db.UpdateMovieInfo(2021)
 
 	// db.ExecDemoSQL()
 	// db.ExecDemoHerokuSQL()

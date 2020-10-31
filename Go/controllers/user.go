@@ -525,9 +525,7 @@ func (c *UserController) LoginAdminPage() {
 func (c *UserController) LoginAdmin() {
 	session := c.StartSession()
 	adminName := os.Getenv("ADMIN_NAME")
-	// adminName := "しじみ"
 	key := os.Getenv("ADMIN_KEY")
-	// key := "$2a$10$869FdgX6e0beX8jK5YaBKumT6yOh.aldJ8EA7zx8fPkkjYpPhEwzq"
 	if c.GetString("username") == adminName {
 		v, err := models.GetUserByUsername(c.GetString("username"))
 		if err == nil && models.UserPassMach(v.Password, c.GetString("password")) {
@@ -557,6 +555,10 @@ func (c *UserController) LoginAdmin() {
 				c.Data["CommentLike"] = commentLikes
 				c.Data["TvProgram"] = tvPrograms
 				c.TplName = "user/show_comment.tpl"
+				z := models.LoginHistory{
+					UserId: UserID,
+				}
+				_, _ = models.AddLoginHistory(&z)
 				return
 			}
 		}
