@@ -273,7 +273,7 @@ git fetch origin master
 5642ae401c59da4cf8db1fcb692aa7ef7dff28a2
 
 git reset --hard origin/master
-rm docker-compose.yml dev.env Go/main.go Go/Procfile Go/Dockerfile Go/Dockerfile.dev
+rm docker-compose.yml Go/main.go Go/Procfile Go/Dockerfile Go/Dockerfile.dev
 mv docker-compose-prod.yml docker-compose.yml
 mv Go/main.prod Go/main.go
 
