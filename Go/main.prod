@@ -13,6 +13,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/orm"
+	_ "github.com/astaxie/beego/session/mysql"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -21,6 +22,8 @@ const location = "Asia/Tokyo"
 func main() {
 	beego.BConfig.WebConfig.StaticDir["/manifest.json"] = "manifest.json"
 	beego.BConfig.WebConfig.StaticDir["/serviceWorker.js"] = "serviceWorker.js"
+	beego.BConfig.WebConfig.Session.SessionProvider = "file"
+	beego.BConfig.WebConfig.Session.SessionProviderConfig = "./session.tmp"
 	beego.Run()
 }
 

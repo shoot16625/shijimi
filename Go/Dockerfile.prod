@@ -10,6 +10,7 @@ RUN apk update && \
   go get "github.com/beego/bee@v1.11.1" && \
   go get "github.com/astaxie/beego@v1.12.2" && \
   go get "github.com/astaxie/beego/session" && \
+  go get "github.com/astaxie/beego/session/mysql" && \
   go get "golang.org/x/crypto/bcrypt" && \
   go get "github.com/PuerkitoBio/goquery@v1.6.0" && \
   go get "github.com/microcosm-cc/bluemonday@v1.0.4" && \
