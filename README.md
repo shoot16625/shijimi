@@ -270,7 +270,6 @@ Go/main.prod(いい感じにする main.goに)
 rootへ接続
 cd shijimi
 git fetch origin master
-5642ae401c59da4cf8db1fcb692aa7ef7dff28a2
 
 git reset --hard origin/master
 rm docker-compose.yml Go/main.go Go/Procfile Go/Dockerfile Go/Dockerfile.dev
