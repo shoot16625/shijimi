@@ -19,7 +19,7 @@ import (
 )
 
 // Scraping TvPrograms by wiki list.
-func GetWikiDoramas(referencePath string) {
+func GetWikiDoramas(referencePath string, fromYear int) {
 	doc, err := goquery.NewDocument(referencePath)
 	if err != nil {
 		fmt.Print("url scarapping failed\n")
@@ -47,81 +47,84 @@ func GetWikiDoramas(referencePath string) {
 		} else if season[:1] == "1" {
 			seasonName = "冬"
 		}
-		s.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
-			var tvProgram models.TvProgram
-			seasonStruct := *new(models.Season)
-			seasonStruct.Name = seasonName
-			tvProgram.Season = &seasonStruct
-			y, _ := strconv.Atoi(year[n])
-			tvProgram.Year = y
-			var data []string
-			t.Find("td").Each(func(_ int, u *goquery.Selection) {
-				html, _ := u.Html()
-				content := strings.Replace(p.Sanitize(html), "<br/>", ",", -1)
-				content = strings.Replace(content, "\n", ",", -1)
-				content = strings.Replace(content, ",（", "（", -1)
-				content = strings.Replace(content, "、", ",", -1)
-				content = models.RegexpWords(content, ", | ,", ",")
-				content = models.RegexpWords(content, `[\(|（](P*S.[0-9|\-| |、]+)+[\)|）]`, "")
-				content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|（.*特別出演.*）|（第[1-9]部）|（主演として.+）|\[注 *[1-9]\]|以下五十音順`, "")
-				content = strings.TrimSpace(content)
-				data = append(data, content)
-			})
-			wikiURL, _ := t.Find("a").Attr("href")
-			if len(data) == 5 {
-				title, _ := t.Find("a").Attr("title")
-				tvProgram.Title = title
-				tvProgram.Star = 5
-				category := strings.Replace(data[1], "ドラマ", "", -1)
-				tvProgram.Category = CategoryReshape(category)
-				tvProgram.Production = data[2]
-				tvProgram.Cast = data[4]
-				tvProgram.ImageUrl = models.SetRandomImageURL()
-				tvProgram.ImageUrlReference = ""
-				tvProgram.WikiReference = "https://ja.wikipedia.org" + wikiURL
-				weekStruct := *new(models.Week)
-				data[3] = strings.Replace(data[3], "平日", "平曜", -1)
-				weekName := strings.Split(data[3], "曜")[0]
-				weekNameLen := utf8.RuneCountInString(weekName)
-				if weekNameLen == 1 {
-					weekStruct.Name = weekName
-					if weekName == "平" {
-						weekStruct.Name = "平日"
+		y, _ := strconv.Atoi(year[n])
+		if fromYear <= y {
+			s.Find("tbody > tr").Each(func(_ int, t *goquery.Selection) {
+				var tvProgram models.TvProgram
+				seasonStruct := *new(models.Season)
+				seasonStruct.Name = seasonName
+				tvProgram.Season = &seasonStruct
+				y, _ := strconv.Atoi(year[n])
+				tvProgram.Year = y
+				var data []string
+				t.Find("td").Each(func(_ int, u *goquery.Selection) {
+					html, _ := u.Html()
+					content := strings.Replace(p.Sanitize(html), "<br/>", ",", -1)
+					content = strings.Replace(content, "\n", ",", -1)
+					content = strings.Replace(content, ",（", "（", -1)
+					content = strings.Replace(content, "、", ",", -1)
+					content = models.RegexpWords(content, ", | ,", ",")
+					content = models.RegexpWords(content, `[\(|（](P*S.[0-9|\-| |、]+)+[\)|）]`, "")
+					content = models.RegexpWords(content, `下記詳細|参照|スタッフ参照|ほか|（.*特別出演.*）|（第[1-9]部）|（主演として.+）|\[注 *[1-9]\]|以下五十音順`, "")
+					content = strings.TrimSpace(content)
+					data = append(data, content)
+				})
+				wikiURL, _ := t.Find("a").Attr("href")
+				if len(data) == 5 {
+					title, _ := t.Find("a").Attr("title")
+					tvProgram.Title = title
+					tvProgram.Star = 5
+					category := strings.Replace(data[1], "ドラマ", "", -1)
+					tvProgram.Category = CategoryReshape(category)
+					tvProgram.Production = data[2]
+					tvProgram.Cast = data[4]
+					tvProgram.ImageUrl = models.SetRandomImageURL()
+					tvProgram.ImageUrlReference = ""
+					tvProgram.WikiReference = "https://ja.wikipedia.org" + wikiURL
+					weekStruct := *new(models.Week)
+					data[3] = strings.Replace(data[3], "平日", "平曜", -1)
+					weekName := strings.Split(data[3], "曜")[0]
+					weekNameLen := utf8.RuneCountInString(weekName)
+					if weekNameLen == 1 {
+						weekStruct.Name = weekName
+						if weekName == "平" {
+							weekStruct.Name = "平日"
+						}
+					} else if data[3] == "参照" || weekNameLen == 0 {
+						weekStruct.Name = "?"
+					} else if weekNameLen > 3 {
+						weekStruct.Name = "スペシャル"
+					} else if weekNameLen == 3 && strings.Contains(weekName, " ") {
+						weekStruct.Name = strings.Split(weekName, " ")[1]
+					} else {
+						weekStruct.Name = "?"
 					}
-				} else if data[3] == "参照" || weekNameLen == 0 {
-					weekStruct.Name = "?"
-				} else if weekNameLen > 3 {
-					weekStruct.Name = "スペシャル"
-				} else if weekNameLen == 3 && strings.Contains(weekName, " ") {
-					weekStruct.Name = strings.Split(weekName, " ")[1]
-				} else {
-					weekStruct.Name = "?"
-				}
-				tvProgram.Week = &weekStruct
+					tvProgram.Week = &weekStruct
 
-				hourBlock := strings.Split(strings.Split(data[3], "-")[0], "曜")
-				var floatHour float32 = 100
-				if len(hourBlock) == 2 {
-					startTime := strings.TrimSpace(hourBlock[1])
-					hourStart := strings.Split(startTime, ":")
-					hour, _ := strconv.Atoi(hourStart[0])
-					mins, _ := strconv.Atoi(hourStart[1])
-					if 15 > mins && mins >= 0 {
-						floatHour = float32(hour) + 0.0
-					} else if 45 > mins && mins >= 15 {
-						floatHour = float32(hour) + 0.5
-					} else if 60 > mins && mins >= 45 {
-						floatHour = float32(hour) + 1.0
+					hourBlock := strings.Split(strings.Split(data[3], "-")[0], "曜")
+					var floatHour float32 = 100
+					if len(hourBlock) == 2 {
+						startTime := strings.TrimSpace(hourBlock[1])
+						hourStart := strings.Split(startTime, ":")
+						hour, _ := strconv.Atoi(hourStart[0])
+						mins, _ := strconv.Atoi(hourStart[1])
+						if 15 > mins && mins >= 0 {
+							floatHour = float32(hour) + 0.0
+						} else if 45 > mins && mins >= 15 {
+							floatHour = float32(hour) + 0.5
+						} else if 60 > mins && mins >= 45 {
+							floatHour = float32(hour) + 1.0
+						}
+						// 無記入のとき
+						if startTime == ":00" {
+							floatHour = 100
+						}
+						tvProgram.Hour = floatHour
 					}
-					// 無記入のとき
-					if startTime == ":00" {
-						floatHour = 100
-					}
-					tvProgram.Hour = floatHour
+					GetTvProgramInformation(tvProgram)
 				}
-				GetTvProgramInformation(tvProgram)
-			}
-		})
+			})
+		}
 		if season[:2] == "10" {
 			n++
 		}
@@ -338,9 +341,9 @@ func GetTvProgramInformation(tvProgram models.TvProgram) {
 
 // Add drama information in wiki lists.
 // change here
-func AddTvProgramsInformation(wikis []string) {
+func AddTvProgramsInformation(wikis []string, fromYear int) {
 	for _, v := range wikis {
-		GetWikiDoramas("https://ja.wikipedia.org/wiki/" + v)
+		GetWikiDoramas("https://ja.wikipedia.org/wiki/"+v, fromYear)
 	}
 
 }
@@ -887,30 +890,29 @@ func GetMovieInformationByURLOnGo(wikiReferenceURL string, newTvProgram models.T
 func GetYoutubeURL(str string) (URL string) {
 	title := strings.Replace(str, " ", "", -1)
 	title = url.QueryEscape(title)
-	keyNum := 10
+	keyNum := 2
 	apikey := ""
 	rand.Seed(time.Now().UnixNano())
 	if rand.Intn(keyNum) == 0 {
-		apikey = "AIzaSyDLMdI5jTIltQGXcB3vR9O_jDK8ZL4Xmw8"
-	} else if rand.Intn(keyNum) == 1 {
-		apikey = "AIzaSyCI8_6ssMS1m03n-CLMogO8dUFQgNP4ARY"
-	} else if rand.Intn(keyNum) == 2 {
-		apikey = "AIzaSyDvFk0vNTmMcK9ygr-6vo4b0bns5C3Bw-o"
-	} else if rand.Intn(keyNum) == 3 {
-		apikey = "AIzaSyAJE1vk6VGzcGWJG1O_e2rjGmoxl609PFA"
-	} else if rand.Intn(keyNum) == 4 {
-		apikey = "AIzaSyBfQgty439DfCTH5ouRUKmk83Q9i8ortZs"
-	} else if rand.Intn(keyNum) == 5 {
-		apikey = "AIzaSyA9UkHSHKgkxxxbKm34TBrBPsnPwWs5nXA"
-	} else if rand.Intn(keyNum) == 6 {
-		apikey = "AIzaSyChKciG-0rhzzHDCUPbz-gDrOje_oqehJI"
-	} else if rand.Intn(keyNum) == 7 {
-		apikey = "AIzaSyASXBukW8dA20xnnqs_3zbwQjXEGWK3ENY"
-	} else if rand.Intn(keyNum) == 8 {
-		apikey = "AIzaSyCHbCgKdM_sA3epdztY1Z8_sH7IJaWKlwU"
-	} else if rand.Intn(keyNum) >= 9 {
-		apikey = "AIzaSyCFiKSNa7IPf3ev-nlTgkvHmRKUApNnRHU"
+		apikey = "AIzaSyD21gZsLxuv4b-UNa8ZBqB8s45xxvpwuVE"
+	} else if rand.Intn(keyNum) >= 1 {
+		apikey = "AIzaSyADP2FK41MoW_W0gAlK5Nrs1DHZBIXsZ9k"
 	}
+	// } else if rand.Intn(keyNum) == 3 {
+	// 	apikey = "AIzaSyAJE1vk6VGzcGWJG1O_e2rjGmoxl609PFA"
+	// } else if rand.Intn(keyNum) == 4 {
+	// 	apikey = "AIzaSyBfQgty439DfCTH5ouRUKmk83Q9i8ortZs"
+	// } else if rand.Intn(keyNum) == 5 {
+	// 	apikey = "AIzaSyA9UkHSHKgkxxxbKm34TBrBPsnPwWs5nXA"
+	// } else if rand.Intn(keyNum) == 6 {
+	// 	apikey = "AIzaSyChKciG-0rhzzHDCUPbz-gDrOje_oqehJI"
+	// } else if rand.Intn(keyNum) == 7 {
+	// 	apikey = "AIzaSyASXBukW8dA20xnnqs_3zbwQjXEGWK3ENY"
+	// } else if rand.Intn(keyNum) == 8 {
+	// 	apikey = "AIzaSyCHbCgKdM_sA3epdztY1Z8_sH7IJaWKlwU"
+	// } else if rand.Intn(keyNum) >= 9 {
+	// 	apikey = "AIzaSyCFiKSNa7IPf3ev-nlTgkvHmRKUApNnRHU"
+	// }
 	query := "https://www.googleapis.com/youtube/v3/search?type=video&part=snippet&maxResults=1&order=viewCount&videoDuration=short&q=" + title + "&key=" + apikey
 	resp, err := http.Get(query)
 	if err != nil {

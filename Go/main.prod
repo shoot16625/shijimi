@@ -90,7 +90,7 @@ func init() {
 	//wikiTitles := []string{"左ききのエレン"}
 	//db.AddRecentTvInfo(wikiTitles)
 	// wikis := []string{"日本のテレビドラマ一覧_(2020年代)"}
-	//db.AddTvProgramsInformation(wikis)
+	//db.AddTvProgramsInformation(wikis, 2020)
 
 	// db.GetMovieWalkers(2020, 2020, 7, 12)
 	// prod

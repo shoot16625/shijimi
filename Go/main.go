@@ -96,7 +96,7 @@ func init() {
 	// db.AddRecentTvInfo(wikiTitles)
 	// wikis := []string{"日本のテレビドラマ一覧_(2020年代)"}
 	// wikis := []string{"日本のテレビドラマ一覧_(2020年代)", "日本のテレビドラマ一覧_(2010年代)", "日本のテレビドラマ一覧_(2000年代)"}
-	// db.AddTvProgramsInformation(wikis)
+	// db.AddTvProgramsInformation(wikis, 2020)
 
 	// db.GetMovieWalkers(2021, 2021, 1, 2)
 	// prod
