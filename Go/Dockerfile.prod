@@ -21,11 +21,11 @@ WORKDIR /go/src/app
 RUN go mod download
 RUN go build -o app main.go
 
-FROM alpine:3.9
-RUN apk update && \
-apk --no-cache add tzdata ca-certificates && \
-  rm -rf /var/cache/apk/*
-WORKDIR /go/src/app
-COPY --from=build /go/src/app/app .
+# FROM alpine:3.9
+# RUN apk update && \
+# apk --no-cache add tzdata ca-certificates && \
+#   rm -rf /var/cache/apk/*
+# WORKDIR /go/src/app
+# COPY --from=build /go/src/app/app .
 
 CMD ["./app"]
