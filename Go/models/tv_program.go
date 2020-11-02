@@ -553,7 +553,7 @@ func GetImageURL(str string) (URL string) {
 			flag = false
 		}
 	})
-	if URL == "" {
+	if URL == "" || URL == "https://d2ueuvlup6lbue.cloudfront.net/assets/common/img_cover-placehold-633a19fbbf6951dbb8debea06f29fefcc0666e8138e79c5ffd8a486da95432ae.svg" {
 		URL = SetRandomImageURL()
 	}
 	return URL
