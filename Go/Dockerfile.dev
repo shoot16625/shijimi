@@ -17,6 +17,6 @@ RUN apk update && \
   go get "github.com/ChimeraCoder/anaconda" && \
   rm -rf /var/cache/apk/*
 
-ADD . /go/src/app
+COPY . /go/src/app
 WORKDIR /go/src/app
 RUN go mod download

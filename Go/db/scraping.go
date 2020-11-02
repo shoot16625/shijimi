@@ -890,31 +890,27 @@ func GetMovieInformationByURLOnGo(wikiReferenceURL string, newTvProgram models.T
 func GetYoutubeURL(str string) (URL string) {
 	title := strings.Replace(str, " ", "", -1)
 	title = url.QueryEscape(title)
-	keyNum := 2
+	keyNum := 5
 	apikey := ""
 	rand.Seed(time.Now().UnixNano())
 	seed := rand.Intn(keyNum)
 	if seed == 0 {
+		// shijimi00
 		apikey = "AIzaSyD21gZsLxuv4b-UNa8ZBqB8s45xxvpwuVE"
-	} else if seed >= 1 {
+	} else if seed == 1 {
+		// shijimi01
 		apikey = "AIzaSyADP2FK41MoW_W0gAlK5Nrs1DHZBIXsZ9k"
+	} else if seed == 2 {
+		// shijimi
+		apikey = "AIzaSyA_on4hMdZDsAYbOrSKebNt4kibqF5kQu8"
+	} else if seed == 3 {
+		// playTag55
+		apikey = "AIzaSyCMQez3bzx2aRBdUe-Ql5OhHKYyTJxaxZM"
+	} else if seed >= 4 {
+		// playTag55
+		apikey = "AIzaSyDROwOJtzftpyvd269F7t6gjnpZ8og35kU"
 	}
-	fmt.Println(apikey)
-	// } else if rand.Intn(keyNum) == 3 {
-	// 	apikey = "AIzaSyAJE1vk6VGzcGWJG1O_e2rjGmoxl609PFA"
-	// } else if rand.Intn(keyNum) == 4 {
-	// 	apikey = "AIzaSyBfQgty439DfCTH5ouRUKmk83Q9i8ortZs"
-	// } else if rand.Intn(keyNum) == 5 {
-	// 	apikey = "AIzaSyA9UkHSHKgkxxxbKm34TBrBPsnPwWs5nXA"
-	// } else if rand.Intn(keyNum) == 6 {
-	// 	apikey = "AIzaSyChKciG-0rhzzHDCUPbz-gDrOje_oqehJI"
-	// } else if rand.Intn(keyNum) == 7 {
-	// 	apikey = "AIzaSyASXBukW8dA20xnnqs_3zbwQjXEGWK3ENY"
-	// } else if rand.Intn(keyNum) == 8 {
-	// 	apikey = "AIzaSyCHbCgKdM_sA3epdztY1Z8_sH7IJaWKlwU"
-	// } else if rand.Intn(keyNum) >= 9 {
-	// 	apikey = "AIzaSyCFiKSNa7IPf3ev-nlTgkvHmRKUApNnRHU"
-	// }
+
 	query := "https://www.googleapis.com/youtube/v3/search?type=video&part=snippet&maxResults=1&order=viewCount&videoDuration=short&q=" + title + "&key=" + apikey
 	resp, err := http.Get(query)
 	if err != nil {
