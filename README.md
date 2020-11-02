@@ -297,8 +297,8 @@ sudo scp -P 36912 ./shijimi_rsa.pub uchida@118.27.19.113:/home/uchida/.ssh
 
 データ更新（admin必要）
 /tv/tv_program/create_tvprogram_auto　にアクセスすると自動でデータが更新されていく
-ドラマは常に2020年代
-映画はその年すべて
+ドラマは常に2020年代{その年以降}
+映画はその年すべて｛3ヶ月後｝
 
 adminのなり方
 /tv/user/login_admin_page

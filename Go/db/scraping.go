@@ -893,11 +893,13 @@ func GetYoutubeURL(str string) (URL string) {
 	keyNum := 2
 	apikey := ""
 	rand.Seed(time.Now().UnixNano())
-	if rand.Intn(keyNum) == 0 {
+	seed := rand.Intn(keyNum)
+	if seed == 0 {
 		apikey = "AIzaSyD21gZsLxuv4b-UNa8ZBqB8s45xxvpwuVE"
-	} else if rand.Intn(keyNum) >= 1 {
+	} else if seed >= 1 {
 		apikey = "AIzaSyADP2FK41MoW_W0gAlK5Nrs1DHZBIXsZ9k"
 	}
+	fmt.Println(apikey)
 	// } else if rand.Intn(keyNum) == 3 {
 	// 	apikey = "AIzaSyAJE1vk6VGzcGWJG1O_e2rjGmoxl609PFA"
 	// } else if rand.Intn(keyNum) == 4 {
