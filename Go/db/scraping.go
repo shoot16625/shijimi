@@ -902,7 +902,7 @@ func GetYoutubeURL(str string) (URL string) {
 		apikey = "AIzaSyADP2FK41MoW_W0gAlK5Nrs1DHZBIXsZ9k"
 	} else if seed == 2 {
 		// shijimi
-		apikey = "AIzaSyA_on4hMdZDsAYbOrSKebNt4kibqF5kQu8"
+		apikey = "AIzaSyDIqP5CLAg3FERd_spvhyrAqkzEurR4XGA"
 	} else if seed == 3 {
 		// playTag55
 		apikey = "AIzaSyCMQez3bzx2aRBdUe-Ql5OhHKYyTJxaxZM"

@@ -13,7 +13,5 @@ require (
 	github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17 // indirect
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/microcosm-cc/bluemonday v1.0.4
-	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
-	github.com/modern-go/reflect2 v1.0.1 // indirect
 	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897
 )
