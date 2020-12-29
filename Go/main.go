@@ -4,6 +4,8 @@ import (
 	"app/db"
 	_ "app/routers"
 
+	// "encoding/gob"
+
 	"fmt"
 	"os"
 	"strconv"
@@ -22,8 +24,8 @@ const location = "Asia/Tokyo"
 func main() {
 	beego.BConfig.WebConfig.StaticDir["/manifest.json"] = "manifest.json"
 	beego.BConfig.WebConfig.StaticDir["/serviceWorker.js"] = "serviceWorker.js"
-	beego.BConfig.WebConfig.Session.SessionProvider = "file"
-	beego.BConfig.WebConfig.Session.SessionProviderConfig = "./session.tmp"
+	// beego.BConfig.WebConfig.Session.SessionProvider = "file"
+	// beego.BConfig.WebConfig.Session.SessionProviderConfig = "./session.tmp"
 	beego.Run()
 }
 
@@ -35,6 +37,7 @@ func init() {
 		loc = time.FixedZone(location, 9*60*60)
 	}
 	time.Local = loc
+	// gob.Register(time.Time{})
 	orm.RegisterDriver(beego.AppConfig.String("driver"), orm.DRMySQL)
 	user := os.Getenv("MYSQL_USER")
 	pass := os.Getenv("MYSQL_PASSWORD")
@@ -42,6 +45,11 @@ func init() {
 	port := os.Getenv("MYSQL_PORT")
 	sqlconn := user + ":" + pass + "@tcp(db:" + port + ")/" + dbName
 	orm.RegisterDataBase("default", beego.AppConfig.String("driver"), sqlconn+"?charset=utf8mb4&loc=Asia%2FTokyo")
+
+	// login情報管理
+	beego.BConfig.WebConfig.Session.SessionProvider = beego.AppConfig.String("driver")
+	beego.BConfig.WebConfig.Session.SessionProviderConfig = sqlconn + "?parseTime=true"
+
 	// heroku
 	// orm.RegisterDataBase("default", beego.AppConfig.String("driver"), beego.AppConfig.String("sqlconn")+"?charset=utf8mb4&loc=Asia%2FTokyo")
 

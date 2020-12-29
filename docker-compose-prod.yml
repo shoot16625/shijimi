@@ -22,8 +22,8 @@ services:
     build:
       context: ./Go
       dockerfile: Dockerfile.prod
-    volumes:
-      - "./Go/session.tmp:/go/src/app/session.tmp"
+    # volumes:
+    #   - "./Go/session.tmp:/go/src/app/session.tmp"
     container_name: go_app
     env_file:
       - prod.env
