@@ -359,7 +359,7 @@ func GetOnAirSeason() (season string) {
 	for i := range seasons {
 		duration := seasons[i].Sub(t)
 		days := int(duration.Hours()) / 24
-		if tmp > days && days > 2 {
+		if tmp > days && days >= 0 {
 			tmp = days
 			season = seasonName[i]
 		}
