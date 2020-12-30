@@ -825,6 +825,7 @@ func GetMovieInformationByURLOnGo(wikiReferenceURL string, newTvProgram models.T
 	}
 	if newTvProgram.ImageUrl == "" || newTvProgram.ImageUrl == "https://d2ueuvlup6lbue.cloudfront.net/assets/common/img_cover-placehold-633a19fbbf6951dbb8debea06f29fefcc0666e8138e79c5ffd8a486da95432ae.svg" {
 		newTvProgram.ImageUrl = models.GetImageURL(newTvProgram.Title)
+		newTvProgram.ImageUrlReference = models.ReshapeImageURLReference(newTvProgram.ImageUrl)
 	}
 	doc, err := goquery.NewDocument(wikiReferenceURL)
 	if err != nil {
