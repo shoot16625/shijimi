@@ -3,8 +3,7 @@ package main
 import (
 	"app/db"
 	_ "app/routers"
-
-	// "encoding/gob"
+	"encoding/gob"
 
 	"fmt"
 	"os"
@@ -37,7 +36,7 @@ func init() {
 		loc = time.FixedZone(location, 9*60*60)
 	}
 	time.Local = loc
-	// gob.Register(time.Time{})
+	gob.Register(time.Time{})
 	orm.RegisterDriver(beego.AppConfig.String("driver"), orm.DRMySQL)
 	user := os.Getenv("MYSQL_USER")
 	pass := os.Getenv("MYSQL_PASSWORD")
