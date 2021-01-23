@@ -220,31 +220,31 @@
             >
           </p>
           <p>
-            <ons-checkbox
+            <!-- <ons-checkbox
               value="consent"
               id="consent-checkbox"
               style="vertical-align: middle;"
               required
-            ></ons-checkbox>
+            ></ons-checkbox> -->
             <ons-button
               modifier="quiet"
               id="consent-button"
               onclick="dialogBoxEveryone('terms-of-service')"
-              >利用規約に同意</ons-button
+              >利用規約</ons-button
             >
           </p>
           <p>
-            <ons-checkbox
+            <!-- <ons-checkbox
               value="privacy"
               id="privacy-checkbox"
               style="vertical-align: middle;"
               required
-            ></ons-checkbox>
+            ></ons-checkbox> -->
             <ons-button
               modifier="quiet"
               id="privacy-button"
               onclick="dialogBoxEveryone('privacy-policy')"
-              >プライバシーポリシーに同意</ons-button
+              >プライバシーポリシー</ons-button
             >
           </p>
           <p class="create-top-bottom-margin">
