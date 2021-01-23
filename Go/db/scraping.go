@@ -446,7 +446,8 @@ func GetMovieWalker(year string, month string) {
 	monthInt, _ := strconv.Atoi(month)
 	seasonName := ReshapeHour(monthInt)
 	var floatHour float32 = 100
-	doc.Find(".movie").Each(func(_ int, m *goquery.Selection) {
+	selection := doc.Find("div.un_screeningListTab")
+	selection.Find("li").Each(func(_ int, m *goquery.Selection) {
 		var tvProgram models.TvProgram
 		seasonStruct := *new(models.Season)
 		seasonStruct.Name = seasonName
@@ -454,10 +455,10 @@ func GetMovieWalker(year string, month string) {
 		weekStruct := *new(models.Week)
 		weekStruct.Name = "映画"
 		tvProgram.Week = &weekStruct
-		tvProgram.Title = m.Find("h3").Text()
+		tvProgram.Title = m.Find(".bl_movieListItem_ttl").Text()
 		tvProgram.Year = yearInt
 		tvProgram.Hour = floatHour
-		id, _ := m.Find("h3 > a").Attr("href")
+		id, _ := m.Find("div > ul > li > a").Attr("href")
 		id = strings.Replace(id, "/", "", -1)
 		id = strings.Replace(id, "mv", "", -1)
 		imageURL := "https://movie.walkerplus.com/api/resizeimage/content/" + id + "?w=300"
@@ -465,17 +466,16 @@ func GetMovieWalker(year string, month string) {
 		tvProgram.ImageUrl = imageURL
 		tvProgram.ImageUrlReference = models.ReshapeImageURLReference(imageURL)
 		tvProgram.MovieUrl = GetYoutubeURL(tvProgram.Title)
-		tvProgram.Content = m.Find(".info > p").Text()
-		director := strings.TrimSpace(m.Find(".info > .directorList > dd").Text())
-		director = strings.Replace(director, " ", "", -1)
-		director = strings.Replace(director, "\n\n\n\n", ",", -1)
-		tvProgram.Director = director
-		cast := strings.TrimSpace(m.Find(".info > .roleList > dd").Text())
-		cast = strings.Replace(cast, " ", "", -1)
-		cast = strings.Replace(cast, "\n\n\n\n", ",", -1)
-		tvProgram.Cast = cast
+		tvProgram.Content = m.Find(".bl_movieList_desc > p").Text()
+		// director := strings.TrimSpace(m.Find(".info > .directorList > dd").Text())
+		// director = strings.Replace(director, " ", "", -1)
+		// director = strings.Replace(director, "\n\n\n\n", ",", -1)
+		// tvProgram.Director = director
+		// cast := strings.TrimSpace(m.Find(".info > .roleList > dd").Text())
+		// cast = strings.Replace(cast, " ", "", -1)
+		// cast = strings.Replace(cast, "\n\n\n\n", ",", -1)
+		// tvProgram.Cast = cast
 		tvProgram.Star = 5
-		fmt.Println(tvProgram.Title)
 		if _, err := models.AddTvProgram(&tvProgram); err != nil {
 			fmt.Println(err)
 		}
