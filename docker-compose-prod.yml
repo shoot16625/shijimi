@@ -44,7 +44,7 @@ services:
     volumes:
       - ./Certs/:/var/lib/https-portal/
     environment:
-      DOMAINS: 'meigen.shijimi.work -> http://dockerhost:8091, app.shijimi.work -> http://dockerhost:8084, livepush.shijimi.work -> http://dockerhost:36000, shijimi.work => www.shijimi.work, www.shijimi.work -> http://app:8080'
+      DOMAINS: 'spotify_extension.shijimi.work -> http://dockerhost:8888, meigen.shijimi.work -> http://dockerhost:8091, app.shijimi.work -> http://dockerhost:8084, livepush.shijimi.work -> http://dockerhost:36000, shijimi.work => www.shijimi.work, www.shijimi.work -> http://app:8080'
       STAGE: "production"
       # FORCE_RENEW: 'true'
     links:
