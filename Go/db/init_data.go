@@ -30,7 +30,7 @@ func ExecInitSQL() {
 	// 管理者用 ID：1
 	UserSQL("しじみ", "doramaba-password", "1995-05-06", "男性", "愛知県", "学生", "doramaba-password", "/static/img/shijimi-192x192-transparence.png", "未婚", "A型", 0, "1")
 
-	// uchida用 ID：2
+	// uchidash用 ID：2
 	UserSQL("ちゃお倉木", "password", "1995-05-06", "男性", "愛知県", "学生", "乃木小学校", "https://avatars2.githubusercontent.com/u/24419610?s=460&v=4", "未婚", "A型", 500, "1")
 
 	UserSQL("1ロック", "password1", "1995-05-06", "男性", "愛知県", "学生", "1111", "https://pbs.twimg.com/profile_images/1210142498514857985/IrTqWohk.jpg", "未婚", "A型", 0, "1")

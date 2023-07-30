@@ -1,10 +1,12 @@
 # doramaba
 
 doramaba とかテレビバって考えてたけど，ShiJimi にしよっかな  
-(Shiny and Jiminy)(光り輝く原石を・驚きとともに))略してしじみ．
+(Shiny and Jiminy)(光り輝く原石を・驚きとともに略してしじみ．
 
 # To Do List
+
 ## ますと
+
 1. サブドメイン
 1. ドラマ自動取得・映画
 1. バグ探し
@@ -17,6 +19,7 @@ doramaba とかテレビバって考えてたけど，ShiJimi にしよっかな
 1. 季節ごとの自分的ランキング（コミュニティを作る？（キャストの部屋・今季の部屋（プロフィールでは，自分のだけ見れる）））
 
 ## その他
+
 1. ホーム画面に登録ポップアップ（serviceworker(chrome/firefox/androidのみ動作中)）
 1. おすすめページでデータ数が40超えてくると，2重に繰り返される（表示側の問題/chromeのみ）
 1. スクロールポジションがコメントリロード時にも固定される（表示側の問題/firefoxのみ）
@@ -62,15 +65,17 @@ doramaba とかテレビバって考えてたけど，ShiJimi にしよっかな
 1. その他サイト作成（CM・本・バラエティ・豆知識・スポーツ観戦・ニュース・不満・3大〇〇）
 
 # Improve Coding
+
 1. javascript 内で cookie が使えません！
 1. 今どきの javascript の書き方
 1. shijimi.com/tv/〇〇の tv を別サイトの場合は変えたいのだが，それって別の go を起動してもいける？
 
 # 機能構成
+
 1. admin用ログインページ tv/user/login_admin_page
 
-
 # 知識いろいろ
+
 1. vscode が便利
 1. prettier で自動コード補正
 1. ESlint でコード指南
@@ -81,7 +86,9 @@ doramaba とかテレビバって考えてたけど，ShiJimi にしよっかな
 1. 検索は自動的に「にっぽん」でも「ニッポン」でもヒットする(.ymlの--collation-server=変更でストップ)
 
 # 環境構築
+
 docker, docker-composeが必要
+
 1. git clone ~
 1. static/js/common.jsのトップにあるURLを変更（自機の場合:localhost）
 1. docker-compose up -d --build　(imageの作成・コンテナの作成・コンテナの起動)
@@ -93,16 +100,19 @@ docker, docker-composeが必要
 1. sudo chown 自分 -R . (MySQLフォルダの権限エラーを防ぐ)
 
 ## herokuの場合
+
 1. https://qiita.com/pitcher292/items/1ca39c7b0dbd79298c0b
 1. 30分でスタンバイ状態：再起動時にきどうしなおしちゃう
 1. heroku:60秒以内にサーバーを起動しないと落ちるため、多くのデータスクレイピングは不可能
 
 # 公開へのロードマップ
-1. konohaVPS900円借りる
+
+1. conohaVPS900円借りる
 1. SSD50GB上に全部乗せる（DB：mysql 500/monthもあるらしい）
 1. のっける
 
 # エラーがおきた
+
 1. ローカルPCからリクエストが投げられない．クロスドメインエラー
     1. https://qiita.com/growsic/items/a919a7e2a665557d9cf4
     1. または，common.jsのURLがおかしい
@@ -113,6 +123,7 @@ docker, docker-composeが必要
     1. 小文字はまずい．大文字
 
 # ポイント番号
+
 1. 寄付：1~10
 1. 毎日ログイン：10~20
 1. 機能系：100~200
@@ -127,6 +138,7 @@ docker, docker-composeが必要
     1. テレビ検索
 
 # herokuへのアップ方法
+
 ```
 heroku apps:destroy -a shijimi --confirm shijimi
 git remote rm heroku
@@ -175,7 +187,6 @@ bee generate scaffold PointHistory -fields="UserId:int64,MoneyPoint:int" -driver
 データベース：go_db
 ```
 
-
 # conoha vps
 
 ```
@@ -197,8 +208,8 @@ firewall-cmd --permanent --zone=public --add-service=https
 firewall-cmd --reload
 
 rootログイン禁止
-useradd -m uchida
-passwd uchida
+useradd -m uchidash
+passwd uchidash
 vim /etc/ssh/sshd_config (PermitRootLogin no)
 systemctl restart sshd
 ポート変更
@@ -211,12 +222,12 @@ systemctl restart sshd
 ssh-keygen -t rsa -b 2048
 mv id_rsa.pub authorized_keys
 chmod 600 authorized_keys
-sudo scp -P 36912 ./authorized_keys uchida@118.27.19.113:/home/uchida/.ssh
-sudo ssh -l uchida -i shijimi_rsa -p 36912 118.27.19.113
+sudo scp -P 36912 ./authorized_keys uchidash@118.27.19.113:/home/uchidash/.ssh
+sudo ssh -l uchidash -i shijimi_rsa -p 36912 118.27.19.113
 
 サーバ
-mkdir /home/uchida/.ssh
-chown uchida -R /home/uchida/.ssh
+mkdir /home/uchidash/.ssh
+chown uchidash -R /home/uchidash/.ssh
 
 RSAAuthentication yes
 PubkeyAuthentication yes
@@ -265,6 +276,7 @@ Go/main.prod(いい感じにする main.goに)
 ```
 
 # conohaへのアップ方法
+
 ```
 
 rootへ接続
@@ -284,15 +296,16 @@ docker-compose stop phpmyadmin
 docker-compose stop metabase
 
 metabase接続
-ssh -l uchida -p 36912 118.27.19.113 -L 53389:127.0.0.1:30001
+ssh -l uchidash -p 36912 118.27.19.113 -L 53389:127.0.0.1:30001
 
 rsaとってくる
-sudo scp -P 36912 ./shijimi_rsa.pub uchida@118.27.19.113:/home/uchida/.ssh
+sudo scp -P 36912 ./shijimi_rsa.pub uchidash@118.27.19.113:/home/uchidash/.ssh
 
 
 ```
 
 # データ更新方法
+
 ```
 
 データ更新（admin必要）
@@ -302,14 +315,16 @@ sudo scp -P 36912 ./shijimi_rsa.pub uchida@118.27.19.113:/home/uchida/.ssh
 
 adminのなり方
 /tv/user/login_admin_page
-Top@1060..cd
 
 main.goからやる方法
 コメントアウトをいい感じにする（その間サーバーはアクセスできなくなる）
 docker-compose up -d --build
 ```
+
 # セッション情報用のmysql table
+
 https://www.shuzhiduo.com/A/6pdDxqOXdw/
+
 ```
 CREATE TABLE `session` (
     `session_key` char(64) NOT NULL,
