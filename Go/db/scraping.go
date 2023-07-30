@@ -897,19 +897,19 @@ func GetYoutubeURL(str string) (URL string) {
 	seed := rand.Intn(keyNum)
 	if seed == 0 {
 		// shijimi00
-		apikey = "AIzaSyD21gZsLxuv4b-UNa8ZBqB8s45xxvpwuVE"
+		apikey = "hogehoge"
 	} else if seed == 1 {
 		// shijimi01
-		apikey = "AIzaSyADP2FK41MoW_W0gAlK5Nrs1DHZBIXsZ9k"
+		apikey = "hogehoge"
 	} else if seed == 2 {
 		// shijimi
-		apikey = "AIzaSyDIqP5CLAg3FERd_spvhyrAqkzEurR4XGA"
+		apikey = "hogehoge"
 	} else if seed == 3 {
 		// playTag55
-		apikey = "AIzaSyCMQez3bzx2aRBdUe-Ql5OhHKYyTJxaxZM"
+		apikey = "hogehoge"
 	} else if seed >= 4 {
 		// playTag55
-		apikey = "AIzaSyDROwOJtzftpyvd269F7t6gjnpZ8og35kU"
+		apikey = "hogehoge"
 	}
 
 	query := "https://www.googleapis.com/youtube/v3/search?type=video&part=snippet&maxResults=1&order=viewCount&videoDuration=short&q=" + title + "&key=" + apikey
